@@ -1,0 +1,32 @@
+/**
+ * @license
+ * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
+ *
+ * See LICENSE.txt in the project root for complete license information.
+ */
+
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ProductsSearchComponent } from './products-search.component';
+
+describe('ProductsSearchComponent', () => {
+  let component: ProductsSearchComponent;
+  let fixture: ComponentFixture<ProductsSearchComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ ProductsSearchComponent ]
+    })
+    .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ProductsSearchComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

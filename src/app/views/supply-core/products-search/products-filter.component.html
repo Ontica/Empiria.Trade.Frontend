@@ -1,0 +1,217 @@
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
+
+  <div class="fx-column-container fx-gap-half">
+
+    <div class="fx-row-container">
+
+      <div class="fx-item-half">
+
+        <label>País:</label>
+
+          <emp-ng-select
+            formControlName="country"
+            [config]="{selectFirst: true}"
+            [items]="countryList"
+            [showError]="formHelper.isControlInvalid(form.controls.country)">
+
+          </emp-ng-select>
+
+      </div>
+
+      <div class="fx-item fx-items-align-end">
+
+        <div class="input-search-container">
+
+          <input type="text" class="text-box" name="keywords"
+            placeholder="Buscar..."
+            formControlName="keywords"
+            [class.invalid-control]="formHelper.isControlInvalid(form.controls.keywords)"
+            (keyup.enter)="onSearchClicked()"
+            (keyup.escape)="form.controls.keywords.reset()">
+
+        </div>
+
+      </div>
+
+      <div class="fx-item-none fx-items-align-end" [style.paddingBottom.px]="2">
+
+        <button title="Buscar"
+          [class.btn-icon-action]="formHelper.isFormReady(form)"
+          [class.btn-icon]="!formHelper.isFormReady(form)"
+          (click)="onSearchClicked()">
+
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+      <ng-container #filterOptionsSection>
+
+        <mat-divider vertical="true" class="vertical">
+
+        </mat-divider>
+
+        <div class="fx-item-none fx-items-align-end" [style.paddingBottom.px]="2">
+
+          <button class="btn-base" (click)="onShowFiltersClicked()" [style.width.px]="100">
+            {{showFilters ? 'Ocultar' :'Mostrar'}} <mat-icon>filter_list</mat-icon>
+          </button>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+
+    <div #filterSection *ngIf="showFilters" [@expandCollapse]>
+
+      <mat-divider [style.marginBottom.px]="8" [style.marginRight.px]="8">
+
+      </mat-divider>
+
+      <div class="fx-row-container" [style.marginBottom.px]="8">
+
+        <div class="fx-item-half">
+
+          <label>Tipo:</label>
+
+          <emp-ng-select name="type"
+            formControlName="type"
+            placeholder="Todos"
+            [config]="{clearable: true, multiple: true}"
+            [items]="typesList">
+
+          </emp-ng-select>
+
+        </div>
+
+        <div class="fx-item-half">
+
+          <label>Estatus:</label>
+
+          <emp-ng-select name="status"
+            formControlName="status"
+            placeholder="Todos"
+            [config]="{clearable: true}"
+            [items]="statusList">
+
+          </emp-ng-select>
+
+        </div>
+
+      </div>
+
+
+      <div class="fx-row-container md-fx-column-container" [style.marginBottom.px]="8">
+
+        <div class="fx-item-half md-fx-item">
+
+          <label>Clave:</label>
+
+          <input type="text" class="text-box"
+            formControlName="number">
+
+        </div>
+
+        <div class="fx-item-none md-fx-item">
+
+          <label>Periodo:</label>
+
+            <emp-ng-date-range-picker name="period"
+              formControlName="period">
+
+            </emp-ng-date-range-picker>
+
+        </div>
+
+        <div class="fx-item">
+
+          <label>Almacen:</label>
+
+          <input type="text" class="text-box"
+            formControlName="store">
+
+        </div>
+
+
+      </div>
+
+
+      <div class="fx-row-container" [style.marginBottom.px]="8">
+
+        <div class="fx-item-half">
+
+          <label>Administrador:</label>
+
+          <emp-ng-select name="editor"
+            formControlName="editor"
+            placeholder="Todos"
+            [config]="{clearable: true,
+                       minTermLength: minTermLength,
+                       typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres'}"
+            [items]="editorList$ | async"
+            [typeahead]="editorInput$"
+            [loading]="editorLoading">
+
+            <ng-template #labelTemplate let-item="item">
+              [{{item.uid}}] {{item.name}}
+            </ng-template>
+            <ng-template #optionTemplate let-item="item">
+              <div class="item">
+                <span class="item-highlight">{{item.name}}</span> <br>
+                <span class="item-text-xs">[{{item.uid}}]</span>
+              </div>
+            </ng-template>
+
+          </emp-ng-select>
+
+        </div>
+
+
+
+        <div class="fx-item-none">
+
+          <label>Fecha ingreso:</label>
+
+            <emp-ng-datepicker name="date"
+              formControlName="date">
+
+            </emp-ng-datepicker>
+
+        </div>
+
+        <div class="fx-item md-fx-item" [style.marginTop.px]="12">
+
+          <mat-checkbox name="disabled"
+            formControlName="disabled"
+            (click)="$event.stopPropagation">
+            Mostrar existencia
+          </mat-checkbox>
+
+        </div>
+
+        <ng-container #clearFilterSection>
+
+          <mat-divider vertical="true" class="vertical">
+
+          </mat-divider>
+
+          <div class="fx-item-none fx-items-align-end" [style.paddingBottom.px]="2">
+
+            <button class="btn-base" (click)="onClearFilters()" [style.width.px]="100">
+              Limpiar <mat-icon>filter_list</mat-icon>
+            </button>
+
+          </div>
+
+        </ng-container>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>

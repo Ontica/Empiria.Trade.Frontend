@@ -1,0 +1,179 @@
+/**
+ * @license
+ * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
+ *
+ * See LICENSE.txt in the project root for complete license information.
+ */
+
+$white: hsl(0, 0%, 99%) !default;
+
+$primary-color: hsl(207, 91%, 30%) !default;
+$primary-color-light: hsl(207, 91%, 45%) !default;
+$primary-color-dark: hsl(207, 91%, 25%) !default;
+
+$secondary-color: hsl(240, 1%, 60%) !default;
+$secondary-color-light: hsl(240, 1%, 75%) !default;
+$secondary-color-semi-light: hsl(240, 1%, 65%) !default;
+$secondary-color-dark: hsl(240, 1%, 35%) !default;
+
+$warning-color: hsl(345, 62%, 45%) !default;
+$warning-color-light: hsl(345, 62%, 48%);
+$warning-color-dark: hsl(345, 62%, 28%) !default;
+
+$title-color: $secondary-color-dark !default;
+$title-border-color: $secondary-color-semi-light !default;
+
+$text-color: $secondary-color-semi-light !default;
+$text-color-light: $secondary-color-light !default;
+$text-color-dark: $secondary-color-dark !default;
+
+$background-color-work-area: hsl(207, 91%, 96%) !default;
+$background-color: $white !default;
+$background-color-highlight: hsl(207, 91%, 99%) !default;
+
+$border-color: hsl(0, 0%, 91%) !default;
+$border-color-light: hsl(0, 0%, 94%) !default;
+$border-color-dark: hsl(0, 0%, 56%) !default;
+
+$disabled-color: hsl(207, 91%, 94%) !default;
+
+$secondary-text-color: $white !default;
+$action-color: $primary-color;
+$action-selected-color: $primary-color-dark;
+
+//
+// Typography
+//
+$font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-secondary: "Inconsolata", monospace !default;
+$font-size-root: 8pt !default;
+$font-size-base: 1rem !default;
+$font-weight-base: 200 !default;
+//
+$font-size-title: $font-size-base * 1.25;
+$font-weight-title: 500;
+//
+$font-size-command: $font-size-base * 0.85;
+$font-weight-command: 300;
+//
+$font-size-hint: $font-size-base * 0.75;
+$font-weight-hint: 300;
+$text-bold: lighten($text-color, 3%);
+$text-italic: italic;
+//
+$font-size-grid-header: $font-size-base * 0.65;
+$font-size-grid: 9pt;
+
+//
+// Layout
+//
+$layout-gradient-initial-color: $primary-color-dark;
+$layout-gradient-final-color: $primary-color;
+$layout-secondary-color: $secondary-color;
+$layout-secondary-color-dark: $secondary-color-light;
+$toolbar-item-background: lighten($primary-color, 67);
+$toolbar-item-background-hover: lighten($primary-color, 60);
+$toolbar-icon-color: $primary-color;
+$toolbar-item-size: 34px;
+$toolbar-icon-size: 24px;
+
+//
+// Elements colors
+//
+$selected-item-text-color: $text-color-dark;
+$link-color: $text-color-dark;
+
+//
+// icons
+//
+$primary-icon-size: 16pt;
+
+$icon-color: hsl(0, 0%, 55%) !default;
+$icon-color-light: hsl(0, 0%, 90%) !default;
+$icon-color-dark: hsl(0, 0%, 40%) !default;
+
+$icon-color-success: hsl(166, 26%, 52%) !default;
+$icon-color-warning: hsl(39, 81%, 76%) !default;
+$icon-color-error: hsl(345, 65%, 70%) !default;
+
+//
+// form
+//
+$form-color: hsl(0, 0%, 42%);
+$form-title-border: 1px dotted $border-color-dark;
+$form-font-weight: 300;
+$form-border-bottom: 1px solid $icon-color-light;
+$form-title-color: $border-color-dark;
+
+//
+// html controls
+//
+
+$control-font: 9.5pt $font-family-secondary;
+$control-small-font: 8.5pt $font-family-secondary;
+
+$control-color: $secondary-color-dark;
+$control-label-color: $secondary-color-dark;
+$control-background-color: hsl(0, 0%, 99%);
+$control-border: 1px solid hsl(0, 0%, 87%);
+$control-border-radius: 2px;
+
+$selected-control-background-color: hsl(0, 0%, 98%);
+$selected-control-color: hsl(0, 0%, 20%);
+$selected-control-border: 1px solid hsl(0, 0%, 73%);
+
+$control-disabled-background: hsl(0, 0%, 96%);
+$control-disabled-color: $secondary-color-semi-light;
+
+$control-width: calc(100% - 8px);
+$control-height: 28px;
+
+$control-margin: 2px 8px 2px 0;
+$control-padding: 2px 6px;
+$select-padding: 2px 2px 2px 6px;
+
+$button-font: 9.5pt $font-family;
+$button-color: hsl(0, 0%, 98%);
+$button-selected-color: hsl(0, 0%, 90%);
+
+$button-border: 0 solid hsl(0, 0%, 81%);
+$button-height: 28px;
+
+$checkbox-background-color: $primary-color-light;
+$checkbox-warning-background-color: $layout-secondary-color;
+$date-picker-width: 90px;
+
+$tag-background-color: hsl(207, 91%, 90%) !default;
+
+//
+// grid
+//
+$grid-header-background-color: hsl(240, 1%, 91%) !default;
+$grid-footer-background-color: hsl(240, 1%, 91%);
+$grid-border: 0;
+$grid-even-background-color: $white;
+$grid-odd-background-color: hsl(0, 0%, 96%) !default;
+$grid-hover-background-color: hsl(0, 0%, 97%);
+$grid-selected-background-color: hsl(207, 91%, 98%);
+$grid-selected-hover-background-color: hsl(207, 91%, 96%);
+$grid-header-height: 30px;
+$grid-row-height: 32px;
+
+//
+// Designer
+//
+
+$designer-border-color: hsl(0, 0%, 82%) !default;
+$designer-bar-background: hsl(0, 0%, 94%) !default;
+$designer-bar-selected-border-color: hsl(207, 91%, 32%) !default;
+$designer-bar-selected-background-color: hsl(207, 91%, 75%) !default;
+$designer-bar-selected-hover-background-color: hsl(207, 91%, 65%) !default;
+$designer-cell-selected-background-color: hsl(207, 91%, 94%) !default;
+$designer-cell-selected-hover-background-color: hsl(207, 91%, 88%) !default;
+
+$designer-primary-color: #e5f6ff !default;
+$designer-secondary-color: #fff8dd !default;
+$designer-tertiary-color: #ffe5ed !default;
+$designer-quaternary-color: #f3eeff !default;
+$designer-gray-color: #f7f7f7 !default;
+$designer-green-color: #e8fff3 !default;

@@ -1,0 +1,25 @@
+
+<div class="explorer">
+
+  <div class="primary" [class.std-hide]="displaySecondaryView">
+
+    <emp-ng-products-search title="Catálogo de pedidos"
+      [productSelected]="entrySelected"
+      (productsSearchEvent)="onEntrySearchEvent($event)">
+
+    </emp-ng-products-search>
+
+  </div>
+
+  <div class="secondary" *ngIf="displaySecondaryView">
+
+    <emp-ng-card
+      [title]="entrySelected.name"
+      hint="Informacion general del pedido"
+      (cardClose)="onCloseSecondaryView()">
+
+    </emp-ng-card>
+
+  </div>
+
+</div>

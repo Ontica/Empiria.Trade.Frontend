@@ -1,0 +1,26 @@
+@import "../../../../styles/variables";
+
+.mat-mdc-dialog-title {
+  border-bottom: 2px solid $primary-color;
+  color: $primary-color;
+  font-size: 12pt;
+  line-height: 12pt;
+  font-weight: 600;
+  padding: 0 24px 16px;
+}
+
+.mat-mdc-dialog-content {
+  font-size: 10pt;
+  color: $secondary-color-dark;
+  padding: 16px 24px;
+}
+
+.mat-mdc-dialog-actions {
+  justify-content: flex-end;
+  border-top: 1px solid $secondary-color;
+  padding: 16px;
+
+  button {
+    margin-left: 16px;
+  }
+}
