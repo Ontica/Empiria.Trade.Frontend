@@ -14,6 +14,7 @@ export interface AppData {
 
 
 export interface AppLayout {
+  displayLogo: boolean;
   displayNavbarHeader: boolean;
   displayMenuUser: boolean;
   displayChangeLanguage: boolean;

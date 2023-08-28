@@ -10,7 +10,7 @@ import { AppConfig } from '../common-models/common';
 
 export const APP_CONFIG: AppConfig = {
   data: {
-    name: 'Empiria Trade',
+    name: 'Sistema Comercial',
     hint: '',
     organization: 'Grupo Sujetsa',
     description: '',
@@ -21,6 +21,7 @@ export const APP_CONFIG: AppConfig = {
     encriptLocalStorageData: true,
   },
   layout: {
+    displayLogo: false,
     displayNavbarHeader: true,
     displayMenuUser: true,
     displayChangeLanguage: true,
