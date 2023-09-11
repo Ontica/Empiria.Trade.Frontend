@@ -16,19 +16,19 @@ export const APP_CONFIG: AppConfig = {
     description: '',
   },
   security: {
-    fakeLogin: true,
+    fakeLogin: false,
     enablePermissions: false,
     encriptLocalStorageData: true,
   },
   layout: {
     displayLogo: false,
     displayNavbarHeader: true,
-    displayMenuUser: true,
-    displayChangeLanguage: true,
-    displayChangePassword: true,
+    displayMenuUser: false,
+    displayChangeLanguage: false,
+    displayChangePassword: false,
     displayAsideLeft: false,
-    displaySubMenu: false,
-    displayHeader: true,
-    displayFooter: true,
+    displaySubMenu: true,
+    displayHeader: false,
+    displayFooter: false,
   }
 };
