@@ -11,7 +11,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ROUTES } from '@app/main-layout';
 
-import { ControlPanelMainPageComponent } from './control-panel-main-page.component';
+import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-main-page.component';
 
 import { DefaultComponent } from '@app/shared/deafult-components/default.component';
 

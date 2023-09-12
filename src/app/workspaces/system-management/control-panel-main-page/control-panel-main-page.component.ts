@@ -13,7 +13,7 @@ import { ControlPanelOption, ControlPanelOptionList } from './control-panel-conf
 
 
 @Component({
-  selector: 'emp-ng-control-panel-main-page',
+  selector: 'emp-trade-control-panel-main-page',
   templateUrl: './control-panel-main-page.component.html',
 })
 export class ControlPanelMainPageComponent {

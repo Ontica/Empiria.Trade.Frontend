@@ -182,7 +182,7 @@ table.mat-mdc-table {
 
   th {
     font-weight: 500;
-    padding: 12px 15px 12px 0;
+    padding: $grid-entry-padding-vertical $grid-entry-padding-horizontal $grid-entry-padding-vertical 0;
 
     &.mat-mdc-header-cell {
       border-bottom: 2pt solid $title-color;
@@ -195,36 +195,36 @@ table.mat-mdc-table {
     }
 
     &:first-of-type {
-      padding-left: 10px;
+      padding-left: $grid-entry-padding-vertical;
     }
 
     &:last-of-type {
-      padding-right: 10px !important;
+      padding-right: $grid-entry-padding-vertical !important;
     }
   }
 
   td {
     vertical-align: top;
-    padding: 8px 15px 8px 0;
+    padding: $grid-entry-padding-vertical $grid-entry-padding-horizontal $grid-entry-padding-vertical 0;
     font-family: $font-family-secondary;
     font-size: $font-size-grid;
     line-height: $font-size-grid;
 
     &:first-of-type {
-      padding-left: 10px;
+      padding-left: $grid-entry-padding-vertical;
     }
 
     &.mat-mdc-cell:last-of-type,
     &.mat-mdc-footer-cell:last-of-type {
-      padding-right: 10px;
+      padding-right: $grid-entry-padding-vertical;
       width: auto;
     }
 
     &.column-action {
       text-align: center;
       width: 32px !important;
-      padding-top: 2px;
-      padding-bottom: 2px;
+      padding-top: $grid-entry-padding-vertical;
+      padding-bottom: $grid-entry-padding-vertical;
     }
 
     &.column-action-check {
@@ -259,6 +259,10 @@ table.mat-mdc-table {
       white-space: nowrap;
     }
 
+    .text-label {
+      font-size: $font-size-grid * 0.95;
+    }
+
     .text-highlight {
       font-size: $font-size-grid * 1.1;
       color: $primary-color;
@@ -289,7 +293,7 @@ table.mat-mdc-table {
     &.mat-mdc-footer-row {
 
       &.text-not-found > td {
-        padding: 1rem;
+        padding: $grid-entry-padding-vertical $grid-entry-padding-horizontal;
         text-align: center;
       }
 
@@ -658,11 +662,15 @@ table.mat-mdc-table.emp-designer {
 }
 
 .mat-mdc-menu-item.selected {
-  background: rgba(0, 0, 0, 0.04);
+  background: lighten($primary-color, 65%)!important;
+  color: $primary-color!important;
 
-  .mdc-list-item__primary-text {
-    color: $primary-color;
-    font-weight: 600;
+  .mat-mdc-menu-item-text {
+    font-weight: 600!important;
+  }
+
+  &:hover {
+    background: lighten($primary-color, 60%)!important;
   }
 }
 

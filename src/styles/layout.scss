@@ -73,6 +73,11 @@
   flex: 0 0 auto;
 }
 
+.fx-item-two-third {
+  flex: 1 1 100%;
+  max-width: 66.66%;
+}
+
 .fx-item-half {
   flex: 1 1 100%;
   max-width: 50%;
@@ -125,22 +130,22 @@
 // Alignment of items along the cross axis (row > vertical; column > horizontal)
 //
 
-.fx-items-align-start {
+.fx-items-start {
   display: flex;
   align-items: flex-start;
 }
 
-.fx-items-align-center {
+.fx-items-center {
   display: flex;
   align-items: center;
 }
 
-.fx-items-align-end {
+.fx-items-end {
   display: flex;
   align-items: flex-end;
 }
 
-.fx-items-align-stretch {
+.fx-items-stretch {
   display: flex;
   align-items: stretch;
 }
@@ -158,6 +163,10 @@
 
   &.fx-gap-half {
     gap: 0.5rem;
+  }
+
+  &.fx-gap-three-quarter {
+    gap: 0.75rem;
   }
 
 }

@@ -16,7 +16,7 @@ import { AccessControlModule } from '@app/views/_access-control/access-control.m
 
 import { SystemManagementWorkspaceRoutingModule } from './system-management-workspace-routing.module';
 
-import { ControlPanelMainPageComponent } from './control-panel-main-page.component';
+import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-main-page.component';
 
 
 
@@ -26,13 +26,11 @@ import { ControlPanelMainPageComponent } from './control-panel-main-page.compone
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-
     AngularMaterialModule,
     SharedModule,
 
-    AccessControlModule,
-
     SystemManagementWorkspaceRoutingModule,
+    AccessControlModule,
   ],
 
   declarations: [

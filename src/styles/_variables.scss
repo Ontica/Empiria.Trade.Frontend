@@ -12,16 +12,16 @@ $primary-color-light: hsl(207, 91%, 45%) !default;
 $primary-color-dark: hsl(207, 91%, 25%) !default;
 
 $secondary-color: hsl(240, 1%, 60%) !default;
-$secondary-color-light: hsl(240, 1%, 75%) !default;
-$secondary-color-semi-light: hsl(240, 1%, 65%) !default;
-$secondary-color-dark: hsl(240, 1%, 35%) !default;
+$secondary-color-light: hsl(240, 1%, 80%) !default;
+$secondary-color-semi-light: hsl(240, 1%, 40%) !default;
+$secondary-color-dark: hsl(240, 1%, 25%) !default;
 
 $warning-color: hsl(345, 62%, 45%) !default;
 $warning-color-light: hsl(345, 62%, 48%);
 $warning-color-dark: hsl(345, 62%, 28%) !default;
 
-$title-color: $secondary-color-dark !default;
-$title-border-color: $secondary-color-semi-light !default;
+$title-color: $primary-color-dark !default;
+$title-border-color: $primary-color-dark !default;
 
 $text-color: $secondary-color-semi-light !default;
 $text-color-light: $secondary-color-light !default;
@@ -158,6 +158,8 @@ $grid-selected-background-color: hsl(207, 91%, 98%);
 $grid-selected-hover-background-color: hsl(207, 91%, 96%);
 $grid-header-height: 30px;
 $grid-row-height: 32px;
+$grid-entry-padding-vertical: 1rem;
+$grid-entry-padding-horizontal: 2rem;
 
 //
 // Designer
