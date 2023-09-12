@@ -18,13 +18,14 @@ import { SharedPipesModule } from '../pipes/shared-pipes.module';
 import { SharedContainersModule } from '../containers/shared-containers.module';
 import { IconSvgModule } from '../icon-svg.module';
 
+import { ButtonCopyToClipboardComponent } from './button-copy-to-clipboard/button-copy-to-clipboard.component';
 import { CheckboxAllComponent } from './check-box-all/check-box-all.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { DateRangePickerComponent } from './date-range-picker/date-range-picker.component';
-import { MonthPickerComponent } from './date-range-picker/month-picker/month-picker.component';
 import { FileControlComponent } from './file-control/file-control.component';
 import { FilePrintPreviewComponent } from './file-print-preview/file-print-preview.component';
 import { MenuComponent } from './menu/menu.component';
+import { MonthPickerComponent } from './date-range-picker/month-picker/month-picker.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { SelectBoxComponent } from './select-box/select-box.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
@@ -45,19 +46,21 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
   ],
 
   declarations: [
+    ButtonCopyToClipboardComponent,
     CheckboxAllComponent,
     DatePickerComponent,
     DateRangePickerComponent,
-    MonthPickerComponent,
     FileControlComponent,
     FilePrintPreviewComponent,
     MenuComponent,
+    MonthPickerComponent,
     SearchBoxComponent,
     SelectBoxComponent,
     TextEditorComponent,
   ],
 
   exports: [
+    ButtonCopyToClipboardComponent,
     CheckboxAllComponent,
     DatePickerComponent,
     DateRangePickerComponent,

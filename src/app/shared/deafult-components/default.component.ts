@@ -26,10 +26,10 @@ import { MainUIStateSelector } from '@app/presentation/exported.presentation.typ
         <div class="card-header card-header-flat">
 
           <div class="card-title">
-            Componente en desarrollo - {{viewName}}
+            {{viewName}}
 
             <div class="card-hint">
-              Este componente es un componente temporal.
+              Este componente esta en desarrollo.
             </div>
 
           </div>
