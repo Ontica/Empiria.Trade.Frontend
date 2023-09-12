@@ -9,6 +9,9 @@
 import { MainLayoutActions, MainLayoutSelectors } from './main-layout/_main-layout.presentation.types';
 export * from './main-layout/_main-layout.presentation.types';
 
+import { SMSelectors } from './security-management/_security.management.presentation.types';
+export * from './security-management/_security.management.presentation.types';
+
 import { TradeActions, TradeCommands, TradeEffects, TradeSelectors } from './trade/_trade.presentation.types';
 export * from './trade/_trade.presentation.types';
 
@@ -21,4 +24,4 @@ export type CommandType = TradeCommands;
 
 export type StateEffect = TradeEffects;
 
-export type StateSelector = MainLayoutSelectors | TradeSelectors;
+export type StateSelector = MainLayoutSelectors | SMSelectors | TradeSelectors;

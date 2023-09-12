@@ -15,6 +15,8 @@ import { ControlPanelMainPageComponent } from './control-panel-main-page/control
 
 import { DefaultComponent } from '@app/shared/deafult-components/default.component';
 
+import { AccessControlMainPageComponent } from './access-control-main-page/access-control-main-page.component';
+
 
 const routes: Routes = [
   {
@@ -40,7 +42,7 @@ const routes: Routes = [
   {
     data: { permission: ROUTES.administracion_control_de_accesos.permission },
     path: ROUTES.administracion_control_de_accesos.path,
-    component: DefaultComponent,
+    component: AccessControlMainPageComponent,
   },
   {
     path: '',

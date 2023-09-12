@@ -7,4 +7,6 @@
 
 export * from './file-services/file-download.service';
 
+export * from './_access-control.data.service';
+
 export * from './projects.data.service';

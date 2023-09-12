@@ -13,7 +13,9 @@ import { Assertion, Validate } from '@app/core';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { UpdateCredentialsFields} from '@app/models';
+import { AccessControlDataService } from '@app/data-services';
+
+import { UpdateCredentialsFields } from '@app/models';
 
 import { FormHelper } from '@app/shared/utils';
 
@@ -47,7 +49,7 @@ const DefaultPaswordRules: IPaswordRules = {
   selector: 'emp-ng-change-password-modal',
   templateUrl: './change-password-modal.component.html',
 })
-export class ChangePasswordModalComponent  {
+export class ChangePasswordModalComponent {
 
   @Output() closeEvent = new EventEmitter<void>();
 
@@ -62,7 +64,8 @@ export class ChangePasswordModalComponent  {
   submitted = false;
 
 
-  constructor(private messageBox: MessageBoxService) {
+  constructor(private accessControlData: AccessControlDataService,
+              private messageBox: MessageBoxService) {
     this.initForm();
   }
 
@@ -102,12 +105,13 @@ export class ChangePasswordModalComponent  {
 
     const command = this.getFormData();
 
-    setTimeout(() => {
-      this.messageBox.show('La contraseña fue actualizada correctamente.', 'Cambiar contraseña');
-      console.log('Data: ',command);
-      this.submitted = false
-      this.onClose();
-    }, 1500);
+    this.accessControlData.updateCredentialsToSubject(command)
+      .firstValue()
+      .then(x => {
+        this.messageBox.show('La contraseña fue actualizada correctamente.', 'Cambiar contraseña');
+        this.onClose();
+      })
+      .finally(() => this.submitted = false);
   }
 
 

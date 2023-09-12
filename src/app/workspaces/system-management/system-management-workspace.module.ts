@@ -16,8 +16,9 @@ import { AccessControlModule } from '@app/views/_access-control/access-control.m
 
 import { SystemManagementWorkspaceRoutingModule } from './system-management-workspace-routing.module';
 
-import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-main-page.component';
+import { AccessControlMainPageComponent } from './access-control-main-page/access-control-main-page.component';
 
+import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-main-page.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { ControlPanelMainPageComponent } from './control-panel-main-page/control
   ],
 
   declarations: [
+    AccessControlMainPageComponent,
     ControlPanelMainPageComponent,
   ],
 
