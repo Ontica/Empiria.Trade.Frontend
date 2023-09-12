@@ -1,16 +1,18 @@
 
 <div class="toolbar-container">
 
-  <div class="search-and-settings">
+  <!-- <div class="search-and-settings">
 
-    <emp-ng-search-box (searchBoxChange)="onSearchClicked($event)">
+    <emp-ng-search-box
+      searchText="Buscador de productos"
+      (searchBoxChange)="onSearchClicked($event)">
 
     </emp-ng-search-box>
 
-  </div>
+  </div> -->
 
 
-  <button *empNgHasPermission="permissions.NOT_REQUIRED"
+  <!-- <button *empNgHasPermission="permissions.NOT_REQUIRED"
     class="toolbar-item"
     title="Alerts"
     [ngClass]="{'activate': toolSelected === 'Alerts'}"
@@ -18,7 +20,7 @@
 
     <mat-icon>notifications</mat-icon>
 
-  </button>
+  </button> -->
 
 
   <button *empNgHasPermission="permissions.NOT_REQUIRED"
@@ -27,7 +29,7 @@
     [ngClass]="{'activate': this.displayAsideRight}"
     (click)="onToolClicked('Search')">
 
-    <mat-icon>stacked_bar_chart</mat-icon>
+    <mat-icon>search</mat-icon>
 
   </button>
 

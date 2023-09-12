@@ -17,7 +17,7 @@ import { MainUIStateAction, MainUIStateSelector } from '@app/presentation/export
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { PERMISSIONS, TOOL } from '../config-data';
+import { PERMISSIONS, TOOL_TYPES, Tool } from '../config-data';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   displayAsideRight = false;
 
-  toolSelected: TOOL = 'None';
+  toolSelected: TOOL_TYPES = 'None';
 
   private unsubscribe: Subject<void> = new Subject();
 
@@ -39,7 +39,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
               private messageBox: MessageBoxService) {}
 
   ngOnInit(): void {
-    this.store.select<TOOL>(MainUIStateSelector.TOOL_SELECTED)
+    this.store.select<Tool>(MainUIStateSelector.TOOL_SELECTED)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(x => this.setToolSelected(x));
   }
@@ -51,21 +51,34 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
 
-  onToolClicked(tool: TOOL) {
-    this.store.dispatch(MainUIStateAction.SET_TOOL_SELECTED, tool);
-  }
+  onToolClicked(toolType: TOOL_TYPES) {
 
+    switch (toolType) {
+      case 'Search':
+        const tool: Tool = {
+          toolType,
+        };
 
-  onSearchClicked(keywords: string) {
-    if (keywords) {
-      this.messageBox.showInDevelopment(`Buscar: ${keywords}`);
-      // this.router.navigate(['/search-services/all', { keywords } ]);
+        this.store.dispatch(MainUIStateAction.SET_TOOL_SELECTED, tool);
+        return;
+
+      default:
+        return;
     }
+
   }
 
 
-  private setToolSelected(tool: TOOL) {
-    this.toolSelected = tool;
+  // onSearchClicked(keywords: string) {
+  //   if (keywords) {
+  //     this.messageBox.showInDevelopment(`Buscar: ${keywords}`);
+  //     // this.router.navigate(['/search-services/all', { keywords } ]);
+  //   }
+  // }
+
+
+  private setToolSelected(tool: Tool) {
+    this.toolSelected = tool.toolType;
     this.displayAsideRight = this.toolSelected !== 'None';
   }
 

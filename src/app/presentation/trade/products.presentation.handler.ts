@@ -11,16 +11,9 @@ import { EmpObservable } from '@app/core';
 
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
-import { ProjectDataService } from '@app/data-services';
-
-
-export enum ActionType {
-  SELECT = 'Empiria.SystemManagement.Action.Select',
-}
-
 
 export enum SelectorType {
-  DEFAULT = 'Empiria.SystemManagement.Selectors.Default',
+  DEFAULT = 'Trade.Products.Selectors.Default',
 }
 
 
@@ -30,13 +23,12 @@ const initialState: StateValues = [
 
 
 @Injectable()
-export class SystemManagementPresentationHandler extends AbstractPresentationHandler {
+export class ProductsPresentationHandler extends AbstractPresentationHandler {
 
-  constructor(private data: ProjectDataService) {
+  constructor() {
     super({
       initialState,
       selectors: SelectorType,
-      actions: ActionType,
     });
   }
 
@@ -46,15 +38,6 @@ export class SystemManagementPresentationHandler extends AbstractPresentationHan
 
       default:
         return super.select<U>(selectorType, params);
-    }
-  }
-
-
-  dispatch(actionType: ActionType, params?: any): void {
-    switch (actionType) {
-
-      default:
-        throw this.unhandledCommandOrActionType(actionType);
     }
   }
 

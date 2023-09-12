@@ -9,16 +9,16 @@
 import { MainLayoutActions, MainLayoutSelectors } from './main-layout/_main-layout.presentation.types';
 export * from './main-layout/_main-layout.presentation.types';
 
-import { EPActions, EPCommands, EPEffects, EPSelectors } from './empiria/_empiria.presentation.types';
-export * from './empiria/_empiria.presentation.types';
+import { TradeActions, TradeCommands, TradeEffects, TradeSelectors } from './trade/_trade.presentation.types';
+export * from './trade/_trade.presentation.types';
 
 
 /* Exportation types */
 
-export type ActionType = MainLayoutActions | EPActions;
+export type ActionType = MainLayoutActions | TradeActions;
 
-export type CommandType = EPCommands;
+export type CommandType = TradeCommands;
 
-export type StateEffect = EPEffects;
+export type StateEffect = TradeEffects;
 
-export type StateSelector = MainLayoutSelectors | EPSelectors;
+export type StateSelector = MainLayoutSelectors | TradeSelectors;

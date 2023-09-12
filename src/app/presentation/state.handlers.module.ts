@@ -11,16 +11,16 @@ import { STATE_HANDLERS } from '@app/core/presentation/presentation.state';
 
 import { MainLayoutPresentationHandler } from './main-layout/main-layout.presentation.handler';
 
-import { SystemManagementPresentationHandler } from './empiria/system-management.presentation.handler';
+import { ProductsPresentationHandler } from './trade/products.presentation.handler';
 
 @NgModule({
 
   providers: [
     MainLayoutPresentationHandler,
-    SystemManagementPresentationHandler,
+    ProductsPresentationHandler,
 
     { provide: STATE_HANDLERS, useExisting: MainLayoutPresentationHandler, multi: true },
-    { provide: STATE_HANDLERS, useExisting: SystemManagementPresentationHandler, multi: true },
+    { provide: STATE_HANDLERS, useExisting: ProductsPresentationHandler, multi: true },
   ]
 
 })
