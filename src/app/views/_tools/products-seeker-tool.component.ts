@@ -8,9 +8,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'emp-ng-search-tool',
-  templateUrl: './search-tool.component.html',
+  selector: 'emp-trade-products-seeker-tool',
+  templateUrl: './products-seeker-tool.component.html',
 })
-export class SearchToolComponent {
+export class ProductsSeekerToolComponent {
 
 }

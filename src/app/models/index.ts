@@ -28,4 +28,4 @@ export * from './imported-data';
 
 export * from './reporting';
 
-export * from './search-data';
+export * from './product';

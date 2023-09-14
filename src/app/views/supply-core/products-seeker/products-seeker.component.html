@@ -1,0 +1,43 @@
+<div class="card card-border">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      {{title}}
+
+      <div class="card-hint" empNgProgressText
+        loadingText="Buscando..."
+        [finalText]="hintText"
+        [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner">
+
+    <emp-ng-spinner #spinner [visible]="isLoading">
+
+    </emp-ng-spinner>
+
+    <div class="fx-column-container-fill">
+
+      <emp-trade-products-filter (productsFilterEvent)="onProductsFilterEvent($event)">
+
+      </emp-trade-products-filter>
+
+      <emp-trade-products-table class="fx-fill"
+        [isLoading]="isLoading"
+        [queryExecuted]="queryExecuted"
+        [products]="data"
+        [productSelected]="productSelected"
+        (productsTableEvent)="onProductsTableEvent($event)">
+
+      </emp-trade-products-table>
+
+    </div>
+
+  </div>
+
+</div>

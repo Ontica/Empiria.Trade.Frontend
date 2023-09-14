@@ -734,3 +734,18 @@ ul.default-list {
   font-style: $text-italic;
   padding: 1rem 0 0.5rem 0;
 }
+
+
+.list-container {
+  border: 1px solid $secondary-color-light;
+  border-radius: 3px;
+  padding: 8px;
+}
+
+.list-selection-item {
+  padding: 8px 8px 8px 4px;
+}
+
+.list-selection-item:not(:last-child) {
+  border-bottom: 1px dashed $secondary-color-light;
+}

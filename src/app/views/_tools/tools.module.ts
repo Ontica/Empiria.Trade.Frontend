@@ -13,7 +13,7 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { SupplyCoreModule } from '../supply-core/supply-core.module';
 
-import { SearchToolComponent } from './search-tool.component';
+import { ProductsSeekerToolComponent } from './products-seeker-tool.component';
 
 
 @NgModule({
@@ -24,10 +24,10 @@ import { SearchToolComponent } from './search-tool.component';
     SupplyCoreModule,
   ],
   declarations: [
-    SearchToolComponent,
+    ProductsSeekerToolComponent,
   ],
   exports: [
-    SearchToolComponent,
+    ProductsSeekerToolComponent,
   ],
 })
 export class ToolsModule { }

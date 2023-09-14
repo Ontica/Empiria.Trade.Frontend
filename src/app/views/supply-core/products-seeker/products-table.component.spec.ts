@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProductsSearchComponent } from './products-search.component';
+import { ProductsTableComponent } from './products-table.component';
 
-describe('ProductsSearchComponent', () => {
-  let component: ProductsSearchComponent;
-  let fixture: ComponentFixture<ProductsSearchComponent>;
+describe('ProductsTableComponent', () => {
+  let component: ProductsTableComponent;
+  let fixture: ComponentFixture<ProductsTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProductsSearchComponent ]
+      declarations: [ ProductsTableComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProductsSearchComponent);
+    fixture = TestBed.createComponent(ProductsTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

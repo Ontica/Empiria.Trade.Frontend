@@ -6,19 +6,22 @@
  */
 
 import { NgModule } from '@angular/core';
-import { ProjectDataService } from './projects.data.service';
 
 import { FileDownloadService } from './file-services/file-download.service';
+
 import { getSaver, SAVER } from './file-services/saver.provider';
 
 import { AccessControlDataService } from './_access-control.data.service';
+
+import { ProductsDataService } from './products.data.service';
+
 
 @NgModule({
 
   providers: [
     FileDownloadService,
     AccessControlDataService,
-    ProjectDataService,
+    ProductsDataService,
 
     { provide: SAVER, useFactory: getSaver }
   ]

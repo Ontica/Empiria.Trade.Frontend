@@ -17,9 +17,11 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 
-import { ProductsFilterComponent } from './products-search/products-filter.component';
+import { ProductsFilterComponent } from './products-seeker/products-filter.component';
 
-import { ProductsSearchComponent } from './products-search/products-search.component';
+import { ProductsSeekerComponent } from './products-seeker/products-seeker.component';
+
+import { ProductsTableComponent } from './products-seeker/products-table.component';
 
 
 @NgModule({
@@ -35,10 +37,11 @@ import { ProductsSearchComponent } from './products-search/products-search.compo
   ],
   declarations: [
     ProductsFilterComponent,
-    ProductsSearchComponent
+    ProductsSeekerComponent,
+    ProductsTableComponent,
   ],
   exports: [
-    ProductsSearchComponent,
+    ProductsSeekerComponent,
   ],
 })
 export class SupplyCoreModule { }

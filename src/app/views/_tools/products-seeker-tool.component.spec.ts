@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchToolComponent } from './search-tool.component';
+import { ProductsSeekerToolComponent } from './products-seeker-tool.component';
 
-describe('SearchToolComponent', () => {
-  let component: SearchToolComponent;
-  let fixture: ComponentFixture<SearchToolComponent>;
+describe('ProductsSeekerToolComponent', () => {
+  let component: ProductsSeekerToolComponent;
+  let fixture: ComponentFixture<ProductsSeekerToolComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SearchToolComponent ]
+      declarations: [ ProductsSeekerToolComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchToolComponent);
+    fixture = TestBed.createComponent(ProductsSeekerToolComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

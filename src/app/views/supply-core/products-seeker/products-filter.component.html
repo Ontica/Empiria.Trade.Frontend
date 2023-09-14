@@ -1,0 +1,39 @@
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
+
+  <div class="fx-column-container fx-gap-half">
+
+    <div class="fx-row-container">
+
+      <div class="fx-item-half fx-items-end">
+
+        <div class="input-search-container">
+
+          <input type="text" class="text-box" name="keywords"
+            placeholder="Buscar..."
+            formControlName="keywords"
+            [class.invalid-control]="formHelper.isControlInvalid(form.controls.keywords)"
+            (keyup.enter)="onSearchClicked()"
+            (keyup.escape)="form.controls.keywords.reset()">
+
+        </div>
+
+      </div>
+
+      <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
+
+        <button title="Buscar"
+          [class.btn-icon-action]="formHelper.isFormReady(form)"
+          [class.btn-icon]="!formHelper.isFormReady(form)"
+          (click)="onSearchClicked()">
+
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>

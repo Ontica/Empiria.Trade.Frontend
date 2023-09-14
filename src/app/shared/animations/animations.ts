@@ -19,6 +19,6 @@ export const expandCollapse = trigger('expandCollapse', [
     'overflow-y': 'hidden',
     'overflow-x': 'hidden',
   })),
-  transition('* => void', animate('250ms ease-out')),
-  transition('void => *', animate('250ms ease-in'))
+  transition('* => void', animate('150ms ease')),
+  transition('void => *', animate('150ms ease'))
 ]);

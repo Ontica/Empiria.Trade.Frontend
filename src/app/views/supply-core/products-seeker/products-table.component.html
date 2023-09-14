@@ -1,0 +1,159 @@
+<div class="fx-column-container-fill">
+
+  <mat-divider>
+
+  </mat-divider>
+
+  <div #tableContainer class="fx-item">
+
+    <cdk-virtual-scroll-viewport tvsItemSize="131" headerHeight="47" [bufferMultiplier]="0">
+
+      <table mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="product">
+          <th mat-header-cell *matHeaderCellDef> Producto </th>
+          <td mat-cell *matCellDef="let row" [style.minWidth.px]="300">
+
+            <ng-container *ngTemplateOutlet="productData; context: { product: row.product }">
+
+            </ng-container>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="attributes">
+          <th mat-header-cell *matHeaderCellDef> Características </th>
+          <td mat-cell *matCellDef="let row" class="nowrap">
+
+            <ng-container *ngTemplateOutlet="productAttributes;
+                                             context: { attributes: row.product.productType.attributes }">
+
+            </ng-container>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="presentations">
+          <th mat-header-cell *matHeaderCellDef> Presentaciones </th>
+          <td mat-cell *matCellDef="let row" [style.width.px]="300" [style.maxWidth.px]="300">
+
+            <ng-container *ngTemplateOutlet="productPresentation; context: { row }">
+
+            </ng-container>
+
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+
+      <div class="text-not-found" *ngIf="this.dataSource.data.length === 0">
+
+        <ng-container *ngIf="isLoading">Buscando...</ng-container>
+
+        <ng-container *ngIf="!isLoading">
+            {{!queryExecuted ? 'No se ha invocado la consulta.' :
+                'No se encontraron productos con el filtro proporcionado.'}}
+        </ng-container>
+
+      </div>
+
+    </cdk-virtual-scroll-viewport>
+
+  </div>
+
+</div>
+
+
+
+<ng-template #productData let-product="product">
+
+  <div class="fx-column-container fx-gap-half">
+    <p class="text-highlight">{{ product.description }}</p>
+    <a class="link-highlight bold-text">{{ product.code }}</a>
+    {{ product.productType.name }}
+  </div>
+
+</ng-template>
+
+
+<ng-template #productAttributes let-attributes="attributes">
+
+  <span *ngIf="attributes.length === 0"> N/A </span>
+
+  <ul *ngIf="attributes.length > 0" class="fx-column-container fx-gap-half">
+
+    <li *ngFor="let attribute of attributes" class="fx-item-none">
+      <span class="text-label nowrap">{{attribute.name}}: </span>
+      <span class="text-highlight nowrap">{{attribute.value}} </span>
+    </li>
+
+  </ul>
+
+</ng-template>
+
+
+<ng-template #productPresentation let-row="row">
+
+  <div class="list-container">
+
+    <div class="fx-row-container">
+
+      <form autocomplete="off"
+        [style.width]="row.selectedPresentation.vendors.length > 1 ? 'calc(100% - 32px)' : '100%'">
+
+        <emp-ng-select
+          [(ngModel)]="row.selectedPresentation"
+          [title]="row.selectedPresentation.description"
+          [name]="'selectPresentation'+ row.product.productUID"
+          [config]="{bindByValue: false}"
+          [items]="row.product.presentations"
+          bindValue="presentationUID"
+          bindLabel="description">
+
+        </emp-ng-select>
+
+      </form>
+
+
+      <button *ngIf="row.selectedPresentation.vendors.length > 1"
+        mat-icon-button class="fx-item-none"
+        [title]="row.showAllVendors ? 'Ocultar' : 'Mostrar'"
+        (click)="row.showAllVendors = !row.showAllVendors">
+
+        <mat-icon>
+          {{row.showAllVendors ? 'expand_less' :'expand_more'}}
+        </mat-icon>
+
+      </button>
+
+    </div>
+
+    <div class="fx-column-container fx-gap-half list-selection-item" [@expandCollapse]
+      *ngFor="let vendor of (row.showAllVendors ?
+              row.selectedPresentation.vendors :
+              row.selectedPresentation?.vendors.slice(0,1))">
+
+      <div class="bold-text">
+        {{vendor.vendorName}}
+      </div>
+
+      <div class="fx-row-container fx-space-between">
+        <div>
+          <span class="text-label">Existencia:</span>
+          <span class="text-highlight">{{!vendor.stock ? '-' : (vendor.stock | number)}}</span>
+        </div>
+
+        <div>
+          <span class="text-label nowrap">Precio base:</span>
+          <span class="text-highlight">{{vendor.price | empDecimal}}</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</ng-template>

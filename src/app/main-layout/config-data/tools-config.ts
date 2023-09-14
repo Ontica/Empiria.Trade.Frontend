@@ -6,10 +6,10 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-export type TOOL_TYPES = 'None' | 'Search' | 'Alerts' ;
+export type TOOL_TYPES = 'None' | 'ProductsSeeker' | 'Alerts' ;
 
 
-export const TOOLS_LIST: TOOL_TYPES[] = ['None', 'Search', 'Alerts'];
+export const TOOLS_LIST: TOOL_TYPES[] = ['None', 'ProductsSeeker', 'Alerts'];
 
 
 export interface Tool {
