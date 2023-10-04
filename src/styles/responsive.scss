@@ -6,32 +6,23 @@
  */
 
 //
-// Responsive mixins and classes
+// Responsive classes
 //
-$screen-small: 959px;
 
-$screen-medium: 1279px;
+.sm-show {
+  display: none;
 
-$screen-standard: 1439px;
-
-
-@mixin small() {
-  @media only screen and (max-width: $screen-small) {
-    @content;
+  @include small() {
+    display: block;
   }
 }
 
 
-@mixin medium() {
-  @media only screen and (max-width: $screen-medium) {
-    @content;
-  }
-}
+.md-show {
+  display: none;
 
-
-@mixin standard() {
-  @media only screen and (max-width: $screen-standard) {
-    @content;
+  @include medium() {
+    display: block;
   }
 }
 
@@ -65,17 +56,29 @@ $screen-standard: 1439px;
 }
 
 
-.md-fx-item {
-  @include small() {
-    flex: 1 1 100%;
-    max-height: 100%;
-    max-width: 100%;
-  }
-}
+.fx-row-container,
+.fx-row-container-fill,
+.fx-column-container,
+.fx-column-container-fill {
 
-
-.md-fx-item-none {
-  @include small() {
-    flex: 0 0 auto;
+  .md-fx-item {
+    @include small() {
+      flex: 1 1 100%;
+      max-height: 100%;
+      max-width: 100%;
+    }
   }
+
+  .md-fx-item-none {
+    @include small() {
+      flex: 0 0 auto;
+    }
+  }
+
+  .md-fx-gap-half {
+    @include small() {
+      gap: 0.5rem;
+    }
+  }
+
 }

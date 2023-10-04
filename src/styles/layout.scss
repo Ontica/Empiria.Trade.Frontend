@@ -5,20 +5,6 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
- @mixin row() {
-   display: flex;
-   flex-flow: row nowrap;
- }
-
- @mixin column() {
-   display: flex;
-   flex-flow: column nowrap;
- }
-
- @mixin expand() {
-   flex: 1 1 1e-9px;
- }
-
  //
  // flex containers
  //
@@ -37,6 +23,50 @@
   // width: 100%;
 }
 
+//
+// flex items
+//
+.fx-row-container,
+.fx-row-container-fill {
+
+  .fx-item {
+    @include expand;
+  }
+
+  .fx-item-none {
+    flex: 0 0 auto;
+  }
+
+  .fx-item-two-third {
+    flex: 1 1 100%;
+    max-width: 66.66%;
+  }
+
+  .fx-item-half {
+    flex: 1 1 100%;
+    max-width: 50%;
+  }
+
+  .fx-item-half-margin {
+    flex: 1 1 100%;
+    max-width: calc(50% - 8px);
+  }
+
+  .fx-item-third {
+    flex: 1 1 100%;
+    max-width: 33.33%;
+  }
+
+  .fx-item-quarter {
+    flex: 1 1 100%;
+    max-width: 25%;
+  }
+
+  .fx-item-auto {
+    flex-grow: 1;
+  }
+}
+
 .fx-column-container {
   @include column;
   flex: 0;
@@ -51,55 +81,64 @@
   // flex: 1;
 }
 
+//
+// flex items
+//
+.fx-column-container,
+.fx-column-container-fill {
+
+  .fx-item {
+    @include expand;
+  }
+
+  .fx-item-none {
+    flex: 0 0 auto;
+  }
+
+  .fx-item-two-third {
+    flex: 1 1 100%;
+    max-height: 66.66%;
+  }
+
+  .fx-item-half {
+    flex: 1 1 100%;
+    max-height: 50%;
+  }
+
+  .fx-item-half-margin {
+    flex: 1 1 100%;
+    max-height: calc(50% - 8px);
+  }
+
+  .fx-item-third {
+    flex: 1 1 100%;
+    max-height: 33.33%;
+  }
+
+  .fx-item-quarter {
+    flex: 1 1 100%;
+    max-height: 25%;
+  }
+
+  .fx-item-auto {
+    flex-grow: 1;
+  }
+}
+
 .fx-fill {
   height: 100%;
   width: 100%;
 }
 
+.fx-fill-auto {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+
 .fx-wrap {
   flex-wrap: wrap;
   align-items: stretch;
-}
-
-//
-// flex items
-//
-
-.fx-item {
-  @include expand;
-}
-
-.fx-item-none {
-  flex: 0 0 auto;
-}
-
-.fx-item-two-third {
-  flex: 1 1 100%;
-  max-width: 66.66%;
-}
-
-.fx-item-half {
-  flex: 1 1 100%;
-  max-width: 50%;
-}
-
-.fx-item-half-margin {
-  flex: 1 1 100%;
-  max-width: calc(50% - 8px);
-}
-
-.fx-item-third {
-  flex: 1 1 100%;
-  max-width: 33.33%;
-}
-
-.fx-item-quarter {
-  flex: 1 1 100%;
-  max-width: 25%;
-}
-
-.fx-item-auto {
-  flex-grow: 1;
 }
 
 //
@@ -187,4 +226,23 @@
 .fx-magin-item {
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
+}
+
+//
+// Spacing
+//
+
+.fx-spacing-1 {
+  margin: 0.25rem;
+  padding: 0.25rem;
+}
+
+.fx-spacing-2 {
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+
+.fx-spacing-3 {
+  margin: 1rem;
+  padding: 1rem;
 }

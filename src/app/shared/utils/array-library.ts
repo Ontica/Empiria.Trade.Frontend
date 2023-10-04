@@ -23,4 +23,11 @@ export class ArrayLibrary {
     return newArray;
   }
 
+
+  static getFirstItem<T>(array: T[]): T {
+    return array.length > 0 ?
+      array.find(e => typeof e !== 'undefined') :
+      null;
+  }
+
 }

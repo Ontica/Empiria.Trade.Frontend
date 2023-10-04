@@ -5,6 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+ //
+ // Color Palette
+ //
 $white: hsl(0, 0%, 99%) !default;
 
 $primary-color: hsl(207, 91%, 30%) !default;
@@ -38,8 +41,12 @@ $border-color-dark: hsl(0, 0%, 56%) !default;
 $disabled-color: hsl(207, 91%, 94%) !default;
 
 $secondary-text-color: $white !default;
-$action-color: $primary-color;
-$action-selected-color: $primary-color-dark;
+$action-color: $primary-color !default;
+$action-selected-color: $primary-color-dark !default;
+$selected-item-text-color: $text-color-dark !default;
+$link-color: $text-color-dark !default;
+
+$backdrop-color: rgba(0, 0, 0, 0.5) !default;
 
 //
 // Typography
@@ -65,6 +72,13 @@ $font-size-grid-header: $font-size-base * 0.65;
 $font-size-grid: 9pt;
 
 //
+// Responsive
+//
+$screen-small: 959px;
+$screen-medium: 1366px;
+$screen-standard: 1440px;
+
+//
 // Layout
 //
 $layout-gradient-initial-color: $primary-color-dark;
@@ -76,12 +90,6 @@ $toolbar-item-background-hover: lighten($primary-color, 60);
 $toolbar-icon-color: $primary-color;
 $toolbar-item-size: 34px;
 $toolbar-icon-size: 24px;
-
-//
-// Elements colors
-//
-$selected-item-text-color: $text-color-dark;
-$link-color: $text-color-dark;
 
 //
 // icons
@@ -108,7 +116,6 @@ $form-title-color: $border-color-dark;
 //
 // html controls
 //
-
 $control-font: 9.5pt $font-family-secondary;
 $control-small-font: 8.5pt $font-family-secondary;
 
@@ -142,18 +149,19 @@ $button-height: 28px;
 $checkbox-background-color: $primary-color-light;
 $checkbox-warning-background-color: $layout-secondary-color;
 $date-picker-width: 90px;
+$range-picker-width: 185px;
 
 $tag-background-color: hsl(207, 91%, 90%) !default;
 
 //
 // grid
 //
-$grid-header-background-color: hsl(240, 1%, 91%) !default;
-$grid-footer-background-color: hsl(240, 1%, 91%);
+$grid-header-background-color: hsl(240, 1%, 94%) !default;
+$grid-footer-background-color: hsl(240, 1%, 94%);
 $grid-border: 0;
 $grid-even-background-color: $white;
-$grid-odd-background-color: hsl(0, 0%, 96%) !default;
-$grid-hover-background-color: hsl(0, 0%, 97%);
+$grid-odd-background-color: hsl(240, 1%, 96%) !default;
+$grid-hover-background-color: hsl(240, 1%, 97%);
 $grid-selected-background-color: hsl(207, 91%, 98%);
 $grid-selected-hover-background-color: hsl(207, 91%, 96%);
 $grid-header-height: 30px;

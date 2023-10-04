@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-@import 'variables', 'layout', 'responsive';
+@import 'mixins', 'variables';
 
 table {
   border: 0;
@@ -21,16 +21,6 @@ table td {
 
 table td:last-child {
   width: 100%;
-}
-
-@mixin input-button-settings {
-  font: $button-font;
-  text-transform: uppercase;
-  border: $button-border;
-  height: $button-height;
-  min-width: 88px;
-  padding: 4pt 8pt;
-  white-space: nowrap;
 }
 
 .circled {
@@ -224,29 +214,6 @@ button.btn-margin-right {
   margin-right: 32px;
 }
 
-@mixin input-settings {
-  background-color: $control-background-color;
-  border-top: $control-border;
-  border-bottom: $control-border;
-  border-left: $control-border;
-  border-right: $control-border;
-  color: $control-color;
-  font: $control-font;
-  font-weight: normal;
-  margin: $control-margin;
-  padding: $control-padding;
-  vertical-align: middle;
-  height: $control-height;
-  width: $control-width;
-  border-radius: $control-border-radius;
-  transition: 0.3s ease-out;
-}
-
-@mixin disabled-element {
-  color: $control-disabled-color;
-  background: $control-disabled-background;
-}
-
 select.select-box {
   @include input-settings;
 }
@@ -341,6 +308,11 @@ textarea:focus {
   background-color: $selected-control-background-color;
   border: $selected-control-border;
   box-shadow: inset 0 0 2px $selected-control-border;
+}
+
+.text-monospace {
+  font-family: $font-family-secondary;
+  font-size: 11pt;
 }
 
 .text-align-left {
@@ -442,10 +414,6 @@ a.warning-indicator-text:hover {
 
 .ghost-icon:hover {
   color: $icon-color-dark;
-}
-
-@mixin raised-header {
-  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.28);
 }
 
 .small-italic-notification {
@@ -748,4 +716,8 @@ ul.default-list {
 
 .list-selection-item:not(:last-child) {
   border-bottom: 1px dashed $secondary-color-light;
+}
+
+.workarea-color {
+  background: hsl(207, 91%, 98%);
 }

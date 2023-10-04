@@ -228,7 +228,7 @@ table.mat-mdc-table.emp-designer tr.mat-mdc-row.fixed-cells-type td.mat-mdc-cell
 table.mat-mdc-table tr.mat-mdc-row.row-selected {
 
   td:first-of-type {
-    padding-left: 7px;
+    padding-left: calc(1rem - 3px);
     border-left: 3px solid darken($grid-selected-background-color, 50%);
   }
 

@@ -80,7 +80,7 @@
 }
 
 .mat-mdc-tab-body-content {
-  padding: 16px 20px;
+  padding: 16px 24px;
 }
 
 .mat-mdc-tab:not(.mat-mdc-tab-disabled) .mdc-tab-indicator__content--underline,
@@ -201,6 +201,14 @@ table.mat-mdc-table {
     &:last-of-type {
       padding-right: $grid-entry-padding-vertical !important;
     }
+
+    &.column-action {
+      text-align: center;
+      width: $grid-row-height !important;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      padding-right: 1rem;
+    }
   }
 
   td {
@@ -222,9 +230,10 @@ table.mat-mdc-table {
 
     &.column-action {
       text-align: center;
-      width: 32px !important;
-      padding-top: $grid-entry-padding-vertical;
-      padding-bottom: $grid-entry-padding-vertical;
+      width: $grid-row-height !important;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      padding-right: 1rem;
     }
 
     &.column-action-check {
@@ -488,6 +497,11 @@ table.mat-mdc-table.emp-designer {
 //
 // matexpansion panel
 //
+
+.mat-accordion .mat-expansion-panel:last-of-type,
+.mat-accordion .mat-expansion-panel:first-of-type {
+  border-radius: 0!important;
+}
 
 .mat-expansion-panel-header {
   min-height: 36px;
@@ -829,5 +843,5 @@ table.mat-mdc-table.emp-designer {
 //
 
 .mat-drawer-backdrop.mat-drawer-shown {
-  background-color: rgba(100, 100, 100, 0.5);
+  background-color: $backdrop-color!important;
 }
