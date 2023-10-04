@@ -1,0 +1,22 @@
+<div class="fx-row-container">
+
+  <img class="logo" *ngIf="appConfig.layout.displayLogo"
+    [alt]="appConfig.data.organization"
+    [src]="appConfig.layout.displayNavbarHeader ? 'assets/img/customer/logo.png' : 'assets/img/customer/main-page.logo.png'"/>
+
+  <div *ngIf="appConfig.layout.displayNavbarHeader" class="header-container">
+
+    <span class="header">{{appConfig.data.organization}}</span>
+
+    <div class="subheader">
+
+      <ng-container *ngIf="appConfig.data.hint">
+        {{appConfig.data.hint}} &nbsp; &nbsp; | &nbsp; &nbsp;
+      </ng-container>
+      {{appConfig.data.name}}
+
+    </div>
+
+  </div>
+
+</div>

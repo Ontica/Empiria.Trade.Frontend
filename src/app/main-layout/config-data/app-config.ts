@@ -23,7 +23,7 @@ export const APP_CONFIG: AppConfig = {
   layout: {
     displayLogo: false,
     displayNavbarHeader: true,
-    displayMenuUser: false,
+    displayMenuUser: true,
     displayChangeLanguage: false,
     displayChangePassword: false,
     displayAsideLeft: false,

@@ -58,11 +58,6 @@ export class MainLayoutComponent implements OnDestroy {
   }
 
 
-  onAction(action: string) {
-
-  }
-
-
   private setSpinnerService() {
     this.spinnerService = this.store.select<boolean>(MainUIStateSelector.IS_PROCESSING);
   }

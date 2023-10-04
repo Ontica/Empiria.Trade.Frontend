@@ -4,7 +4,8 @@
  *
  * See LICENSE.txt in the project root for complete license information.
  */
-@import "../../../styles/general-styles.scss";
+
+@import '../../../styles/variables', '../../../styles/mixins';
 
 $margin-size: 16px;
 $margin-size-border: 36px;
@@ -31,23 +32,6 @@ $min-width-sides: 225px;
     margin: 0 $margin-size 0 $margin-size-border;
   }
 
-  .logo {
-    max-height: 46px;
-  }
-
-  .header-container {
-    padding-left: 8px;
-  }
-
-  .header {
-    text-transform: uppercase;
-  }
-
-  .subheader {
-    font-size: 8pt;
-    margin-top: 4px;
-  }
-
   .main-menu {
     margin: 0 $margin-size;
   }
@@ -61,10 +45,6 @@ $min-width-sides: 225px;
     .left-section {
       min-width: auto;
       margin: 0 $margin-size-small;
-    }
-
-    .header-container {
-      display: none;
     }
 
     .main-menu {

@@ -7,12 +7,14 @@
 
 import { Component } from '@angular/core';
 
+import { APP_CONFIG } from '../config-data';
+
 
 @Component({
-  selector: 'emp-ng-nav-bar',
-  templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.scss']
+  selector: 'emp-ng-branding',
+  templateUrl: './branding.component.html',
+  styleUrls: ['./branding.component.scss']
 })
-export class NavBarComponent {
-
+export class BrandingComponent {
+  appConfig = APP_CONFIG;
 }
