@@ -29,7 +29,8 @@
             "allowedCommonJsDependencies": [
               "quill",
               "crypto-js",
-              "moment"
+              "moment",
+              "lodash/cloneDeep"
             ],
             "outputPath": "dist/empiria-trade-frontend",
             "index": "src/index.html",
