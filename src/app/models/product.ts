@@ -5,6 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+import { OrderFields } from './order';
+
 
 export interface Product {
   productUID: string;
@@ -46,7 +48,7 @@ export interface Vendor {
 
 export interface ProductQuery {
   keywords?: string;
-  order?: any;
+  order?: OrderFields;
 }
 
 

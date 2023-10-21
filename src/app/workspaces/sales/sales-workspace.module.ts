@@ -12,10 +12,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
-import { SupplyCoreModule } from '@app/views/supply-core/supply-core.module';
+import { SalesModule } from '@app/views/sales/sales.module';
+import { InventoryModule } from '@app/views/inventory/inventory.module';
 
 import { SalesWorkspaceRoutingModule } from './sales-workspace-routing.module';
-
 import { SalesMainPageComponent } from './sales-main-page.component';
 
 
@@ -28,8 +28,10 @@ import { SalesMainPageComponent } from './sales-main-page.component';
     AngularMaterialModule,
     SharedModule,
 
+    SalesModule,
+    InventoryModule,
+
     SalesWorkspaceRoutingModule,
-    SupplyCoreModule,
   ],
 
   declarations: [

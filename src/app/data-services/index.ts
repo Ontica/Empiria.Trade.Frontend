@@ -9,4 +9,8 @@ export * from './file-services/file-download.service';
 
 export * from './_access-control.data.service';
 
+export * from './contacts.data.service';
+
+export * from './sales-orders.data.service';
+
 export * from './products.data.service';

@@ -1,0 +1,73 @@
+  <mat-divider [style.margin]="'8px 0'">
+
+  </mat-divider>
+
+  <div class="fx-row-container">
+
+    <ng-container *ngIf="!isSaved">
+
+      <div class="fx-item fx-end fx-items-center">
+
+        <button
+          [class.btn]="!isReady"
+          [class.btn-action]="isReady"
+          (click)="onCreateButtonClicked()">
+          Agregar pedido
+        </button>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isSaved && canEdit">
+
+      <div class="fx-item fx-start fx-items-center">
+
+        <button *ngIf="editionMode"
+          type="button" class="btn-warning"
+          (click)="onDeleteButtonClicked()">
+          Cancelar
+        </button>
+
+        <button *ngIf="!editionMode"
+          type="button" class="btn"
+          (click)="onSendToButtonClicked()">
+          Aplicar
+        </button>
+
+      </div>
+
+      <div class="fx-item fx-end fx-items-center">
+
+        <div class="fx-row-container fx-gap-half">
+
+          <button *ngIf="!editionMode"
+            class="btn-action"
+            (click)="onToggleEditionMode()">
+            Editar
+          </button>
+
+          <ng-container *ngIf="editionMode">
+
+            <button
+              [class.btn]="!isReady"
+              [class.btn-action]="isReady"
+              (click)="onUpdateButtonClicked()">
+              Guardar
+            </button>
+
+            <button
+              class="btn-base uppercase"
+              (click)="onToggleEditionMode()">
+              Descartar Cambios
+            </button>
+
+          </ng-container>
+
+        </div>
+
+      </div>
+
+    </ng-container>
+
+  </div>

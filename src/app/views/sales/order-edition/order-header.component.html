@@ -1,0 +1,129 @@
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+
+  <div class="fx-column-container fx-gap-half">
+
+    <div class="fx-row-container">
+
+        <div class="fx-item-third">
+          <label>Pedido:</label>
+          <input type="text" class="text-box"
+            formControlName="orderNumber"
+            [class.invalid-control]="formHelper.isControlInvalid(form.controls.orderNumber)">
+        </div>
+
+        <div class="fx-item-third">
+
+        </div>
+
+        <div class="fx-item-third fx-row-container">
+
+          <div class="fx-item-none">
+            <label>Fecha:</label>
+            <emp-ng-datepicker
+              formControlName="orderTime"
+              [showError]="formHelper.isControlInvalid(form.controls.orderTime)">
+
+            </emp-ng-datepicker>
+          </div>
+
+          <div class="fx-item">
+            <label>Estatus:</label>
+            <emp-ng-select
+              formControlName="status"
+              [items]="statusList"
+              [showError]="formHelper.isControlInvalid(form.controls.status)">
+            </emp-ng-select>
+          </div>
+
+        </div>
+
+    </div>
+
+    <div class="fx-row-container">
+
+      <div class="fx-item-third">
+        <label>Vendedor:</label>
+        <emp-ng-select
+          formControlName="salesAgent"
+          [config]="{bindByValue: false}"
+          [items]="salesAgentsList"
+          [showError]="formHelper.isControlInvalid(form.controls.salesAgent)">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item-third">
+        <label>Proveedor:</label>
+        <emp-ng-select
+          formControlName="supplier"
+          [config]="{bindByValue: false}"
+          [items]="suppliersList"
+          [showError]="formHelper.isControlInvalid(form.controls.supplier)">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item-third">
+        <label>Forma de envio:</label>
+        <emp-ng-select
+          formControlName="shippingMethod"
+          [items]="shippingMethodList"
+          [showError]="formHelper.isControlInvalid(form.controls.shippingMethod)">
+        </emp-ng-select>
+      </div>
+
+    </div>
+
+    <div class="fx-row-container">
+
+      <div class="fx-item-third">
+        <label>Cliente:</label>
+        <emp-ng-select #customer
+          formControlName="customer"
+          placeholder="Buscar cliente"
+          [config]="{ bindByValue: false,
+                      minTermLength: minTermLength,
+                      typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres',
+                      virtualScroll: true }"
+          [items]="customersList$ | async"
+          [typeahead]="customersInput$"
+          [loading]="isCustomersLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.customer)"
+          (changes)="onCustomertChange()">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item-third">
+        <label>Contacto:</label>
+
+        <emp-ng-select
+          formControlName="customerContact"
+          [config]="{bindByValue: false, clearable: true}"
+          [items]="customerContactsList"
+          [placeholder]="contactsPlaceholder"
+          [showError]="formHelper.isControlInvalid(form.controls.customerContact)">
+
+           <ng-template #labelTemplate let-item="item">
+              {{item.name}} {{item.phone ? '(' + item.phone + ')' : ''}}
+            </ng-template>
+
+            <ng-template #optionTemplate let-item="item">
+              {{item.name}} {{item.phone ? '(' + item.phone + ')' : ''}}
+            </ng-template>
+
+          </emp-ng-select>
+      </div>
+
+      <div class="fx-item-third">
+        <label>Condiciones de pago:</label>
+        <emp-ng-select
+          formControlName="paymentCondition"
+          [items]="paymentConditionList"
+          [showError]="formHelper.isControlInvalid(form.controls.paymentCondition)">
+        </emp-ng-select>
+      </div>
+
+    </div>
+
+  </div>
+
+
+</form>

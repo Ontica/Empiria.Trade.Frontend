@@ -1,0 +1,32 @@
+<emp-ng-card
+  [title]="title"
+  [hint]="hint"
+  (cardClose)="onClose()" >
+
+  <mat-tab-group mat-stretch-tabs="false" [(selectedIndex)]="selectedTabIndex" >
+
+    <mat-tab label="General">
+
+      <emp-trade-order-editor
+        [order]="order"
+        (orderEditorEvent)="onOrderEditorEvent($event)">
+
+      </emp-trade-order-editor>
+
+    </mat-tab>
+
+    <mat-tab label="Envio" disabled>
+
+    </mat-tab>
+
+    <mat-tab label="Pago" disabled>
+
+    </mat-tab>
+
+    <mat-tab label="Documentos" disabled>
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+</emp-ng-card>

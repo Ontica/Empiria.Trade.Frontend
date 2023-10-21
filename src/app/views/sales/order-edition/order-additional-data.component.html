@@ -1,0 +1,16 @@
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+
+  <div class="fx-column-container fx-gap-half">
+
+    <div class="fx-item">
+      <label>Notas:</label>
+      <textarea class="text-area" empNgTextareaAutoresize rows="5"
+        formControlName="notes"
+        [class.invalid-control]="formHelper.isControlInvalid(form.controls.notes)">
+
+      </textarea>
+    </div>
+
+  </div>
+
+</form>

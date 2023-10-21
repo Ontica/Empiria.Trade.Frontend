@@ -13,6 +13,10 @@ import { getSaver, SAVER } from './file-services/saver.provider';
 
 import { AccessControlDataService } from './_access-control.data.service';
 
+import { ContactsDataService } from './contacts.data.service';
+
+import { SalesOrdersDataService } from './sales-orders.data.service';
+
 import { ProductsDataService } from './products.data.service';
 
 
@@ -21,6 +25,8 @@ import { ProductsDataService } from './products.data.service';
   providers: [
     FileDownloadService,
     AccessControlDataService,
+    ContactsDataService,
+    SalesOrdersDataService,
     ProductsDataService,
 
     { provide: SAVER, useFactory: getSaver }

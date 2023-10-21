@@ -1,0 +1,63 @@
+<cdk-virtual-scroll-viewport tvsItemSize="32">
+
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="orderNumber">
+      <th mat-header-cell *matHeaderCellDef class="nowrap"> No. Orden </th>
+      <td mat-cell *matCellDef="let row" class="nowrap">
+        <a class="link-highlight bold-text" (click)="onEntryClicked(row)">
+          {{ row.orderNumber }}
+        </a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef class="nowrap"> Fecha </th>
+      <td mat-cell *matCellDef="let row">
+        {{!!row.orderTime ? (row.orderTime | dateTimeFormat) : '-'}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="customer">
+      <th mat-header-cell *matHeaderCellDef> Cliente </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.customer.name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef class="text-align-center"> Estatus </th>
+      <td mat-cell *matCellDef="let row" class="text-align-center">
+        <span class="tag">{{ getOrderStatusName(row.status) }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="vendor">
+      <th mat-header-cell *matHeaderCellDef> Vendedor </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.salesAgent.name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="total">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right"> Total </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right">
+        {{ row.orderTotal ?? 0 | empDecimal }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+      [class.row-selected]="row.uid === orderSelected?.uid"></tr>
+
+  </table>
+
+  <div *ngIf="!queryExecuted" class="text-not-found">
+    {{isLoading ? 'Cargando...' : 'No se ha invocado la consulta.'}}
+  </div>
+
+  <div *ngIf="queryExecuted && ordersList.length === 0" class="text-not-found">
+    No se encontraron registros con el filtro proporcionado.
+  </div>
+
+</cdk-virtual-scroll-viewport>

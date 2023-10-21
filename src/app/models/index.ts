@@ -20,12 +20,16 @@
 
 export * from './_access-control';
 
+export * from './contacts';
+
 export * from './data-table';
 
 export * from './edition-command';
 
 export * from './imported-data';
 
-export * from './reporting';
+export * from './order';
 
 export * from './product';
+
+export * from './reporting';
