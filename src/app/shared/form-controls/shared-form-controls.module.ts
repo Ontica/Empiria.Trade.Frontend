@@ -14,6 +14,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 import { AngularMaterialModule } from '../angular-material.module';
 
+import { SharedDirectivesModule } from '../directives/shared-directives.module';
 import { SharedPipesModule } from '../pipes/shared-pipes.module';
 import { SharedContainersModule } from '../containers/shared-containers.module';
 import { IconSvgModule } from '../icon-svg.module';
@@ -24,6 +25,7 @@ import { DatePickerComponent } from './date-picker/date-picker.component';
 import { DateRangePickerComponent } from './date-range-picker/date-range-picker.component';
 import { FileControlComponent } from './file-control/file-control.component';
 import { FilePrintPreviewComponent } from './file-print-preview/file-print-preview.component';
+import { InputNumericComponent } from './input-numeric/input-numeric.component';
 import { MenuComponent } from './menu/menu.component';
 import { MonthPickerComponent } from './date-range-picker/month-picker/month-picker.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
@@ -39,6 +41,7 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
     ReactiveFormsModule,
     AngularMaterialModule,
     NgSelectModule,
+    SharedDirectivesModule,
     SharedPipesModule,
     SharedContainersModule,
     QuillModule.forRoot(),
@@ -52,6 +55,7 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
     DateRangePickerComponent,
     FileControlComponent,
     FilePrintPreviewComponent,
+    InputNumericComponent,
     MenuComponent,
     MonthPickerComponent,
     SearchBoxComponent,
@@ -66,6 +70,7 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
     DateRangePickerComponent,
     FileControlComponent,
     FilePrintPreviewComponent,
+    InputNumericComponent,
     MenuComponent,
     SearchBoxComponent,
     SelectBoxComponent,
