@@ -9,15 +9,16 @@
 
 $medium-max-width: 1024px;
 $logo-width: 350px;
+$container-width: 390px;
 $logo-padding: 20px;
 
 .outer {
   height: 100vh;
-  padding-right: 15%;
+  padding-right: 5%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  background: url("../../../../assets/img/customer/background.png") no-repeat center center fixed;
+  background: url("../../../../assets/img/customer/background.jpg") no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -25,6 +26,7 @@ $logo-padding: 20px;
   display: flex;
   align-items: center;
   height: 100%;
+  width: $container-width;
   background: -prefix-linear-gradient(top, $layout-gradient-initial-color, $layout-gradient-final-color);
   background: linear-gradient(to top, $layout-gradient-initial-color, $layout-gradient-final-color);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
@@ -37,6 +39,7 @@ $logo-padding: 20px;
 .authentication-section-logo {
   display: flex;
   align-items: center;
+  width: calc($container-width + 10px);
   text-align: center;
   padding: $logo-padding;
   margin: 0 -5px;
@@ -45,8 +48,7 @@ $logo-padding: 20px;
 }
 
 .logo {
-  width: $logo-width;
-  height: auto;
+  max-height: 25vh;
   margin: auto;
 }
 
