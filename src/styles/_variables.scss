@@ -151,7 +151,12 @@ $checkbox-warning-background-color: $layout-secondary-color;
 $date-picker-width: 90px;
 $range-picker-width: 185px;
 
-$tag-background-color: hsl(207, 91%, 90%) !default;
+$tag-default-background-color: hsl(207, 91%, 90%) !default;
+$tag-info-background-color: $primary-color-light !default;
+$tag-error-background-color: $warning-color-light !default;
+$tag-warning-color: hsl(39, 81%, 50%) !default;
+
+$tag-default-color: hsl(207, 91%, 40%) !default;
 
 //
 // grid
@@ -166,8 +171,8 @@ $grid-selected-background-color: hsl(207, 91%, 98%);
 $grid-selected-hover-background-color: hsl(207, 91%, 96%);
 $grid-header-height: 30px;
 $grid-row-height: 32px;
-$grid-entry-padding-vertical: 1rem;
-$grid-entry-padding-horizontal: 2rem;
+$grid-entry-padding-vertical: 0.75rem;
+$grid-entry-padding-horizontal: 1.5rem;
 
 //
 // Designer

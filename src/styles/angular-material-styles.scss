@@ -207,7 +207,7 @@ table.mat-mdc-table {
       width: $grid-row-height !important;
       padding-top: 0.25rem;
       padding-bottom: 0.25rem;
-      padding-right: 1rem;
+      padding-right: $grid-entry-padding-vertical;
     }
   }
 
@@ -233,7 +233,8 @@ table.mat-mdc-table {
       width: $grid-row-height !important;
       padding-top: 0.25rem;
       padding-bottom: 0.25rem;
-      padding-right: 1rem;
+      padding-right: $grid-entry-padding-vertical;
+      vertical-align: middle;
     }
 
     &.column-action-check {
@@ -314,6 +315,10 @@ table.mat-mdc-table {
     &.mat-mdc-row {
       background-color: $white;
     }
+  }
+
+  &.data-centered td {
+    vertical-align: middle;
   }
 
   .text-align-right {
