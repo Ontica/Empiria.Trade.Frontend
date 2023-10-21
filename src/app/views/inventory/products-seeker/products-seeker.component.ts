@@ -7,11 +7,11 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EmpObservable, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { Product, ProductQuery } from '@app/models';
+import { OrderFields, ProductDescriptor, ProductQuery } from '@app/models';
 
 import { ProductsDataService } from '@app/data-services';
 
@@ -20,7 +20,8 @@ import { ProductsFilterEventType } from './products-filter.component';
 import { ProductsTableEventType } from './products-table.component';
 
 export enum ProductsSeekerEventType {
-  ENTRY_CLICKED = 'ProductsSeekerComponent.Event.EntryClicked',
+  SELECT_PRODUCT = 'ProductsSeekerComponent.Event.SelectProduct',
+  ADD_PRODUCT    = 'ProductsSeekerComponent.Event.AddProduct',
 }
 
 @Component({
@@ -29,19 +30,19 @@ export enum ProductsSeekerEventType {
 })
 export class ProductsSeekerComponent implements OnInit {
 
-  @Input() title = 'Buscador de productos';
+  @Input() order: OrderFields = null;
 
-  @Input() productSelected = null;
+  @Input() displayFlat = null;
 
   @Output() productsSeekerEvent = new EventEmitter<EventInfo>();
 
-  hintText = 'Ingrese el producto a buscar.';
+  resultText = 'Ingrese el producto a buscar.';
 
   queryExecuted = false;
 
   isLoading = false;
 
-  data: Product[] = [];
+  data: ProductDescriptor[] = [];
 
 
   constructor(private productsData: ProductsDataService) {
@@ -50,7 +51,7 @@ export class ProductsSeekerComponent implements OnInit {
 
 
   ngOnInit() {
-    this.setText();
+    this.setResultText();
   }
 
 
@@ -76,9 +77,14 @@ export class ProductsSeekerComponent implements OnInit {
   onProductsTableEvent(event: EventInfo) {
     switch (event.type as ProductsTableEventType) {
 
-      case ProductsTableEventType.ENTRY_CLICKED:
-        Assertion.assertValue(event.payload.entry, 'event.payload.entry');
-        sendEvent(this.productsSeekerEvent, ProductsSeekerEventType.ENTRY_CLICKED, event.payload.entry);
+      case ProductsTableEventType.SELECT_PRODUCT_CLICKED:
+        Assertion.assertValue(event.payload.product, 'event.payload.product');
+        sendEvent(this.productsSeekerEvent, ProductsSeekerEventType.SELECT_PRODUCT, event.payload);
+        return;
+
+      case ProductsTableEventType.ADD_PRODUCT_CLICKED:
+        Assertion.assertValue(event.payload.selection, 'event.payload.selection');
+        sendEvent(this.productsSeekerEvent, ProductsSeekerEventType.ADD_PRODUCT, event.payload);
         return;
 
       default:
@@ -91,35 +97,57 @@ export class ProductsSeekerComponent implements OnInit {
   private clearData() {
     this.queryExecuted = false;
     this.data = [];
-    this.setText();
+    this.setResultText();
   }
 
 
   private searchData(query: ProductQuery) {
+    const queryValid = this.buildProductQuery(query)
+
+    const observable = this.order ?
+      this.productsData.searchProductsForOrder(queryValid) :
+      this.productsData.searchProducts(queryValid)
+
+    this.executeSearchProducts(observable);
+  }
+
+
+  private executeSearchProducts(observable: EmpObservable<any>) {
     this.isLoading = true;
     this.clearData();
 
-    this.productsData.searchProducts(query)
+    observable
       .firstValue()
       .then(x => this.data = x)
       .finally(() => this.setSearchFinally());
   }
 
 
-  private setSearchFinally() {
-    this.queryExecuted = true;
-    this.isLoading = false;
-    this.setText();
+  private buildProductQuery(query: ProductQuery) {
+    const productQuery: ProductQuery = {...query};
+
+    if (!!this.order) {
+      productQuery.order = this.order;
+    }
+
+    return productQuery;
   }
 
 
-  private setText() {
+  private setSearchFinally() {
+    this.queryExecuted = true;
+    this.isLoading = false;
+    this.setResultText();
+  }
+
+
+  private setResultText() {
     if (!this.queryExecuted) {
-      this.hintText = 'Ingrese el producto a buscar.';
+      this.resultText = 'Ingrese el producto a buscar.';
       return;
     }
 
-    this.hintText = `${this.data.length} registros encontrados`;
+    this.resultText = `${this.data.length} registros encontrados`;
   }
 
 }

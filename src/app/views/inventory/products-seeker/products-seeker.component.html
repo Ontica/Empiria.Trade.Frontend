@@ -1,0 +1,72 @@
+<ng-container *ngIf="displayFlat">
+
+  <div class="fx-fill" [empNgSpinnerHost]="spinner">
+
+    <emp-ng-spinner #spinner [visible]="isLoading">
+
+    </emp-ng-spinner>
+
+    <ng-container *ngTemplateOutlet="productSeeker;">
+
+    </ng-container>
+
+  </div>
+
+
+</ng-container>
+
+
+<div class="card card-border" *ngIf="!displayFlat">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      Buscador de productos
+
+      <div class="card-hint" empNgProgressText
+        loadingText="Buscando..."
+        [finalText]="resultText"
+        [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner">
+
+    <emp-ng-spinner #spinner [visible]="isLoading">
+
+    </emp-ng-spinner>
+
+    <ng-container *ngTemplateOutlet="productSeeker;">
+
+    </ng-container>
+
+  </div>
+
+</div>
+
+
+<ng-template #productSeeker>
+
+  <div class="fx-column-container-fill">
+
+    <emp-trade-products-filter
+      [style.marginLeft.px]="displayFlat ? -8 : 0"
+      (productsFilterEvent)="onProductsFilterEvent($event)">
+
+    </emp-trade-products-filter>
+
+    <emp-trade-products-table class="fx-fill mat-elevation-z1"
+      [isLoading]="isLoading"
+      [queryExecuted]="queryExecuted"
+      [products]="data"
+      [selectable]="displayFlat"
+      (productsTableEvent)="onProductsTableEvent($event)">
+
+    </emp-trade-products-table>
+
+  </div>
+
+</ng-template>

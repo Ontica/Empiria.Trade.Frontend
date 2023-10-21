@@ -1,0 +1,10 @@
+  <span *ngIf="attributes.length === 0"> N/A </span>
+
+  <ul *ngIf="attributes.length > 0" class="fx-column-container fx-gap-half">
+
+    <li *ngFor="let attribute of attributes" class="fx-item-none">
+      <span class="text-label nowrap">{{attribute.name}}: </span>
+      <span class="text-highlight nowrap">{{attribute.value}} </span>
+    </li>
+
+  </ul>

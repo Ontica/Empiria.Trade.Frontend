@@ -23,7 +23,7 @@ export enum ProductsFilterEventType {
   CLEAR_CLICKED  = 'ProductsFilterEventType.Event.ClearSearchClicked',
 }
 
-interface FilterFormModel extends FormGroup<{
+interface ProductsFilterFormModel extends FormGroup<{
   keywords: FormControl<string>;
 }> { }
 
@@ -36,7 +36,7 @@ export class ProductsFilterComponent implements OnDestroy {
 
   @Output() productsFilterEvent = new EventEmitter<EventInfo>();
 
-  form: FilterFormModel;
+  form: ProductsFilterFormModel;
 
   formHelper = FormHelper;
 

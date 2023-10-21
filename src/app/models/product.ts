@@ -6,47 +6,31 @@
  */
 
 
-export interface ProductQuery {
-  keywords: string;
-}
-
-
-export interface ProductForSeeker {
-  product: Product;
-  selectedPresentation: ProductPresentation;
-  showAllVendors: boolean;
-}
-
-
 export interface Product {
   productUID: string;
-  code: string;
+  productCode: string;
   description: string;
   productType: ProductType;
-  presentations: ProductPresentation[];
-
 }
 
 
 export interface ProductType {
   productTypeUID: string;
   name: string;
-  attributes: ProductAttributes[];
+  attributes: Attributes[];
 }
 
 
-
-export interface ProductAttributes {
+export interface Attributes {
   name: string;
   value: string;
 }
 
 
-export interface ProductPresentation {
+export interface Presentation {
   presentationUID: string;
   description: string;
   units: number;
-  vendors: Vendor[];
 }
 
 
@@ -54,17 +38,38 @@ export interface Vendor {
   vendorUID: string;
   vendorName: string;
   sku: string;
+  vendorProductUID: string;
   stock: number;
   price: number;
 }
 
 
-export function mapProductForSeekerFromProduct(product: Product) {
-  const productForSeeker: ProductForSeeker = {
-    product,
-    selectedPresentation: product.presentations[0] ?? null,
-    showAllVendors: false,
-  };
+export interface ProductQuery {
+  keywords?: string;
+  order?: any;
+}
 
-  return productForSeeker;
+
+export interface ProductSelection {
+  product: ProductDescriptor;
+  presentation: ProductPresentation;
+  vendor: Vendor;
+  quantity: number,
+}
+
+
+export interface ProductDescriptor extends Product {
+  productUID: string;
+  productCode: string;
+  description: string;
+  productType: ProductType;
+  presentations: ProductPresentation[];
+}
+
+
+export interface ProductPresentation extends Presentation {
+  presentationUID: string;
+  description: string;
+  units: number;
+  vendors: Vendor[];
 }

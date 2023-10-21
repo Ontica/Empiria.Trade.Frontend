@@ -1,0 +1,139 @@
+<div *ngIf="!product.presentations || product.presentations?.length === 0">
+  N/A
+</div>
+
+<div *ngIf="product.presentations?.length > 0" class="list-container">
+
+  <div class="fx-column-container">
+
+    <form autocomplete="off" empNgFormKeyDownEnter #productSelected>
+
+      <div class="fx-row-container">
+
+        <emp-ng-select #presentationSelected class="fx-item"
+          [(ngModel)]="presentation"
+          [title]="presentation?.description"
+          [name]="'selectPresentation'+ product.productUID"
+          [config]="{bindByValue: false}"
+          [items]="product.presentations"
+          [disabled]="product.presentations.length === 1"
+          bindValue="presentationUID"
+          bindLabel="description"
+          (changes)="onPresentationChanges($event)">
+
+        </emp-ng-select>
+
+        <button *ngIf="presentation?.vendors.length > 1" mat-icon-button class="fx-item-none"
+          [title]="showAllVendors ? 'Ocultar' : 'Mostrar'"
+          (click)="showAllVendors = !showAllVendors">
+
+          <mat-icon>
+            {{showAllVendors ? 'expand_less' :'expand_more'}}
+          </mat-icon>
+
+        </button>
+
+      </div>
+
+      <div *ngIf="!showAllVendors" #vendorSelected class="fx-row-container">
+
+        <div class="fx-column-container fx-item fx-gap-half list-selection-item">
+          <div class="bold-text">
+            {{vendor.vendorName}}
+          </div>
+
+          <div class="fx-row-container fx-space-between">
+            <div class="fx-item-none">
+              <span class="text-label">Existencia:</span>
+              <span class="text-highlight">{{!vendor.stock ? '-' : (vendor.stock | number)}}</span>
+            </div>
+
+            <div class="fx-item-none">
+              <span class="text-label nowrap">Precio lista:</span>
+              <span class="text-highlight">{{vendor.price | empDecimal}}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <ng-container *ngIf="!showAllVendors && selectable" #quantitySelected>
+
+        <mat-divider>
+
+        </mat-divider>
+
+        <div class="fx-row-container fx-space-between">
+
+          <div class="fx-item">
+
+            <span class="text-label">Cantidad:</span>
+
+            <emp-ng-input-numeric
+              [id]="'quantity-' + vendor.vendorProductUID"
+              [minDecimals]="0"
+              [maxDecimals]="2"
+              [(ngModel)]="quantity"
+              [showError]="isQuantityInvalid"
+              [ngModelOptions]="{standalone: true}">
+
+            </emp-ng-input-numeric>
+
+          </div>
+
+          <div class="fx-items-end" [style.marginBottom.px]="2">
+
+            <button class="btn" (click)="onAddProductClicked();">Agregar</button>
+
+          </div>
+
+        </div>
+
+      </ng-container>
+
+    </form>
+
+
+    <div *ngIf="showAllVendors" #productSelection [@expandCollapse]>
+
+      <mat-radio-group class="radio-group-vertical fx-column-container fx-gap-quarter"
+        [(ngModel)]="vendor" [name]="vendor.vendorUID">
+
+        <div *ngFor="let vendor of presentation?.vendors"
+          class="fx-column-container fx-gap-half list-selection-item" [style.width.%]="100">
+
+          <div class="fx-row-container">
+
+            <mat-radio-button [value]="vendor" *ngIf="selectable"
+              class="fx-item" [style.margin.px]="-8">
+
+              <span class="bold-text">{{vendor.vendorName}}</span>
+
+            </mat-radio-button>
+
+            <div class="fx-item bold-text" *ngIf="!selectable"> {{vendor.vendorName}} </div>
+
+          </div>
+
+          <div class="fx-row-container fx-space-between">
+            <div class="fx-item-none">
+              <span class="text-label">Existencia:</span>
+              <span class="text-highlight">{{!vendor.stock ? '-' : (vendor.stock | number)}}</span>
+            </div>
+
+            <div class="fx-item-none">
+              <span class="text-label nowrap">Precio base:</span>
+              <span class="text-highlight">{{vendor.price | empDecimal}}</span>
+            </div>
+          </div>
+
+        </div>
+
+      </mat-radio-group>
+
+    </div>
+
+  </div>
+
+</div>

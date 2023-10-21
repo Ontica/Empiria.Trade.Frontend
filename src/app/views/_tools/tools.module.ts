@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '@app/shared/shared.module';
 
-import { SupplyCoreModule } from '../supply-core/supply-core.module';
+import { InventoryModule } from '../inventory/inventory.module';
 
 import { ProductsSeekerToolComponent } from './products-seeker-tool.component';
 
@@ -21,7 +21,7 @@ import { ProductsSeekerToolComponent } from './products-seeker-tool.component';
     CommonModule,
     SharedModule,
 
-    SupplyCoreModule,
+    InventoryModule,
   ],
   declarations: [
     ProductsSeekerToolComponent,

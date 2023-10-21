@@ -19,9 +19,17 @@ import { ReportsControlsModule } from '../reports-controls/reports-controls.modu
 
 import { ProductsFilterComponent } from './products-seeker/products-filter.component';
 
+import { ProductsTableComponent } from './products-seeker/products-table.component';
+
 import { ProductsSeekerComponent } from './products-seeker/products-seeker.component';
 
-import { ProductsTableComponent } from './products-seeker/products-table.component';
+import { ProductsSelectorComponent } from './products-selector/products-selector.component';
+
+import { ProductAttributesComponent } from './products-seeker/product-attributes.component';
+
+import { ProductDataComponent } from './products-seeker/product-data.component';
+
+import { ProductPresentationsComponent } from './products-seeker/product-presentations.component';
 
 
 @NgModule({
@@ -36,12 +44,17 @@ import { ProductsTableComponent } from './products-seeker/products-table.compone
     ReportsControlsModule,
   ],
   declarations: [
+    ProductAttributesComponent,
+    ProductDataComponent,
+    ProductPresentationsComponent,
     ProductsFilterComponent,
     ProductsSeekerComponent,
     ProductsTableComponent,
+    ProductsSelectorComponent,
   ],
   exports: [
     ProductsSeekerComponent,
+    ProductsSelectorComponent,
   ],
 })
-export class SupplyCoreModule { }
+export class InventoryModule { }

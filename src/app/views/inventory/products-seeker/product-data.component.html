@@ -1,0 +1,7 @@
+<div class="fx-column-container fx-gap-half">
+  <p class="text-highlight">{{ product.description ?? 'N/A' }}</p>
+  <a class="link-highlight bold-text" (click)="onSelectProductClicked(product)">
+    {{ product.productCode ?? 'N/A' }}
+  </a>
+  {{ product.productType.name ?? 'N/A' }}
+</div>

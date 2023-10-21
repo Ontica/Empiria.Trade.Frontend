@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService } from '@app/core';
 
-import { Product, ProductQuery } from '@app/models';
+import { ProductDescriptor, ProductQuery } from '@app/models';
 
 
 @Injectable()
@@ -18,12 +18,21 @@ export class ProductsDataService {
   constructor(private http: HttpService) { }
 
 
-  searchProducts(query: ProductQuery): EmpObservable<Product[]> {
+  searchProducts(query: ProductQuery): EmpObservable<ProductDescriptor[]> {
     Assertion.assertValue(query, 'query');
 
-    const path = 'v4/trade/products/products-list';
+    const path = 'v4/trade/products/search-products';
 
-    return this.http.post<Product[]>(path, query);
+    return this.http.post<ProductDescriptor[]>(path, query);
+  }
+
+
+  searchProductsForOrder(query: ProductQuery): EmpObservable<ProductDescriptor[]> {
+    Assertion.assertValue(query, 'query');
+
+    const path = 'v4/trade/products/search-products-for-order';
+
+    return this.http.post<ProductDescriptor[]>(path, query);
   }
 
 }
