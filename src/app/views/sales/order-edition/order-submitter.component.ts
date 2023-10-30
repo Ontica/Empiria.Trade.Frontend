@@ -19,8 +19,8 @@ export enum OrderSubmitterEventType {
   TOGGLE_EDITION_MODE_CLICKED = 'OrderSubmitterComponent.Event.ToggleEditionModeClicked',
   CREATE_BUTTON_CLICKED       = 'OrderSubmitterComponent.Event.CreateButtonClicked',
   UPDATE_BUTTON_CLICKED       = 'OrderSubmitterComponent.Event.UpdateButtonClicked',
-  DELETE_BUTTON_CLICKED       = 'OrderSubmitterComponent.Event.DeleteButtonClicked',
-  SENT_TO_BUTTON_CLICKED      = 'OrderSubmitterComponent.Event.SendToButtonClicked',
+  CANCEL_BUTTON_CLICKED       = 'OrderSubmitterComponent.Event.CancelButtonClicked',
+  APPLY_BUTTON_CLICKED        = 'OrderSubmitterComponent.Event.ApplyButtonClicked',
 }
 
 @Component({
@@ -69,8 +69,8 @@ export class OrderSubmitterComponent {
   }
 
 
-  onDeleteButtonClicked() {
-    this.confirmDelete();
+  onCancelButtonClicked() {
+    this.confirmCancel();
   }
 
 
@@ -98,14 +98,14 @@ export class OrderSubmitterComponent {
   }
 
 
-  private confirmDelete() {
+  private confirmCancel() {
     const message = `Esta operación eliminara el pedido <strong> ${this.order.orderNumber} </strong>
                     <br><br>¿Elimino el pedido?`;
     this.messageBox.confirm(message, 'Eliminar pedido', 'DeleteCancel')
       .firstValue()
       .then(x => {
         if (x) {
-          sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.DELETE_BUTTON_CLICKED);
+          sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.CANCEL_BUTTON_CLICKED);
         }
       });
   }
@@ -120,7 +120,7 @@ export class OrderSubmitterComponent {
       .firstValue()
       .then(x => {
         if (x) {
-          sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.SENT_TO_BUTTON_CLICKED);
+          sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.APPLY_BUTTON_CLICKED);
         }
       });
   }

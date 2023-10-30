@@ -94,11 +94,11 @@ export class SalesMainPageComponent {
         return;
 
       case OrderTabbedViewEventType.ORDER_UPDATED:
-        // TODO: actualizar el pedido seleccionado y el elemento de la lista con el contenido del payload
-        this.setOrderSelected(this.orderSelected);
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        this.insertOrderToList(event.payload.order as Order);
         return;
 
-      case OrderTabbedViewEventType.ORDER_DELETED:
+      case OrderTabbedViewEventType.ORDER_CANCELED:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         this.removeOrderFromList(event.payload.orderUID);
         return;

@@ -18,10 +18,11 @@ import { EmptyOrder, Order, OrderFields, mapOrderFieldsFromOrder } from '@app/mo
 import { OrderEditionEventType } from '../order-edition/order-edition.component';
 
 export enum OrderEditorEventType {
-  EDITION_MODE  = 'OrderEditorComponent.Event.EditionMode',
-  ORDER_DIRTY   = 'OrderEditorComponent.Event.OrderDirty',
-  ORDER_UPDATED = 'OrderEditorComponent.Event.OrderUpdated',
-  ORDER_DELETED = 'OrderEditorComponent.Event.OrderDeleted',
+  EDITION_MODE   = 'OrderEditorComponent.Event.EditionMode',
+  ORDER_DIRTY    = 'OrderEditorComponent.Event.OrderDirty',
+  ORDER_UPDATED  = 'OrderEditorComponent.Event.OrderUpdated',
+  ORDER_APPLIED  = 'OrderEditorComponent.Event.OrderApplied',
+  ORDER_CANCELED = 'OrderEditorComponent.Event.OrderCanceled',
 }
 
 @Component({
@@ -49,13 +50,17 @@ export class OrderEditorComponent {
 
       case OrderEditionEventType.UPDATE_ORDER:
         Assertion.assertValue(event.payload.order, 'event.payload.order');
-        const order = mapOrderFieldsFromOrder(event.payload.order as Order);
-        this.updateOrder(order);
+        this.updateOrder(mapOrderFieldsFromOrder(event.payload.order as Order));
         return;
 
-      case OrderEditionEventType.DELETE_ORDER:
+      case OrderEditionEventType.APPLY_ORDER:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
-        this.deleteOrder(event.payload.orderUID);
+        this.applyOrder(event.payload.orderUID, mapOrderFieldsFromOrder(this.order));
+        return;
+
+      case OrderEditionEventType.CANCEL_ORDER:
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        this.cancelOrder(event.payload.orderUID, mapOrderFieldsFromOrder(this.order));
         return;
 
       case OrderEditionEventType.EDITION_MODE:
@@ -83,12 +88,22 @@ export class OrderEditorComponent {
   }
 
 
-  deleteOrder(orderUID: string) {
+  applyOrder(orderUID: string, order: OrderFields) {
     this.submitted = true;
 
-    this.salesOrdersData.deleteOrder(orderUID)
+    this.salesOrdersData.applyOrder(orderUID, order)
       .firstValue()
-      .then(x => sendEvent(this.orderEditorEvent, OrderEditorEventType.ORDER_DELETED, { orderUID }))
+      .then(x => sendEvent(this.orderEditorEvent, OrderEditorEventType.ORDER_APPLIED, { order: x }))
+      .finally(() => this.submitted = false);
+  }
+
+
+  cancelOrder(orderUID: string, order: OrderFields) {
+    this.submitted = true;
+
+    this.salesOrdersData.cancelOrder(orderUID, order)
+      .firstValue()
+      .then(x => sendEvent(this.orderEditorEvent, OrderEditorEventType.ORDER_CANCELED, { orderUID }))
       .finally(() => this.submitted = false);
   }
 

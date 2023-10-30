@@ -17,7 +17,7 @@ import { AlertService } from '@app/shared/containers/alert/alert.service';
 
 import { SalesOrdersDataService } from '@app/data-services';
 
-import { EmptyOrder, Order, OrderAdditionalData, OrderData, OrderItem, ProductSelection,
+import { EmptyOrder, Order, OrderAdditionalData, OrderData, OrderItem, OrderStatus, ProductSelection,
          mapOrderFieldsFromOrder, mapOrderItemFromProductSelection } from '@app/models';
 
 import {
@@ -38,7 +38,8 @@ export enum OrderEditionEventType {
   ORDER_DIRTY  = 'OrderEditionComponent.Event.OrderDirty',
   CREATE_ORDER = 'OrderEditionComponent.Event.CreateOrder',
   UPDATE_ORDER = 'OrderEditionComponent.Event.UpdateOrder',
-  DELETE_ORDER = 'OrderEditionComponent.Event.DeleteOrder',
+  APPLY_ORDER  = 'OrderEditionComponent.Event.ApplyOrder',
+  CANCEL_ORDER = 'OrderEditionComponent.Event.CancelOrder',
 }
 
 @Component({
@@ -56,8 +57,6 @@ export class OrderEditionComponent implements OnChanges {
   @Output() orderEditionEvent = new EventEmitter<EventInfo>();
 
   editionMode = true;
-
-  canEdit = true;
 
   isOrderDataValid = false;
 
@@ -83,6 +82,11 @@ export class OrderEditionComponent implements OnChanges {
 
   get isSaved(): boolean {
     return !!this.order.uid;
+  }
+
+
+  get canEdit(): boolean {
+    return this.order.status === OrderStatus.Captured;
   }
 
 
@@ -164,47 +168,22 @@ export class OrderEditionComponent implements OnChanges {
 
 
   onOrderSubmitterEvent(event: EventInfo) {
-
     switch (event.type as OrderSubmitterEventType) {
-
       case OrderSubmitterEventType.TOGGLE_EDITION_MODE_CLICKED:
-        this.editionMode = !this.editionMode;
-
-        sendEvent(this.orderEditionEvent, OrderEditionEventType.EDITION_MODE,
-          { editionMode: this.editionMode });
-
-        this.initOrderForEdition();
-
+        this.toggleEditionMode();
         return;
-
       case OrderSubmitterEventType.CREATE_BUTTON_CLICKED:
-        if (!this.isReady) {
-          this.invalidateForms();
-          return;
-        }
-
-        sendEvent(this.orderEditionEvent, OrderEditionEventType.CREATE_ORDER,
-          { order: this.orderForEdition });
-
+        this.validateAndEmitEvent(OrderEditionEventType.CREATE_ORDER, this.orderForEdition);
         return;
-
       case OrderSubmitterEventType.UPDATE_BUTTON_CLICKED:
-        if (!this.isReady) {
-          this.invalidateForms();
-          return;
-        }
-
-        sendEvent(this.orderEditionEvent, OrderEditionEventType.UPDATE_ORDER,
-          { order: this.orderForEdition });
-
+        this.validateAndEmitEvent(OrderEditionEventType.UPDATE_ORDER, this.orderForEdition);
         return;
-
-      case OrderSubmitterEventType.DELETE_BUTTON_CLICKED:
-        sendEvent(this.orderEditionEvent, OrderEditionEventType.DELETE_ORDER,
-          { orderUID: this.orderForEdition.uid });
-
+      case OrderSubmitterEventType.APPLY_BUTTON_CLICKED:
+        this.emitEvent(OrderEditionEventType.APPLY_ORDER, this.orderForEdition.uid);
         return;
-
+      case OrderSubmitterEventType.CANCEL_BUTTON_CLICKED:
+        this.emitEvent(OrderEditionEventType.CANCEL_ORDER, this.orderForEdition.uid);
+        return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -238,6 +217,31 @@ export class OrderEditionComponent implements OnChanges {
   }
 
 
+  private toggleEditionMode() {
+    this.editionMode = !this.editionMode;
+
+    sendEvent(this.orderEditionEvent, OrderEditionEventType.EDITION_MODE,
+      { editionMode: this.editionMode });
+
+    this.initOrderForEdition();
+  }
+
+
+  private emitEvent(event: OrderEditionEventType, orderUID: string) {
+    sendEvent(this.orderEditionEvent, event, { orderUID });
+  }
+
+
+  private validateAndEmitEvent(event: OrderEditionEventType, order: Order) {
+    if (!this.isReady) {
+      this.invalidateForms();
+      return;
+    }
+
+    sendEvent(this.orderEditionEvent, event, { order });
+  }
+
+
   private initOrderForEdition() {
     this.setOrderForEdition(this.order);
   }
@@ -267,7 +271,7 @@ export class OrderEditionComponent implements OnChanges {
     const orderToRecalculate = clone(this.orderForEdition);
     orderToRecalculate.items.push(item);
 
-    this.recalculateOrder(orderToRecalculate);
+    this.calculateOrder(orderToRecalculate);
   }
 
 
@@ -277,23 +281,23 @@ export class OrderEditionComponent implements OnChanges {
 
     if(index !== -1) orderToRecalculate.items[index] = item;
 
-    this.recalculateOrder(orderToRecalculate);
+    this.calculateOrder(orderToRecalculate);
   }
 
 
   private removeOrderItem(item: OrderItem) {
     const orderToRecalculate = clone(this.orderForEdition);
     orderToRecalculate.items = orderToRecalculate.items.filter(x => !this.isSameOrderItem(x, item));
-    this.recalculateOrder(orderToRecalculate);
+    this.calculateOrder(orderToRecalculate);
   }
 
 
-  private recalculateOrder(order: Order) {
+  private calculateOrder(order: Order) {
     this.isLoading = true;
 
     const orderFields = mapOrderFieldsFromOrder(order);
 
-    this.salesOrdersData.calculateOrderData(orderFields)
+    this.salesOrdersData.calculateOrder(orderFields)
       .firstValue()
       .then(x => this.resolveCalculateOrderResponse(x))
       .catch(e => this.handleCalculateOrderError())

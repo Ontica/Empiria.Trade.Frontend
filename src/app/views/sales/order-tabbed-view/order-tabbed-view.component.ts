@@ -20,7 +20,7 @@ import { OrderEditorEventType } from '../order-editor/order-editor.component';
 export enum OrderTabbedViewEventType {
   CLOSE_BUTTON_CLICKED = 'OrderTabbedViewComponent.Event.CloseButtonClicked',
   ORDER_UPDATED        = 'OrderTabbedViewComponent.Event.OrderUpdated',
-  ORDER_DELETED        = 'OrderTabbedViewComponent.Event.OrderDeleted',
+  ORDER_CANCELED        = 'OrderTabbedViewComponent.Event.OrderCanceled',
 }
 
 @Component({
@@ -67,11 +67,12 @@ export class OrderTabbedViewComponent implements OnChanges {
     switch (event.type as OrderEditorEventType) {
 
       case OrderEditorEventType.ORDER_UPDATED:
+      case OrderEditorEventType.ORDER_APPLIED:
         sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_UPDATED, event.payload);
         return;
 
-      case OrderEditorEventType.ORDER_DELETED:
-        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_DELETED, event.payload);
+      case OrderEditorEventType.ORDER_CANCELED:
+        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_CANCELED, event.payload);
         return;
 
       case OrderEditorEventType.EDITION_MODE:
@@ -96,7 +97,6 @@ export class OrderTabbedViewComponent implements OnChanges {
     this.title = `${this.order.orderNumber}`;
 
     this.hint = `<strong>${this.order.customer.name} </strong> &nbsp; &nbsp; | &nbsp; &nbsp; ` +
-      // `${this.order.paymentCondition} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${orderTime} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${orderTotal} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `<span class="tag tag-small">${getOrderStatusName(this.order.status)}</span>`;

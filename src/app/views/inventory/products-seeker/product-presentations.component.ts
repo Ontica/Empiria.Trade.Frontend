@@ -46,7 +46,7 @@ export class ProductPresentationsComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.product) {
       this.presentation = ArrayLibrary.getFirstItem(this.product.presentations) ?? null;
-      this.vendor = ArrayLibrary.getFirstItem(this.presentation.vendors ?? []);
+      this.vendor = ArrayLibrary.getFirstItem(this.presentation?.vendors ?? []);
     }
   }
 
@@ -86,7 +86,7 @@ export class ProductPresentationsComponent implements OnChanges {
 
   onPresentationChanges(presentation: ProductPresentation) {
     this.showAllVendors = false;
-    this.vendor = presentation.vendors.length > 0 ? presentation.vendors[0] : null;
+    this.vendor = presentation?.vendors.length > 0 ? presentation?.vendors[0] : null;
   }
 
 }

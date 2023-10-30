@@ -1,4 +1,4 @@
-  <mat-divider [style.margin]="'8px 0'">
+  <mat-divider [style.margin]="'8px 0'" *ngIf="!isSaved || canEdit">
 
   </mat-divider>
 
@@ -25,7 +25,7 @@
 
         <button *ngIf="editionMode"
           type="button" class="btn-warning"
-          (click)="onDeleteButtonClicked()">
+          (click)="onCancelButtonClicked()">
           Cancelar
         </button>
 
