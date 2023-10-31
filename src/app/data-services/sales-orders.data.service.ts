@@ -21,7 +21,7 @@ export class SalesOrdersDataService {
   searchOrders(query: OrderQuery): EmpObservable<Order[]> {
     Assertion.assertValue(query, 'query');
 
-    const path = 'v4/trade/sales/search-sales-order';
+    const path = 'v4/trade/sales/orders/search';
 
     return this.http.post<Order[]>(path, query);
   }
@@ -30,7 +30,7 @@ export class SalesOrdersDataService {
   calculateOrder(orderFields: OrderFields): EmpObservable<Order> {
     Assertion.assertValue(orderFields, 'orderFields');
 
-    const path = `v4/trade/sales/process-sales-order`;
+    const path = `v4/trade/sales/orders/process`;
 
     return this.http.post<Order>(path, orderFields);
   }
@@ -39,7 +39,7 @@ export class SalesOrdersDataService {
   createOrder(orderFields: OrderFields): EmpObservable<Order> {
     Assertion.assertValue(orderFields, 'orderFields');
 
-    const path = 'v4/trade/sales/create-sales-order';
+    const path = 'v4/trade/sales/orders';
 
     return this.http.post<Order>(path, orderFields);
   }
@@ -55,23 +55,21 @@ export class SalesOrdersDataService {
   }
 
 
-  applyOrder(orderUID: string, orderFields: OrderFields): EmpObservable<Order> {
+  applyOrder(orderUID: string): EmpObservable<Order> {
     Assertion.assertValue(orderUID, 'orderUID');
-    Assertion.assertValue(orderFields, 'orderFields');
 
     const path = `v4/trade/sales/orders/${orderUID}/apply`;
 
-    return this.http.post<Order>(path, orderFields);
+    return this.http.post<Order>(path);
   }
 
 
-  cancelOrder(orderUID: string, orderFields: OrderFields): EmpObservable<Order> {
+  cancelOrder(orderUID: string): EmpObservable<Order> {
     Assertion.assertValue(orderUID, 'orderUID');
-    Assertion.assertValue(orderFields, 'orderFields');
 
     const path = `v4/trade/sales/orders/${orderUID}/cancel`;
 
-    return this.http.delete<Order>(path, orderFields);
+    return this.http.delete<Order>(path);
   }
 
 }

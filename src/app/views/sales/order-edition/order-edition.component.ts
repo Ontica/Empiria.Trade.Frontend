@@ -307,7 +307,9 @@ export class OrderEditionComponent implements OnChanges {
 
   private resolveCalculateOrderResponse(order: Order) {
     this.setOrderForEdition(order);
-    this.alertService.openAlert('Se actualizo la lista de productos del pedido.');
+    if(this.displayProductsSelector) {
+      this.alertService.openAlert('Se agregó el producto al pedido.');
+    }
   }
 
 

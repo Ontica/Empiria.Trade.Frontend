@@ -55,12 +55,12 @@ export class OrderEditorComponent {
 
       case OrderEditionEventType.APPLY_ORDER:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
-        this.applyOrder(event.payload.orderUID, mapOrderFieldsFromOrder(this.order));
+        this.applyOrder(event.payload.orderUID);
         return;
 
       case OrderEditionEventType.CANCEL_ORDER:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
-        this.cancelOrder(event.payload.orderUID, mapOrderFieldsFromOrder(this.order));
+        this.cancelOrder(event.payload.orderUID);
         return;
 
       case OrderEditionEventType.EDITION_MODE:
@@ -88,20 +88,20 @@ export class OrderEditorComponent {
   }
 
 
-  applyOrder(orderUID: string, order: OrderFields) {
+  applyOrder(orderUID: string) {
     this.submitted = true;
 
-    this.salesOrdersData.applyOrder(orderUID, order)
+    this.salesOrdersData.applyOrder(orderUID)
       .firstValue()
       .then(x => sendEvent(this.orderEditorEvent, OrderEditorEventType.ORDER_APPLIED, { order: x }))
       .finally(() => this.submitted = false);
   }
 
 
-  cancelOrder(orderUID: string, order: OrderFields) {
+  cancelOrder(orderUID: string) {
     this.submitted = true;
 
-    this.salesOrdersData.cancelOrder(orderUID, order)
+    this.salesOrdersData.cancelOrder(orderUID)
       .firstValue()
       .then(x => sendEvent(this.orderEditorEvent, OrderEditorEventType.ORDER_CANCELED, { orderUID }))
       .finally(() => this.submitted = false);
