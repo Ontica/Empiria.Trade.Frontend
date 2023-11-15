@@ -3,7 +3,7 @@
   <div class="card-header card-header-flat">
 
     <div class="card-title">
-      Listado de pedidos
+      Listado de {{config.text}}
 
       <div class="card-hint" empNgProgressText
         loadingText="Cargando"
@@ -15,10 +15,10 @@
 
     <div class="card-header-options">
 
-      <button
+      <button *ngIf="config.canAdd"
         class="btn-action" fxFlexOffset="1.5rem"
         (click)="onCreateOrderClicked()">
-        Agregar Pedido
+        Agregar {{config.addText}}
       </button>
 
     </div>
@@ -34,11 +34,13 @@
       </emp-ng-spinner>
 
       <emp-trade-orders-filter class="fx-item-none"
+        [orderType]="config.type"
         (ordersFilterEvent)="onOrdersFilterEvent($event)">
 
       </emp-trade-orders-filter>
 
       <emp-trade-orders-table class="fx-item"
+        [orderType]="config.type"
         [ordersList]="ordersList"
         [orderSelected]="orderSelected"
         [queryExecuted]="queryExecuted"

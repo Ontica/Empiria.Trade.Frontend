@@ -14,26 +14,7 @@ import { Contact, Customer, Party, EmptyCustomer, EmptyContact } from './contact
 import { Presentation, Product, ProductSelection, Vendor } from './product';
 
 
-export enum OrderStatus {
-  Applied   = 'Applied',
-  Captured  = 'Captured',
-  Closed    = 'Closed',
-  Cancelled = 'Cancelled',
-};
-
-
-export const OrderStatusList: Identifiable[] = [
-  { uid: OrderStatus.Captured,  name: 'Capturado' },
-  { uid: OrderStatus.Applied,   name: 'Aplicado' },
-  { uid: OrderStatus.Closed,    name: 'Cerrado' },
-  { uid: OrderStatus.Cancelled, name: 'Cancelado' },
-];
-
-
-export function getOrderStatusName(status: OrderStatus): string {
-  const item = OrderStatusList.find(x => x.uid === status);
-  return item ? item.name : status;
-}
+export const DefaultOrderStatus: string = 'Captured';
 
 
 export const ShippingMethodList: Identifiable[] = [
@@ -50,11 +31,18 @@ export const PaymentConditionList: Identifiable[] = [
 ];
 
 
+export enum OrderQueryType {
+  Sales              = 'SalesOrders',
+  SalesAuthorization = 'SalesOrdersAuthorization',
+}
+
+
 export interface OrderQuery {
+  queryType: OrderQueryType;
   keywords: string;
   fromDate: DateString;
   toDate: DateString;
-  status: OrderStatus;
+  status: string;
 }
 
 
@@ -62,7 +50,8 @@ export interface OrderData {
   uid?: string;
   orderNumber: string;
   orderTime: DateString;
-  status: OrderStatus;
+  status: string;
+  statusName: string;
   customer: Customer;
   customerContact: Contact;
   salesAgent: Party;
@@ -81,7 +70,7 @@ export interface Order extends OrderData, OrderAdditionalData {
   uid: string;
   orderNumber: string;
   orderTime: DateString;
-  status: OrderStatus;
+  status: string;
   customer: Customer;
   customerContact: Contact;
   salesAgent: Party;
@@ -91,12 +80,28 @@ export interface Order extends OrderData, OrderAdditionalData {
   shippingMethod: string;
 
   items: OrderItem[];
+
   itemsCount: number;
   itemsTotal: number;
   shipment: number;
   discount: number;
   taxes: number;
   orderTotal: number;
+  totalDebt: number;
+
+  actions: OrderActions;
+}
+
+
+export interface OrderActions {
+  canEdit: boolean;
+  canApply: boolean;
+  canAuthorize: boolean;
+
+  transportPackaging: boolean;
+  canSelectCarrier: boolean;
+  canShipping: boolean;
+  canClose: boolean;
 }
 
 
@@ -127,7 +132,7 @@ export interface OrderFields {
   uid?: string;
   orderNumber: string;
   orderTime: DateString;
-  status: OrderStatus;
+  status: string;
   customerUID: string;
   customerContactUID: string;
   salesAgentUID: string;
@@ -166,7 +171,8 @@ export function EmptyOrder(): Order {
     orderTime: '',
     notes: '',
     shippingMethod: '',
-    status: null,
+    status: '',
+    statusName: '',
     customer: EmptyCustomer,
     customerContact: EmptyContact,
     supplier: Empty,
@@ -178,7 +184,9 @@ export function EmptyOrder(): Order {
     discount: 0,
     taxes: 0,
     orderTotal: 0,
+    totalDebt: 0,
     items: [],
+    actions: null,
   })
 
 }

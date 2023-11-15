@@ -5,28 +5,41 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
+
+import { View } from '@app/main-layout';
+
 import { ArrayLibrary, clone } from '@app/shared/utils';
 
-import { EmptyOrder, Order, OrderQuery } from '@app/models';
+import { EmptyOrder, Order, OrderQuery, OrderQueryType } from '@app/models';
 
 import { SalesOrdersDataService } from '@app/data-services';
 
-import { OrderCreatorEventType } from '@app/views/sales/order-creator/order-creator.component';
+import { OrderCreatorEventType } from '@app/views/orders/order-creator/order-creator.component';
 
-import { OrderTabbedViewEventType } from '@app/views/sales/order-tabbed-view/order-tabbed-view.component';
+import { OrderTabbedViewEventType } from '@app/views/orders/order-tabbed-view/order-tabbed-view.component';
 
-import { OrdersListingEventType } from '@app/views/sales/orders-listing/orders-listing.component';
+import { OrderTypeConfig, OrdersListingEventType } from '@app/views/orders/orders-listing/orders-listing.component';
 
 
 @Component({
   selector: 'emp-trade-sales-main-page',
   templateUrl: './sales-main-page.component.html',
 })
-export class SalesMainPageComponent {
+export class SalesMainPageComponent implements OnInit, OnDestroy {
+
+  salesConfig: OrderTypeConfig = {
+    type: OrderQueryType.Sales,
+    text: 'Pedido',
+    addText: 'pedido',
+    canAdd: false,
+  };
 
   isLoading = false;
 
@@ -40,8 +53,23 @@ export class SalesMainPageComponent {
 
   displayOrderCreator = false;
 
+  subscriptionHelper: SubscriptionHelper;
 
-  constructor(private salesOrdersData: SalesOrdersDataService) {}
+
+  constructor(private uiLayer: PresentationLayer,
+              private salesOrdersData: SalesOrdersDataService) {
+    this.subscriptionHelper = uiLayer.createSubscriptionHelper();
+  }
+
+
+  ngOnInit() {
+    this.getCurrentView();
+  }
+
+
+  ngOnDestroy() {
+    this.subscriptionHelper.destroy();
+  }
 
 
   onOrderCreatorEvent(event: EventInfo) {
@@ -106,6 +134,27 @@ export class SalesMainPageComponent {
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
+    }
+  }
+
+
+  private getCurrentView() {
+    this.subscriptionHelper.select<View>(MainUIStateSelector.CURRENT_VIEW)
+      .subscribe(x => this.validateCurrentView(x.name));
+  }
+
+
+  private validateCurrentView(view: string) {
+    if (view === 'VentasViews.Autorizaciones') {
+      this.salesConfig.type = OrderQueryType.SalesAuthorization;
+      this.salesConfig.text = 'Autorizaciones';
+      this.salesConfig.addText = '';
+      this.salesConfig.canAdd = false;
+    } else {
+      this.salesConfig.type = OrderQueryType.Sales;
+      this.salesConfig.text = 'Pedidos';
+      this.salesConfig.addText = 'pedido';
+      this.salesConfig.canAdd = true;
     }
   }
 

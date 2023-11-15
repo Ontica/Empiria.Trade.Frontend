@@ -67,4 +67,4 @@ import { OrderEditorComponent } from './order-editor/order-editor.component';
     OrderTabbedViewComponent,
   ],
 })
-export class SalesModule { }
+export class OrdersModule { }

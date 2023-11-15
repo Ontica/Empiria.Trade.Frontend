@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 
 import { DateStringLibrary, EventInfo } from '@app/core';
 
-import { EmptyOrder, Order, getOrderStatusName } from '@app/models';
+import { EmptyOrder, Order } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -49,7 +49,6 @@ export class OrderTabbedViewComponent implements OnChanges {
 
   ngOnChanges() {
     this.setTitle();
-    console.log(this.order)
   }
 
 
@@ -68,6 +67,7 @@ export class OrderTabbedViewComponent implements OnChanges {
 
       case OrderEditorEventType.ORDER_UPDATED:
       case OrderEditorEventType.ORDER_APPLIED:
+      case OrderEditorEventType.ORDER_AUTHORIZED:
         sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_UPDATED, event.payload);
         return;
 
@@ -99,7 +99,7 @@ export class OrderTabbedViewComponent implements OnChanges {
     this.hint = `<strong>${this.order.customer.name} </strong> &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${orderTime} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${orderTotal} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
-      `<span class="tag tag-small">${getOrderStatusName(this.order.status)}</span>`;
+      `<span class="tag tag-small">${this.order.status}</span>`;
   }
 
 

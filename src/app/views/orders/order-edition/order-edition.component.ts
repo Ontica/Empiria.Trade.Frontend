@@ -17,7 +17,7 @@ import { AlertService } from '@app/shared/containers/alert/alert.service';
 
 import { SalesOrdersDataService } from '@app/data-services';
 
-import { EmptyOrder, Order, OrderAdditionalData, OrderData, OrderItem, OrderStatus, ProductSelection,
+import { DefaultOrderStatus, EmptyOrder, Order, OrderAdditionalData, OrderData, OrderItem, ProductSelection,
          mapOrderFieldsFromOrder, mapOrderItemFromProductSelection } from '@app/models';
 
 import {
@@ -34,12 +34,13 @@ import { OrderSummaryComponent, OrderSummaryEventType } from './order-summary.co
 
 
 export enum OrderEditionEventType {
-  EDITION_MODE = 'OrderEditionComponent.Event.EditionMode',
-  ORDER_DIRTY  = 'OrderEditionComponent.Event.OrderDirty',
-  CREATE_ORDER = 'OrderEditionComponent.Event.CreateOrder',
-  UPDATE_ORDER = 'OrderEditionComponent.Event.UpdateOrder',
-  APPLY_ORDER  = 'OrderEditionComponent.Event.ApplyOrder',
-  CANCEL_ORDER = 'OrderEditionComponent.Event.CancelOrder',
+  EDITION_MODE    = 'OrderEditionComponent.Event.EditionMode',
+  ORDER_DIRTY     = 'OrderEditionComponent.Event.OrderDirty',
+  CREATE_ORDER    = 'OrderEditionComponent.Event.CreateOrder',
+  UPDATE_ORDER    = 'OrderEditionComponent.Event.UpdateOrder',
+  APPLY_ORDER     = 'OrderEditionComponent.Event.ApplyOrder',
+  AUTHORIZE_ORDER = 'OrderEditionComponent.Event.AuthorizeOrder',
+  CANCEL_ORDER    = 'OrderEditionComponent.Event.CancelOrder',
 }
 
 @Component({
@@ -86,7 +87,7 @@ export class OrderEditionComponent implements OnChanges {
 
 
   get canEdit(): boolean {
-    return this.order.status === OrderStatus.Captured;
+    return this.order.status === DefaultOrderStatus;
   }
 
 
@@ -181,6 +182,10 @@ export class OrderEditionComponent implements OnChanges {
       case OrderSubmitterEventType.APPLY_BUTTON_CLICKED:
         this.emitEvent(OrderEditionEventType.APPLY_ORDER, this.orderForEdition.uid);
         return;
+      case OrderSubmitterEventType.AUTHORIZE_BUTTON_CLICKED:
+        this.emitEvent(OrderEditionEventType.AUTHORIZE_ORDER, this.orderForEdition.uid);
+        return;
+
       case OrderSubmitterEventType.CANCEL_BUTTON_CLICKED:
         this.emitEvent(OrderEditionEventType.CANCEL_ORDER, this.orderForEdition.uid);
         return;

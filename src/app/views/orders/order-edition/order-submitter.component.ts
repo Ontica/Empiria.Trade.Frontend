@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { EventInfo } from '@app/core';
 
-import { EmptyOrder, Order } from '@app/models';
+import { EmptyOrder, Order, OrderActions } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -21,6 +21,7 @@ export enum OrderSubmitterEventType {
   UPDATE_BUTTON_CLICKED       = 'OrderSubmitterComponent.Event.UpdateButtonClicked',
   CANCEL_BUTTON_CLICKED       = 'OrderSubmitterComponent.Event.CancelButtonClicked',
   APPLY_BUTTON_CLICKED        = 'OrderSubmitterComponent.Event.ApplyButtonClicked',
+  AUTHORIZE_BUTTON_CLICKED    = 'OrderSubmitterComponent.Event.AuthorizeButtonClicked',
 }
 
 @Component({
@@ -34,7 +35,9 @@ export enum OrderSubmitterEventType {
 })
 export class OrderSubmitterComponent {
 
-  @Input() order: Order = EmptyOrder();
+  @Input() orderNumber: string = '';
+
+  @Input() actions: OrderActions = null;
 
   @Input() isSaved = false;
 
@@ -79,6 +82,11 @@ export class OrderSubmitterComponent {
   }
 
 
+  onAuthorizeButtonClicked() {
+    this.confirmAuthorize();
+  }
+
+
   private confirmCloseEditionMode() {
     const message = `Esta operación descartará los cambios y perderá la información modificada.
                     <br><br>¿Descarto los cambios?`;
@@ -99,7 +107,7 @@ export class OrderSubmitterComponent {
 
 
   private confirmCancel() {
-    const message = `Esta operación eliminara el pedido <strong> ${this.order.orderNumber} </strong>
+    const message = `Esta operación eliminara el pedido <strong> ${this.orderNumber} </strong>
                     <br><br>¿Elimino el pedido?`;
     this.messageBox.confirm(message, 'Eliminar pedido', 'DeleteCancel')
       .firstValue()
@@ -112,15 +120,28 @@ export class OrderSubmitterComponent {
 
 
   private confirmSendTo() {
-    const message = `Esta operación enviará el pedido <strong> ${this.order.orderNumber} </strong> ` +
-                    `a almacen para ser procesado.
-                    <br><br>¿Aplico el pedido?`;
+    const message = `Esta operación enviará el pedido <strong> ${this.orderNumber} </strong> ` +
+                    `a almacen para ser procesado. <br><br>¿Aplico el pedido?`;
 
     this.messageBox.confirm(message, 'Aplicar pedido')
       .firstValue()
       .then(x => {
         if (x) {
           sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.APPLY_BUTTON_CLICKED);
+        }
+      });
+  }
+
+
+  private confirmAuthorize() {
+    const message = `Esta operación autorizará el pedido <strong> ${this.orderNumber} </strong> ` +
+                    `<br><br>¿Autorizo el pedido?`;
+
+    this.messageBox.confirm(message, 'Autorizar pedido')
+      .firstValue()
+      .then(x => {
+        if (x) {
+          sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.AUTHORIZE_BUTTON_CLICKED);
         }
       });
   }

@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { EmptyOrder, Order } from '@app/models';
+import { EmptyOrder, Order, OrderQueryType } from '@app/models';
 
 import { OrdersFilterEventType } from './orders-filter.component';
 
@@ -24,11 +24,26 @@ export enum OrdersListingEventType {
   SELECT_ORDER  = 'OrdersListingComponent.Event.SelectOrder',
 }
 
+
+export interface OrderTypeConfig {
+  type: OrderQueryType;
+  text: string;
+  addText: string;
+  canAdd: boolean;
+}
+
 @Component({
   selector: 'emp-trade-orders-listing',
   templateUrl: './orders-listing.component.html',
 })
 export class OrdersListingComponent implements OnChanges {
+
+  @Input() config: OrderTypeConfig = {
+    type: OrderQueryType.Sales,
+    text: 'Pedido',
+    addText: 'pedido',
+    canAdd: false,
+  };
 
   @Input() ordersList: Order[] = [];
 

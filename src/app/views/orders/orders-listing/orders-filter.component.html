@@ -34,10 +34,11 @@
         <label>Estatus:</label>
 
         <emp-ng-select
-          [config]="{clearable: true}"
           formControlName="status"
           placeholder="Todos"
-          [items]="statusList">
+          [config]="{clearable: true}"
+          [items]="statusList"
+          [loading]="isLoading">
         </emp-ng-select>
 
       </div>

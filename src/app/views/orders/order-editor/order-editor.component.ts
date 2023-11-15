@@ -18,11 +18,12 @@ import { EmptyOrder, Order, OrderFields, mapOrderFieldsFromOrder } from '@app/mo
 import { OrderEditionEventType } from '../order-edition/order-edition.component';
 
 export enum OrderEditorEventType {
-  EDITION_MODE   = 'OrderEditorComponent.Event.EditionMode',
-  ORDER_DIRTY    = 'OrderEditorComponent.Event.OrderDirty',
-  ORDER_UPDATED  = 'OrderEditorComponent.Event.OrderUpdated',
-  ORDER_APPLIED  = 'OrderEditorComponent.Event.OrderApplied',
-  ORDER_CANCELED = 'OrderEditorComponent.Event.OrderCanceled',
+  EDITION_MODE     = 'OrderEditorComponent.Event.EditionMode',
+  ORDER_DIRTY      = 'OrderEditorComponent.Event.OrderDirty',
+  ORDER_UPDATED    = 'OrderEditorComponent.Event.OrderUpdated',
+  ORDER_APPLIED    = 'OrderEditorComponent.Event.OrderApplied',
+  ORDER_AUTHORIZED = 'OrderEditorComponent.Event.OrderAuthorize',
+  ORDER_CANCELED   = 'OrderEditorComponent.Event.OrderCanceled',
 }
 
 @Component({
@@ -56,6 +57,11 @@ export class OrderEditorComponent {
       case OrderEditionEventType.APPLY_ORDER:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         this.applyOrder(event.payload.orderUID);
+        return;
+
+      case OrderEditionEventType.AUTHORIZE_ORDER:
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        this.authorizeOrder(event.payload.orderUID);
         return;
 
       case OrderEditionEventType.CANCEL_ORDER:
@@ -94,6 +100,16 @@ export class OrderEditorComponent {
     this.salesOrdersData.applyOrder(orderUID)
       .firstValue()
       .then(x => sendEvent(this.orderEditorEvent, OrderEditorEventType.ORDER_APPLIED, { order: x }))
+      .finally(() => this.submitted = false);
+  }
+
+
+  authorizeOrder(orderUID: string) {
+    this.submitted = true;
+
+    this.salesOrdersData.authorizeOrder(orderUID)
+      .firstValue()
+      .then(x => sendEvent(this.orderEditorEvent, OrderEditorEventType.ORDER_AUTHORIZED, { order: x }))
       .finally(() => this.submitted = false);
   }
 

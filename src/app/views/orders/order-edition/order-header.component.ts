@@ -14,10 +14,10 @@ import { Observable, Subject, catchError, combineLatest, concat, debounceTime, d
 
 import { DateString, DateStringLibrary, EventInfo, Identifiable, isEmpty } from '@app/core';
 
-import { ContactsDataService } from '@app/data-services';
+import { ContactsDataService, SalesOrdersDataService } from '@app/data-services';
 
-import { Contact, Customer, EmptyOrder, Order, OrderData, OrderStatus, OrderStatusList,
-         Party, PaymentConditionList, ShippingMethodList} from '@app/models';
+import { Contact, Customer, DefaultOrderStatus, EmptyOrder, Order, OrderData, Party, PaymentConditionList,
+         ShippingMethodList } from '@app/models';
 
 import { ArrayLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
@@ -29,7 +29,7 @@ export enum OrderHeaderEventType {
 interface OrderFormModel extends FormGroup<{
   orderNumber: FormControl<string>;
   orderTime: FormControl<DateString>;
-  status: FormControl<OrderStatus>;
+  status: FormControl<string>;
   customer: FormControl<Customer>;
   customerContact: FormControl<Contact>;
   salesAgent: FormControl<Party>;
@@ -60,7 +60,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
 
   isChangeEmission = false;
 
-  statusList: Identifiable[] = OrderStatusList;
+  statusList: Identifiable[] = [];
 
   shippingMethodList: Identifiable[] = ShippingMethodList;
 
@@ -81,7 +81,8 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
   minTermLength = 5;
 
 
-  constructor(private contactsData: ContactsDataService) {
+  constructor(private contactsData: ContactsDataService,
+              private ordersData: SalesOrdersDataService) {
     this.initForm();
     this.validateEditionMode();
   }
@@ -132,7 +133,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
     this.form = fb.group({
       orderNumber: [''],
       orderTime: [DateStringLibrary.today(), Validators.required],
-      status: [OrderStatus.Captured, Validators.required],
+      status: [DefaultOrderStatus, Validators.required],
       customer: [null as Customer, Validators.required],
       customerContact: [null],
       salesAgent: [null as Party, Validators.required],
@@ -202,6 +203,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
       orderNumber: formModel.orderNumber ?? '',
       orderTime: formModel.orderTime ?? '',
       status: formModel.status ?? null,
+      statusName: formModel.status ?? null,
       customer: formModel.customer ?? null,
       customerContact: formModel.customerContact ?? null,
       salesAgent: formModel.salesAgent ?? null,
@@ -218,12 +220,14 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
     this.isLoadingDataList = true;
 
     combineLatest([
+      this.ordersData.getOrderStatus(),
       this.contactsData.getInternalSuppliers(),
       this.contactsData.getSalesAgents(),
     ])
-    .subscribe(([x, y]) => {
-      this.suppliersList = x;
-      this.salesAgentsList = y;
+    .subscribe(([x, y, z]) => {
+      this.statusList = x;
+      this.suppliersList = y;
+      this.salesAgentsList = z;
       this.isLoadingDataList = false;
     });
   }

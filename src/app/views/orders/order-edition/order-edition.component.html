@@ -34,7 +34,8 @@
 
   <emp-trade-order-submitter
     class="fx-item-none"
-    [order]="orderForEdition"
+    [orderNumber]="orderForEdition.orderNumber"
+    [actions]="orderForEdition.actions ?? null"
     [isSaved]="isSaved"
     [editionMode]="editionMode"
     [canEdit]="canEdit"

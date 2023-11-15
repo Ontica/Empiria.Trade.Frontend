@@ -7,7 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Assertion, EmpObservable, HttpService } from '@app/core';
+import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 import { Order, OrderFields, OrderQuery } from '@app/models';
 
@@ -16,6 +16,20 @@ import { Order, OrderFields, OrderQuery } from '@app/models';
 export class SalesOrdersDataService {
 
   constructor(private http: HttpService) { }
+
+
+  getOrderStatus(): EmpObservable<Identifiable[]> {
+    const path = 'v4/trade/sales/orders/status';
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
+  getOrderStatusForAuthorizations(): EmpObservable<Identifiable[]> {
+    const path = 'v4/trade/sales/orders/status/authorizations';
+
+    return this.http.get<Identifiable[]>(path);
+  }
 
 
   searchOrders(query: OrderQuery): EmpObservable<Order[]> {
@@ -59,6 +73,15 @@ export class SalesOrdersDataService {
     Assertion.assertValue(orderUID, 'orderUID');
 
     const path = `v4/trade/sales/orders/${orderUID}/apply`;
+
+    return this.http.post<Order>(path);
+  }
+
+
+  authorizeOrder(orderUID: string): EmpObservable<Order> {
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v4/trade/sales/orders/${orderUID}/authorize`;
 
     return this.http.post<Order>(path);
   }

@@ -11,7 +11,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewC
 
 import { EventInfo } from '@app/core';
 
-import { EmptyOrder, Order, OrderStatus, getOrderStatusName } from '@app/models';
+import { EmptyOrder, Order, OrderQueryType } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -29,6 +29,8 @@ export class OrdersTableComponent implements OnChanges {
 
   @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
+  @Input() orderType: OrderQueryType = OrderQueryType.Sales;
+
   @Input() ordersList: Order[] = [];
 
   @Input() orderSelected: Order = EmptyOrder();
@@ -39,7 +41,9 @@ export class OrdersTableComponent implements OnChanges {
 
   @Output() ordersTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumns: string[] = ['orderNumber', 'date', 'customer', 'status', 'vendor', 'total'];
+  displayedColumnsDefault: string[] = ['orderNumber', 'date', 'customer', 'status', 'vendor', 'total'];
+
+  displayedColumns = [...this.displayedColumnsDefault];
 
   dataSource: TableVirtualScrollDataSource<Order>;
 
@@ -47,13 +51,9 @@ export class OrdersTableComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ordersList) {
       this.dataSource = new TableVirtualScrollDataSource(this.ordersList);
+      this.resetColumns();
       this.scrollToTop();
     }
-  }
-
-
-  getOrderStatusName(status: OrderStatus): string {
-    return getOrderStatusName(status);
   }
 
 
@@ -65,6 +65,15 @@ export class OrdersTableComponent implements OnChanges {
   private scrollToTop() {
     if (this.virtualScroll) {
       this.virtualScroll.scrollToIndex(-1);
+    }
+  }
+
+
+  private resetColumns() {
+    this.displayedColumns = [...this.displayedColumnsDefault];
+
+    if (this.orderType === OrderQueryType.SalesAuthorization) {
+      this.displayedColumns.push('totalDebt');
     }
   }
 
