@@ -34,13 +34,13 @@ const routes: Routes = [
       .then((m) => m.PurchasesWorkspaceModule)
   },
   {
-    data: { permission: ROUTES.inventarios.permission },
-    path: ROUTES.inventarios.path,
+    data: { permission: ROUTES.almacenes.permission },
+    path: ROUTES.almacenes.path,
     component: MainLayoutComponent,
     canActivate: [ParentRouteGuard],
     canActivateChild: [ChildRouteGuard],
-    loadChildren: () => import('./workspaces/inventory/inventory-workspace.module')
-      .then((m) => m.InventoryWorkspaceModule)
+    loadChildren: () => import('./workspaces/warehouses/warehouses-workspace.module')
+      .then((m) => m.WarehousesWorkspaceModule)
   },
   {
     data: { permission: ROUTES.contabilidad.permission },

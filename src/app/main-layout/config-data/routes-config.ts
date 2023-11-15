@@ -26,11 +26,11 @@ export const ROUTES = {
     fullpath: '/compras',
   },
 
-  inventarios: {
+  almacenes: {
     permission: PERMISSIONS.NOT_REQUIRED,
     parent: '',
-    path: 'inventarios',
-    fullpath: '/inventarios',
+    path: 'almacenes',
+    fullpath: '/almacenes',
   },
 
   contabilidad: {
@@ -70,6 +70,13 @@ export const ROUTES = {
     fullpath: '/ventas/pedidos',
   },
 
+  ventas_autorizaciones: {
+    permission: PERMISSIONS.NOT_REQUIRED,
+    parent: 'ventas',
+    path: 'autorizaciones',
+    fullpath: '/ventas/autorizaciones',
+  },
+
   ventas_cuentas_x_cobrar: {
     permission: PERMISSIONS.NOT_REQUIRED,
     parent: 'ventas',
@@ -104,20 +111,34 @@ export const ROUTES = {
 
   //#endregion
 
-  // #region inventarios-routing module
+  // #region almacenes-routing module
 
-  inventarios_inventario: {
+  almacenes_surtidos: {
     permission: PERMISSIONS.NOT_REQUIRED,
-    parent: 'inventarios',
-    path: 'inventario',
-    fullpath: '/inventarios/inventario',
+    parent: 'almacenes',
+    path: 'surtidos',
+    fullpath: '/almacenes/surtidos',
   },
 
-  inventarios_almacenes: {
+  almacenes_embarques: {
     permission: PERMISSIONS.NOT_REQUIRED,
-    parent: 'inventarios',
-    path: 'almacenes',
-    fullpath: '/inventarios/almacenes',
+    parent: 'almacenes',
+    path: 'embarques',
+    fullpath: '/almacenes/embarques',
+  },
+
+  almacenes_inventario: {
+    permission: PERMISSIONS.NOT_REQUIRED,
+    parent: 'almacenes',
+    path: 'inventario',
+    fullpath: '/almacenes/inventario',
+  },
+
+  almacenes_almacenamiento: {
+    permission: PERMISSIONS.NOT_REQUIRED,
+    parent: 'almacenes',
+    path: 'almacenamiento',
+    fullpath: '/almacenes/almacenamiento',
   },
 
   //#endregion

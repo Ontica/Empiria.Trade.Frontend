@@ -5,8 +5,6 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { PERMISSIONS } from './permissions-config';
-
 import { ROUTES } from './routes-config';
 
 import { View } from '../common-models/common';
@@ -17,11 +15,13 @@ export const VentasViews: View[] = [
     name: 'VentasViews.Pedidos',
     title: 'Pedidos',
     url: ROUTES.ventas_pedidos.fullpath,
-    permission: ROUTES.ventas_pedidos.permission,
-    actions: [
-      { action: 'ActionExport', name: 'Exportar', permission: PERMISSIONS.NOT_REQUIRED },
-      { action: 'ActionCreate', name: 'Agregar', permission: PERMISSIONS.NOT_REQUIRED },
-    ]
+    permission: ROUTES.ventas_pedidos.permission
+  },
+  {
+    name: 'VentasViews.Autorizaciones',
+    title: 'Autorizaciones',
+    url: ROUTES.ventas_autorizaciones.fullpath,
+    permission: ROUTES.ventas_autorizaciones.permission
   },
   {
     name: 'VentasViews.CuentasXCobrar',
@@ -54,18 +54,30 @@ export const ComprasViews: View[] = [
 ];
 
 
-export const InventariosViews: View[] = [
+export const AlmacenesViews: View[] = [
   {
-    name: 'InventariosViews.Inventario',
-    title: 'Inventario',
-    url: ROUTES.inventarios_inventario.fullpath,
-    permission: ROUTES.inventarios_inventario.permission,
+    name: 'AlmacenesViews.Surtidos',
+    title: 'Surtidos',
+    url: ROUTES.almacenes_surtidos.fullpath,
+    permission: ROUTES.almacenes_surtidos.permission,
   },
   {
-    name: 'InventariosViews.Almacenes',
-    title: 'Almacenes',
-    url: ROUTES.inventarios_almacenes.fullpath,
-    permission: ROUTES.inventarios_almacenes.permission
+    name: 'AlmacenesViews.Embarques',
+    title: 'Embarques',
+    url: ROUTES.almacenes_embarques.fullpath,
+    permission: ROUTES.almacenes_embarques.permission,
+  },
+  {
+    name: 'AlmacenesViews.Inventario',
+    title: 'Inventario',
+    url: ROUTES.almacenes_inventario.fullpath,
+    permission: ROUTES.almacenes_inventario.permission,
+  },
+  {
+    name: 'AlmacenesViews.Almacenamiento',
+    title: 'Almacenamiento',
+    url: ROUTES.almacenes_almacenamiento.fullpath,
+    permission: ROUTES.almacenes_almacenamiento.permission
   },
 ];
 

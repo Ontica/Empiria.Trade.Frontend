@@ -12,7 +12,7 @@ import { View, Layout } from '../common-models/common';
 import {
   VentasViews,
   ComprasViews,
-  InventariosViews,
+  AlmacenesViews,
   ContabilidadViews,
   AdministracionSistemaViews,
   UnauthorizedViews,
@@ -20,7 +20,7 @@ import {
 
 
 export const APP_VIEWS: View[] = VentasViews.concat(ComprasViews,
-                                                    InventariosViews,
+                                                    AlmacenesViews,
                                                     ContabilidadViews,
                                                     AdministracionSistemaViews,
                                                     UnauthorizedViews);
@@ -36,20 +36,20 @@ export const APP_LAYOUTS: Layout[] = [
     permission: ROUTES.ventas.permission,
   },
   {
+    name: 'Almacenes',
+    views: AlmacenesViews,
+    hint: 'Almacenes',
+    defaultTitle: 'Almacenes',
+    url: ROUTES.almacenes.fullpath,
+    permission: ROUTES.almacenes.permission,
+  },
+  {
     name: 'Compras',
     views: ComprasViews,
     hint: 'Compras',
     defaultTitle: 'Compras',
     url: ROUTES.compras.fullpath,
     permission: ROUTES.compras.permission,
-  },
-  {
-    name: 'Inventarios',
-    views: InventariosViews,
-    hint: 'Inventarios',
-    defaultTitle: 'Inventarios',
-    url: ROUTES.inventarios.fullpath,
-    permission: ROUTES.inventarios.permission,
   },
   {
     name: 'Contabilidad',

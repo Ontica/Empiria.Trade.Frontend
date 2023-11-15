@@ -13,7 +13,7 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 
 import { SharedModule } from '@app/shared/shared.module';
 
-import { InventoryWorkspaceRoutingModule } from './inventory-workspace-routing.module';
+import { WarehousesWorkspaceRoutingModule } from './warehouses-workspace-routing.module';
 
 
 @NgModule({
@@ -25,7 +25,7 @@ import { InventoryWorkspaceRoutingModule } from './inventory-workspace-routing.m
     AngularMaterialModule,
     SharedModule,
 
-    InventoryWorkspaceRoutingModule,
+    WarehousesWorkspaceRoutingModule,
   ],
 
   declarations: [
@@ -37,4 +37,4 @@ import { InventoryWorkspaceRoutingModule } from './inventory-workspace-routing.m
   ]
 
 })
-export class InventoryWorkspaceModule { }
+export class WarehousesWorkspaceModule { }

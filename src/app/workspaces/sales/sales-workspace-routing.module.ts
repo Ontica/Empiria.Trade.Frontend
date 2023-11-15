@@ -23,6 +23,11 @@ const routes: Routes = [
     component: SalesMainPageComponent,
   },
   {
+    data: { permission: ROUTES.ventas_autorizaciones.permission },
+    path: ROUTES.ventas_autorizaciones.path,
+    component: SalesMainPageComponent,
+  },
+  {
     data: { permission: ROUTES.ventas_cuentas_x_cobrar.permission },
     path: ROUTES.ventas_cuentas_x_cobrar.path,
     component: DefaultComponent,

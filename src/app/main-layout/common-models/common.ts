@@ -39,7 +39,7 @@ export interface AppConfig {
 }
 
 
-export type LayoutType = 'Ventas' | 'Compras' | 'Inventarios' | 'Contabilidad' | 'Administración' |
+export type LayoutType = 'Ventas' | 'Compras' | 'Almacenes' | 'Contabilidad' | 'Administración' |
                          'Unauthorized';
 
 
