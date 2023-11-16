@@ -29,6 +29,7 @@
   <div class="secondary priority" *ngIf="displaySecondaryView">
 
     <emp-trade-order-tabbed-view
+      [config]="salesConfig"
       [order]="orderSelected"
       (orderTabbedViewEvent)="onOrderTabbedViewEvent($event)">
 

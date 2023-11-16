@@ -17,7 +17,7 @@ import { View } from '@app/main-layout';
 
 import { ArrayLibrary, clone } from '@app/shared/utils';
 
-import { EmptyOrder, Order, OrderQuery, OrderQueryType } from '@app/models';
+import { EmptyOrder, Order, OrderQuery, OrderQueryType, OrderTypeConfig } from '@app/models';
 
 import { SalesOrdersDataService } from '@app/data-services';
 
@@ -25,7 +25,7 @@ import { OrderCreatorEventType } from '@app/views/orders/order-creator/order-cre
 
 import { OrderTabbedViewEventType } from '@app/views/orders/order-tabbed-view/order-tabbed-view.component';
 
-import { OrderTypeConfig, OrdersListingEventType } from '@app/views/orders/orders-listing/orders-listing.component';
+import { OrdersListingEventType } from '@app/views/orders/orders-listing/orders-listing.component';
 
 
 @Component({
@@ -36,8 +36,8 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   salesConfig: OrderTypeConfig = {
     type: OrderQueryType.Sales,
-    text: 'Pedido',
-    addText: 'pedido',
+    titleText: 'Pedido',
+    itemText: 'pedido',
     canAdd: false,
   };
 
@@ -145,17 +145,32 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
 
   private validateCurrentView(view: string) {
-    if (view === 'VentasViews.Autorizaciones') {
-      this.salesConfig.type = OrderQueryType.SalesAuthorization;
-      this.salesConfig.text = 'Autorizaciones';
-      this.salesConfig.addText = '';
-      this.salesConfig.canAdd = false;
-    } else {
-      this.salesConfig.type = OrderQueryType.Sales;
-      this.salesConfig.text = 'Pedidos';
-      this.salesConfig.addText = 'pedido';
-      this.salesConfig.canAdd = true;
+    switch (view) {
+      case 'VentasViews.Pedidos':
+        this.setSalesConfig(OrderQueryType.Sales, 'Pedidos', 'pedido', true);
+        return;
+
+      case 'VentasViews.Autorizaciones':
+        this.setSalesConfig(OrderQueryType.SalesAuthorization, 'Autorizaciones', '', false);
+        return;
+
+      case 'AlmacenesViews.Surtidos':
+        this.setSalesConfig(OrderQueryType.SalesPacking, 'Surtidos', '', false);
+        return;
+
+      default:
+        break;
     }
+  }
+
+
+  private setSalesConfig(type: OrderQueryType, titleText: string, itemText: string, canAdd: boolean) {
+    this.salesConfig = {
+      type,
+      titleText,
+      itemText,
+      canAdd,
+    };
   }
 
 

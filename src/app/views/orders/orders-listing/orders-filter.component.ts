@@ -7,9 +7,9 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { EmpObservable, EventInfo, Identifiable } from '@app/core';
 
 import { SalesOrdersDataService } from '@app/data-services';
 
@@ -57,11 +57,7 @@ export class OrdersFilterComponent implements OnInit {
 
 
   ngOnInit() {
-    if (this.orderType === OrderQueryType.SalesAuthorization) {
-      this.getOrderStatusForAuthorizations();
-    } else {
-      this.getOrderStatus();
-    }
+    this.getStatusByOrderType();
   }
 
 
@@ -96,20 +92,24 @@ export class OrdersFilterComponent implements OnInit {
   }
 
 
-  private getOrderStatus() {
-    this.isLoading = true;
-
-    this.salesOrdersData.getOrderStatus()
-      .firstValue()
-      .then(x => this.setStatusList(x))
-      .finally(() => this.isLoading = false);
+  private getStatusByOrderType() {
+    switch (this.orderType) {
+      case OrderQueryType.Sales:
+        this.getStatus(this.salesOrdersData.getOrderStatus());
+        return;
+      case OrderQueryType.SalesAuthorization:
+        this.getStatus(this.salesOrdersData.getOrderStatusForAuthorizations());
+        return;
+      case OrderQueryType.SalesPacking:
+        return;
+    }
   }
 
 
-  private getOrderStatusForAuthorizations() {
+  private getStatus(observable: EmpObservable<Identifiable[]>) {
     this.isLoading = true;
 
-    this.salesOrdersData.getOrderStatusForAuthorizations()
+    observable
       .firstValue()
       .then(x => this.setStatusList(x))
       .finally(() => this.isLoading = false);
@@ -118,13 +118,6 @@ export class OrdersFilterComponent implements OnInit {
 
   private setStatusList(status: Identifiable[]) {
     this.statusList = status;
-    // if (this.statusRequired) {
-    //   this.form.controls.status.reset(this.statusList.length > 0 ? this.statusList[0].uid : null)
-    //   this.formHelper.setControlValidators(this.form.controls.status, Validators.required);
-    // } else {
-    //   this.form.controls.status.reset('');
-    //   this.formHelper.clearControlValidators(this.form.controls.status);
-    // }
   }
 
 }

@@ -6,12 +6,8 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AngularMaterialModule } from '@app/shared/angular-material.module';
-
-import { SharedModule } from '@app/shared/shared.module';
+import { SalesModule } from '@app/views/sales/sales.module';
 
 import { WarehousesWorkspaceRoutingModule } from './warehouses-workspace-routing.module';
 
@@ -19,21 +15,8 @@ import { WarehousesWorkspaceRoutingModule } from './warehouses-workspace-routing
 @NgModule({
 
   imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AngularMaterialModule,
-    SharedModule,
-
+    SalesModule,
     WarehousesWorkspaceRoutingModule,
-  ],
-
-  declarations: [
-
-  ],
-
-  exports: [
-
   ]
 
 })

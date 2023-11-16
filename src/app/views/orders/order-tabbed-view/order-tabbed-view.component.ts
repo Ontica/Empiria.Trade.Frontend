@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 
 import { DateStringLibrary, EventInfo } from '@app/core';
 
-import { EmptyOrder, Order } from '@app/models';
+import { EmptyOrder, Order, OrderQueryType, OrderTypeConfig } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -28,6 +28,12 @@ export enum OrderTabbedViewEventType {
   templateUrl: './order-tabbed-view.component.html',
 })
 export class OrderTabbedViewComponent implements OnChanges {
+
+  @Input() config: OrderTypeConfig = {
+    type: OrderQueryType.Sales,
+    titleText: 'Pedido',
+    itemText: 'pedido',
+  };
 
   @Input() order: Order = EmptyOrder();
 
@@ -49,6 +55,16 @@ export class OrderTabbedViewComponent implements OnChanges {
 
   ngOnChanges() {
     this.setTitle();
+  }
+
+
+  get showSaleTab(): boolean {
+    return this.config.type === OrderQueryType.Sales || this.config.type === OrderQueryType.SalesAuthorization;
+  }
+
+
+  get showPackingTab(): boolean {
+    return this.config.type === OrderQueryType.SalesPacking;
   }
 
 

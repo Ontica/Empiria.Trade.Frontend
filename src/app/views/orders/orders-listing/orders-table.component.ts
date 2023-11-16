@@ -72,8 +72,15 @@ export class OrdersTableComponent implements OnChanges {
   private resetColumns() {
     this.displayedColumns = [...this.displayedColumnsDefault];
 
-    if (this.orderType === OrderQueryType.SalesAuthorization) {
-      this.displayedColumns.push('totalDebt');
+    switch (this.orderType) {
+      case OrderQueryType.SalesAuthorization:
+        this.displayedColumns.push('totalDebt');
+        return;
+
+      case OrderQueryType.SalesPacking:
+        this.displayedColumns.push('weight');
+        this.displayedColumns.push('boxesCount');
+        return;
     }
   }
 

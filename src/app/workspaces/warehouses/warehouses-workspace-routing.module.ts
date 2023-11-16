@@ -13,12 +13,14 @@ import { ROUTES } from '@app/main-layout';
 
 import { DefaultComponent } from '@app/shared/deafult-components/default.component';
 
+import { SalesMainPageComponent } from '@app/views/sales/sales-main-page.component';
+
 
 const routes: Routes = [
   {
     data: { permission: ROUTES.almacenes_surtidos.permission },
     path: ROUTES.almacenes_surtidos.path,
-    component: DefaultComponent,
+    component: SalesMainPageComponent,
   },
   {
     data: { permission: ROUTES.almacenes_embarques.permission },

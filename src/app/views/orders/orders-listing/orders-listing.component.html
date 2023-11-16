@@ -3,7 +3,7 @@
   <div class="card-header card-header-flat">
 
     <div class="card-title">
-      Listado de {{config.text}}
+      Listado de {{config.titleText}}
 
       <div class="card-hint" empNgProgressText
         loadingText="Cargando"
@@ -18,7 +18,7 @@
       <button *ngIf="config.canAdd"
         class="btn-action" fxFlexOffset="1.5rem"
         (click)="onCreateOrderClicked()">
-        Agregar {{config.addText}}
+        Agregar {{config.itemText}}
       </button>
 
     </div>

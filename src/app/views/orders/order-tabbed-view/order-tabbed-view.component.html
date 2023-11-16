@@ -5,7 +5,7 @@
 
   <mat-tab-group mat-stretch-tabs="false" [(selectedIndex)]="selectedTabIndex" >
 
-    <mat-tab label="General">
+    <mat-tab label="General" *ngIf="showSaleTab">
 
       <emp-trade-order-editor
         [order]="order"
@@ -15,15 +15,19 @@
 
     </mat-tab>
 
-    <mat-tab label="Envio" disabled>
+    <mat-tab label="Surtido" *ngIf="showPackingTab">
 
     </mat-tab>
 
-    <mat-tab label="Pago" disabled>
+    <mat-tab label="Envio" *ngIf="showSaleTab" disabled>
 
     </mat-tab>
 
-    <mat-tab label="Documentos" disabled>
+    <mat-tab label="Pago" *ngIf="showSaleTab" disabled>
+
+    </mat-tab>
+
+    <mat-tab label="Documentos" *ngIf="showSaleTab" disabled>
 
     </mat-tab>
 

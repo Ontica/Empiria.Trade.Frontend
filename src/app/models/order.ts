@@ -14,6 +14,14 @@ import { Contact, Customer, Party, EmptyCustomer, EmptyContact } from './contact
 import { Presentation, Product, ProductSelection, Vendor } from './product';
 
 
+export interface OrderTypeConfig {
+  type: OrderQueryType;
+  titleText: string;
+  itemText: string;
+  canAdd?: boolean;
+}
+
+
 export const DefaultOrderStatus: string = 'Captured';
 
 
@@ -32,8 +40,9 @@ export const PaymentConditionList: Identifiable[] = [
 
 
 export enum OrderQueryType {
-  Sales              = 'SalesOrders',
+  Sales = 'SalesOrders',
   SalesAuthorization = 'SalesOrdersAuthorization',
+  SalesPacking = 'SalesOrdersPacking',
 }
 
 
@@ -88,6 +97,8 @@ export interface Order extends OrderData, OrderAdditionalData {
   taxes: number;
   orderTotal: number;
   totalDebt: number;
+  weight: number;
+  boxesCount: number;
   actions: OrderActions;
 }
 
@@ -171,9 +182,11 @@ export function EmptyOrder(): Order {
     taxes: 0,
     orderTotal: 0,
     totalDebt: 0,
+    weight: 0,
+    boxesCount: 0,
     items: [],
     actions: null,
-  })
+  });
 
 }
 
