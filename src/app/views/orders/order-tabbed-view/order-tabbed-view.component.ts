@@ -63,8 +63,8 @@ export class OrderTabbedViewComponent implements OnChanges {
   }
 
 
-  get showPackingTab(): boolean {
-    return this.config.type === OrderQueryType.SalesPacking;
+  get showPackagingTab(): boolean {
+    return this.config.type === OrderQueryType.SalesPackaging;
   }
 
 

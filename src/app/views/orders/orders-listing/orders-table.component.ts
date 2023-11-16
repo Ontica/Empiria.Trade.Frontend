@@ -77,7 +77,7 @@ export class OrdersTableComponent implements OnChanges {
         this.displayedColumns.push('totalDebt');
         return;
 
-      case OrderQueryType.SalesPacking:
+      case OrderQueryType.SalesPackaging:
         this.displayedColumns.push('weight');
         this.displayedColumns.push('boxesCount');
         return;

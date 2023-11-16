@@ -32,6 +32,13 @@ export class SalesOrdersDataService {
   }
 
 
+  getOrderStatusForPackaging(): EmpObservable<Identifiable[]> {
+    const path = 'v4/trade/sales/orders/status/packing';
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
   searchOrders(query: OrderQuery): EmpObservable<Order[]> {
     Assertion.assertValue(query, 'query');
 

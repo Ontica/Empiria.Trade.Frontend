@@ -155,7 +155,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
         return;
 
       case 'AlmacenesViews.Surtidos':
-        this.setSalesConfig(OrderQueryType.SalesPacking, 'Surtidos', '', false);
+        this.setSalesConfig(OrderQueryType.SalesPackaging, 'Surtidos', '', false);
         return;
 
       default:

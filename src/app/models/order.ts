@@ -40,9 +40,9 @@ export const PaymentConditionList: Identifiable[] = [
 
 
 export enum OrderQueryType {
-  Sales = 'SalesOrders',
+  Sales              = 'SalesOrders',
   SalesAuthorization = 'SalesOrdersAuthorization',
-  SalesPacking = 'SalesOrdersPacking',
+  SalesPackaging     = 'SalesOrdersPacking',
 }
 
 
