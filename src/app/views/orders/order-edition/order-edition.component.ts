@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { clone, sendEvent } from '@app/shared/utils';
 
@@ -110,9 +110,8 @@ export class OrderEditionComponent implements OnChanges {
         Assertion.assertValue(event.payload.orderData, 'event.payload.orderData');
 
         this.isOrderDataValid = event.payload.isFormValid as boolean;
-        this.setOrderForEdition({ ...this.orderForEdition, ...event.payload.orderData as OrderData });
+        this.validateOrderHeaderChanges(event.payload.orderData as OrderData);
         this.emitOrderDirty(event.payload.isFormDirty);
-
         return;
 
       default:
@@ -264,6 +263,24 @@ export class OrderEditionComponent implements OnChanges {
 
   private isSameOrderItem(item1: OrderItem, item2: OrderItem): boolean {
     return item1.vendor.vendorProductUID === item2.vendor.vendorProductUID
+  }
+
+
+  private fieldHasChanges(newItem: Identifiable, oldItem: Identifiable): boolean {
+    return !isEmpty(newItem) && !isEmpty(oldItem) && newItem.uid !== oldItem.uid;
+  }
+
+
+  private validateOrderHeaderChanges(orderData: OrderData) {
+    const recalculateItems = this.orderForEdition.items.length > 0 &&
+      (this.fieldHasChanges(orderData.customer, this.orderForEdition.customer) ||
+        this.fieldHasChanges(orderData.supplier, this.orderForEdition.supplier));
+
+    this.setOrderForEdition({ ...this.orderForEdition, ...orderData });
+
+    if (recalculateItems) {
+      this.calculateOrder(this.orderForEdition);
+    }
   }
 
 

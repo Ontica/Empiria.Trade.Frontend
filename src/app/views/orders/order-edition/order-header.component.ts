@@ -32,6 +32,7 @@ interface OrderFormModel extends FormGroup<{
   status: FormControl<string>;
   customer: FormControl<Customer>;
   customerContact: FormControl<Contact>;
+  priceList: FormControl<string>;
   salesAgent: FormControl<Party>;
   supplier: FormControl<Party>;
   paymentCondition: FormControl<string>;
@@ -136,6 +137,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
       status: [DefaultOrderStatus, Validators.required],
       customer: [null as Customer, Validators.required],
       customerContact: [null],
+      priceList: ['', Validators.required],
       salesAgent: [null as Party, Validators.required],
       supplier: [null as Party, Validators.required],
       paymentCondition: ['', Validators.required],
@@ -172,6 +174,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
         status: this.order.status,
         customer: this.order.customer,
         customerContact: this.order.customerContact ?? null,
+        priceList: this.order.priceList,
         salesAgent: this.order.salesAgent,
         supplier: this.order.supplier,
         paymentCondition: this.order.paymentCondition,
@@ -193,6 +196,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
     this.formHelper.setDisableControl(this.form.controls.orderNumber);
     this.formHelper.setDisableControl(this.form.controls.orderTime);
     this.formHelper.setDisableControl(this.form.controls.status);
+    this.formHelper.setDisableControl(this.form.controls.priceList);
   }
 
 
@@ -206,6 +210,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
       statusName: formModel.status ?? null,
       customer: formModel.customer ?? null,
       customerContact: formModel.customerContact ?? null,
+      priceList: formModel.priceList ?? '',
       salesAgent: formModel.salesAgent ?? null,
       supplier: formModel.supplier ?? null,
       paymentCondition: formModel.paymentCondition ?? '',

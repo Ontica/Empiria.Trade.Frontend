@@ -12,7 +12,13 @@
         </div>
 
         <div class="fx-item-third">
-
+          <label>Proveedor:</label>
+          <emp-ng-select
+            formControlName="supplier"
+            [config]="{bindByValue: false}"
+            [items]="suppliersList"
+            [showError]="formHelper.isControlInvalid(form.controls.supplier)">
+          </emp-ng-select>
         </div>
 
         <div class="fx-item-third fx-row-container">
@@ -52,21 +58,20 @@
       </div>
 
       <div class="fx-item-third">
-        <label>Proveedor:</label>
-        <emp-ng-select
-          formControlName="supplier"
-          [config]="{bindByValue: false}"
-          [items]="suppliersList"
-          [showError]="formHelper.isControlInvalid(form.controls.supplier)">
-        </emp-ng-select>
-      </div>
-
-      <div class="fx-item-third">
         <label>Forma de envio:</label>
         <emp-ng-select
           formControlName="shippingMethod"
           [items]="shippingMethodList"
           [showError]="formHelper.isControlInvalid(form.controls.shippingMethod)">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item-third">
+        <label>Condiciones de pago:</label>
+        <emp-ng-select
+          formControlName="paymentCondition"
+          [items]="paymentConditionList"
+          [showError]="formHelper.isControlInvalid(form.controls.paymentCondition)">
         </emp-ng-select>
       </div>
 
@@ -113,12 +118,10 @@
       </div>
 
       <div class="fx-item-third">
-        <label>Condiciones de pago:</label>
-        <emp-ng-select
-          formControlName="paymentCondition"
-          [items]="paymentConditionList"
-          [showError]="formHelper.isControlInvalid(form.controls.paymentCondition)">
-        </emp-ng-select>
+        <label>Lista de precio:</label>
+        <input type="text" class="text-box"
+          formControlName="priceList"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.priceList)">
       </div>
 
     </div>

@@ -58,6 +58,7 @@ export interface OrderData {
   supplier: Party;
   paymentCondition: string;
   shippingMethod: string;
+  priceList: string;
 }
 
 
@@ -78,9 +79,8 @@ export interface Order extends OrderData, OrderAdditionalData {
   paymentCondition: string;
   notes: string;
   shippingMethod: string;
-
+  priceList: string;
   items: OrderItem[];
-
   itemsCount: number;
   itemsTotal: number;
   shipment: number;
@@ -88,7 +88,6 @@ export interface Order extends OrderData, OrderAdditionalData {
   taxes: number;
   orderTotal: number;
   totalDebt: number;
-
   actions: OrderActions;
 }
 
@@ -97,7 +96,6 @@ export interface OrderActions {
   canEdit: boolean;
   canApply: boolean;
   canAuthorize: boolean;
-
   transportPackaging: boolean;
   canSelectCarrier: boolean;
   canShipping: boolean;
@@ -139,6 +137,7 @@ export interface OrderFields {
   supplierUID: string;
   paymentCondition: string;
   shippingMethod: string;
+  priceList: string;
   notes: string;
   items: OrderItemFields[];
 }
@@ -178,6 +177,7 @@ export function EmptyOrder(): Order {
     supplier: Empty,
     salesAgent: Empty,
     paymentCondition: '',
+    priceList: '',
     itemsCount: 0,
     itemsTotal: 0,
     shipment: 0,
@@ -204,6 +204,7 @@ export function mapOrderFieldsFromOrder(order: Order): OrderFields {
     supplierUID: order.supplier?.uid ?? '',
     paymentCondition: order.paymentCondition,
     shippingMethod: order.shippingMethod,
+    priceList: order.priceList,
     items: order.items.map(x => mapOrderItemFieldsFromOrderItem(x)),
     notes: order.notes,
   };
@@ -226,7 +227,7 @@ export function mapOrderItemFieldsFromOrderItem(orderItem: OrderItem): OrderItem
     taxes: orderItem.taxes,
     total: orderItem.total,
     notes: orderItem.notes,
-  };
+};
 
   return orderFields;
 }
