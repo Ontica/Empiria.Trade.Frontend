@@ -105,24 +105,16 @@ export interface OrderActions {
 
 export interface OrderItem {
   orderItemUID: string;
-
   product: Product;
   presentation: Presentation;
   vendor: Vendor;
-
   quantity: number;
-
-  basePrice: number;
-  specialPrice: number;
+  unitPrice: number;
   salesPrice: number;
-  additionalDiscount: number;
-  additionalDiscountToApply: number;
-
-  shipment: number;
-  taxes: number;
-  total: number;
-
-  notes: string;
+  discountPolicy: string;
+  discount1: number;
+  discount2: number;
+  subtotal: number;
 }
 
 
@@ -145,20 +137,14 @@ export interface OrderFields {
 
 export interface OrderItemFields {
   orderItemUID: string;
-
   vendorProductUID: string;
   quantity: number;
-
-  basePrice: number;
-  specialPrice: number;
+  unitPrice: number;
   salesPrice: number;
-  additionalDiscount: number;
-  additionalDiscountToApply: number;
-
-  shipment: number;
-  taxes: number;
-  total: number;
-  notes: string;
+  discountPolicy: string;
+  discount1: number;
+  discount2: number;
+  subtotal: number;
 }
 
 
@@ -217,17 +203,14 @@ export function mapOrderItemFieldsFromOrderItem(orderItem: OrderItem): OrderItem
   const orderFields: OrderItemFields = {
     orderItemUID: orderItem.orderItemUID,
     vendorProductUID: orderItem.vendor.vendorProductUID ?? null,
-    quantity: orderItem.quantity,
-    basePrice: orderItem.basePrice,
-    specialPrice: orderItem.specialPrice,
-    salesPrice: orderItem.salesPrice,
-    additionalDiscount: orderItem.additionalDiscount,
-    additionalDiscountToApply: orderItem.additionalDiscountToApply,
-    shipment: orderItem.shipment,
-    taxes: orderItem.taxes,
-    total: orderItem.total,
-    notes: orderItem.notes,
-};
+    quantity: orderItem.quantity ?? null,
+    unitPrice: orderItem.unitPrice ?? null,
+    salesPrice: orderItem.salesPrice ?? null,
+    discountPolicy: orderItem.discountPolicy ?? null,
+    discount1: orderItem.discount1 ?? null,
+    discount2: orderItem.discount2 ?? null,
+    subtotal: orderItem.subtotal ?? null,
+  };
 
   return orderFields;
 }
@@ -236,21 +219,16 @@ export function mapOrderItemFieldsFromOrderItem(orderItem: OrderItem): OrderItem
 export function mapOrderItemFromProductSelection(product: ProductSelection): OrderItem {
   const productForSeeker: OrderItem = {
     orderItemUID: null,
-    quantity: product.quantity,
-
-    basePrice: product.vendor.price,
-    specialPrice: null,
-    salesPrice: product.vendor.price,
-    additionalDiscount: null,
-    additionalDiscountToApply: null,
-
-    shipment: null,
-    taxes: null,
-    total: null,
-    notes: null,
     product: product.product,
     presentation: product.presentation,
     vendor: product.vendor,
+    quantity: product.quantity ?? null,
+    unitPrice: product.vendor.price ?? null,
+    salesPrice: null,
+    discountPolicy: null,
+    discount1: null,
+    discount2: null,
+    subtotal: null,
   };
 
   return productForSeeker;

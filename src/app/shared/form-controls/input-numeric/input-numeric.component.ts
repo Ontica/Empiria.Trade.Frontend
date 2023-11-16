@@ -36,6 +36,8 @@ export class InputNumericComponent implements ControlValueAccessor {
 
   @Input() noMargin = false;
 
+  @Input() format: 'decimal' | 'percent' = 'decimal';
+
   @Output() valueChange = new EventEmitter<number>();
 
   disabled = false;
@@ -87,9 +89,10 @@ export class InputNumericComponent implements ControlValueAccessor {
 
 
   private setFormattedValue(value: any) {
-    this.formattedValue = value === null || value === undefined || value === '' ?
-      null :
+    const formatted =  value === null || value === undefined || value === '' ? null :
       FormatLibrary.numberWithCommas(value, `1.${this.minDecimals}-${this.maxDecimals}`);
+
+    this.formattedValue = this.format === 'percent' && formatted !== null ? formatted + '%' : formatted;
   }
 
 }

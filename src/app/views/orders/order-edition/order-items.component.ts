@@ -39,8 +39,8 @@ export class OrderItemsComponent implements OnChanges {
 
   @Output() orderItemsEvent = new EventEmitter<EventInfo>();
 
-  displayedColumnsDefault: string[] = ['product', 'quantity', 'basePrice', 'specialPrice', 'salesPrice',
-    'discount', 'discountToApply', 'total'];
+  displayedColumnsDefault: string[] = ['product', 'description', 'quantity', 'unitPrice', 'salesPrice',
+    'discountPolicy', 'discount1', 'discount2', 'subtotal'];
 
   displayedColumns = [...this.displayedColumnsDefault];
 
