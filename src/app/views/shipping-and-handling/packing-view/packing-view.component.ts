@@ -259,6 +259,11 @@ export class PackingViewComponent implements OnChanges {
 
   private setOrderPackingAndEmit(ordenPacking: Packing) {
     this.orderPacking = ordenPacking;
+
+    const newSelectedPackingItem =
+      this.orderPacking.packagedItems.find(x => x.uid === this.selectedPackingItem.uid);
+    this.setDisplayPackingItemEntriesEditor(newSelectedPackingItem, true);
+
     sendEvent(this.packingViewEvent, PackingViewEventType.ORDER_PACKING_UPDATED, { orderUID: this.orderUID });
   }
 
