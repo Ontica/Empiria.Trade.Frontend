@@ -17,7 +17,7 @@ import { sendEvent } from '@app/shared/utils';
 
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
-import { ProductDataEventType } from './product-data.component';
+import { ProductDataEventType } from '../../products/product-data/product-data.component';
 
 export enum ProductsTableEventType {
   SELECT_PRODUCT_CLICKED = 'ProductsTableComponent.Event.SelectProductClicked',

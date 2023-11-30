@@ -25,11 +25,12 @@ import { ProductsSeekerComponent } from './products-seeker/products-seeker.compo
 
 import { ProductsSelectorComponent } from './products-selector/products-selector.component';
 
-import { ProductAttributesComponent } from './products-seeker/product-attributes.component';
+import { ProductAttributesComponent } from '../products/product-data/product-attributes.component';
 
-import { ProductDataComponent } from './products-seeker/product-data.component';
+import { ProductDataComponent } from '../products/product-data/product-data.component';
 
-import { ProductPresentationsComponent } from './products-seeker/product-presentations.component';
+import { ProductPresentationsComponent } from '../products/product-data/product-presentations.component';
+import { ProductsModule } from '../products/products.module';
 
 
 @NgModule({
@@ -42,11 +43,9 @@ import { ProductPresentationsComponent } from './products-seeker/product-present
     SharedModule,
 
     ReportsControlsModule,
+    ProductsModule,
   ],
   declarations: [
-    ProductAttributesComponent,
-    ProductDataComponent,
-    ProductPresentationsComponent,
     ProductsFilterComponent,
     ProductsSeekerComponent,
     ProductsTableComponent,
