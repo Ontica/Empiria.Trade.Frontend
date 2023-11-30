@@ -18,9 +18,10 @@ import { FormatLibrary, sendEvent } from '@app/shared/utils';
 import { OrderEditorEventType } from '../order-editor/order-editor.component';
 
 export enum OrderTabbedViewEventType {
-  CLOSE_BUTTON_CLICKED = 'OrderTabbedViewComponent.Event.CloseButtonClicked',
-  ORDER_UPDATED        = 'OrderTabbedViewComponent.Event.OrderUpdated',
+  CLOSE_BUTTON_CLICKED  = 'OrderTabbedViewComponent.Event.CloseButtonClicked',
+  ORDER_UPDATED         = 'OrderTabbedViewComponent.Event.OrderUpdated',
   ORDER_CANCELED        = 'OrderTabbedViewComponent.Event.OrderCanceled',
+  ORDER_PACKING_UPDATED = 'OrderTabbedViewComponent.Event.OrderPackingUpdated',
 }
 
 @Component({
@@ -63,8 +64,8 @@ export class OrderTabbedViewComponent implements OnChanges {
   }
 
 
-  get showPackagingTab(): boolean {
-    return this.config.type === OrderQueryType.SalesPackaging;
+  get showPackingTab(): boolean {
+    return this.config.type === OrderQueryType.SalesPacking;
   }
 
 
@@ -106,11 +107,25 @@ export class OrderTabbedViewComponent implements OnChanges {
   }
 
 
+  onPackingViewEvent(event: EventInfo) {
+    sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_PACKING_UPDATED, event.payload);
+  }
+
+
   private setTitle() {
     const orderTime = DateStringLibrary.format(this.order.orderTime);
     const orderTotal = FormatLibrary.numberWithCommas(this.order.orderTotal, '1.2-2');
 
     this.title = `${this.order.orderNumber}`;
+
+    if (this.config.type === OrderQueryType.SalesPacking) {
+      this.title += this.order.totalBoxes;
+    }
+
+    if (this.config.type === OrderQueryType.SalesAuthorization) {
+      this.title += this.order.totalDebt > 0 ?
+        ` (adeudo: ${FormatLibrary.numberWithCommas(this.order.totalDebt, '1.2-2')})` : ' (sin adeudo)';
+    }
 
     this.hint = `<strong>${this.order.customer.name} </strong> &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${orderTime} &nbsp; &nbsp; | &nbsp; &nbsp; ` +

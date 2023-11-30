@@ -14,6 +14,7 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 import { InventoryModule } from '../inventory/inventory.module';
+import { ShippingAndHandlingModule } from '../shipping-and-handling/shipping-and-handling.module';
 
 import { OrderEditionComponent } from './order-edition/order-edition.component';
 import { OrderHeaderComponent } from './order-edition/order-header.component';
@@ -43,6 +44,7 @@ import { OrderEditorComponent } from './order-editor/order-editor.component';
 
     ReportsControlsModule,
     InventoryModule,
+    ShippingAndHandlingModule,
   ],
   declarations: [
     OrderEditionComponent,

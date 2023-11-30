@@ -15,7 +15,13 @@
 
     </mat-tab>
 
-    <mat-tab label="Surtido" *ngIf="showPackagingTab">
+    <mat-tab label="Surtido" *ngIf="showPackingTab">
+
+      <emp-trade-packing-view
+        [orderUID]="order.uid"
+        (packingViewEvent)="onPackingViewEvent($event)">
+
+      </emp-trade-packing-view>
 
     </mat-tab>
 

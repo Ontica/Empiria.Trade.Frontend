@@ -100,8 +100,8 @@ export class OrdersFilterComponent implements OnInit {
       case OrderQueryType.SalesAuthorization:
         this.getStatus(this.salesOrdersData.getOrderStatusForAuthorizations());
         return;
-      case OrderQueryType.SalesPackaging:
-        this.getStatus(this.salesOrdersData.getOrderStatusForPackaging());
+      case OrderQueryType.SalesPacking:
+        this.getStatus(this.salesOrdersData.getOrderStatusForPacking());
         return;
       default:
         console.log(`Unhandled status list for order type "${this.orderType}"`);
