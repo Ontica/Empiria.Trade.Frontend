@@ -13,7 +13,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyPacking, MissingItemField, Packing, PackingItem, PackingItemFields } from '@app/models';
+import { EmptyPacking, PackingOrderItemField, Packing, PackingItem, PackingItemFields } from '@app/models';
 
 import { PackingOrdersDataService } from '@app/data-services';
 
@@ -163,7 +163,7 @@ export class PackingViewComponent implements OnChanges {
       case PackingItemEntriesEditorEventType.ASSIGN_ENTRY_ITEM:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
         this.assignPackingItemEntry(this.orderUID, this.selectedPackingItem.uid,
-          event.payload.entry as MissingItemField);
+          event.payload.entry as PackingOrderItemField);
         return;
 
       case PackingItemEntriesEditorEventType.REMOVE_ENTRY_ITEM:
@@ -226,10 +226,10 @@ export class PackingViewComponent implements OnChanges {
   }
 
 
-  private assignPackingItemEntry(orderUID: string, packingItemUID: string, missingItemField: MissingItemField) {
+  private assignPackingItemEntry(orderUID: string, packingItemUID: string, entryFields: PackingOrderItemField) {
     this.submitted = true;
 
-    this.packingOrdersData.createPackingItemEntry(orderUID, packingItemUID, missingItemField)
+    this.packingOrdersData.createPackingItemEntry(orderUID, packingItemUID, entryFields)
       .firstValue()
       .then(x => this.setOrderPackingAndEmit(x))
       .finally(() => this.submitted = false);

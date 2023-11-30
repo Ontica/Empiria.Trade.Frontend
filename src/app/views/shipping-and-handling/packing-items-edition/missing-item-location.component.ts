@@ -13,7 +13,7 @@ import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
-import { MissingItem, MissingItemField, WarehouseBin } from '@app/models';
+import { MissingItem, PackingOrderItemField, WarehouseBin } from '@app/models';
 
 export enum MissingItemLocationEventType {
   ASSIGN_ITEM_CLICKED = 'MissingItemLocationComponent.Event.AssignItemClicked',
@@ -57,7 +57,7 @@ export class MissingItemLocationComponent implements OnChanges {
   onAssignItemClicked() {
     if (this.quantityHasValue && !this.isQuantityInvalid) {
 
-      const entry: MissingItemField = {
+      const entry: PackingOrderItemField = {
         orderItemUID: this.missingItem.orderItemUID,
         warehouseBinUID: this.warehouseBin.uid,
         quantity: this.quantity,

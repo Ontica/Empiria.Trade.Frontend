@@ -64,7 +64,7 @@ export interface MissingItem {
 }
 
 
-export interface MissingItemField {
+export interface PackingOrderItemField {
   orderItemUID: string;
   warehouseBinUID: string;
   warehouseUID?: string;

@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { MissingItemField, Packing, PackingItemFields } from '@app/models';
+import { PackingOrderItemField, Packing, PackingItemFields } from '@app/models';
 
 
 @Injectable()
@@ -71,14 +71,14 @@ export class PackingOrdersDataService {
 
   createPackingItemEntry(orderUID: string,
                          packingItemUID: string,
-                         missingItemField: MissingItemField): EmpObservable<Packing> {
+                         entryFields: PackingOrderItemField): EmpObservable<Packing> {
     Assertion.assertValue(orderUID, 'orderUID');
     Assertion.assertValue(packingItemUID, 'packingItemUID');
-    Assertion.assertValue(missingItemField, 'missingItemField');
+    Assertion.assertValue(entryFields, 'entryFields');
 
     const path = `v4/trade/shipping-and-handling/packing/${orderUID}/packing-item/${packingItemUID}`;
 
-    return this.http.post<Packing>(path, missingItemField);
+    return this.http.post<Packing>(path, entryFields);
   }
 
 
