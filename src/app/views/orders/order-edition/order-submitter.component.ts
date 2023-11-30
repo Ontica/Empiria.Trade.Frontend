@@ -9,11 +9,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { EventInfo } from '@app/core';
 
-import { EmptyOrder, Order, OrderActions } from '@app/models';
+import { EmptyOrder, Order } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { sendEvent } from '@app/shared/utils';
+import { FormatLibrary, sendEvent } from '@app/shared/utils';
 
 export enum OrderSubmitterEventType {
   TOGGLE_EDITION_MODE_CLICKED = 'OrderSubmitterComponent.Event.ToggleEditionModeClicked',
@@ -35,9 +35,7 @@ export enum OrderSubmitterEventType {
 })
 export class OrderSubmitterComponent {
 
-  @Input() orderNumber: string = '';
-
-  @Input() actions: OrderActions = null;
+  @Input() order: Order = EmptyOrder();
 
   @Input() isSaved = false;
 
@@ -107,7 +105,7 @@ export class OrderSubmitterComponent {
 
 
   private confirmCancel() {
-    const message = `Esta operación eliminara el pedido <strong> ${this.orderNumber} </strong>
+    const message = `Esta operación eliminara el pedido <strong> ${this.order.orderNumber} </strong>
                     <br><br>¿Elimino el pedido?`;
     this.messageBox.confirm(message, 'Eliminar pedido', 'DeleteCancel')
       .firstValue()
@@ -120,7 +118,7 @@ export class OrderSubmitterComponent {
 
 
   private confirmSendTo() {
-    const message = `Esta operación enviará el pedido <strong> ${this.orderNumber} </strong> ` +
+    const message = `Esta operación enviará el pedido <strong> ${this.order.orderNumber} </strong> ` +
                     `a almacen para ser procesado. <br><br>¿Aplico el pedido?`;
 
     this.messageBox.confirm(message, 'Aplicar pedido')
@@ -134,7 +132,9 @@ export class OrderSubmitterComponent {
 
 
   private confirmAuthorize() {
-    const message = `Esta operación autorizará el pedido <strong> ${this.orderNumber} </strong> ` +
+    const message = `Esta operación autorizará el pedido <strong> ${this.order.orderNumber} </strong> ` +
+                    `del cliente <strong>${this.order.customer.name}</strong> con adeudo de ` +
+                    `<strong>${FormatLibrary.numberWithCommas(this.order.totalDebt, '1.2-2')}</strong>`+
                     `<br><br>¿Autorizo el pedido?`;
 
     this.messageBox.confirm(message, 'Autorizar pedido')

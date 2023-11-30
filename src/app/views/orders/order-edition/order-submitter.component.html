@@ -1,4 +1,5 @@
-  <mat-divider [style.margin]="'8px 0'" *ngIf="!isSaved || (actions?.canEdit || actions?.canApply || actions?.canAuthorize)">
+  <mat-divider *ngIf="!isSaved || (order.actions.canEdit || order.actions.canApply || order.actions.canAuthorize)"
+    [style.margin]="'8px 0'">
 
   </mat-divider>
 
@@ -23,19 +24,19 @@
 
       <div class="fx-item fx-start fx-items-center">
 
-        <button *ngIf="editionMode && actions?.canEdit"
+        <button *ngIf="editionMode && order.actions.canEdit"
           type="button" class="btn-warning"
           (click)="onCancelButtonClicked()">
           Cancelar
         </button>
 
-        <button *ngIf="!editionMode && actions?.canApply"
+        <button *ngIf="!editionMode && order.actions.canApply"
           type="button" class="btn"
           (click)="onSendToButtonClicked()">
           Aplicar
         </button>
 
-        <button *ngIf="!editionMode && actions?.canAuthorize"
+        <button *ngIf="!editionMode && order.actions.canAuthorize"
           type="button" class="btn"
           (click)="onAuthorizeButtonClicked()">
           Autorizar
@@ -47,7 +48,7 @@
 
         <div class="fx-row-container fx-gap-half">
 
-          <button *ngIf="!editionMode && actions?.canEdit"
+          <button *ngIf="!editionMode && order.actions.canEdit"
             class="btn-action"
             (click)="onToggleEditionMode()">
             Editar
