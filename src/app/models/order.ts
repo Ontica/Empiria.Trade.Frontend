@@ -42,7 +42,7 @@ export const PaymentConditionList: Identifiable[] = [
 export enum OrderQueryType {
   Sales              = 'SalesOrders',
   SalesAuthorization = 'SalesOrdersAuthorization',
-  SalesPackaging     = 'SalesOrdersPacking',
+  SalesPacking       = 'SalesOrdersPacking',
 }
 
 
@@ -98,7 +98,7 @@ export interface Order extends OrderData, OrderAdditionalData {
   orderTotal: number;
   totalDebt: number;
   weight: number;
-  boxesCount: number;
+  totalBoxes: number;
   actions: OrderActions;
 }
 
@@ -183,7 +183,7 @@ export function EmptyOrder(): Order {
     orderTotal: 0,
     totalDebt: 0,
     weight: 0,
-    boxesCount: 0,
+    totalBoxes: 0,
     items: [],
     actions: null,
   });

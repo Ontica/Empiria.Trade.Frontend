@@ -30,6 +30,8 @@ export * from './imported-data';
 
 export * from './order';
 
+export * from './packing';
+
 export * from './product';
 
 export * from './reporting';

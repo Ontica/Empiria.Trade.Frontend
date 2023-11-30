@@ -522,6 +522,13 @@ i.disabled {
   color: $tag-default-color;
   padding: 4px 8px;
   width: fit-content;
+  white-space: nowrap;
+
+  &.tag-base {
+    background-color: $white;
+    color: $tag-default-color;
+    border: 1px solid $tag-default-color;
+  }
 
   &.tag-info {
     background-color: $tag-info-background-color;
@@ -553,6 +560,10 @@ a.tag {
     background-color: darken($tag-default-background-color, 4%);
     color: $primary-color-light;
     cursor: pointer;
+
+    &.tag-base {
+      background-color: lighten($tag-default-color, 55%);
+    }
 
     &.tag-info {
       background-color: darken($tag-info-background-color, 4%);
@@ -724,4 +735,40 @@ ul.default-list {
 
 .workarea-color {
   background: hsl(207, 91%, 98%);
+}
+
+
+@mixin message-container() {
+  display: flex;
+  padding: 0.5rem;
+  font-size: $font-size-grid;
+  border-radius: $control-border-radius;
+  border: 1px solid #000;
+}
+
+
+.info-container {
+  @include message-container;
+
+  border-color: $primary-color;
+}
+
+
+.warning-container {
+  @include message-container;
+
+  border-color: darken($icon-color-warning, 35%);
+
+}
+
+
+.container-expand-half {
+  max-height: 35vh;
+  overflow-y: auto;
+}
+
+
+.container-expand-all {
+  max-height: 85vh;
+  overflow-y: auto;
 }

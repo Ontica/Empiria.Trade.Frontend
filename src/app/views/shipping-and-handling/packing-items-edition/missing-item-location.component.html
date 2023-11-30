@@ -1,0 +1,88 @@
+<div *ngIf="!missingItem.warehouseBins || missingItem.warehouseBins.length === 0">
+  N/D
+</div>
+
+<div *ngIf="missingItem.warehouseBins.length > 0" class="list-container">
+
+  <div class="fx-column-container">
+
+    <form autocomplete="off" empNgFormKeyDownEnter>
+
+      <div class="fx-column-container fx-gap-half">
+
+        <!-- <div #quantitySection class="fx-row-container">
+          <div class="fx-item info-container">
+            <span class="text-label">Por surtir:</span>
+            <span class="text-highlight">{{!missingItem.quantity ? '-' : (missingItem.quantity | number)}}</span>
+          </div>
+        </div>
+
+        <mat-divider>
+
+        </mat-divider> -->
+
+        <div #warehouseBinSection class="fx-row-container">
+
+          <emp-ng-select #warehouseBinSelect class="fx-item"
+            [(ngModel)]="warehouseBin"
+            [name]="'selectWarehouseBin'+ warehouseBin?.uid"
+            [config]="{bindByValue: false}"
+            [items]="missingItem.warehouseBins"
+            [style.marginRight.px]="-8">
+
+            <ng-template #labelTemplate let-item="item">
+              {{item.warehouseName}} - {{item.name}} {{'(' + (item.stock | number) + ')'}}
+            </ng-template>
+
+            <ng-template #optionTemplate let-item="item">
+              {{item.warehouseName}} - {{item.name}} {{'(' + (item.stock | number) + ')'}}
+            </ng-template>
+
+          </emp-ng-select>
+
+        </div>
+
+      </div>
+
+
+      <ng-container #quantitySelectionSection *ngIf="canAdd">
+
+
+        <mat-divider [style.margin]="'4px 0'">
+
+        </mat-divider>
+
+
+        <div class="fx-row-container fx-space-between">
+
+          <div class="fx-item">
+
+            <span class="text-label">Cantidad:</span>
+
+            <emp-ng-input-numeric
+              [id]="'quantity-' + missingItem.orderItemUID"
+              [minDecimals]="0"
+              [maxDecimals]="2"
+              [(ngModel)]="quantity"
+              [showError]="isQuantityInvalid"
+              [ngModelOptions]="{standalone: true}">
+
+            </emp-ng-input-numeric>
+
+          </div>
+
+          <div class="fx-items-end" [style.marginBottom.px]="2">
+
+            <button class="btn" (click)="onAssignItemClicked();">Agregar</button>
+
+          </div>
+
+        </div>
+
+      </ng-container>
+
+    </form>
+
+  </div>
+
+</div>

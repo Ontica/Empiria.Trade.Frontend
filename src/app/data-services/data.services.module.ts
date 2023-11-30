@@ -15,9 +15,11 @@ import { AccessControlDataService } from './_access-control.data.service';
 
 import { ContactsDataService } from './contacts.data.service';
 
-import { SalesOrdersDataService } from './sales-orders.data.service';
+import { PackingOrdersDataService } from './packing-orders.data.service';
 
 import { ProductsDataService } from './products.data.service';
+
+import { SalesOrdersDataService } from './sales-orders.data.service';
 
 
 @NgModule({
@@ -26,8 +28,9 @@ import { ProductsDataService } from './products.data.service';
     FileDownloadService,
     AccessControlDataService,
     ContactsDataService,
-    SalesOrdersDataService,
+    PackingOrdersDataService,
     ProductsDataService,
+    SalesOrdersDataService,
 
     { provide: SAVER, useFactory: getSaver }
   ]

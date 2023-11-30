@@ -1,0 +1,61 @@
+<emp-ng-modal-window [config]="{width:'500px'}">
+
+  <emp-ng-card
+    [title]="isSaved ? 'Editar caja' : 'Agregar caja'"
+    hint='Información de la caja.'
+    (cardClose)="onCloseClicked()">
+
+    <div class="card-body-padding">
+
+      <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+
+        <div class="fx-column-container fx-gap-half">
+
+          <div class="fx-row-container">
+
+              <div class="fx-item">
+                <label>Caja:</label>
+                <input type="text" class="text-box"
+                  formControlName="packageID"
+                  [class.invalid-control]="formHelper.isControlInvalid(form.controls.packageID)">
+              </div>
+
+          </div>
+
+          <div class="fx-row-container">
+
+            <div class="fx-item">
+              <label>Tipo de caja:</label>
+              <emp-ng-select
+                formControlName="packageTypeUID"
+                [items]="packageTypeList"
+                [showError]="formHelper.isControlInvalid(form.controls.packageTypeUID)">
+              </emp-ng-select>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <mat-divider class="horizontal"></mat-divider>
+
+
+        <div class="fx-row-container fx-end fx-item-none fx-items-center">
+
+          <button
+            [class.btn]="!formHelper.isFormReady(form)"
+            [class.btn-action]="formHelper.isFormReady(form)"
+            (click)="onSubmitButtonClicked()">
+            {{isSaved ? 'Guardar' : 'Agregar'}}
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

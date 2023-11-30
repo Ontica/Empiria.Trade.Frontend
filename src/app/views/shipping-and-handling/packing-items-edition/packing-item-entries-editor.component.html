@@ -1,0 +1,52 @@
+<emp-ng-modal-window [config]="{width:'958px', maxHeight: '98%'}">
+
+  <emp-ng-card
+    [title]="'Asignación de productos - ' + packingItem.packageID + ' (' + packingItem.packageTypeName + ')'"
+    hint="Seleccione la ubicación y la cantidad de producto a agregar a la caja"
+    (cardClose)="onClose()">
+
+    <div class="card-body-without-top">
+
+      <div class="fx-column-container-fill">
+
+        <div class="fx-item-none">
+
+          <div class="section-title"> Productos asignados: </div>
+
+          <div class="container-expand-half mat-elevation-z1">
+
+            <emp-trade-packing-item-entries-table
+              [packingItem]="packingItem"
+              [canEdit]="canEdit"
+              (packingItemEntriesTableEvent)="onPackingItemEntriesTableEvent($event)">
+
+            </emp-trade-packing-item-entries-table>
+
+          </div>
+
+        </div>
+
+
+        <br>
+
+
+        <emp-ng-expansion-button [style.marginRight.px]="-8" class="expand-half" *ngIf="canEdit"
+          [config]="{textButtonOpen: 'Productos por surtir', textButtonClose: 'Productos por surtir'}">
+
+          <emp-trade-missing-items-table
+            [missingItems]="missingItems"
+            [canAssign]="canEdit"
+            (missingItemsTableEvent)="onMissingItemsTableEvent($event)">
+
+          </emp-trade-missing-items-table>
+
+        </emp-ng-expansion-button>
+
+
+      </div>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

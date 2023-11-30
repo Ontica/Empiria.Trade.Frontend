@@ -1,0 +1,78 @@
+<div class="fill-table-container" [style.width.%]="100">
+
+  <table mat-table [dataSource]="dataSource" class="data-centered">
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef class="column-action">
+        <button title="Agregar caja"
+          mat-icon-button color="primary"
+          (click)="onCreatePackingItemClicked()">
+          <mat-icon color="primary">
+            add
+          </mat-icon>
+        </button>
+      </th>
+      <td mat-cell *matCellDef="let row" class="column-action">
+        <button title="Eliminar caja"
+          mat-icon-button
+          (click)="$event.stopPropagation(); onDeletePackingItemClicked(row)">
+          <mat-icon>
+            delete
+          </mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="packageID">
+      <th mat-header-cell *matHeaderCellDef class="nowrap"> Caja </th>
+      <td mat-cell *matCellDef="let row" class="nowrap">
+        <a class="link-highlight bold-text" (click)="$event.stopPropagation(); onPackingItemClicked(row)">
+          {{ row.packageID }}
+        </a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="size">
+      <th mat-header-cell *matHeaderCellDef class="nowrap"> Tamaño </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.packageTypeName }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="items">
+      <th mat-header-cell *matHeaderCellDef> Productos </th>
+      <td mat-cell *matCellDef="let row">
+        <div class="fx-row-container fx-wrap fx-gap-half">
+
+          <span *ngIf="row.orderItems.length === 0">-</span>
+
+          <span class="tag tag-base" *ngFor="let item of row.orderItems">
+            <strong>{{ item.quantity }}</strong> {{ item.product.productCode }} ({{ item.warehouseBin.name }})
+          </span>
+
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="selectable-row"
+      [class.row-selected]="row.packageID === selected?.packageID"
+      (click)="onPackingItemEntriesClicked(row)"></tr>
+
+  </table>
+
+
+  <div class="fx-column-container fx-center fx-items-center fx-spacing-2">
+
+    <!-- <button class="btn-base" *ngIf="canEdit"
+      (click)="onCreatePackingItemClicked()">
+      <mat-icon [style.margin]="'0 0.5rem 0 0'">add</mat-icon> Agregar Caja
+    </button> -->
+
+    <div class="text-not-found" *ngIf="!hasPackingItems">
+      No se han creado cajas.
+    </div>
+
+  </div>
+
+</div>

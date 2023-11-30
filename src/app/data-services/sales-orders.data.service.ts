@@ -32,7 +32,7 @@ export class SalesOrdersDataService {
   }
 
 
-  getOrderStatusForPackaging(): EmpObservable<Identifiable[]> {
+  getOrderStatusForPacking(): EmpObservable<Identifiable[]> {
     const path = 'v4/trade/sales/orders/status/packing';
 
     return this.http.get<Identifiable[]>(path);

@@ -1,0 +1,24 @@
+<emp-ng-modal-window [config]="{width:'958px'}">
+
+  <emp-ng-card
+    title="Productos por surtir"
+    hint="Informacion de los productos pendientes por surtir y sus ubicaciones"
+    (cardClose)="onClose()">
+
+    <div class="card-body-without-top">
+
+      <div class="container-expand-all mat-elevation-z1">
+
+        <emp-trade-missing-items-table
+          [missingItems]="missingItems"
+          [canAssign]="false">
+
+        </emp-trade-missing-items-table>
+
+      </div>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

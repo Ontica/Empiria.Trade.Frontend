@@ -45,6 +45,8 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   queryExecuted = false;
 
+  query: OrderQuery = null;
+
   ordersList: Order[] = []
 
   orderSelected: Order = EmptyOrder();
@@ -99,7 +101,9 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
       case OrdersListingEventType.SEARCH_ORDERS:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
-        this.searchOrders(event.payload.query as OrderQuery);
+        this.query = event.payload.query as OrderQuery;
+        this.setOrderSelected(EmptyOrder());
+        this.searchOrders(this.query);
         return;
 
       case OrdersListingEventType.SELECT_ORDER:
@@ -131,6 +135,11 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
         this.removeOrderFromList(event.payload.orderUID);
         return;
 
+      case OrderTabbedViewEventType.ORDER_PACKING_UPDATED:
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        this.resetSearchData();
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -155,7 +164,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
         return;
 
       case 'AlmacenesViews.Surtidos':
-        this.setSalesConfig(OrderQueryType.SalesPackaging, 'Surtidos', '', false);
+        this.setSalesConfig(OrderQueryType.SalesPacking, 'Surtidos', '', false);
         return;
 
       default:
@@ -184,6 +193,11 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
+  private resetSearchData() {
+    this.searchOrders(this.query);
+  }
+
+
   private setOrderData(data: Order[]) {
     this.ordersList = data;
     this.queryExecuted = true;
@@ -194,8 +208,6 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
     this.ordersList = [];
     this.isLoading = true;
     this.queryExecuted = false;
-
-    this.setOrderSelected(EmptyOrder());
   }
 
 

@@ -317,6 +317,10 @@ table.mat-mdc-table {
     }
   }
 
+  &.table-no-margin {
+    margin: 0;
+  }
+
   &.data-centered td {
     vertical-align: middle;
   }
@@ -509,6 +513,7 @@ table.mat-mdc-table.emp-designer {
 }
 
 .mat-expansion-panel-header {
+  max-height: 48px !important;
   min-height: 36px;
   height: auto;
   padding: 4px 24px !important;
@@ -517,6 +522,7 @@ table.mat-mdc-table.emp-designer {
 }
 
 .mat-expansion-panel-header.mat-expanded {
+  max-height: 48px !important;
   min-height: 36px;
   height: auto;
   padding: 4px 24px !important;
@@ -534,6 +540,12 @@ table.mat-mdc-table.emp-designer {
 
 .mat-expansion-panel .mat-action-row {
   padding: 8px 30px 8px 24px !important;
+}
+
+.expand-half .mat-expansion-panel-body {
+  max-height: 35vh;
+  overflow-y: auto;
+  padding: 0 !important;
 }
 
 //
