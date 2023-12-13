@@ -127,7 +127,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
       case OrderTabbedViewEventType.ORDER_UPDATED:
         Assertion.assertValue(event.payload.order, 'event.payload.order');
-        this.insertOrderToList(event.payload.order as Order);
+        this.validateActionForOrderUpdated(event.payload.order as Order);
         return;
 
       case OrderTabbedViewEventType.ORDER_CANCELED:
@@ -220,6 +220,15 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   private setOrderSelected(order: Order) {
     this.orderSelected = clone(order);
     this.displaySecondaryView = !!this.orderSelected.uid;
+  }
+
+
+  private validateActionForOrderUpdated(order: Order) {
+    if (this.salesConfig.type === OrderQueryType.Sales) {
+      this.insertOrderToList(order);
+    } else {
+      this.resetSearchData();
+    }
   }
 
 

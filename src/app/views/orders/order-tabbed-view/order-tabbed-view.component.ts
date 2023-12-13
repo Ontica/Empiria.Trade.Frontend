@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { DateStringLibrary, EventInfo } from '@app/core';
 
@@ -54,8 +54,12 @@ export class OrderTabbedViewComponent implements OnChanges {
   constructor(private messageBox: MessageBoxService) { }
 
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     this.setTitle();
+
+    if (changes.order) {
+      this.validateSelectedTabIndex();
+    }
   }
 
 
@@ -75,7 +79,12 @@ export class OrderTabbedViewComponent implements OnChanges {
 
 
   get showShippingTab(): boolean {
-    return this.config.type === OrderQueryType.Sales;
+    return this.config.type === OrderQueryType.Sales && this.order.status === 'CarrierSelector';
+  }
+
+
+  get canPacking(): boolean {
+    return this.order.status === 'Packing';
   }
 
 
@@ -143,6 +152,13 @@ export class OrderTabbedViewComponent implements OnChanges {
       `${orderTime} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${orderTotal} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `<span class="tag tag-small">${this.order.status}</span>`;
+  }
+
+
+  private validateSelectedTabIndex() {
+    if (this.showOrderTab && !this.showShippingTab && this.selectedTabIndex === 1) {
+      this.selectedTabIndex = 0;
+    }
   }
 
 

@@ -29,16 +29,16 @@
 
       <emp-trade-packing-view
         [orderUID]="order.uid"
-        [canPacking]="order.status === 'Packing'"
+        [canPacking]="canPacking"
         (packingViewEvent)="onPackingViewEvent($event)">
 
       </emp-trade-packing-view>
 
     </mat-tab>
 
-    <mat-tab label="Envio" *ngIf="showShippingTab">
+    <mat-tab label="Envío" *ngIf="showOrderTab" [disabled]="!showShippingTab">
 
-      <emp-trade-shipping-view>
+      <emp-trade-shipping-view *ngIf="showShippingTab">
 
       </emp-trade-shipping-view>
 
