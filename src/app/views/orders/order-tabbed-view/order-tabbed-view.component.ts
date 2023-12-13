@@ -59,13 +59,23 @@ export class OrderTabbedViewComponent implements OnChanges {
   }
 
 
-  get showSaleTab(): boolean {
+  get showOrderTab(): boolean {
     return this.config.type === OrderQueryType.Sales || this.config.type === OrderQueryType.SalesAuthorization;
+  }
+
+
+  get showCreditTab(): boolean {
+    return this.config.type === OrderQueryType.SalesAuthorization;
   }
 
 
   get showPackingTab(): boolean {
     return this.config.type === OrderQueryType.SalesPacking;
+  }
+
+
+  get showShippingTab(): boolean {
+    return this.config.type === OrderQueryType.Sales;
   }
 
 
@@ -119,12 +129,14 @@ export class OrderTabbedViewComponent implements OnChanges {
     this.title = `${this.order.orderNumber}`;
 
     if (this.config.type === OrderQueryType.SalesPacking) {
-      this.title += this.order.totalBoxes;
+      this.title += this.order.totalPackages;
     }
 
     if (this.config.type === OrderQueryType.SalesAuthorization) {
       this.title += this.order.totalDebt > 0 ?
-        ` (adeudo: ${FormatLibrary.numberWithCommas(this.order.totalDebt, '1.2-2')})` : ' (sin adeudo)';
+        `<span class="tag tag-medium tag-base-warning">Adeudo: &nbsp; ` +
+        `${FormatLibrary.numberWithCommas(this.order.totalDebt, '1.2-2')}</span>` :
+        '<span class="tag tag-medium tag-base">sin adeudo</span>';
     }
 
     this.hint = `<strong>${this.order.customer.name} </strong> &nbsp; &nbsp; | &nbsp; &nbsp; ` +

@@ -47,7 +47,9 @@
           <span *ngIf="row.orderItems.length === 0">-</span>
 
           <span class="tag tag-base" *ngFor="let item of row.orderItems">
-            <strong>{{ item.quantity }}</strong> {{ item.product.productCode }} ({{ item.warehouseBin.name }})
+            <strong>{{ item.quantity }}</strong>
+            <span> {{ item.product.productCode }} </span>
+            <span *ngIf="!!item.warehouseBin.name"> ({{ item.warehouseBin.name }}) </span>
           </span>
 
         </div>

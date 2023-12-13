@@ -79,7 +79,7 @@ export class OrdersTableComponent implements OnChanges {
 
       case OrderQueryType.SalesPacking:
         this.displayedColumns.push('weight');
-        this.displayedColumns.push('totalBoxes');
+        this.displayedColumns.push('totalPackages');
         return;
     }
   }

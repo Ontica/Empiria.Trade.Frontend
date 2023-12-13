@@ -98,7 +98,7 @@ export interface Order extends OrderData, OrderAdditionalData {
   orderTotal: number;
   totalDebt: number;
   weight: number;
-  totalBoxes: number;
+  totalPackages: number;
   actions: OrderActions;
 }
 
@@ -107,11 +107,22 @@ export interface OrderActions {
   canEdit: boolean;
   canApply: boolean;
   canAuthorize: boolean;
-  transportPackaging: boolean;
+  canPackaging: boolean;
   canSelectCarrier: boolean;
   canShipping: boolean;
   canClose: boolean;
 }
+
+
+export const EmptyOrderActions: OrderActions = {
+  canEdit: false,
+  canApply: false,
+  canAuthorize: false,
+  canPackaging: false,
+  canSelectCarrier: false,
+  canShipping: false,
+  canClose: false,
+};
 
 
 export interface OrderItem {
@@ -183,9 +194,9 @@ export function EmptyOrder(): Order {
     orderTotal: 0,
     totalDebt: 0,
     weight: 0,
-    totalBoxes: 0,
+    totalPackages: 0,
     items: [],
-    actions: null,
+    actions: EmptyOrderActions,
   });
 
 }
