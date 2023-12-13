@@ -20,7 +20,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
         [title]="code"
         [style.height.px]="imageSize"
         [style.width.px]="imageSize"
-        (click)="imageClicked.emit(imageUrl)"
+        (click)="onImageClicked()"
         (error)="imageError = true">
 
       <div *ngIf="!imageUrl || imageError" class="product-not-found" [title]="code">
@@ -61,5 +61,15 @@ export class ProductImageComponent {
   @Output() imageClicked = new EventEmitter();
 
   imageError = false;
+
+
+  onImageClicked() {
+    const payload = {
+      imageUrl: this.imageUrl,
+      imageName: this.code,
+    };
+
+    this.imageClicked.emit(payload);
+  }
 
 }

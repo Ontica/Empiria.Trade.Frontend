@@ -9,13 +9,15 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
+import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+
 import { Assertion, EventInfo } from '@app/core';
 
 import { ProductDescriptor } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+import { GalleryImage } from '@app/shared/components/gallery/gallery.component';
 
 import { ProductDataEventType } from '../../products/product-data/product-data.component';
 
@@ -46,7 +48,7 @@ export class ProductsTableComponent implements OnChanges {
 
   dataSource: TableVirtualScrollDataSource<ProductDescriptor>;
 
-  imageSelected: string = null;
+  imageSelected: GalleryImage = null;
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -54,6 +56,17 @@ export class ProductsTableComponent implements OnChanges {
       this.initDataSource();
       this.scrollToTop();
     }
+  }
+
+
+  onProductImageClicked(event) {
+    Assertion.assert(event.imageUrl, 'event.imageUrl');
+    Assertion.assert(event.imageName, 'event.imageName');
+
+    this.imageSelected = {
+      url: event.imageUrl,
+      name: event.imageName,
+    };
   }
 
 

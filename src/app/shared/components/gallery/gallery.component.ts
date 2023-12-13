@@ -13,6 +13,12 @@ export interface GalleryConfig {
 }
 
 
+export interface GalleryImage {
+  url: string;
+  name: string;
+}
+
+
 const DefaultGalleryConfig: GalleryConfig = {
   backdropClick: true,
 };
@@ -24,7 +30,8 @@ const DefaultGalleryConfig: GalleryConfig = {
 })
 
 export class GalleryComponent {
-  @Input() image: string = null;
+
+  @Input() image: GalleryImage = null;
 
   @Input()
   get config() {
