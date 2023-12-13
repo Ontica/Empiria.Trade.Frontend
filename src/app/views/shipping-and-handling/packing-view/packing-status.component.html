@@ -1,37 +1,49 @@
+<ng-container *ngIf="hasError">
 
-<ng-container *ngIf="isLoading">
-
-  <div class="fx-row-container fx-space-between fx-items-center info-container">
-    Cargando...
+  <div class="instruction-text">
+     Ocurrió un error al consultar los datos…
   </div>
 
 </ng-container>
 
-<ng-container *ngIf="!isLoading">
 
-  <div *ngIf="missingItemsCount > 0"
-    class="fx-row-container fx-space-between fx-items-center warning-container" >
+<ng-container *ngIf="!hasError">
 
-    Faltan {{missingItemsCount}} produtos por surtir.
+  <ng-container *ngIf="isLoading">
 
-    <button class="btn"
-      (click)="onViewStatusClicked()">
-      Ver Productos
-    </button>
+    <div class="fx-row-container fx-space-between fx-items-center info-container">
+      Cargando...
+    </div>
 
-  </div>
+  </ng-container>
 
-  <div *ngIf="missingItemsCount === 0"
-    class="fx-row-container fx-space-between fx-items-center info-container">
+  <ng-container *ngIf="!isLoading">
 
-    {{packingItemsCount > 0 ? 'Se han surtido todos los productos...' : 'La orden no tiene productos asignados...'}}
+    <div *ngIf="missingItemsCount > 0"
+      class="fx-row-container fx-space-between fx-items-center warning-container" >
 
-    <button class="btn"
-      *ngIf="canEdit && packingItemsCount > 0"
-      (click)="onSendPackingClicked()">
-      Enviar
-    </button>
+      Faltan {{missingItemsCount}} produtos por surtir.
 
-  </div>
+      <button class="btn"
+        (click)="onViewStatusClicked()">
+        Ver Productos
+      </button>
+
+    </div>
+
+    <div *ngIf="missingItemsCount === 0"
+      class="fx-row-container fx-space-between fx-items-center info-container">
+
+      {{packingItemsCount > 0 ? 'Se han surtido todos los productos.' : 'La orden no tiene productos asignados.'}}
+
+      <button class="btn"
+        *ngIf="canEdit && packingItemsCount > 0"
+        (click)="onSendPackingClicked()">
+        Cerrar Surtido
+      </button>
+
+    </div>
+
+  </ng-container>
 
 </ng-container>

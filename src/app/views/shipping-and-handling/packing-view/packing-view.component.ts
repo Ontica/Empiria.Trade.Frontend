@@ -13,7 +13,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyPacking, PackingOrderItemField, Packing, PackingItem, PackingItemFields } from '@app/models';
+import { EmptyPacking, PackingOrderItemField, Packing, PackingItem, PackingItemFields, OrderActions, EmptyOrderActions } from '@app/models';
 
 import { PackingOrdersDataService } from '@app/data-services';
 
@@ -37,11 +37,11 @@ export class PackingViewComponent implements OnChanges {
 
   @Input() orderUID: string = '';
 
+  @Input() canPacking: boolean = false;
+
   @Output() packingViewEvent = new EventEmitter<EventInfo>();
 
   orderPacking: Packing = EmptyPacking;
-
-  canPacking = true;
 
   displayPackingItemEditor = false;
 
@@ -55,6 +55,8 @@ export class PackingViewComponent implements OnChanges {
 
   isLoading = true;
 
+  hasError = false;
+
 
   constructor(private packingOrdersData: PackingOrdersDataService,
               private messageBox: MessageBoxService) { }
@@ -62,7 +64,7 @@ export class PackingViewComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.orderUID) {
+    if (changes.orderUID || changes.status) {
       this.getOrderPacking();
     }
   }
@@ -188,11 +190,19 @@ export class PackingViewComponent implements OnChanges {
 
   private getOrderPacking() {
     this.isLoading = true;
+    this.hasError = false;
 
     this.packingOrdersData.getOrderPacking(this.orderUID)
       .firstValue()
       .then(x => this.orderPacking = x)
+      .catch(e => this.catchOrderPackingError())
       .finally(() => this.isLoading = false);
+  }
+
+
+  private catchOrderPackingError() {
+    this.hasError = true;
+    this.orderPacking = EmptyPacking;
   }
 
 
@@ -201,7 +211,10 @@ export class PackingViewComponent implements OnChanges {
 
     this.packingOrdersData.createPackingItem(orderUID, packingItemFields)
       .firstValue()
-      .then(x => this.setOrderPackingCloseAndEmit(x))
+      .then(x => {
+        this.setOrderPackingCloseAndEmit(x);
+        this.displayPackingItemEditor = false;
+      })
       .finally(() => this.submitted = false);
   }
 
@@ -249,28 +262,28 @@ export class PackingViewComponent implements OnChanges {
   private sendOrderPacking(orderUID: string) {
     this.submitted = true;
 
-    setTimeout(() => {
-      this.closeEditors();
-      this.submitted = false;
-      this.messageBox.showInDevelopment('Enviar pedido', { orderUID });
-    }, 500);
+    this.packingOrdersData.sendPackingOrder(orderUID)
+      .firstValue()
+      .then(x => this.emitOrderPackingUpdated())
+      .finally(() => this.submitted = false);
   }
 
 
   private setOrderPackingAndEmit(ordenPacking: Packing) {
     this.orderPacking = ordenPacking;
-
-    const newSelectedPackingItem =
-      this.orderPacking.packagedItems.find(x => x.uid === this.selectedPackingItem.uid);
-    this.setDisplayPackingItemEntriesEditor(newSelectedPackingItem, true);
-
-    sendEvent(this.packingViewEvent, PackingViewEventType.ORDER_PACKING_UPDATED, { orderUID: this.orderUID });
+    this.refreshPackingItemEntriesEditor();
+    this.emitOrderPackingUpdated();
   }
 
 
   private setOrderPackingCloseAndEmit(ordenPacking: Packing) {
     this.setOrderPackingAndEmit(ordenPacking);
     this.closeEditors();
+  }
+
+
+  private emitOrderPackingUpdated() {
+    sendEvent(this.packingViewEvent, PackingViewEventType.ORDER_PACKING_UPDATED, { orderUID: this.orderUID });
   }
 
 
@@ -289,6 +302,15 @@ export class PackingViewComponent implements OnChanges {
   private setDisplayPackingItemEntriesEditor(item: PackingItem, display: boolean) {
     this.selectedPackingItem = item;
     this.displayPackingItemEntriesEditor = display;
+  }
+
+
+  private refreshPackingItemEntriesEditor() {
+    if (this.displayPackingItemEntriesEditor) {
+      const newSelectedPackingItem =
+        this.orderPacking.packagedItems.find(x => x.uid === this.selectedPackingItem.uid);
+      this.setDisplayPackingItemEntriesEditor(newSelectedPackingItem, true);
+    }
   }
 
 }

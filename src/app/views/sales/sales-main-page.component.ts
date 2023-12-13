@@ -7,7 +7,7 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -201,6 +201,12 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   private setOrderData(data: Order[]) {
     this.ordersList = data;
     this.queryExecuted = true;
+
+    // TODO: check this
+    if (!isEmpty(this.orderSelected)) {
+      const newOrder = this.ordersList.find(x => x.uid === this.orderSelected.uid);
+      this.setOrderSelected(newOrder ?? EmptyOrder());
+    }
   }
 
 

@@ -9,6 +9,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { EventInfo } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/containers/message-box';
+
 import { sendEvent } from '@app/shared/utils';
 
 export enum PackingStatusEventType {
@@ -30,15 +32,38 @@ export class PackingStatusComponent {
 
   @Input() isLoading = false;
 
+  @Input() hasError = false;
+
   @Output() packingStatusEvent = new EventEmitter<EventInfo>();
+
+
+  constructor(private messageBox: MessageBoxService) {
+
+  }
 
 
   onViewStatusClicked() {
     sendEvent(this.packingStatusEvent, PackingStatusEventType.VIEW_STATUS_CLICKED);
   }
 
+
   onSendPackingClicked() {
-    sendEvent(this.packingStatusEvent, PackingStatusEventType.SEND_PACKING_CLICKED);
+    this.showConfirmMessage();
+  }
+
+
+  private showConfirmMessage() {
+    const title = 'Cerrar surtido';
+    const message = `Esta operación cerrará el surtido y procederá con el envío.
+      <br><br>¿Cierro el surtido?`;
+
+    this.messageBox.confirm(message, title)
+      .firstValue()
+      .then(x => {
+        if (x) {
+          sendEvent(this.packingStatusEvent, PackingStatusEventType.SEND_PACKING_CLICKED);
+        }
+      });
   }
 
 }
