@@ -17,6 +17,8 @@ import { NgControl } from '@angular/forms';
 })
 export class EmpCurrencyDirective implements OnChanges {
 
+  @Input() empNgInputName = '';
+
   @Input() empNgCurrencyCode = 'MXN';
 
   @Input() empNgCurrencyDisplaySymbol: 'symbol-narrow' | '' = '';
