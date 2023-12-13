@@ -32,8 +32,6 @@ export class ProductsSelectorComponent implements OnChanges {
 
   @Output() productsSelectorEvent = new EventEmitter<EventInfo>();
 
-  displayInTwoColumns = false;
-
   displaySeeker = true;
 
   orderForQuery: OrderFields = null;

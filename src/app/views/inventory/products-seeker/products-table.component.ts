@@ -42,9 +42,11 @@ export class ProductsTableComponent implements OnChanges {
 
   @Output() productsTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumns: string[] = ['product', 'attributes', 'presentations'];
+  displayedColumns: string[] = ['image', 'product', 'attributes', 'presentations'];
 
   dataSource: TableVirtualScrollDataSource<ProductDescriptor>;
+
+  imageSelected: string = null;
 
 
   ngOnChanges(changes: SimpleChanges) {

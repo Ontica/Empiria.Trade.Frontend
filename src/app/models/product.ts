@@ -13,6 +13,7 @@ export interface Product {
   productCode: string;
   description: string;
   productType: ProductType;
+  productImageUrl: string;
 }
 
 
@@ -65,6 +66,7 @@ export interface ProductDescriptor extends Product {
   productCode: string;
   description: string;
   productType: ProductType;
+  productImageUrl: string;
   presentations: ProductPresentation[];
 }
 

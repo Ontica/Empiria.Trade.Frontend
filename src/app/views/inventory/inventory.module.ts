@@ -6,31 +6,20 @@
  */
 
 import { NgModule } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
-
 import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
-
-import { ProductsFilterComponent } from './products-seeker/products-filter.component';
-
-import { ProductsTableComponent } from './products-seeker/products-table.component';
-
-import { ProductsSeekerComponent } from './products-seeker/products-seeker.component';
-
-import { ProductsSelectorComponent } from './products-selector/products-selector.component';
-
-import { ProductAttributesComponent } from '../products/product-data/product-attributes.component';
-
-import { ProductDataComponent } from '../products/product-data/product-data.component';
-
-import { ProductPresentationsComponent } from '../products/product-data/product-presentations.component';
 import { ProductsModule } from '../products/products.module';
+
+import { ProductImageComponent } from './products-seeker/product-image.component';
+import { ProductsFilterComponent } from './products-seeker/products-filter.component';
+import { ProductsSeekerComponent } from './products-seeker/products-seeker.component';
+import { ProductsSelectorComponent } from './products-selector/products-selector.component';
+import { ProductsTableComponent } from './products-seeker/products-table.component';
 
 
 @NgModule({
@@ -46,10 +35,11 @@ import { ProductsModule } from '../products/products.module';
     ProductsModule,
   ],
   declarations: [
+    ProductImageComponent,
     ProductsFilterComponent,
     ProductsSeekerComponent,
-    ProductsTableComponent,
     ProductsSelectorComponent,
+    ProductsTableComponent,
   ],
   exports: [
     ProductsSeekerComponent,
