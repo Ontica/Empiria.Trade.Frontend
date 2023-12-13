@@ -13,7 +13,7 @@ import { ROUTES } from '@app/main-layout';
 
 import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-main-page.component';
 
-import { DefaultComponent } from '@app/shared/deafult-components/default.component';
+import { DefaultComponent } from '@app/shared/components/default-component/default.component';
 
 import { AccessControlMainPageComponent } from './access-control-main-page/access-control-main-page.component';
 

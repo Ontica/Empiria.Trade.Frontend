@@ -15,7 +15,8 @@ import { SharedIndicatorsModule } from './indicators/shared-indicators.module';
 import { SharedPipesModule } from './pipes/shared-pipes.module';
 import { PrinterService } from './utils/printer.service';
 
-import { DefaultComponent } from './deafult-components/default.component';
+import { DefaultComponent } from './components/default-component/default.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { DefaultComponent } from './deafult-components/default.component';
 
   declarations: [
     DefaultComponent,
+    GalleryComponent,
   ],
 
   exports: [
@@ -40,6 +42,9 @@ import { DefaultComponent } from './deafult-components/default.component';
     SharedFormControlsModule,
     SharedIndicatorsModule,
     SharedPipesModule,
+
+    DefaultComponent,
+    GalleryComponent,
   ],
 
   providers: [

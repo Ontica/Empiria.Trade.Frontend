@@ -530,6 +530,12 @@ i.disabled {
     border: 1px solid $tag-default-color;
   }
 
+  &.tag-base-warning {
+    background-color: $white;
+    color: $tag-warning-color;
+    border: 1px solid $tag-warning-color;
+  }
+
   &.tag-info {
     background-color: $tag-info-background-color;
     color: $white;
@@ -550,6 +556,12 @@ i.disabled {
     margin: 0 8px;
     padding: 2px 8px;
     line-height: 1rem;
+  }
+
+  &.tag-medium {
+    font-size: 0.75rem;
+    margin: 0 8px;
+    padding: 4px 8px;
   }
 }
 

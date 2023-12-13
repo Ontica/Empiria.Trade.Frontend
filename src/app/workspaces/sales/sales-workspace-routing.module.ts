@@ -11,7 +11,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ROUTES } from '@app/main-layout';
 
-import { DefaultComponent } from '@app/shared/deafult-components/default.component';
+import { DefaultComponent } from '@app/shared/components/default-component/default.component';
 
 import { SalesMainPageComponent } from '../../views/sales/sales-main-page.component';
 
