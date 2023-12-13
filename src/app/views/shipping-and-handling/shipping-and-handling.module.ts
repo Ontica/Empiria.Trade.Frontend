@@ -25,6 +25,8 @@ import { MissingItemsTableComponent } from './packing-items-edition/missing-item
 import { MissingItemLocationComponent } from './packing-items-edition/missing-item-location.component';
 import { MissingItemsModalComponent } from './packing-view/missing-items-modal.component';
 
+import { ShippingViewComponent } from './shipping-view/shipping-view.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -47,9 +49,12 @@ import { MissingItemsModalComponent } from './packing-view/missing-items-modal.c
     MissingItemsTableComponent,
     MissingItemLocationComponent,
     MissingItemsModalComponent,
+
+    ShippingViewComponent,
   ],
   exports: [
     PackingViewComponent,
+    ShippingViewComponent,
   ],
 })
 export class ShippingAndHandlingModule { }
