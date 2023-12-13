@@ -94,6 +94,15 @@ export class SalesOrdersDataService {
   }
 
 
+  supplyOrder(orderUID: string): EmpObservable<Order> {
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v4/trade/sales/orders/${orderUID}/supply`;
+
+    return this.http.post<Order>(path);
+  }
+
+
   cancelOrder(orderUID: string): EmpObservable<Order> {
     Assertion.assertValue(orderUID, 'orderUID');
 

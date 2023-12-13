@@ -9,13 +9,11 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { sendEvent } from '@app/shared/utils';
 
 import { EmptyPacking, PackingOrderItemField, Packing, PackingItem, PackingItemFields } from '@app/models';
 
-import { PackingOrdersDataService } from '@app/data-services';
+import { PackingOrdersDataService, SalesOrdersDataService } from '@app/data-services';
 
 import { PackingItemsTableEventType } from './packing-items-table.component';
 
@@ -59,12 +57,12 @@ export class PackingViewComponent implements OnChanges {
 
 
   constructor(private packingOrdersData: PackingOrdersDataService,
-              private messageBox: MessageBoxService) { }
+              private ordersData: SalesOrdersDataService) { }
 
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.orderUID || changes.status) {
+    if (changes.orderUID || changes.canPacking) {
       this.getOrderPacking();
     }
   }
@@ -78,7 +76,7 @@ export class PackingViewComponent implements OnChanges {
         return;
 
       case PackingStatusEventType.SEND_PACKING_CLICKED:
-        this.sendOrderPacking(this.orderUID);
+        this.supplyOrder(this.orderUID);
         return;
 
       default:
@@ -259,10 +257,10 @@ export class PackingViewComponent implements OnChanges {
   }
 
 
-  private sendOrderPacking(orderUID: string) {
+  private supplyOrder(orderUID: string) {
     this.submitted = true;
 
-    this.packingOrdersData.sendPackingOrder(orderUID)
+    this.ordersData.supplyOrder(orderUID)
       .firstValue()
       .then(x => this.emitOrderPackingUpdated())
       .finally(() => this.submitted = false);
