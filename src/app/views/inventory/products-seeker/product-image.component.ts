@@ -14,14 +14,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       [style.height.px]="imageSize"
       [style.width.px]="imageSize">
 
-      <img *ngIf="imageUrl" class="product-image"
+      <img *ngIf="imageUrl && !imageError" class="product-image"
         [src]="imageUrl"
         [alt]="code"
+        [title]="code"
         [style.height.px]="imageSize"
         [style.width.px]="imageSize"
-        (click)="imageClicked.emit(imageUrl)">
+        (click)="imageClicked.emit(imageUrl)"
+        (error)="imageError = true">
 
-      <div *ngIf="!imageUrl" class="product-not-found">
+      <div *ngIf="!imageUrl || imageError" class="product-not-found" [title]="code">
         Imagen no encontrada
       </div>
 
@@ -57,5 +59,7 @@ export class ProductImageComponent {
   @Input() code = '';
 
   @Output() imageClicked = new EventEmitter();
+
+  imageError = false;
 
 }
