@@ -13,6 +13,8 @@ import { Contact, Customer, Party, EmptyCustomer, EmptyContact } from './contact
 
 import { Presentation, Product, ProductSelection, Vendor } from './product';
 
+import { CustomerCredit, EmptyCustomerCredit } from './customer';
+
 
 export interface OrderTypeConfig {
   type: OrderQueryType;
@@ -82,6 +84,7 @@ export interface Order extends OrderData, OrderAdditionalData {
   orderTime: DateString;
   status: string;
   customer: Customer;
+  customerCredit: CustomerCredit;
   customerContact: Contact;
   salesAgent: Party;
   supplier: Party;
@@ -96,7 +99,6 @@ export interface Order extends OrderData, OrderAdditionalData {
   discount: number;
   taxes: number;
   orderTotal: number;
-  totalDebt: number;
   weight: number;
   totalPackages: number;
   actions: OrderActions;
@@ -182,6 +184,7 @@ export function EmptyOrder(): Order {
     statusName: '',
     customer: EmptyCustomer,
     customerContact: EmptyContact,
+    customerCredit: EmptyCustomerCredit,
     supplier: Empty,
     salesAgent: Empty,
     paymentCondition: '',
@@ -192,7 +195,6 @@ export function EmptyOrder(): Order {
     discount: 0,
     taxes: 0,
     orderTotal: 0,
-    totalDebt: 0,
     weight: 0,
     totalPackages: 0,
     items: [],

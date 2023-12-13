@@ -1,0 +1,21 @@
+<div class="fx-column-container-fill">
+
+  <div class="section-title"> Datos del cliente </div>
+
+  <emp-trade-customer-view class="fx-item-none"
+    [customer]="customer"
+    [customerCredit]="customerCredit">
+
+  </emp-trade-customer-view>
+
+  <br>
+
+  <div class="section-title fx-item-none"> Adeudos pendientes </div>
+
+  <emp-trade-customer-credit-table class="fx-item"
+    [creditTransactions]="customerCredit.creditTransactions"
+    [style.paddingRight.px]="8">
+
+  </emp-trade-customer-credit-table>
+
+</div>

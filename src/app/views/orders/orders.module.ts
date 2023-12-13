@@ -12,8 +12,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
-import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
+import { CustomersModule } from '../customers/customers.module';
 import { InventoryModule } from '../inventory/inventory.module';
+import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 import { ShippingAndHandlingModule } from '../shipping-and-handling/shipping-and-handling.module';
 
 import { OrderEditionComponent } from './order-edition/order-edition.component';
@@ -42,8 +43,9 @@ import { OrderEditorComponent } from './order-editor/order-editor.component';
     AngularMaterialModule,
     SharedModule,
 
-    ReportsControlsModule,
+    CustomersModule,
     InventoryModule,
+    ReportsControlsModule,
     ShippingAndHandlingModule,
   ],
   declarations: [

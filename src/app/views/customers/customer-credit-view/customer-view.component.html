@@ -1,0 +1,31 @@
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+
+  <div class="fx-column-container fx-gap-half">
+
+    <div class="fx-row-container">
+
+      <div class="fx-item-half">
+        <label>Cliente:</label>
+        <input type="text" class="text-box"
+          formControlName="customerName">
+      </div>
+
+      <div class="fx-item-quarter">
+        <label>Límite de Crédito:</label>
+        <input type="text" class="text-box text-align-right" empNgCurrency
+          [empNgInputName]="'creditLimit' + customer.uid"
+          formControlName="creditLimit">
+      </div>
+
+      <div class="fx-item-quarter">
+        <label>Adeudo:</label>
+        <input type="text" class="text-box text-align-right" empNgCurrency
+          [empNgInputName]="'totalDebt' + customer.uid"
+          formControlName="totalDebt">
+      </div>
+
+    </div>
+
+  </div>
+
+</form>

@@ -22,6 +22,8 @@ export * from './_access-control';
 
 export * from './contacts';
 
+export * from './customer';
+
 export * from './data-table';
 
 export * from './edition-command';

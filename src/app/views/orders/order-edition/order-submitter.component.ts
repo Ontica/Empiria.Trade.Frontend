@@ -134,8 +134,9 @@ export class OrderSubmitterComponent {
   private confirmAuthorize() {
     const message = `Esta operación autorizará el pedido <strong> ${this.order.orderNumber} </strong> ` +
                     `del cliente <strong>${this.order.customer.name}</strong> con adeudo de ` +
-                    `<strong class="warning-text">${FormatLibrary.numberWithCommas(this.order.totalDebt, '1.2-2')}</strong>`+
-                    `<br><br>¿Autorizo el pedido?`;
+                    `<strong class="warning-text">` +
+                    FormatLibrary.numberWithCommas(this.order.customerCredit.totalDebt, '1.2-2') +
+                    `</strong><br><br>¿Autorizo el pedido?`;
 
     this.messageBox.confirm(message, 'Autorizar pedido', 'DeleteCancel')
       .firstValue()

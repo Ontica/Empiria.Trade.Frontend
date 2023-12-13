@@ -133,9 +133,9 @@ export class OrderTabbedViewComponent implements OnChanges {
     }
 
     if (this.config.type === OrderQueryType.SalesAuthorization) {
-      this.title += this.order.totalDebt > 0 ?
+      this.title += this.order.customerCredit.totalDebt > 0 ?
         `<span class="tag tag-medium tag-base-warning">Adeudo: &nbsp; ` +
-        `${FormatLibrary.numberWithCommas(this.order.totalDebt, '1.2-2')}</span>` :
+        `${FormatLibrary.numberWithCommas(this.order.customerCredit.totalDebt, '1.2-2')}</span>` :
         '<span class="tag tag-medium tag-base">sin adeudo</span>';
     }
 
