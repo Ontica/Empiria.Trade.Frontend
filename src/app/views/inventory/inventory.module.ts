@@ -14,8 +14,6 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 import { ProductsModule } from '../products/products.module';
-
-import { ProductImageComponent } from './products-seeker/product-image.component';
 import { ProductsFilterComponent } from './products-seeker/products-filter.component';
 import { ProductsSeekerComponent } from './products-seeker/products-seeker.component';
 import { ProductsSelectorComponent } from './products-selector/products-selector.component';
@@ -35,7 +33,6 @@ import { ProductsTableComponent } from './products-seeker/products-table.compone
     ProductsModule,
   ],
   declarations: [
-    ProductImageComponent,
     ProductsFilterComponent,
     ProductsSeekerComponent,
     ProductsSelectorComponent,

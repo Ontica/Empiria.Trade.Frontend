@@ -19,6 +19,8 @@ import { ProductAttributesComponent } from './product-data/product-attributes.co
 
 import { ProductDataComponent } from './product-data/product-data.component';
 
+import { ProductImageComponent } from './product-data/product-image.component';
+
 import { ProductPresentationsComponent } from './product-data/product-presentations.component';
 
 
@@ -34,11 +36,13 @@ import { ProductPresentationsComponent } from './product-data/product-presentati
   declarations: [
     ProductAttributesComponent,
     ProductDataComponent,
+    ProductImageComponent,
     ProductPresentationsComponent,
   ],
   exports: [
     ProductAttributesComponent,
     ProductDataComponent,
+    ProductImageComponent,
     ProductPresentationsComponent,
   ]
 })

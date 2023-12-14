@@ -9,11 +9,13 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { MatTableDataSource } from '@angular/material/table';
 
-import { EventInfo } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
+
+import { MissingItem } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { MissingItem } from '@app/models';
+import { GalleryImage } from '@app/shared/components/gallery/gallery.component';
 
 import { MissingItemLocationEventType } from './missing-item-location.component';
 
@@ -33,9 +35,11 @@ export class MissingItemsTableComponent implements OnChanges {
 
   @Output() missingItemsTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumns: string[] = ['product', 'attributes', 'quantity', 'selection'];
+  displayedColumns: string[] = ['image', 'product', 'attributes', 'quantity', 'selection'];
 
   dataSource: MatTableDataSource<MissingItem>;
+
+  imageSelected: GalleryImage = null;
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -47,6 +51,17 @@ export class MissingItemsTableComponent implements OnChanges {
 
   get hasItems(): boolean {
     return this.missingItems.length > 0;
+  }
+
+
+  onProductImageClicked(event) {
+    Assertion.assert(event.imageUrl, 'event.imageUrl');
+    Assertion.assert(event.imageName, 'event.imageName');
+
+    this.imageSelected = {
+      url: event.imageUrl,
+      name: event.imageName,
+    };
   }
 
 

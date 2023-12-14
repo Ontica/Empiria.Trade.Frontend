@@ -54,7 +54,7 @@ export class ProductImageComponent {
 
   @Input() imageUrl = '';
 
-  @Input() imageSize = 144;
+  @Input() imageSize = 100;
 
   @Input() code = '';
 
