@@ -17,11 +17,13 @@ import { FormatLibrary, sendEvent } from '@app/shared/utils';
 
 import { OrderEditorEventType } from '../order-editor/order-editor.component';
 
+import { PackingViewEventType } from '@app/views/shipping-and-handling/packing-view/packing-view.component';
+
 export enum OrderTabbedViewEventType {
   CLOSE_BUTTON_CLICKED  = 'OrderTabbedViewComponent.Event.CloseButtonClicked',
   ORDER_UPDATED         = 'OrderTabbedViewComponent.Event.OrderUpdated',
-  ORDER_CANCELED        = 'OrderTabbedViewComponent.Event.OrderCanceled',
   ORDER_PACKING_UPDATED = 'OrderTabbedViewComponent.Event.OrderPackingUpdated',
+  ORDER_CANCELED        = 'OrderTabbedViewComponent.Event.OrderCanceled',
 }
 
 @Component({
@@ -98,17 +100,13 @@ export class OrderTabbedViewComponent implements OnChanges {
 
 
   onOrderEditorEvent(event: EventInfo): void {
-
     switch (event.type as OrderEditorEventType) {
 
       case OrderEditorEventType.ORDER_UPDATED:
       case OrderEditorEventType.ORDER_APPLIED:
       case OrderEditorEventType.ORDER_AUTHORIZED:
-        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_UPDATED, event.payload);
-        return;
-
       case OrderEditorEventType.ORDER_CANCELED:
-        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_CANCELED, event.payload);
+        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_UPDATED, event.payload);
         return;
 
       case OrderEditorEventType.EDITION_MODE:
@@ -127,7 +125,20 @@ export class OrderTabbedViewComponent implements OnChanges {
 
 
   onPackingViewEvent(event: EventInfo) {
-    sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_PACKING_UPDATED, event.payload);
+    switch (event.type as PackingViewEventType) {
+
+      case PackingViewEventType.ORDER_PACKING_UPDATED:
+        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_PACKING_UPDATED, event.payload);
+        return;
+
+      case PackingViewEventType.ORDER_SUPPLIED:
+        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_UPDATED, event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
@@ -138,13 +149,13 @@ export class OrderTabbedViewComponent implements OnChanges {
     this.title = `${this.order.orderNumber}`;
 
     if (this.config.type === OrderQueryType.SalesPacking) {
-      this.title += this.order.totalPackages;
+      this.title += this.order?.totalPackages ?? '';
     }
 
     if (this.config.type === OrderQueryType.SalesAuthorization) {
-      this.title += this.order.customerCredit.totalDebt > 0 ?
+      this.title += this.order.customerCredit?.totalDebt > 0 ?
         `<span class="tag tag-medium tag-base-warning">Adeudo: &nbsp; ` +
-        `${FormatLibrary.numberWithCommas(this.order.customerCredit.totalDebt, '1.2-2')}</span>` :
+        `${FormatLibrary.numberWithCommas(this.order.customerCredit?.totalDebt, '1.2-2')}</span>` :
         '<span class="tag tag-medium tag-base">sin adeudo</span>';
     }
 
@@ -156,7 +167,7 @@ export class OrderTabbedViewComponent implements OnChanges {
 
 
   private validateSelectedTabIndex() {
-    if (this.showOrderTab && !this.showShippingTab && this.selectedTabIndex === 1) {
+    if (this.showOrderTab && !this.showCreditTab && !this.showShippingTab && this.selectedTabIndex === 1) {
       this.selectedTabIndex = 0;
     }
   }

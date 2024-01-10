@@ -57,6 +57,22 @@ export interface OrderQuery {
 }
 
 
+export interface OrderDescriptor {
+  uid: string;
+  orderNumber: string;
+  customerName: string;
+  supplierName: string;
+  salesAgentName: string;
+  status: string;
+  statusName: string;
+  orderTime: DateString;
+  orderTotal: number;
+  totalDebt: number;
+  totalPackages: number;
+  weight: number;
+}
+
+
 export interface OrderData {
   uid?: string;
   orderNumber: string;
@@ -83,24 +99,31 @@ export interface Order extends OrderData, OrderAdditionalData {
   orderNumber: string;
   orderTime: DateString;
   status: string;
+
   customer: Customer;
-  customerCredit: CustomerCredit;
   customerContact: Contact;
+
+  customerCredit: CustomerCredit;
+
   salesAgent: Party;
   supplier: Party;
   paymentCondition: string;
   notes: string;
   shippingMethod: string;
   priceList: string;
+
   items: OrderItem[];
+
   itemsCount: number;
   itemsTotal: number;
   shipment: number;
   discount: number;
   taxes: number;
   orderTotal: number;
+
   weight: number;
   totalPackages: number;
+
   actions: OrderActions;
 }
 
@@ -169,6 +192,24 @@ export interface OrderItemFields {
   discount1: number;
   discount2: number;
   subtotal: number;
+}
+
+
+export function mapOrderDescriptorFromOrder(order: Order): OrderDescriptor {
+  return {
+    uid: order.uid,
+    orderNumber: order.orderNumber,
+    customerName: order.customer.name,
+    supplierName: order.supplier.name,
+    salesAgentName: order.salesAgent.name,
+    status: order.status,
+    statusName: order.statusName,
+    totalDebt: order.customerCredit.totalDebt,
+    orderTime: order.orderTime,
+    orderTotal: order.orderTotal,
+    totalPackages: order.totalPackages,
+    weight: order.weight,
+  };
 }
 
 

@@ -19,4 +19,9 @@ export class CustomerCreditViewComponent {
 
   @Input() customerCredit: CustomerCredit = EmptyCustomerCredit;
 
+
+  get customerCreditValid(): CustomerCredit {
+    return this.customerCredit ?? EmptyCustomerCredit;
+  }
+
 }

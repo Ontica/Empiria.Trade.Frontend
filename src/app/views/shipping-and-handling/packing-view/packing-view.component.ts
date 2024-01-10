@@ -25,6 +25,7 @@ import { PackingStatusEventType } from './packing-status.component';
 
 export enum PackingViewEventType {
   ORDER_PACKING_UPDATED = 'PackingViewComponent.Event.OrderPackingUpdated',
+  ORDER_SUPPLIED        = 'PackingViewComponent.Event.OrderSupplied',
 }
 
 @Component({
@@ -262,7 +263,7 @@ export class PackingViewComponent implements OnChanges {
 
     this.ordersData.supplyOrder(orderUID)
       .firstValue()
-      .then(x => this.emitOrderPackingUpdated())
+      .then(x => sendEvent(this.packingViewEvent, PackingViewEventType.ORDER_SUPPLIED, { order: x }))
       .finally(() => this.submitted = false);
   }
 

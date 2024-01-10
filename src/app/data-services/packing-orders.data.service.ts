@@ -19,7 +19,7 @@ export class PackingOrdersDataService {
 
 
   getPackageType(): EmpObservable<Identifiable[]> {
-    const path = 'v4/trade/shipping-and-handling/packing/package-type';
+    const path = 'v4/trade/shipping-and-handling/packing/package-types';
 
     return this.http.get<Identifiable[]>(path);
   }

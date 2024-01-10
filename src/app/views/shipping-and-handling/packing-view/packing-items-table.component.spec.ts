@@ -1,16 +1,23 @@
+/**
+ * @license
+ * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
+ *
+ * See LICENSE.txt in the project root for complete license information.
+ */
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PackingTableComponent } from './packing-items-table.component';
+import { PackingItemsTableComponent } from './packing-items-table.component';
 
-describe('PackingTableComponent', () => {
-  let component: PackingTableComponent;
-  let fixture: ComponentFixture<PackingTableComponent>;
+describe('PackingItemsTableComponent', () => {
+  let component: PackingItemsTableComponent;
+  let fixture: ComponentFixture<PackingItemsTableComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PackingTableComponent]
+      declarations: [PackingItemsTableComponent]
     });
-    fixture = TestBed.createComponent(PackingTableComponent);
+    fixture = TestBed.createComponent(PackingItemsTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

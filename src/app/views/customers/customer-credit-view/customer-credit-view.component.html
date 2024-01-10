@@ -4,7 +4,7 @@
 
   <emp-trade-customer-view class="fx-item-none"
     [customer]="customer"
-    [customerCredit]="customerCredit">
+    [customerCredit]="customerCreditValid">
 
   </emp-trade-customer-view>
 
@@ -13,7 +13,7 @@
   <div class="section-title fx-item-none"> Adeudos pendientes </div>
 
   <emp-trade-customer-credit-table class="fx-item"
-    [creditTransactions]="customerCredit.creditTransactions"
+    [creditTransactions]="customerCreditValid.creditTransactions"
     [style.paddingRight.px]="8">
 
   </emp-trade-customer-credit-table>

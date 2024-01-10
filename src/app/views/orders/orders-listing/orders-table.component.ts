@@ -11,7 +11,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewC
 
 import { EventInfo } from '@app/core';
 
-import { EmptyOrder, Order, OrderQueryType } from '@app/models';
+import { EmptyOrder, Order, OrderDescriptor, OrderQueryType } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -31,7 +31,7 @@ export class OrdersTableComponent implements OnChanges {
 
   @Input() orderType: OrderQueryType = OrderQueryType.Sales;
 
-  @Input() ordersList: Order[] = [];
+  @Input() ordersList: OrderDescriptor[] = [];
 
   @Input() orderSelected: Order = EmptyOrder();
 
@@ -45,7 +45,7 @@ export class OrdersTableComponent implements OnChanges {
 
   displayedColumns = [...this.displayedColumnsDefault];
 
-  dataSource: TableVirtualScrollDataSource<Order>;
+  dataSource: TableVirtualScrollDataSource<OrderDescriptor>;
 
 
   ngOnChanges(changes: SimpleChanges) {

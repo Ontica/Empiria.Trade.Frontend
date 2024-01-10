@@ -17,7 +17,8 @@ import { View } from '@app/main-layout';
 
 import { ArrayLibrary, clone } from '@app/shared/utils';
 
-import { EmptyOrder, Order, OrderQuery, OrderQueryType, OrderTypeConfig } from '@app/models';
+import { EmptyOrder, Order, OrderDescriptor, OrderQuery, OrderQueryType, OrderTypeConfig,
+         mapOrderDescriptorFromOrder } from '@app/models';
 
 import { SalesOrdersDataService } from '@app/data-services';
 
@@ -47,7 +48,9 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   query: OrderQuery = null;
 
-  ordersList: Order[] = []
+  ordersList: OrderDescriptor[] = [];
+
+  isLoadingOrder = false;
 
   orderSelected: Order = EmptyOrder();
 
@@ -95,20 +98,21 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   onOrdersListingEvent(event: EventInfo) {
     switch (event.type as OrdersListingEventType) {
       case OrdersListingEventType.CREATE_ORDER:
-        this.setOrderSelected(EmptyOrder());
+        this.clearOrderSelected();
         this.displayOrderCreator = true;
         return;
 
       case OrdersListingEventType.SEARCH_ORDERS:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
         this.query = event.payload.query as OrderQuery;
-        this.setOrderSelected(EmptyOrder());
+        this.clearOrderSelected();
         this.searchOrders(this.query);
         return;
 
       case OrdersListingEventType.SELECT_ORDER:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
-        this.setOrderSelected(event.payload.entry as Order);
+        Assertion.assertValue(event.payload.entry.uid, 'event.payload.entry.uid');
+        this.getOrder(event.payload.entry.uid);
         return;
 
       default:
@@ -122,21 +126,19 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   onOrderTabbedViewEvent(event: EventInfo) {
     switch (event.type as OrderTabbedViewEventType) {
       case OrderTabbedViewEventType.CLOSE_BUTTON_CLICKED:
-        this.setOrderSelected(EmptyOrder());
+        this.clearOrderSelected();
         return;
 
       case OrderTabbedViewEventType.ORDER_UPDATED:
-        Assertion.assertValue(event.payload.order, 'event.payload.order');
-        this.validateActionForOrderUpdated(event.payload.order as Order);
-        return;
-
       case OrderTabbedViewEventType.ORDER_CANCELED:
-        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
-        this.removeOrderFromList(event.payload.orderUID);
+        this.setOrderSelected(event.payload.order ?? EmptyOrder() as Order);
+        this.resetSearchData();
+        // TODO: check if it can be implemented with this code instead of 'setOrderSelected' and 'resetSearchData'
+        // this.insertOrderToList(event.payload.order ?? EmptyOrder() as Order);
         return;
 
       case OrderTabbedViewEventType.ORDER_PACKING_UPDATED:
-        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        this.resetOrderSelected();
         this.resetSearchData();
         return;
 
@@ -193,19 +195,22 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private resetSearchData() {
-    this.searchOrders(this.query);
+  private getOrder(orderUID: string) {
+    this.isLoadingOrder = true;
+
+    this.salesOrdersData.getOrder(orderUID, this.salesConfig.type)
+      .firstValue()
+      .then(x => this.setOrderSelected(x))
+      .finally(() => this.isLoadingOrder = false);
   }
 
 
-  private setOrderData(data: Order[]) {
+  private setOrderData(data: OrderDescriptor[]) {
     this.ordersList = data;
     this.queryExecuted = true;
 
-    // TODO: check this
-    if (!isEmpty(this.orderSelected)) {
-      const newOrder = this.ordersList.find(x => x.uid === this.orderSelected.uid);
-      this.setOrderSelected(newOrder ?? EmptyOrder());
+    if (!this.ordersList.some(x => x.uid === this.orderSelected.uid)) {
+      this.clearOrderSelected();
     }
   }
 
@@ -223,27 +228,27 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private validateActionForOrderUpdated(order: Order) {
-    if (this.salesConfig.type === OrderQueryType.Sales) {
-      this.insertOrderToList(order);
-    } else {
-      this.resetSearchData();
-    }
+  private clearOrderSelected() {
+    this.setOrderSelected(EmptyOrder());
+  }
+
+
+  private resetSearchData() {
+    this.searchOrders(this.query);
+  }
+
+
+  private resetOrderSelected() {
+    this.getOrder(this.orderSelected.uid);
   }
 
 
   private insertOrderToList(order: Order) {
     this.displayOrderCreator = false;
-    const newOrdersList = ArrayLibrary.insertItemTop(this.ordersList, order, 'uid');
+    const orderToInsert = mapOrderDescriptorFromOrder(order);
+    const newOrdersList = ArrayLibrary.insertItemTop(this.ordersList, orderToInsert, 'uid');
     this.setOrderData(newOrdersList);
     this.setOrderSelected(order);
-  }
-
-
-  private removeOrderFromList(orderUID: string) {
-    const newOrdersList = this.ordersList.filter(x => x.uid !== orderUID);
-    this.setOrderData(newOrdersList);
-    this.setOrderSelected(EmptyOrder());
   }
 
 }

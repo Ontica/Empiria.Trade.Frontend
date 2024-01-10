@@ -10,17 +10,6 @@
 
       <div class="fx-column-container fx-gap-half">
 
-        <!-- <div #quantitySection class="fx-row-container">
-          <div class="fx-item info-container">
-            <span class="text-label">Por surtir:</span>
-            <span class="text-highlight">{{!missingItem.quantity ? '-' : (missingItem.quantity | number)}}</span>
-          </div>
-        </div>
-
-        <mat-divider>
-
-        </mat-divider> -->
-
         <div #warehouseBinSection class="fx-row-container">
 
           <emp-ng-select #warehouseBinSelect class="fx-item"
@@ -28,6 +17,7 @@
             [name]="'selectWarehouseBin'+ warehouseBin?.uid"
             [config]="{bindByValue: false}"
             [items]="missingItem.warehouseBins"
+            [disabled]="missingItem.warehouseBins.length === 1"
             [style.marginRight.px]="-8">
 
             <ng-template #labelTemplate let-item="item">

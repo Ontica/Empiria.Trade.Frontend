@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { EmptyOrder, Order, OrderQueryType, OrderTypeConfig } from '@app/models';
+import { EmptyOrder, Order, OrderDescriptor, OrderQueryType, OrderTypeConfig } from '@app/models';
 
 import { OrdersFilterEventType } from './orders-filter.component';
 
@@ -37,7 +37,7 @@ export class OrdersListingComponent implements OnChanges {
     canAdd: false,
   };
 
-  @Input() ordersList: Order[] = [];
+  @Input() ordersList: OrderDescriptor[] = [];
 
   @Input() orderSelected: Order = EmptyOrder();
 
