@@ -15,7 +15,7 @@ import { AccessControlDataService } from './_access-control.data.service';
 
 import { ContactsDataService } from './contacts.data.service';
 
-import { PackingOrdersDataService } from './packing-orders.data.service';
+import { PackingDataService } from './packing.data.service';
 
 import { ProductsDataService } from './products.data.service';
 
@@ -28,7 +28,7 @@ import { SalesOrdersDataService } from './sales-orders.data.service';
     FileDownloadService,
     AccessControlDataService,
     ContactsDataService,
-    PackingOrdersDataService,
+    PackingDataService,
     ProductsDataService,
     SalesOrdersDataService,
 

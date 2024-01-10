@@ -13,7 +13,7 @@ import { sendEvent } from '@app/shared/utils';
 
 import { EmptyPacking, PackingOrderItemField, Packing, PackingItem, PackingItemFields } from '@app/models';
 
-import { PackingOrdersDataService, SalesOrdersDataService } from '@app/data-services';
+import { PackingDataService, SalesOrdersDataService } from '@app/data-services';
 
 import { PackingItemsTableEventType } from './packing-items-table.component';
 
@@ -57,9 +57,8 @@ export class PackingViewComponent implements OnChanges {
   hasError = false;
 
 
-  constructor(private packingOrdersData: PackingOrdersDataService,
+  constructor(private packingData: PackingDataService,
               private ordersData: SalesOrdersDataService) { }
-
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -191,7 +190,7 @@ export class PackingViewComponent implements OnChanges {
     this.isLoading = true;
     this.hasError = false;
 
-    this.packingOrdersData.getOrderPacking(this.orderUID)
+    this.packingData.getOrderPacking(this.orderUID)
       .firstValue()
       .then(x => this.orderPacking = x)
       .catch(e => this.catchOrderPackingError())
@@ -208,7 +207,7 @@ export class PackingViewComponent implements OnChanges {
   private createPackingItem(orderUID: string, packingItemFields: PackingItemFields) {
     this.submitted = true;
 
-    this.packingOrdersData.createPackingItem(orderUID, packingItemFields)
+    this.packingData.createPackingItem(orderUID, packingItemFields)
       .firstValue()
       .then(x => {
         this.setOrderPackingCloseAndEmit(x);
@@ -221,7 +220,7 @@ export class PackingViewComponent implements OnChanges {
   private updatePackingItem(orderUID: string, packingItemUID: string, packingItemFields: PackingItemFields) {
     this.submitted = true;
 
-    this.packingOrdersData.updatePackingItem(orderUID, packingItemUID, packingItemFields)
+    this.packingData.updatePackingItem(orderUID, packingItemUID, packingItemFields)
       .firstValue()
       .then(x => this.setOrderPackingCloseAndEmit(x))
       .finally(() => this.submitted = false);
@@ -231,7 +230,7 @@ export class PackingViewComponent implements OnChanges {
   private deletePackingItem(orderUID: string, packingItemUID: string) {
     this.submitted = true;
 
-    this.packingOrdersData.deletePackingItem(orderUID, packingItemUID)
+    this.packingData.deletePackingItem(orderUID, packingItemUID)
       .firstValue()
       .then(x => this.setOrderPackingCloseAndEmit(x))
       .finally(() => this.submitted = false);
@@ -241,7 +240,7 @@ export class PackingViewComponent implements OnChanges {
   private assignPackingItemEntry(orderUID: string, packingItemUID: string, entryFields: PackingOrderItemField) {
     this.submitted = true;
 
-    this.packingOrdersData.createPackingItemEntry(orderUID, packingItemUID, entryFields)
+    this.packingData.createPackingItemEntry(orderUID, packingItemUID, entryFields)
       .firstValue()
       .then(x => this.setOrderPackingAndEmit(x))
       .finally(() => this.submitted = false);
@@ -251,7 +250,7 @@ export class PackingViewComponent implements OnChanges {
   private removePackingItemEntry(orderUID: string, packingItemUID: string, packingItemEntryUID: string) {
     this.submitted = true;
 
-    this.packingOrdersData.removePackingItemEntry(orderUID, packingItemUID, packingItemEntryUID)
+    this.packingData.removePackingItemEntry(orderUID, packingItemUID, packingItemEntryUID)
       .firstValue()
       .then(x => this.setOrderPackingAndEmit(x))
       .finally(() => this.submitted = false);

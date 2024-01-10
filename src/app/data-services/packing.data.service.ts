@@ -13,7 +13,7 @@ import { PackingOrderItemField, Packing, PackingItemFields } from '@app/models';
 
 
 @Injectable()
-export class PackingOrdersDataService {
+export class PackingDataService {
 
   constructor(private http: HttpService) { }
 

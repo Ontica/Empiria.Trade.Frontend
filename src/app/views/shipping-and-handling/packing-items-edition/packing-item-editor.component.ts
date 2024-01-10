@@ -11,7 +11,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { Assertion, EventInfo, Identifiable } from '@app/core';
 
-import { PackingOrdersDataService } from '@app/data-services';
+import { PackingDataService } from '@app/data-services';
 
 import { PackingItem, PackingItemFields } from '@app/models';
 
@@ -51,7 +51,7 @@ export class PackingItemEditorComponent implements OnChanges, OnInit {
   packageTypeList: Identifiable[] = [];
 
 
-  constructor(private packingData: PackingOrdersDataService) {
+  constructor(private packingData: PackingDataService) {
     this.initForm();
   }
 
