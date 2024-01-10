@@ -108,6 +108,7 @@ export interface Order extends OrderData, OrderAdditionalData {
   orderNumber: string;
   orderTime: DateString;
   status: string;
+  statusName: string;
 
   customer: Customer;
   customerContact: Contact;
