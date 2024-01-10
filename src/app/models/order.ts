@@ -57,6 +57,15 @@ export interface OrderQuery {
 }
 
 
+export const EmptyOrderQuery: OrderQuery = {
+  queryType: OrderQueryType.Sales,
+  keywords: null,
+  fromDate: null,
+  toDate: null,
+  status: null,
+}
+
+
 export interface OrderDescriptor {
   uid: string;
   orderNumber: string;

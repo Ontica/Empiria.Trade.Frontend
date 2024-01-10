@@ -17,7 +17,7 @@ import { View } from '@app/main-layout';
 
 import { ArrayLibrary, clone } from '@app/shared/utils';
 
-import { EmptyOrder, Order, OrderDescriptor, OrderQuery, OrderQueryType, OrderTypeConfig,
+import { EmptyOrder, EmptyOrderQuery, Order, OrderDescriptor, OrderQuery, OrderQueryType, OrderTypeConfig,
          mapOrderDescriptorFromOrder } from '@app/models';
 
 import { SalesOrdersDataService } from '@app/data-services';
@@ -46,7 +46,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   queryExecuted = false;
 
-  query: OrderQuery = null;
+  query: OrderQuery = EmptyOrderQuery;
 
   ordersList: OrderDescriptor[] = [];
 
@@ -158,15 +158,15 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   private validateCurrentView(view: string) {
     switch (view) {
       case 'VentasViews.Pedidos':
-        this.setSalesConfig(OrderQueryType.Sales, 'Pedidos', 'pedido', true);
+        this.setInitConfig(OrderQueryType.Sales, 'Pedidos', 'pedido', true);
         return;
 
       case 'VentasViews.Autorizaciones':
-        this.setSalesConfig(OrderQueryType.SalesAuthorization, 'Autorizaciones', '', false);
+        this.setInitConfig(OrderQueryType.SalesAuthorization, 'Autorizaciones', '', false);
         return;
 
       case 'AlmacenesViews.Surtidos':
-        this.setSalesConfig(OrderQueryType.SalesPacking, 'Surtidos', '', false);
+        this.setInitConfig(OrderQueryType.SalesPacking, 'Surtidos', '', false);
         return;
 
       default:
@@ -175,13 +175,15 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private setSalesConfig(type: OrderQueryType, titleText: string, itemText: string, canAdd: boolean) {
+  private setInitConfig(type: OrderQueryType, titleText: string, itemText: string, canAdd: boolean) {
     this.salesConfig = {
       type,
       titleText,
       itemText,
       canAdd,
     };
+
+    this.query = Object.assign({}, EmptyOrderQuery, { queryType: type });
   }
 
 
