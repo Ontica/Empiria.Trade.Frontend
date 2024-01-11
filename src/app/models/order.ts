@@ -15,6 +15,8 @@ import { Presentation, Product, ProductSelection, Vendor } from './product';
 
 import { CustomerCredit, EmptyCustomerCredit } from './customer';
 
+import { EmptyShipping, Shipping } from './shipping';
+
 
 export interface OrderTypeConfig {
   type: OrderQueryType;
@@ -114,6 +116,8 @@ export interface Order extends OrderData, OrderAdditionalData {
   customerContact: Contact;
 
   customerCredit: CustomerCredit;
+
+  shipping: Shipping;
 
   salesAgent: Party;
   supplier: Party;
@@ -236,6 +240,7 @@ export function EmptyOrder(): Order {
     customer: EmptyCustomer,
     customerContact: EmptyContact,
     customerCredit: EmptyCustomerCredit,
+    shipping: EmptyShipping,
     supplier: Empty,
     salesAgent: Empty,
     paymentCondition: '',

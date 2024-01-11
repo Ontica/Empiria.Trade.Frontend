@@ -34,6 +34,8 @@ export * from './order';
 
 export * from './packing';
 
+export * from './shipping';
+
 export * from './product';
 
 export * from './reporting';

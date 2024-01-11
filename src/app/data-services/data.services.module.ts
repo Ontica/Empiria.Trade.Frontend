@@ -21,6 +21,8 @@ import { ProductsDataService } from './products.data.service';
 
 import { SalesOrdersDataService } from './sales-orders.data.service';
 
+import { ShippingDataService } from './shipping-data.service';
+
 
 @NgModule({
 
@@ -31,6 +33,7 @@ import { SalesOrdersDataService } from './sales-orders.data.service';
     PackingDataService,
     ProductsDataService,
     SalesOrdersDataService,
+    ShippingDataService,
 
     { provide: SAVER, useFactory: getSaver }
   ]

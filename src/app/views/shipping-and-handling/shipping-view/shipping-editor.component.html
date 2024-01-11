@@ -1,0 +1,101 @@
+<form [formGroup]="form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+  autocomplete="off" class="form-section">
+
+  <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+  <div class="fx-column-container fx-gap-three-quarter">
+
+    <div class="fx-row-container">
+
+      <div class="fx-item-third">
+        <label>Paquetería:</label>
+        <emp-ng-select
+          formControlName="parcelSupplier"
+          [items]="parcelSuppliersList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.parcelSupplier)">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item-third">
+        <label>Número de guía:</label>
+        <input type="text" class="text-box"
+          formControlName="shippingGuide"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.shippingGuide)">
+      </div>
+
+      <div class="fx-row-container fx-item-third">
+
+        <div class="fx-item-half">
+          <label>Importe de la paquetería:</label>
+          <input type="text" class="text-box text-align-right" empNgCurrency
+            [empNgInputName]="'parcelAmount' + orderUID"
+            formControlName="parcelAmount"
+            [class.invalid-control]="formHelper.isControlInvalid(form.controls.parcelAmount)">
+        </div>
+
+        <div class="fx-item-half">
+          <label>Importe cobrado al cliente:</label>
+          <input type="text" class="text-box text-align-right" empNgCurrency
+            [empNgInputName]="'customerAmount' + orderUID"
+            formControlName="customerAmount"
+            [class.invalid-control]="formHelper.isControlInvalid(form.controls.customerAmount)">
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+  <ng-container *ngIf="canEdit || canSendOrder" #rowFooter>
+
+    <mat-divider class="horizontal">
+
+    </mat-divider>
+
+    <div class="fx-row-container">
+
+      <div class="fx-item fx-start fx-items-center" *ngIf="canSendOrder && !editionMode">
+
+        <button
+          type="button" class="btn"
+          (click)="onSendOrder()">
+          Enviar
+        </button>
+
+      </div>
+
+      <div class="fx-item fx-end fx-items-center"*ngIf="canEdit">
+
+        <button *ngIf="!editionMode"
+          class="btn-action"
+          (click)="enableEditor(true)">
+          Editar
+        </button>
+
+        <ng-container *ngIf="editionMode">
+
+          <button
+            [class.btn]="!formHelper.isFormReady(form)"
+            [class.btn-action]="formHelper.isFormReady(form)"
+            (click)="onSubmitButtonClicked()">
+            Guardar
+          </button>
+
+          <button
+            class="btn-base uppercase"
+            (click)="enableEditor(false)">
+            Descartar Cambios
+          </button>
+
+        </ng-container>
+
+      </div>
+
+    </div>
+
+  </ng-container>
+
+</form>

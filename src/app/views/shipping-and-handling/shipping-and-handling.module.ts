@@ -26,6 +26,7 @@ import { MissingItemLocationComponent } from './packing-items-edition/missing-it
 import { MissingItemsModalComponent } from './packing-view/missing-items-modal.component';
 
 import { ShippingViewComponent } from './shipping-view/shipping-view.component';
+import { ShippingEditorComponent } from './shipping-view/shipping-editor.component';
 
 @NgModule({
   imports: [
@@ -49,8 +50,8 @@ import { ShippingViewComponent } from './shipping-view/shipping-view.component';
     MissingItemsTableComponent,
     MissingItemLocationComponent,
     MissingItemsModalComponent,
-
     ShippingViewComponent,
+    ShippingEditorComponent,
   ],
   exports: [
     PackingViewComponent,

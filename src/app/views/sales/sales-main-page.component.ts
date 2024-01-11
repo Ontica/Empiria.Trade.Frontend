@@ -138,6 +138,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
         return;
 
       case OrderTabbedViewEventType.ORDER_PACKING_UPDATED:
+      case OrderTabbedViewEventType.ORDER_SHIPPING_UPDATED:
         this.resetOrderSelected();
         this.resetSearchData();
         return;

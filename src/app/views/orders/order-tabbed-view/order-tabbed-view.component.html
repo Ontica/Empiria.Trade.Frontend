@@ -38,7 +38,12 @@
 
     <mat-tab label="Envío" *ngIf="showOrderTab" [disabled]="!showShippingTab">
 
-      <emp-trade-shipping-view *ngIf="showShippingTab">
+      <emp-trade-shipping-view *ngIf="showShippingTab"
+        [orderUID]="order.uid"
+        [orderNumber]="order.orderNumber"
+        [shipping]="order.shipping"
+        [canEdit]="canShipping"
+        (shippingViewEvent)="onShippingViewEvent($event)">
 
       </emp-trade-shipping-view>
 
