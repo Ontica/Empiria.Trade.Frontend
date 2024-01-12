@@ -1,8 +1,8 @@
 <emp-ng-modal-window [config]="{width:'500px'}">
 
   <emp-ng-card
-    [title]="isSaved ? 'Editar caja' : 'Agregar caja'"
-    hint='Información de la caja.'
+    [title]="isSaved ? 'Editar paquete' : 'Agregar paquete'"
+    hint='Información del paquete.'
     (cardClose)="onCloseClicked()">
 
     <div class="card-body-padding">
@@ -14,7 +14,7 @@
           <div class="fx-row-container">
 
               <div class="fx-item">
-                <label>Caja:</label>
+                <label>Identificador del paquete:</label>
                 <input type="text" class="text-box"
                   formControlName="packageID"
                   [class.invalid-control]="formHelper.isControlInvalid(form.controls.packageID)">
@@ -25,7 +25,7 @@
           <div class="fx-row-container">
 
             <div class="fx-item">
-              <label>Tipo de caja:</label>
+              <label>Tipo de paquete:</label>
               <emp-ng-select
                 formControlName="packageTypeUID"
                 [items]="packageTypeList"

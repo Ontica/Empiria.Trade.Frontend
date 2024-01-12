@@ -4,7 +4,7 @@
 
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef class="column-action">
-        <button title="Agregar caja"
+        <button title="Agregar paquete"
           mat-icon-button color="primary"
           (click)="onCreatePackingItemClicked()">
           <mat-icon color="primary">
@@ -13,7 +13,7 @@
         </button>
       </th>
       <td mat-cell *matCellDef="let row" class="column-action">
-        <button title="Eliminar caja"
+        <button title="Eliminar paquete"
           mat-icon-button
           (click)="$event.stopPropagation(); onDeletePackingItemClicked(row)">
           <mat-icon>
@@ -24,7 +24,7 @@
     </ng-container>
 
     <ng-container matColumnDef="packageID">
-      <th mat-header-cell *matHeaderCellDef class="nowrap"> Caja </th>
+      <th mat-header-cell *matHeaderCellDef class="nowrap"> ID paquete </th>
       <td mat-cell *matCellDef="let row" class="nowrap">
         <a class="link-highlight bold-text" (click)="$event.stopPropagation(); onPackingItemClicked(row)">
           {{ row.packageID }}
@@ -33,7 +33,7 @@
     </ng-container>
 
     <ng-container matColumnDef="size">
-      <th mat-header-cell *matHeaderCellDef class="nowrap"> Tamaño </th>
+      <th mat-header-cell *matHeaderCellDef class="nowrap"> Tipo de paquete </th>
       <td mat-cell *matCellDef="let row">
         {{ row.packageTypeName }}
       </td>
@@ -68,11 +68,11 @@
 
     <!-- <button class="btn-base" *ngIf="canEdit"
       (click)="onCreatePackingItemClicked()">
-      <mat-icon [style.margin]="'0 0.5rem 0 0'">add</mat-icon> Agregar Caja
+      <mat-icon [style.margin]="'0 0.5rem 0 0'">add</mat-icon> Agregar paquete
     </button> -->
 
     <div class="text-not-found" *ngIf="!hasPackingItems">
-      No se han creado cajas.
+      No se han creado paquetes.
     </div>
 
   </div>

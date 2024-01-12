@@ -93,10 +93,10 @@ export class PackingItemsTableComponent implements OnChanges {
 
 
   private confirmDeletePackingItem(packingItem: PackingItem) {
-    const message = `Esta operación eliminara la caja ` +
-      `<strong>${packingItem.packageID} - ${packingItem.packageTypeName}</strong><br><br>¿Elimino la caja?`;
+    const message = `Esta operación eliminara el paquete ` +
+      `<strong>${packingItem.packageID} - ${packingItem.packageTypeName}</strong><br><br>¿Elimino el paquete?`;
 
-    this.messageBox.confirm(message, 'Eliminar caja', 'DeleteCancel')
+    this.messageBox.confirm(message, 'Eliminar paquete', 'DeleteCancel')
       .firstValue()
       .then(x => {
         if (x) {
