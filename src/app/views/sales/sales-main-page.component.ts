@@ -7,7 +7,7 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Assertion, EventInfo, isEmpty } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -85,7 +85,9 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
       case OrderCreatorEventType.ORDER_CREATED:
         Assertion.assertValue(event.payload.order, 'event.payload.order');
-        this.insertOrderToList(event.payload.order as Order);
+        this.displayOrderCreator = false;
+        const orderCreated = event.payload.order as Order;
+        this.insertOrderToList(orderCreated);
         return;
 
       default:
@@ -130,17 +132,13 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
         return;
 
       case OrderTabbedViewEventType.ORDER_UPDATED:
-      case OrderTabbedViewEventType.ORDER_CANCELED:
-        this.setOrderSelected(event.payload.order ?? EmptyOrder() as Order);
-        this.resetSearchData();
-        // TODO: check if it can be implemented with this code instead of 'setOrderSelected' and 'resetSearchData'
-        // this.insertOrderToList(event.payload.order ?? EmptyOrder() as Order);
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        this.insertOrderToList(event.payload.order ?? EmptyOrder() as Order);
         return;
 
-      case OrderTabbedViewEventType.ORDER_PACKING_UPDATED:
-      case OrderTabbedViewEventType.ORDER_SHIPPING_UPDATED:
-        this.resetOrderSelected();
-        this.resetSearchData();
+      case OrderTabbedViewEventType.ORDER_CANCELED:
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        this.removeOrderFromList(event.payload.orderUID);
         return;
 
       default:
@@ -177,13 +175,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
 
   private setInitConfig(type: OrderQueryType, titleText: string, itemText: string, canAdd: boolean) {
-    this.salesConfig = {
-      type,
-      titleText,
-      itemText,
-      canAdd,
-    };
-
+    this.salesConfig = { type, titleText, itemText, canAdd };
     this.query = Object.assign({}, EmptyOrderQuery, { queryType: type });
   }
 
@@ -226,7 +218,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
 
   private setOrderSelected(order: Order) {
-    this.orderSelected = clone(order);
+    this.orderSelected = clone<Order>(order);
     this.displaySecondaryView = !!this.orderSelected.uid;
   }
 
@@ -236,22 +228,18 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private resetSearchData() {
-    this.searchOrders(this.query);
-  }
-
-
-  private resetOrderSelected() {
-    this.getOrder(this.orderSelected.uid);
-  }
-
-
   private insertOrderToList(order: Order) {
-    this.displayOrderCreator = false;
     const orderToInsert = mapOrderDescriptorFromOrder(order);
-    const newOrdersList = ArrayLibrary.insertItemTop(this.ordersList, orderToInsert, 'uid');
-    this.setOrderData(newOrdersList);
+    const ordersListNew = ArrayLibrary.insertItemTop(this.ordersList, orderToInsert, 'uid');
+    this.setOrderData(ordersListNew);
     this.setOrderSelected(order);
+  }
+
+
+  private removeOrderFromList(orderUID: string) {
+    const ordersListNew = this.ordersList.filter(x => x.uid !== orderUID);
+    this.setOrderData(ordersListNew);
+    this.clearOrderSelected();
   }
 
 }

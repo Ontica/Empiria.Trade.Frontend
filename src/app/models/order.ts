@@ -15,6 +15,8 @@ import { Presentation, Product, ProductSelection, Vendor } from './product';
 
 import { CustomerCredit, EmptyCustomerCredit } from './customer';
 
+import { EmptyPacking, Packing } from './packing';
+
 import { EmptyShipping, Shipping } from './shipping';
 
 
@@ -84,7 +86,7 @@ export interface OrderDescriptor {
 }
 
 
-export interface OrderData {
+export interface OrderData extends OrderAdditionalData {
   uid?: string;
   orderNumber: string;
   orderTime: DateString;
@@ -97,36 +99,29 @@ export interface OrderData {
   paymentCondition: string;
   shippingMethod: string;
   priceList: string;
+  notes?: string;
 }
 
 
 export interface OrderAdditionalData {
-  notes: string;
+  notes?: string;
 }
 
 
-export interface Order extends OrderData, OrderAdditionalData {
+export interface Order extends OrderData {
   uid: string;
   orderNumber: string;
   orderTime: DateString;
   status: string;
   statusName: string;
-
   customer: Customer;
   customerContact: Contact;
-
-  customerCredit: CustomerCredit;
-
-  shipping: Shipping;
-
   salesAgent: Party;
   supplier: Party;
   paymentCondition: string;
-  notes: string;
   shippingMethod: string;
   priceList: string;
-
-  items: OrderItem[];
+  notes?: string;
 
   itemsCount: number;
   itemsTotal: number;
@@ -135,8 +130,11 @@ export interface Order extends OrderData, OrderAdditionalData {
   taxes: number;
   orderTotal: number;
 
-  weight: number;
-  totalPackages: number;
+  items: OrderItem[];
+
+  customerCredit: CustomerCredit;
+  shipping: Shipping;
+  packing: Packing;
 
   actions: OrderActions;
 }
@@ -156,6 +154,7 @@ export interface OrderActions {
 export const EmptyOrderActions: OrderActions = {
   canEdit: false,
   canApply: false,
+
   canAuthorize: false,
   canPackaging: false,
   canSelectCarrier: false,
@@ -221,15 +220,15 @@ export function mapOrderDescriptorFromOrder(order: Order): OrderDescriptor {
     totalDebt: order.customerCredit.totalDebt,
     orderTime: order.orderTime,
     orderTotal: order.orderTotal,
-    totalPackages: order.totalPackages,
-    weight: order.weight,
+    totalPackages: order.packing.data.totalPackages,
+    weight: order.packing.data.totalWeight,
   };
 }
 
 
 export function EmptyOrder(): Order {
 
-  return clone({
+  return clone<Order>({
     uid: null,
     orderNumber: '',
     orderTime: '',
@@ -239,8 +238,6 @@ export function EmptyOrder(): Order {
     statusName: '',
     customer: EmptyCustomer,
     customerContact: EmptyContact,
-    customerCredit: EmptyCustomerCredit,
-    shipping: EmptyShipping,
     supplier: Empty,
     salesAgent: Empty,
     paymentCondition: '',
@@ -251,9 +248,13 @@ export function EmptyOrder(): Order {
     discount: 0,
     taxes: 0,
     orderTotal: 0,
-    weight: 0,
-    totalPackages: 0,
+
     items: [],
+
+    customerCredit: EmptyCustomerCredit,
+    shipping: EmptyShipping,
+    packing: EmptyPacking,
+
     actions: EmptyOrderActions,
   });
 

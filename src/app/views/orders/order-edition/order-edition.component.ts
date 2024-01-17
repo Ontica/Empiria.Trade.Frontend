@@ -252,7 +252,7 @@ export class OrderEditionComponent implements OnChanges {
 
 
   private setOrderForEdition(order: Order) {
-    this.orderForEdition = clone(order);
+    this.orderForEdition = clone<Order>(order);
   }
 
 
@@ -290,7 +290,7 @@ export class OrderEditionComponent implements OnChanges {
       return;
     }
 
-    const orderToRecalculate = clone(this.orderForEdition);
+    const orderToRecalculate = clone<Order>(this.orderForEdition);
     orderToRecalculate.items.push(item);
 
     this.calculateOrder(orderToRecalculate);
@@ -298,7 +298,7 @@ export class OrderEditionComponent implements OnChanges {
 
 
   private updateOrderItem(item: OrderItem) {
-    const orderToRecalculate = clone(this.orderForEdition);
+    const orderToRecalculate = clone<Order>(this.orderForEdition);
     const index = orderToRecalculate.items.findIndex(x => this.isSameOrderItem(x, item));
 
     if(index !== -1) orderToRecalculate.items[index] = item;
@@ -308,7 +308,7 @@ export class OrderEditionComponent implements OnChanges {
 
 
   private removeOrderItem(item: OrderItem) {
-    const orderToRecalculate = clone(this.orderForEdition);
+    const orderToRecalculate = clone<Order>(this.orderForEdition);
     orderToRecalculate.items = orderToRecalculate.items.filter(x => !this.isSameOrderItem(x, item));
     this.calculateOrder(orderToRecalculate);
   }

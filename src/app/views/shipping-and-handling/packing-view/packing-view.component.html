@@ -1,14 +1,14 @@
  <div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
 
-  <emp-ng-spinner #spinner [visible]="submitted || isLoading">
+  <emp-ng-spinner #spinner [visible]="submitted">
 
   </emp-ng-spinner>
 
   <emp-trade-packing-status class="fx-item-none"
-    [missingItemsCount]="orderPacking.missingItems.length"
-    [packingItemsCount]="orderPacking.packagedItems.length"
-    [canEdit]="canPacking"
-    [isLoading]="isLoading"
+    [missingItemsCount]="packingValid.missingItems.length"
+    [packingItemsCount]="packingValid.packagedItems.length"
+    [canEdit]="canEdit"
+    [isLoading]="false"
     [hasError]="hasError"
     (packingStatusEvent)="onPackingStatusEvent($event)">
 
@@ -17,8 +17,8 @@
   <br>
 
   <emp-trade-packing-items-table class="fx-item"
-    [packingItems]="orderPacking.packagedItems"
-    [canEdit]="canPacking"
+    [packingItems]="packingValid.packagedItems"
+    [canEdit]="canEdit"
     (packingItemsTableEvent)="onPackingItemsTableEvent($event)">
 
   </emp-trade-packing-items-table>
@@ -35,15 +35,15 @@
 
 <emp-trade-packing-item-entries-editor *ngIf="displayPackingItemEntriesEditor"
   [packingItem]="selectedPackingItem"
-  [missingItems]="orderPacking.missingItems"
-  [canEdit]="canPacking"
+  [missingItems]="packingValid.missingItems"
+  [canEdit]="canEdit"
   (packingItemEntriesEditorEvent)="onPackingItemEntriesEditorEvent($event)">
 
 </emp-trade-packing-item-entries-editor>
 
 
 <emp-trade-missing-items-modal *ngIf="displayMissingItemsModal"
-  [missingItems]="orderPacking.missingItems"
+  [missingItems]="packingValid.missingItems"
   (missingItemsModalEvent)="onMissingItemsModalEvent($event)">
 
 </emp-trade-missing-items-modal>

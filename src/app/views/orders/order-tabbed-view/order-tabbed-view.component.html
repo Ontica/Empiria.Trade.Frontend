@@ -29,21 +29,21 @@
 
       <emp-trade-packing-view
         [orderUID]="order.uid"
-        [canPacking]="canPacking"
+        [packing]="order.packing"
+        [canEdit]="canPacking"
         (packingViewEvent)="onPackingViewEvent($event)">
 
       </emp-trade-packing-view>
 
     </mat-tab>
 
-    <mat-tab label="Envío" *ngIf="showOrderTab" [disabled]="!showShippingTab">
+    <mat-tab label="Envío" *ngIf="showShippingTab" [disabled]="!shippingTabEnabled">
 
-      <emp-trade-shipping-view *ngIf="showShippingTab"
+      <emp-trade-shipping-view *ngIf="shippingTabEnabled"
         [orderUID]="order.uid"
         [orderNumber]="order.orderNumber"
         [shipping]="order.shipping"
-        [canEdit]="canShipping"
-        (shippingViewEvent)="onShippingViewEvent($event)">
+        [canEdit]="false">
 
       </emp-trade-shipping-view>
 

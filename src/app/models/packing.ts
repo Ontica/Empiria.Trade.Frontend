@@ -16,9 +16,17 @@ export interface Packing {
 
 
 export interface PackingData {
-  orderUID: string;
-  size: number;
-  count: number;
+  totalPackages: number;
+  totalWeight: number;
+  totalVolume: number;
+  packingTypesData: PackingTypeData[];
+}
+
+
+export interface PackingTypeData {
+  packageTypeUID: string;
+  packageTypeName: string;
+  packages: number;
 }
 
 
@@ -91,9 +99,10 @@ export interface WarehouseBin {
 
 export const EmptyPacking: Packing = {
   data: {
-    orderUID: '',
-    count: 0,
-    size: 0,
+    totalPackages: 0,
+    totalWeight: 0,
+    totalVolume: 0,
+    packingTypesData: [],
   },
   packagedItems: [],
   missingItems: [],

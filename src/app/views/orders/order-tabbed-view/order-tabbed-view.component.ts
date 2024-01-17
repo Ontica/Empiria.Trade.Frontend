@@ -19,14 +19,10 @@ import { OrderEditorEventType } from '../order-editor/order-editor.component';
 
 import { PackingViewEventType } from '@app/views/shipping-and-handling/packing-view/packing-view.component';
 
-import { ShippingViewEventType } from '@app/views/shipping-and-handling/shipping-view/shipping-view.component';
-
 
 export enum OrderTabbedViewEventType {
   CLOSE_BUTTON_CLICKED   = 'OrderTabbedViewComponent.Event.CloseButtonClicked',
   ORDER_UPDATED          = 'OrderTabbedViewComponent.Event.OrderUpdated',
-  ORDER_PACKING_UPDATED  = 'OrderTabbedViewComponent.Event.OrderPackingUpdated',
-  ORDER_SHIPPING_UPDATED = 'OrderTabbedViewComponent.Event.OrderShippingUpdated',
   ORDER_CANCELED         = 'OrderTabbedViewComponent.Event.OrderCanceled',
 }
 
@@ -85,8 +81,12 @@ export class OrderTabbedViewComponent implements OnChanges {
 
 
   get showShippingTab(): boolean {
-    return this.config.type === OrderQueryType.Sales &&
-           ['CarrierSelector', 'Delivery'].includes(this.order.status);
+    return this.config.type === OrderQueryType.Sales;
+  }
+
+
+  get shippingTabEnabled(): boolean {
+    return ['CarrierSelector', 'Delivery'].includes(this.order.status);
   }
 
 
@@ -115,8 +115,11 @@ export class OrderTabbedViewComponent implements OnChanges {
       case OrderEditorEventType.ORDER_UPDATED:
       case OrderEditorEventType.ORDER_APPLIED:
       case OrderEditorEventType.ORDER_AUTHORIZED:
-      case OrderEditorEventType.ORDER_CANCELED:
         sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_UPDATED, event.payload);
+        return;
+
+      case OrderEditorEventType.ORDER_CANCELED:
+        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_CANCELED, event.payload);
         return;
 
       case OrderEditorEventType.EDITION_MODE:
@@ -138,28 +141,7 @@ export class OrderTabbedViewComponent implements OnChanges {
     switch (event.type as PackingViewEventType) {
 
       case PackingViewEventType.ORDER_PACKING_UPDATED:
-        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_PACKING_UPDATED, event.payload);
-        return;
-
       case PackingViewEventType.ORDER_SUPPLIED:
-        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_UPDATED, event.payload);
-        return;
-
-      default:
-        console.log(`Unhandled user interface event ${event.type}`);
-        return;
-    }
-  }
-
-
-  onShippingViewEvent(event: EventInfo) {
-    switch (event.type as ShippingViewEventType) {
-
-      case ShippingViewEventType.ORDER_SHIPPING_UPDATED:
-        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_SHIPPING_UPDATED, event.payload);
-        return;
-
-      case ShippingViewEventType.ORDER_SENT:
         sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_UPDATED, event.payload);
         return;
 
@@ -177,7 +159,7 @@ export class OrderTabbedViewComponent implements OnChanges {
     this.title = `${this.order.orderNumber}`;
 
     if (this.config.type === OrderQueryType.SalesPacking) {
-      this.title += this.order?.totalPackages ?? '';
+      this.title += this.order?.packing.data.totalPackages ?? '';
     }
 
     if (this.config.type === OrderQueryType.SalesAuthorization) {
@@ -195,7 +177,8 @@ export class OrderTabbedViewComponent implements OnChanges {
 
 
   private validateSelectedTabIndex() {
-    if (this.showOrderTab && !this.showCreditTab && !this.showShippingTab && this.selectedTabIndex === 1) {
+    if (this.selectedTabIndex === 1 && this.showOrderTab && !this.showCreditTab &&
+        this.showShippingTab && !this.shippingTabEnabled) {
       this.selectedTabIndex = 0;
     }
   }

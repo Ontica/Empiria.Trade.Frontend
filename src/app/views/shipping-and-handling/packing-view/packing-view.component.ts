@@ -5,23 +5,27 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyPacking, PackingOrderItemField, Packing, PackingItem, PackingItemFields } from '@app/models';
+import { EmptyPacking, PackingOrderItemField, Packing, PackingItem, PackingItemFields,
+         Order } from '@app/models';
 
 import { PackingDataService, SalesOrdersDataService } from '@app/data-services';
+
+import { PackingStatusEventType } from './packing-status.component';
 
 import { PackingItemsTableEventType } from './packing-items-table.component';
 
 import { PackingItemEditorEventType } from '../packing-items-edition/packing-item-editor.component';
 
-import { PackingItemEntriesEditorEventType } from '../packing-items-edition/packing-item-entries-editor.component';
+import {
+  PackingItemEntriesEditorEventType
+} from '../packing-items-edition/packing-item-entries-editor.component';
 
-import { PackingStatusEventType } from './packing-status.component';
 
 export enum PackingViewEventType {
   ORDER_PACKING_UPDATED = 'PackingViewComponent.Event.OrderPackingUpdated',
@@ -32,15 +36,15 @@ export enum PackingViewEventType {
   selector: 'emp-trade-packing-view',
   templateUrl: './packing-view.component.html',
 })
-export class PackingViewComponent implements OnChanges {
+export class PackingViewComponent {
 
   @Input() orderUID: string = '';
 
-  @Input() canPacking: boolean = false;
+  @Input() packing: Packing = EmptyPacking;
+
+  @Input() canEdit: boolean = false;
 
   @Output() packingViewEvent = new EventEmitter<EventInfo>();
-
-  orderPacking: Packing = EmptyPacking;
 
   displayPackingItemEditor = false;
 
@@ -52,8 +56,6 @@ export class PackingViewComponent implements OnChanges {
 
   submitted = false;
 
-  isLoading = true;
-
   hasError = false;
 
 
@@ -61,10 +63,8 @@ export class PackingViewComponent implements OnChanges {
               private ordersData: SalesOrdersDataService) { }
 
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.orderUID || changes.canPacking) {
-      this.getOrderPacking();
-    }
+  get packingValid(): Packing {
+    return this.packing ?? EmptyPacking;
   }
 
 
@@ -98,7 +98,7 @@ export class PackingViewComponent implements OnChanges {
 
       case PackingItemsTableEventType.ITEM_CLICKED:
         Assertion.assertValue(event.payload.packingItem, 'event.payload.packingItem');
-        if (this.canPacking) {
+        if (this.canEdit) {
           this.setDisplayPackingItemEditor(event.payload.packingItem as PackingItem);
         }
         return;
@@ -186,31 +186,13 @@ export class PackingViewComponent implements OnChanges {
   }
 
 
-  private getOrderPacking() {
-    this.isLoading = true;
-    this.hasError = false;
-
-    this.packingData.getOrderPacking(this.orderUID)
-      .firstValue()
-      .then(x => this.orderPacking = x)
-      .catch(e => this.catchOrderPackingError())
-      .finally(() => this.isLoading = false);
-  }
-
-
-  private catchOrderPackingError() {
-    this.hasError = true;
-    this.orderPacking = EmptyPacking;
-  }
-
-
   private createPackingItem(orderUID: string, packingItemFields: PackingItemFields) {
     this.submitted = true;
 
     this.packingData.createPackingItem(orderUID, packingItemFields)
       .firstValue()
       .then(x => {
-        this.setOrderPackingCloseAndEmit(x);
+        this.resolvePackingItemUpdated(x);
         this.displayPackingItemEditor = false;
       })
       .finally(() => this.submitted = false);
@@ -222,7 +204,7 @@ export class PackingViewComponent implements OnChanges {
 
     this.packingData.updatePackingItem(orderUID, packingItemUID, packingItemFields)
       .firstValue()
-      .then(x => this.setOrderPackingCloseAndEmit(x))
+      .then(x => this.resolvePackingItemUpdated(x))
       .finally(() => this.submitted = false);
   }
 
@@ -232,7 +214,7 @@ export class PackingViewComponent implements OnChanges {
 
     this.packingData.deletePackingItem(orderUID, packingItemUID)
       .firstValue()
-      .then(x => this.setOrderPackingCloseAndEmit(x))
+      .then(x => this.resolvePackingItemUpdated(x))
       .finally(() => this.submitted = false);
   }
 
@@ -242,7 +224,7 @@ export class PackingViewComponent implements OnChanges {
 
     this.packingData.createPackingItemEntry(orderUID, packingItemUID, entryFields)
       .firstValue()
-      .then(x => this.setOrderPackingAndEmit(x))
+      .then(x => this.resolvePackingItemEntryUpdated(x))
       .finally(() => this.submitted = false);
   }
 
@@ -252,7 +234,7 @@ export class PackingViewComponent implements OnChanges {
 
     this.packingData.removePackingItemEntry(orderUID, packingItemUID, packingItemEntryUID)
       .firstValue()
-      .then(x => this.setOrderPackingAndEmit(x))
+      .then(x => this.resolvePackingItemEntryUpdated(x))
       .finally(() => this.submitted = false);
   }
 
@@ -267,21 +249,20 @@ export class PackingViewComponent implements OnChanges {
   }
 
 
-  private setOrderPackingAndEmit(ordenPacking: Packing) {
-    this.orderPacking = ordenPacking;
-    this.refreshPackingItemEntriesEditor();
-    this.emitOrderPackingUpdated();
-  }
-
-
-  private setOrderPackingCloseAndEmit(ordenPacking: Packing) {
-    this.setOrderPackingAndEmit(ordenPacking);
+  private resolvePackingItemUpdated(order: Order) {
+    this.resolvePackingItemEntryUpdated(order);
     this.closeEditors();
   }
 
 
-  private emitOrderPackingUpdated() {
-    sendEvent(this.packingViewEvent, PackingViewEventType.ORDER_PACKING_UPDATED, { orderUID: this.orderUID });
+  private resolvePackingItemEntryUpdated(order: Order) {
+    this.refreshPackingItemEntriesEditor(order.packing.packagedItems);
+    this.emitPackingUpdated(order);
+  }
+
+
+  private emitPackingUpdated(order: Order) {
+    sendEvent(this.packingViewEvent, PackingViewEventType.ORDER_PACKING_UPDATED, { order });
   }
 
 
@@ -303,10 +284,9 @@ export class PackingViewComponent implements OnChanges {
   }
 
 
-  private refreshPackingItemEntriesEditor() {
+  private refreshPackingItemEntriesEditor(items: PackingItem[]) {
     if (this.displayPackingItemEntriesEditor) {
-      const newSelectedPackingItem =
-        this.orderPacking.packagedItems.find(x => x.uid === this.selectedPackingItem.uid);
+      const newSelectedPackingItem = items.find(x => x.uid === this.selectedPackingItem.uid);
       this.setDisplayPackingItemEntriesEditor(newSelectedPackingItem, true);
     }
   }
