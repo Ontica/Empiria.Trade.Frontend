@@ -11,7 +11,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { EventInfo} from '@app/core';
 
-import { EmptyOrder, Order, OrderAdditionalData } from '@app/models';
+import { EmptyOrderAdditionalData, OrderAdditionalData } from '@app/models';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
@@ -29,7 +29,7 @@ interface OrderAdditionalDataFormModel extends FormGroup<{
 })
 export class OrderAdditionalDataComponent implements OnChanges {
 
-  @Input() order: Order = EmptyOrder();
+  @Input() orderData: OrderAdditionalData = EmptyOrderAdditionalData;
 
   @Input() editionMode = false;
 
@@ -51,7 +51,7 @@ export class OrderAdditionalDataComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.order) {
+    if (changes.orderData) {
       this.setFormData();
     }
 
@@ -83,7 +83,7 @@ export class OrderAdditionalDataComponent implements OnChanges {
       const payload = {
         isFormValid: this.form.valid,
         isFormDirty: this.form.dirty,
-        orderAdditionalData: this.getFormData(),
+        data: this.getFormData(),
       };
 
       this.isChangeEmission = true;
@@ -95,7 +95,7 @@ export class OrderAdditionalDataComponent implements OnChanges {
 
   private setFormData() {
     if (this.isSaved) {
-      this.form.reset({notes: this.order.notes});
+      this.form.reset({ notes: this.orderData.notes});
     } else {
       this.isChangeEmission = false;
     }

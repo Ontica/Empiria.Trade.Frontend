@@ -105,7 +105,7 @@ export class OrderSubmitterComponent {
 
 
   private confirmCancel() {
-    const message = `Esta operación eliminara el pedido <strong> ${this.order.orderNumber} </strong>
+    const message = `Esta operación eliminara el pedido <strong> ${this.order.orderData.orderNumber} </strong>
                     <br><br>¿Elimino el pedido?`;
     this.messageBox.confirm(message, 'Eliminar pedido', 'DeleteCancel')
       .firstValue()
@@ -118,7 +118,7 @@ export class OrderSubmitterComponent {
 
 
   private confirmSendTo() {
-    const message = `Esta operación enviará el pedido <strong> ${this.order.orderNumber} </strong> ` +
+    const message = `Esta operación enviará el pedido <strong> ${this.order.orderData.orderNumber} </strong> ` +
                     `a almacen para ser procesado. <br><br>¿Aplico el pedido?`;
 
     this.messageBox.confirm(message, 'Aplicar pedido')
@@ -132,8 +132,8 @@ export class OrderSubmitterComponent {
 
 
   private confirmAuthorize() {
-    const message = `Esta operación autorizará el pedido <strong> ${this.order.orderNumber} </strong> ` +
-                    `del cliente <strong>${this.order.customer.name}</strong> con adeudo de ` +
+    const message = `Esta operación autorizará el pedido <strong> ${this.order.orderData.orderNumber} </strong> ` +
+                    `del cliente <strong>${this.order.orderData.customer.name}</strong> con adeudo de ` +
                     `<strong class="warning-text">` +
                     FormatLibrary.numberWithCommas(this.order.customerCredit.totalDebt, '1.2-2') +
                     `</strong><br><br>¿Autorizo el pedido?`;

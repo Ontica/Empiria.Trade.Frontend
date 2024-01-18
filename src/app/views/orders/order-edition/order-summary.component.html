@@ -3,7 +3,7 @@
   <div class="fx-item-third">
 
     <emp-trade-order-additional-data #additionalData
-      [order]="order"
+      [orderData]="orderData"
       [isSaved]="isSaved"
       [editionMode]="editionMode"
       (orderAdditionalDataEvent)="onOrderAdditionalDataEvent($event)">
@@ -16,7 +16,7 @@
   <div class="fx-item-none" [style.minWidth.px]="150" [style.minHeight.px]="100">
 
     <emp-trade-order-totals
-      [order]="order">
+      [orderTotals]="orderData">
 
     </emp-trade-order-totals>
 

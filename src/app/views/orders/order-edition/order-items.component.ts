@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EventInfo } from '@app/core';
 
-import { EmptyOrder, Order, OrderItem } from '@app/models';
+import { OrderItem } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -31,7 +31,7 @@ export enum OrderItemsEventType {
 })
 export class OrderItemsComponent implements OnChanges {
 
-  @Input() order: Order = EmptyOrder();
+  @Input() orderItems: OrderItem[] = [];
 
   @Input() editionMode = false;
 
@@ -55,7 +55,7 @@ export class OrderItemsComponent implements OnChanges {
 
 
   get hasItems(): boolean {
-    return this.order.items.length > 0;
+    return this.orderItems.length > 0;
   }
 
 
@@ -80,7 +80,7 @@ export class OrderItemsComponent implements OnChanges {
 
 
   private setDataTable() {
-    this.dataSource = new MatTableDataSource(this.order.items ?? []);
+    this.dataSource = new MatTableDataSource(this.orderItems ?? []);
     this.resetColumns();
   }
 

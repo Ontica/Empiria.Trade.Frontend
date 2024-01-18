@@ -18,7 +18,7 @@
     <mat-tab label="Crédito" *ngIf="showCreditTab">
 
       <emp-trade-customer-credit-view
-        [customer]="order.customer"
+        [customer]="order.orderData.customer"
         [customerCredit]="order.customerCredit">
 
       </emp-trade-customer-credit-view>
@@ -28,7 +28,7 @@
     <mat-tab label="Surtido" *ngIf="showPackingTab">
 
       <emp-trade-packing-view
-        [orderUID]="order.uid"
+        [orderUID]="order.orderData.uid"
         [packing]="order.packing"
         [canEdit]="canPacking"
         (packingViewEvent)="onPackingViewEvent($event)">
@@ -40,8 +40,8 @@
     <mat-tab label="Envío" *ngIf="showShippingTab" [disabled]="!shippingTabEnabled">
 
       <emp-trade-shipping-view *ngIf="shippingTabEnabled"
-        [orderUID]="order.uid"
-        [orderNumber]="order.orderNumber"
+        [orderUID]="order.orderData.uid"
+        [orderNumber]="order.orderData.orderNumber"
         [shipping]="order.shipping"
         [canEdit]="false">
 

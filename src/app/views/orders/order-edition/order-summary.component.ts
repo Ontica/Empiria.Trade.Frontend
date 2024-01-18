@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 
 import { EventInfo } from '@app/core';
 
-import { EmptyOrder, Order } from '@app/models';
+import { EmptyOrderData, OrderData } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -27,7 +27,7 @@ export class OrderSummaryComponent  {
 
   @ViewChild('additionalData') additionalData: OrderAdditionalDataComponent;
 
-  @Input() order: Order =EmptyOrder();
+  @Input() orderData: OrderData = EmptyOrderData;
 
   @Input() editionMode = false;
 

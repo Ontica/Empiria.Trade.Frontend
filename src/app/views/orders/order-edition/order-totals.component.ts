@@ -7,7 +7,7 @@
 
 import { Component, Input } from '@angular/core';
 
-import { EmptyOrder, Order } from '@app/models';
+import { EmptyOrderTotals, OrderTotals } from '@app/models';
 
 @Component({
   selector: 'emp-trade-order-totals',
@@ -15,6 +15,6 @@ import { EmptyOrder, Order } from '@app/models';
 })
 export class OrderTotalsComponent {
 
-  @Input() order: Order = EmptyOrder();
+  @Input() orderTotals: OrderTotals = EmptyOrderTotals;
 
 }

@@ -16,8 +16,8 @@ import { DateString, DateStringLibrary, EventInfo, Identifiable, isEmpty } from 
 
 import { ContactsDataService, SalesOrdersDataService } from '@app/data-services';
 
-import { Contact, Customer, DefaultOrderStatus, EmptyOrder, Order, OrderData, Party, PaymentConditionList,
-         ShippingMethodList } from '@app/models';
+import { Contact, Customer, DefaultOrderStatus, EmptyOrderGeneralData, OrderGeneralData, Party,
+         PaymentConditionList, ShippingMethodList } from '@app/models';
 
 import { ArrayLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
@@ -45,7 +45,7 @@ interface OrderFormModel extends FormGroup<{
 })
 export class OrderHeaderComponent implements OnChanges, OnInit {
 
-  @Input() order: Order = EmptyOrder();
+  @Input() orderData: OrderGeneralData = EmptyOrderGeneralData;
 
   @Input() editionMode = false;
 
@@ -96,7 +96,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.order) {
+    if (changes.orderData) {
       this.setFormData();
     }
 
@@ -156,7 +156,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
       const payload = {
         isFormValid: this.form.valid,
         isFormDirty: this.form.dirty,
-        orderData: this.getFormData(),
+        data: this.getFormData(),
       };
 
       this.isChangeEmission = true;
@@ -169,16 +169,16 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
   private setFormData() {
     if (this.isSaved) {
       this.form.reset({
-        orderNumber: this.order.orderNumber,
-        orderTime: this.order.orderTime,
-        status: this.order.status,
-        customer: this.order.customer,
-        customerContact: this.order.customerContact ?? null,
-        priceList: this.order.priceList,
-        salesAgent: this.order.salesAgent,
-        supplier: this.order.supplier,
-        paymentCondition: this.order.paymentCondition,
-        shippingMethod: this.order.shippingMethod,
+        orderNumber: this.orderData.orderNumber,
+        orderTime: this.orderData.orderTime,
+        status: this.orderData.status,
+        customer: this.orderData.customer,
+        customerContact: this.orderData.customerContact ?? null,
+        priceList: this.orderData.priceList,
+        salesAgent: this.orderData.salesAgent,
+        supplier: this.orderData.supplier,
+        paymentCondition: this.orderData.paymentCondition,
+        shippingMethod: this.orderData.shippingMethod,
       });
 
       this.initLists();
@@ -200,10 +200,10 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
   }
 
 
-  private getFormData(): OrderData {
+  private getFormData(): OrderGeneralData {
     const formModel = this.form.getRawValue();
 
-    const data: OrderData = {
+    const data: OrderGeneralData = {
       orderNumber: formModel.orderNumber ?? '',
       orderTime: formModel.orderTime ?? '',
       status: formModel.status ?? null,
@@ -239,19 +239,19 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
 
 
   private initLists() {
-    this.customerContactsList = isEmpty(this.order.customerContact) ? this.customerContactsList :
-      ArrayLibrary.insertIfNotExist(this.customerContactsList ?? [], this.order.customerContact , 'uid');
-    this.salesAgentsList = isEmpty(this.order.salesAgent) ? this.customerContactsList :
-      ArrayLibrary.insertIfNotExist(this.salesAgentsList ?? [], this.order.salesAgent, 'uid');
-    this.suppliersList = isEmpty(this.order.supplier) ? this.suppliersList :
-      ArrayLibrary.insertIfNotExist(this.suppliersList ?? [], this.order.supplier, 'uid');
+    this.customerContactsList = isEmpty(this.orderData.customerContact) ? this.customerContactsList :
+      ArrayLibrary.insertIfNotExist(this.customerContactsList ?? [], this.orderData.customerContact , 'uid');
+    this.salesAgentsList = isEmpty(this.orderData.salesAgent) ? this.customerContactsList :
+      ArrayLibrary.insertIfNotExist(this.salesAgentsList ?? [], this.orderData.salesAgent, 'uid');
+    this.suppliersList = isEmpty(this.orderData.supplier) ? this.suppliersList :
+      ArrayLibrary.insertIfNotExist(this.suppliersList ?? [], this.orderData.supplier, 'uid');
     this.subscribeCustomersList();
   }
 
 
   private subscribeCustomersList() {
     this.customersList$ = concat(
-      of(isEmpty(this.order.customer) ? [] : [this.order.customer]),
+      of(isEmpty(this.orderData.customer) ? [] : [this.orderData.customer]),
       this.customersInput$.pipe(
         filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
         distinctUntilChanged(),

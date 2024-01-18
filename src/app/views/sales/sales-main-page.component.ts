@@ -204,7 +204,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
     this.ordersList = data;
     this.queryExecuted = true;
 
-    if (!this.ordersList.some(x => x.uid === this.orderSelected.uid)) {
+    if (!this.ordersList.some(x => x.uid === this.orderSelected.orderData.uid)) {
       this.clearOrderSelected();
     }
   }
@@ -219,7 +219,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   private setOrderSelected(order: Order) {
     this.orderSelected = clone<Order>(order);
-    this.displaySecondaryView = !!this.orderSelected.uid;
+    this.displaySecondaryView = !!this.orderSelected.orderData.uid;
   }
 
 

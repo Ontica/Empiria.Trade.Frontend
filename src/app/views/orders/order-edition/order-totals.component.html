@@ -1,16 +1,16 @@
 <div class="fx-column-container fx-space-between fx-fill">
 
   <div class="fx-row-container fx-space-between">
-    <p>Subtotal:</p><p class="text-monospace">{{order.itemsTotal | empDecimal}}</p>
+    <p>Subtotal:</p><p class="text-monospace">{{orderTotals.itemsTotal | empDecimal}}</p>
   </div>
   <div class="fx-row-container fx-space-between">
-    <p>Envío:</p> <p class="text-monospace">{{order.shipment | empDecimal}}</p>
+    <p>Envío:</p> <p class="text-monospace">{{orderTotals.shipment | empDecimal}}</p>
   </div>
   <div class="fx-row-container fx-space-between">
-    <p>IVA:</p> <p class="text-monospace">{{order.taxes | empDecimal}}</p>
+    <p>IVA:</p> <p class="text-monospace">{{orderTotals.taxes | empDecimal}}</p>
   </div>
   <div class="fx-row-container fx-space-between">
-    <strong>Total:</strong> <p class="text-monospace">{{order.orderTotal | empDecimal}}</p>
+    <strong>Total:</strong> <p class="text-monospace">{{orderTotals.orderTotal | empDecimal}}</p>
   </div>
 
 </div>

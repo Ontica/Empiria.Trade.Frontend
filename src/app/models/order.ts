@@ -86,7 +86,7 @@ export interface OrderDescriptor {
 }
 
 
-export interface OrderData extends OrderAdditionalData {
+export interface OrderGeneralData extends OrderAdditionalData {
   uid?: string;
   orderNumber: string;
   orderTime: DateString;
@@ -108,34 +108,34 @@ export interface OrderAdditionalData {
 }
 
 
-export interface Order extends OrderData {
-  uid: string;
-  orderNumber: string;
-  orderTime: DateString;
-  status: string;
-  statusName: string;
-  customer: Customer;
-  customerContact: Contact;
-  salesAgent: Party;
-  supplier: Party;
-  paymentCondition: string;
-  shippingMethod: string;
-  priceList: string;
-  notes?: string;
-
+export interface OrderTotals {
   itemsCount: number;
   itemsTotal: number;
   shipment: number;
   discount: number;
   taxes: number;
   orderTotal: number;
+}
 
+
+export interface OrderData extends OrderGeneralData, OrderAdditionalData, OrderTotals {
+
+}
+
+
+export interface Authorization {
+  authorizationStatus: string;
+  authorizationTime: DateString;
+}
+
+
+export interface Order {
+  orderData: OrderData;
   items: OrderItem[];
-
+  authorization: Authorization;
   customerCredit: CustomerCredit;
   shipping: Shipping;
   packing: Packing;
-
   actions: OrderActions;
 }
 
@@ -210,51 +210,92 @@ export interface OrderItemFields {
 
 export function mapOrderDescriptorFromOrder(order: Order): OrderDescriptor {
   return {
-    uid: order.uid,
-    orderNumber: order.orderNumber,
-    customerName: order.customer.name,
-    supplierName: order.supplier.name,
-    salesAgentName: order.salesAgent.name,
-    status: order.status,
-    statusName: order.statusName,
+    uid: order.orderData.uid,
+    orderNumber: order.orderData.orderNumber,
+    customerName: order.orderData.customer.name,
+    supplierName: order.orderData.supplier.name,
+    salesAgentName: order.orderData.salesAgent.name,
+    status: order.orderData.status,
+    statusName: order.orderData.statusName,
     totalDebt: order.customerCredit.totalDebt,
-    orderTime: order.orderTime,
-    orderTotal: order.orderTotal,
+    orderTime: order.orderData.orderTime,
+    orderTotal: order.orderData.orderTotal,
     totalPackages: order.packing.data.totalPackages,
     weight: order.packing.data.totalWeight,
   };
 }
 
 
+export const EmptyOrderGeneralData: OrderGeneralData = {
+  uid: null,
+  orderNumber: '',
+  orderTime: '',
+  shippingMethod: '',
+  status: '',
+  statusName: '',
+  customer: EmptyCustomer,
+  customerContact: EmptyContact,
+  supplier: Empty,
+  salesAgent: Empty,
+  paymentCondition: '',
+  priceList: '',
+  notes: '',
+}
+
+
+export const EmptyOrderAdditionalData: OrderAdditionalData = {
+  notes: '',
+}
+
+
+export const EmptyOrderTotals: OrderTotals = {
+  itemsCount: 0,
+  itemsTotal: 0,
+  shipment: 0,
+  discount: 0,
+  taxes: 0,
+  orderTotal: 0,
+}
+
+
+export const EmptyOrderData: OrderData = {
+  uid: null,
+  orderNumber: '',
+  orderTime: '',
+  notes: '',
+  shippingMethod: '',
+  status: '',
+  statusName: '',
+  customer: EmptyCustomer,
+  customerContact: EmptyContact,
+  supplier: Empty,
+  salesAgent: Empty,
+  paymentCondition: '',
+  priceList: '',
+  itemsCount: 0,
+  itemsTotal: 0,
+  shipment: 0,
+  discount: 0,
+  taxes: 0,
+  orderTotal: 0,
+}
+
+
+export const EmptyAuthorization: Authorization = {
+  authorizationStatus: '',
+  authorizationTime: '',
+}
+
+
 export function EmptyOrder(): Order {
 
   return clone<Order>({
-    uid: null,
-    orderNumber: '',
-    orderTime: '',
-    notes: '',
-    shippingMethod: '',
-    status: '',
-    statusName: '',
-    customer: EmptyCustomer,
-    customerContact: EmptyContact,
-    supplier: Empty,
-    salesAgent: Empty,
-    paymentCondition: '',
-    priceList: '',
-    itemsCount: 0,
-    itemsTotal: 0,
-    shipment: 0,
-    discount: 0,
-    taxes: 0,
-    orderTotal: 0,
-
+    orderData: EmptyOrderData,
     items: [],
-
+    authorization: EmptyAuthorization,
     customerCredit: EmptyCustomerCredit,
     shipping: EmptyShipping,
     packing: EmptyPacking,
-
     actions: EmptyOrderActions,
   });
 
@@ -263,19 +304,19 @@ export function EmptyOrder(): Order {
 
 export function mapOrderFieldsFromOrder(order: Order): OrderFields {
   const orderFields: OrderFields = {
-    uid: order.uid,
-    orderNumber: order.orderNumber,
-    orderTime: order.orderTime,
-    status: order.status,
-    customerUID: order.customer?.uid ?? '',
-    customerContactUID: order.customerContact?.uid ?? '',
-    salesAgentUID: order.salesAgent?.uid ?? '',
-    supplierUID: order.supplier?.uid ?? '',
-    paymentCondition: order.paymentCondition,
-    shippingMethod: order.shippingMethod,
-    priceList: order.priceList,
+    uid: order.orderData.uid,
+    orderNumber: order.orderData.orderNumber,
+    orderTime: order.orderData.orderTime,
+    status: order.orderData.status,
+    customerUID: order.orderData.customer?.uid ?? '',
+    customerContactUID: order.orderData.customerContact?.uid ?? '',
+    salesAgentUID: order.orderData.salesAgent?.uid ?? '',
+    supplierUID: order.orderData.supplier?.uid ?? '',
+    paymentCondition: order.orderData.paymentCondition,
+    shippingMethod: order.orderData.shippingMethod,
+    priceList: order.orderData.priceList,
     items: order.items.map(x => mapOrderItemFieldsFromOrderItem(x)),
-    notes: order.notes,
+    notes: order.orderData.notes,
   };
 
   return orderFields;

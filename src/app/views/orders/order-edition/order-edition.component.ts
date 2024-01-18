@@ -17,8 +17,8 @@ import { AlertService } from '@app/shared/containers/alert/alert.service';
 
 import { SalesOrdersDataService } from '@app/data-services';
 
-import { DefaultOrderStatus, EmptyOrder, Order, OrderAdditionalData, OrderData, OrderItem, ProductSelection,
-         mapOrderFieldsFromOrder, mapOrderItemFromProductSelection } from '@app/models';
+import { DefaultOrderStatus, EmptyOrder, Order, OrderData, OrderItem,
+         ProductSelection, mapOrderFieldsFromOrder, mapOrderItemFromProductSelection } from '@app/models';
 
 import {
   ProductsSelectorEventType
@@ -82,12 +82,12 @@ export class OrderEditionComponent implements OnChanges {
 
 
   get isSaved(): boolean {
-    return !!this.order.uid;
+    return !!this.order.orderData.uid;
   }
 
 
   get canEdit(): boolean {
-    return this.order.status === DefaultOrderStatus;
+    return this.order.orderData.status === DefaultOrderStatus;
   }
 
 
@@ -107,10 +107,10 @@ export class OrderEditionComponent implements OnChanges {
       case OrderHeaderEventType.CHANGE_DATA:
         Assertion.assertValue(event.payload.isFormValid, 'event.payload.isFormValid');
         Assertion.assertValue(event.payload.isFormDirty, 'event.payload.isFormDirty');
-        Assertion.assertValue(event.payload.orderData, 'event.payload.orderData');
+        Assertion.assertValue(event.payload.data, 'event.payload.data');
 
         this.isOrderDataValid = event.payload.isFormValid as boolean;
-        this.validateOrderHeaderChanges(event.payload.orderData as OrderData);
+        this.validateOrderHeaderChanges(event.payload.data as OrderData);
         this.emitOrderDirty(event.payload.isFormDirty);
         return;
 
@@ -152,11 +152,10 @@ export class OrderEditionComponent implements OnChanges {
       case OrderSummaryEventType.CHANGE_DATA:
         Assertion.assertValue(event.payload.isFormValid, 'event.payload.isFormValid');
         Assertion.assertValue(event.payload.isFormDirty, 'event.payload.isFormDirty');
-        Assertion.assertValue(event.payload.orderAdditionalData, 'event.payload.orderAdditionalData');
-
+        Assertion.assertValue(event.payload.data, 'event.payload.data');
         this.isOrderAdditionalDataValid = event.payload.isFormValid as boolean;
-        this.setOrderForEdition({ ...this.orderForEdition,
-          ...event.payload.orderAdditionalData as OrderAdditionalData });
+        const orderDataUpdated = { ...this.orderForEdition.orderData, ...event.payload.data as OrderData };
+        this.setOrderForEdition({ ...this.orderForEdition, ...{ orderData: orderDataUpdated } });
         this.emitOrderDirty(event.payload.isFormDirty);
         return;
 
@@ -179,14 +178,14 @@ export class OrderEditionComponent implements OnChanges {
         this.validateAndEmitEvent(OrderEditionEventType.UPDATE_ORDER, this.orderForEdition);
         return;
       case OrderSubmitterEventType.APPLY_BUTTON_CLICKED:
-        this.emitEvent(OrderEditionEventType.APPLY_ORDER, this.orderForEdition.uid);
+        this.emitEvent(OrderEditionEventType.APPLY_ORDER, this.orderForEdition.orderData.uid);
         return;
       case OrderSubmitterEventType.AUTHORIZE_BUTTON_CLICKED:
-        this.emitEvent(OrderEditionEventType.AUTHORIZE_ORDER, this.orderForEdition.uid);
+        this.emitEvent(OrderEditionEventType.AUTHORIZE_ORDER, this.orderForEdition.orderData.uid);
         return;
 
       case OrderSubmitterEventType.CANCEL_BUTTON_CLICKED:
-        this.emitEvent(OrderEditionEventType.CANCEL_ORDER, this.orderForEdition.uid);
+        this.emitEvent(OrderEditionEventType.CANCEL_ORDER, this.orderForEdition.orderData.uid);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -271,12 +270,14 @@ export class OrderEditionComponent implements OnChanges {
   }
 
 
-  private validateOrderHeaderChanges(orderData: OrderData) {
+  private validateOrderHeaderChanges(data: OrderData) {
     const recalculateItems = this.orderForEdition.items.length > 0 &&
-      (this.fieldHasChanges(orderData.customer, this.orderForEdition.customer) ||
-        this.fieldHasChanges(orderData.supplier, this.orderForEdition.supplier));
+      (this.fieldHasChanges(data.customer, this.orderForEdition.orderData.customer) ||
+       this.fieldHasChanges(data.supplier, this.orderForEdition.orderData.supplier));
 
-    this.setOrderForEdition({ ...this.orderForEdition, ...orderData });
+    const orderDataUpdated = { ...this.orderForEdition.orderData, ...data };
+
+    this.setOrderForEdition({ ...this.orderForEdition, ...{ orderData: orderDataUpdated } });
 
     if (recalculateItems) {
       this.calculateOrder(this.orderForEdition);

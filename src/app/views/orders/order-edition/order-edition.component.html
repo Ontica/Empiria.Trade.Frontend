@@ -6,7 +6,7 @@
 
   <emp-trade-order-header #orderHeader
     class="fx-item-none"
-    [order]="orderForEdition"
+    [orderData]="orderForEdition.orderData"
     [isSaved]="isSaved"
     [editionMode]="editionMode"
     (orderHeaderEvent)="onOrderHeaderEvent($event)">
@@ -15,7 +15,7 @@
 
   <emp-trade-order-items
     class="fx-item"
-    [order]="orderForEdition"
+    [orderItems]="orderForEdition.items"
     [editionMode]="editionMode"
     [canEdit]="isOrderDataValid"
     [style.min-height.px]="145"
@@ -25,7 +25,7 @@
 
   <emp-trade-order-summary #orderSummary
     class="fx-item-none"
-    [order]="orderForEdition"
+    [orderData]="orderForEdition.orderData"
     [isSaved]="isSaved"
     [editionMode]="editionMode"
     (orderSummaryEvent)="onOrderSummaryEvent($event)">

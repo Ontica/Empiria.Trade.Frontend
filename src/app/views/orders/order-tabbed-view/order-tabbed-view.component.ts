@@ -86,17 +86,17 @@ export class OrderTabbedViewComponent implements OnChanges {
 
 
   get shippingTabEnabled(): boolean {
-    return ['CarrierSelector', 'Delivery'].includes(this.order.status);
+    return ['CarrierSelector', 'Delivery'].includes(this.order.orderData.status);
   }
 
 
   get canPacking(): boolean {
-    return this.order.status === 'Packing';
+    return this.order.orderData.status === 'Packing';
   }
 
 
   get canShipping(): boolean {
-    return this.order.status === 'CarrierSelector';
+    return this.order.orderData.status === 'CarrierSelector';
   }
 
 
@@ -153,10 +153,10 @@ export class OrderTabbedViewComponent implements OnChanges {
 
 
   private setTitle() {
-    const orderTime = DateStringLibrary.format(this.order.orderTime);
-    const orderTotal = FormatLibrary.numberWithCommas(this.order.orderTotal, '1.2-2');
+    const orderTime = DateStringLibrary.format(this.order.orderData.orderTime);
+    const orderTotal = FormatLibrary.numberWithCommas(this.order.orderData.orderTotal, '1.2-2');
 
-    this.title = `${this.order.orderNumber}`;
+    this.title = `${this.order.orderData.orderNumber}`;
 
     if (this.config.type === OrderQueryType.SalesPacking) {
       this.title += this.order?.packing.data.totalPackages ?? '';
@@ -169,10 +169,10 @@ export class OrderTabbedViewComponent implements OnChanges {
         '<span class="tag tag-medium tag-base">sin adeudo</span>';
     }
 
-    this.hint = `<strong>${this.order.customer.name} </strong> &nbsp; &nbsp; | &nbsp; &nbsp; ` +
+    this.hint = `<strong>${this.order.orderData.customer.name} </strong> &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${orderTime} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${orderTotal} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
-      `<span class="tag tag-small">${this.order.statusName}</span>`;
+      `<span class="tag tag-small">${this.order.orderData.statusName}</span>`;
   }
 
 
