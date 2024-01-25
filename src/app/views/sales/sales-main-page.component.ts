@@ -11,6 +11,8 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
+import { AppStatusStateAction } from '@app/presentation/app-data/_app-data.presentation.types';
+
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { View } from '@app/main-layout';
@@ -233,6 +235,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
     const ordersListNew = ArrayLibrary.insertItemTop(this.ordersList, orderToInsert, 'uid');
     this.setOrderData(ordersListNew);
     this.setOrderSelected(order);
+    this.setUserWorkStatusFinished();
   }
 
 
@@ -240,6 +243,12 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
     const ordersListNew = this.ordersList.filter(x => x.uid !== orderUID);
     this.setOrderData(ordersListNew);
     this.clearOrderSelected();
+    this.setUserWorkStatusFinished();
+  }
+
+
+  private setUserWorkStatusFinished() {
+    this.uiLayer.dispatch(AppStatusStateAction.SET_IS_USER_WORKING, false);
   }
 
 }

@@ -9,13 +9,14 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
-import { EmptyOrder, Order, OrderDescriptor, OrderQueryType } from '@app/models';
+import { ApplicationStatusService, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+import { EmptyOrder, Order, OrderDescriptor, OrderQueryType } from '@app/models';
+
 
 export enum OrdersTableEventType {
   ENTRY_CLICKED = 'OrdersTableComponent.Event.EntryClicked',
@@ -48,6 +49,9 @@ export class OrdersTableComponent implements OnChanges {
   dataSource: TableVirtualScrollDataSource<OrderDescriptor>;
 
 
+  constructor(private appStatus: ApplicationStatusService) { }
+
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ordersList) {
       this.dataSource = new TableVirtualScrollDataSource(this.ordersList);
@@ -58,7 +62,10 @@ export class OrdersTableComponent implements OnChanges {
 
 
   onEntryClicked(entry: Order) {
-    sendEvent(this.ordersTableEvent, OrdersTableEventType.ENTRY_CLICKED, { entry });
+    this.appStatus.canUserContinue()
+      .subscribe(x =>
+        x ? sendEvent(this.ordersTableEvent, OrdersTableEventType.ENTRY_CLICKED, { entry }) : null
+      );
   }
 
 

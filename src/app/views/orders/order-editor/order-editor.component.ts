@@ -18,8 +18,6 @@ import { EmptyOrder, Order, OrderFields, mapOrderFieldsFromOrder } from '@app/mo
 import { OrderEditionEventType } from '../order-edition/order-edition.component';
 
 export enum OrderEditorEventType {
-  EDITION_MODE     = 'OrderEditorComponent.Event.EditionMode',
-  ORDER_DIRTY      = 'OrderEditorComponent.Event.OrderDirty',
   ORDER_UPDATED    = 'OrderEditorComponent.Event.OrderUpdated',
   ORDER_APPLIED    = 'OrderEditorComponent.Event.OrderApplied',
   ORDER_AUTHORIZED = 'OrderEditorComponent.Event.OrderAuthorize',
@@ -67,14 +65,6 @@ export class OrderEditorComponent {
       case OrderEditionEventType.CANCEL_ORDER:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         this.cancelOrder(event.payload.orderUID);
-        return;
-
-      case OrderEditionEventType.EDITION_MODE:
-        sendEvent(this.orderEditorEvent, OrderEditorEventType.EDITION_MODE, event.payload);
-        return;
-
-      case OrderEditionEventType.ORDER_DIRTY:
-        sendEvent(this.orderEditorEvent, OrderEditorEventType.ORDER_DIRTY, event.payload);
         return;
 
       default:

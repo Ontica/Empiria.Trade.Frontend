@@ -11,6 +11,8 @@ import { Router, ActivatedRouteSnapshot, CanActivateFn, CanActivateChildFn } fro
 
 import { SessionService } from '../general/session.service';
 
+import { ApplicationStatusService } from '../general/application-status.service';
+
 import { RoutingStateService } from './routing-state.service';
 
 
@@ -39,7 +41,9 @@ export const ChildRouteGuard: CanActivateChildFn = (route: ActivatedRouteSnapsho
     return false;
   }
 
-  return true;
+  const userCanContinue = inject(ApplicationStatusService).canUserContinue();
+
+  return userCanContinue;
 };
 
 

@@ -7,11 +7,9 @@
 
 import { Component, EventEmitter, Output } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { ApplicationStatusService, Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { SalesOrdersDataService } from '@app/data-services';
 
@@ -34,18 +32,16 @@ export class OrderCreatorComponent {
 
   submitted = false;
 
-  orderDirty = false;
 
-  constructor(private salesOrdersData: SalesOrdersDataService,
-              private messageBox: MessageBoxService) { }
+  constructor(private appStatus: ApplicationStatusService,
+              private salesOrdersData: SalesOrdersDataService) { }
 
 
   onClose() {
-    if (this.orderDirty) {
-      this.confirmCloseModal();
-    } else {
-      this.emitCloseModal();
-    }
+    this.appStatus.canUserContinue()
+      .subscribe( x =>
+        x ? sendEvent(this.orderCreatorEvent, OrderCreatorEventType.CLOSE_MODAL_CLICKED) : null
+      );
   }
 
 
@@ -62,11 +58,6 @@ export class OrderCreatorComponent {
         this.createOrder(order);
         return;
 
-      case OrderEditionEventType.ORDER_DIRTY:
-        Assertion.assertValue(event.payload.dirty, 'event.payload.dirty');
-        this.orderDirty = event.payload.dirty;
-        return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -74,32 +65,13 @@ export class OrderCreatorComponent {
   }
 
 
-  createOrder(order: OrderFields) {
+  private createOrder(order: OrderFields) {
     this.submitted = true;
 
     this.salesOrdersData.createOrder(order)
       .firstValue()
       .then(x => sendEvent(this.orderCreatorEvent, OrderCreatorEventType.ORDER_CREATED, { order: x }))
       .finally(() => this.submitted = false);
-  }
-
-
-  private emitCloseModal() {
-    sendEvent(this.orderCreatorEvent, OrderCreatorEventType.CLOSE_MODAL_CLICKED);
-  }
-
-
-  private confirmCloseModal() {
-    const message = `Esta operación descartará los cambios y perderá la información modificada.
-                    <br><br>¿Descarto los cambios?`;
-
-    this.messageBox.confirm(message, 'Descartar cambios')
-      .firstValue()
-      .then(x => {
-        if (x) {
-          this.emitCloseModal();
-        }
-      });
   }
 
 }

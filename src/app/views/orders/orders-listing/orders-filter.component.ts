@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { EmpObservable, EventInfo, Identifiable } from '@app/core';
+import { ApplicationStatusService, EmpObservable, EventInfo, Identifiable } from '@app/core';
 
 import { SalesOrdersDataService } from '@app/data-services';
 
@@ -46,7 +46,8 @@ export class OrdersFilterComponent implements OnInit {
   isLoading = false;
 
 
-  constructor(private salesOrdersData: SalesOrdersDataService) {
+  constructor(private appStatus: ApplicationStatusService,
+              private salesOrdersData: SalesOrdersDataService) {
     this.initForm();
   }
 
@@ -63,7 +64,12 @@ export class OrdersFilterComponent implements OnInit {
 
   onSearchClicked() {
     if (this.form.valid) {
-      sendEvent(this.ordersFilterEvent, OrdersFilterEventType.SEARCH_CLICKED, { query: this.getOrdersQuery() });
+      const payload = { query: this.getOrdersQuery() };
+
+      this.appStatus.canUserContinue()
+        .subscribe(x =>
+          x ? sendEvent(this.ordersFilterEvent, OrdersFilterEventType.SEARCH_CLICKED, payload) : null
+        );
     }
   }
 

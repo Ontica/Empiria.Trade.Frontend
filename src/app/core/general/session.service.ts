@@ -34,7 +34,7 @@ export class SessionService {
   private data: KeyValue[] = [];
 
   constructor(private appSettingsService: ApplicationSettingsService,
-    private localStorage: LocalStorageService) {
+              private localStorage: LocalStorageService) {
     this.tryToRetrieveStoredPrincipalData();
   }
 

@@ -13,6 +13,7 @@ export { Exception } from './general/exception';
 export { Assertion } from './general/assertion';
 export { Validate } from './general/validate';
 
+export { ApplicationStatusService } from './general/application-status.service';
 export { SessionService } from './general/session.service';
 export { HttpService } from './http/http.service';
 export { LocalStorageService } from './general/local-storage.service';
@@ -20,6 +21,7 @@ export { LoggerService } from './general/logger.service';
 
 export { AuthenticationService } from './security/authentication.service';
 export { RoutingStateService } from './security/routing-state.service';
+export { SecurityDataService } from './security/security-data.service';
 export { ChildRouteGuard, ParentRouteGuard } from './security/security.guard';
 
 export * from './localization';

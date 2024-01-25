@@ -7,13 +7,14 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { EventInfo } from '@app/core';
-
-import { EmptyOrder, Order } from '@app/models';
+import { ApplicationStatusService, EventInfo } from '@app/core';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { FormatLibrary, sendEvent } from '@app/shared/utils';
+
+import { EmptyOrder, Order } from '@app/models';
+
 
 export enum OrderSubmitterEventType {
   TOGGLE_EDITION_MODE_CLICKED = 'OrderSubmitterComponent.Event.ToggleEditionModeClicked',
@@ -48,7 +49,8 @@ export class OrderSubmitterComponent {
   @Output() orderSubmitterEvent = new EventEmitter<EventInfo>();
 
 
-  constructor(private messageBox: MessageBoxService) { }
+  constructor(private appStatus: ApplicationStatusService,
+              private messageBox: MessageBoxService) { }
 
 
   onCreateButtonClicked() {
@@ -57,11 +59,10 @@ export class OrderSubmitterComponent {
 
 
   onToggleEditionMode() {
-    if (this.editionMode) {
-      this.confirmCloseEditionMode();
-    } else {
-      this.emitToggleEditionMode();
-    }
+    this.appStatus.canUserContinue()
+      .subscribe( x =>
+        x ? sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.TOGGLE_EDITION_MODE_CLICKED) : null
+      );
   }
 
 
@@ -82,25 +83,6 @@ export class OrderSubmitterComponent {
 
   onAuthorizeButtonClicked() {
     this.confirmAuthorize();
-  }
-
-
-  private confirmCloseEditionMode() {
-    const message = `Esta operación descartará los cambios y perderá la información modificada.
-                    <br><br>¿Descarto los cambios?`;
-
-    this.messageBox.confirm(message, 'Descartar cambios')
-      .firstValue()
-      .then(x => {
-        if (x) {
-          this.emitToggleEditionMode();
-        }
-      });
-  }
-
-
-  private emitToggleEditionMode() {
-    sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.TOGGLE_EDITION_MODE_CLICKED);
   }
 
 

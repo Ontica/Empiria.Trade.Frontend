@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { ApplicationStatusService, Assertion, EventInfo } from '@app/core';
 
 import { EmptyOrder, Order, OrderDescriptor, OrderQueryType, OrderTypeConfig } from '@app/models';
 
@@ -50,6 +50,9 @@ export class OrdersListingComponent implements OnChanges {
   cardHint = 'Seleccionar los filtros';
 
 
+  constructor(private appStatus: ApplicationStatusService) { }
+
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ordersList) {
       this.setText();
@@ -58,7 +61,10 @@ export class OrdersListingComponent implements OnChanges {
 
 
   onCreateOrderClicked() {
-    sendEvent(this.ordersListingEvent, OrdersListingEventType.CREATE_ORDER);
+    this.appStatus.canUserContinue()
+      .subscribe(x =>
+        x ? sendEvent(this.ordersListingEvent, OrdersListingEventType.CREATE_ORDER) : null
+      );
   }
 
 

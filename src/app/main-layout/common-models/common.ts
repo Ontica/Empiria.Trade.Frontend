@@ -29,6 +29,7 @@ export interface AppSecurity {
   fakeLogin: boolean;
   enablePermissions: boolean;
   encriptLocalStorageData: boolean;
+  protectUserWork: boolean;
 }
 
 

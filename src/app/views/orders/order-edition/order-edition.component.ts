@@ -5,9 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, ViewChild } from '@angular/core';
 
 import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
+
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { AppStatusStateAction } from '@app/presentation/app-data/_app-data.presentation.types';
 
 import { clone, sendEvent } from '@app/shared/utils';
 
@@ -34,8 +38,6 @@ import { OrderSummaryComponent, OrderSummaryEventType } from './order-summary.co
 
 
 export enum OrderEditionEventType {
-  EDITION_MODE    = 'OrderEditionComponent.Event.EditionMode',
-  ORDER_DIRTY     = 'OrderEditionComponent.Event.OrderDirty',
   CREATE_ORDER    = 'OrderEditionComponent.Event.CreateOrder',
   UPDATE_ORDER    = 'OrderEditionComponent.Event.UpdateOrder',
   APPLY_ORDER     = 'OrderEditionComponent.Event.ApplyOrder',
@@ -47,7 +49,7 @@ export enum OrderEditionEventType {
   selector: 'emp-trade-order-edition',
   templateUrl: './order-edition.component.html',
 })
-export class OrderEditionComponent implements OnChanges {
+export class OrderEditionComponent implements OnChanges, OnDestroy {
 
   @ViewChild('orderHeader') orderHeader: OrderHeaderComponent;
 
@@ -69,15 +71,25 @@ export class OrderEditionComponent implements OnChanges {
 
   orderForEdition: Order = EmptyOrder();
 
+  subscriptionHelper: SubscriptionHelper;
 
-  constructor(private salesOrdersData: SalesOrdersDataService,
+
+  constructor(private uiLayer: PresentationLayer,
+              private salesOrdersData: SalesOrdersDataService,
               private messageBox: MessageBoxService,
-              private alertService: AlertService) { }
+              private alertService: AlertService) {
+    this.subscriptionHelper = uiLayer.createSubscriptionHelper();
+  }
 
 
   ngOnChanges() {
     this.initOrderForEdition();
     this.editionMode = !this.isSaved;
+  }
+
+
+  ngOnDestroy() {
+    this.subscriptionHelper.destroy();
   }
 
 
@@ -111,7 +123,7 @@ export class OrderEditionComponent implements OnChanges {
 
         this.isOrderDataValid = event.payload.isFormValid as boolean;
         this.validateOrderHeaderChanges(event.payload.data as OrderData);
-        this.emitOrderDirty(event.payload.isFormDirty);
+        this.setDirtyOrder(event.payload.isFormDirty);
         return;
 
       default:
@@ -156,7 +168,7 @@ export class OrderEditionComponent implements OnChanges {
         this.isOrderAdditionalDataValid = event.payload.isFormValid as boolean;
         const orderDataUpdated = { ...this.orderForEdition.orderData, ...event.payload.data as OrderData };
         this.setOrderForEdition({ ...this.orderForEdition, ...{ orderData: orderDataUpdated } });
-        this.emitOrderDirty(event.payload.isFormDirty);
+        this.setDirtyOrder(event.payload.isFormDirty);
         return;
 
       default:
@@ -222,11 +234,13 @@ export class OrderEditionComponent implements OnChanges {
 
   private toggleEditionMode() {
     this.editionMode = !this.editionMode;
-
-    sendEvent(this.orderEditionEvent, OrderEditionEventType.EDITION_MODE,
-      { editionMode: this.editionMode });
-
+    this.setIsUserWorkingStatus(this.editionMode);
     this.initOrderForEdition();
+  }
+
+
+  private setIsUserWorkingStatus(isWorking: boolean) {
+    this.uiLayer.dispatch(AppStatusStateAction.SET_IS_USER_WORKING, isWorking);
   }
 
 
@@ -362,8 +376,10 @@ export class OrderEditionComponent implements OnChanges {
   }
 
 
-  private emitOrderDirty(dirty: boolean) {
-    sendEvent(this.orderEditionEvent, OrderEditionEventType.ORDER_DIRTY, { dirty });
+  private setDirtyOrder(dirty: boolean) {
+    if (dirty) {
+      this.setIsUserWorkingStatus(dirty);
+    }
   }
 
 }

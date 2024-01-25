@@ -7,11 +7,9 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { DateStringLibrary, EventInfo } from '@app/core';
+import { ApplicationStatusService, DateStringLibrary, EventInfo } from '@app/core';
 
 import { EmptyOrder, Order, OrderQueryType, OrderTypeConfig } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { FormatLibrary, sendEvent } from '@app/shared/utils';
 
@@ -48,12 +46,8 @@ export class OrderTabbedViewComponent implements OnChanges {
 
   selectedTabIndex = 0;
 
-  editionMode = false;
 
-  orderDirty = false;
-
-
-  constructor(private messageBox: MessageBoxService) { }
+  constructor(private appStatus: ApplicationStatusService) { }
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -101,11 +95,10 @@ export class OrderTabbedViewComponent implements OnChanges {
 
 
   onClose() {
-    if (this.editionMode) {
-      this.confirmClose();
-      return;
-    }
-    this.emitCloseTabbed();
+    this.appStatus.canUserContinue()
+      .subscribe(x =>
+        x ? sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.CLOSE_BUTTON_CLICKED) : null
+      );
   }
 
 
@@ -120,14 +113,6 @@ export class OrderTabbedViewComponent implements OnChanges {
 
       case OrderEditorEventType.ORDER_CANCELED:
         sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_CANCELED, event.payload);
-        return;
-
-      case OrderEditorEventType.EDITION_MODE:
-        this.editionMode = event.payload.editionMode;
-        return;
-
-      case OrderEditorEventType.ORDER_DIRTY:
-        this.orderDirty = event.payload.dirty;
         return;
 
       default:
@@ -181,25 +166,6 @@ export class OrderTabbedViewComponent implements OnChanges {
         this.showShippingTab && !this.shippingTabEnabled) {
       this.selectedTabIndex = 0;
     }
-  }
-
-
-  private confirmClose() {
-    const message = `Esta operación descartará los cambios y perderá la información modificada.
-                    <br><br>¿Descarto los cambios?`;
-
-    this.messageBox.confirm(message, 'Descartar cambios')
-      .firstValue()
-      .then(x => {
-        if (x) {
-          this.emitCloseTabbed();
-        }
-      });
-  }
-
-
-  private emitCloseTabbed() {
-    sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.CLOSE_BUTTON_CLICKED);
   }
 
 }
