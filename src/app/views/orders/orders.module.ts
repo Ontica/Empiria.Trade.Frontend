@@ -25,9 +25,10 @@ import { OrderAdditionalDataComponent } from './order-edition/order-additional-d
 import { OrderTotalsComponent } from './order-edition/order-totals.component';
 import { OrderSubmitterComponent } from './order-edition/order-submitter.component';
 
-import { OrdersListingComponent } from './orders-listing/orders-listing.component';
-import { OrdersFilterComponent } from './orders-listing/orders-filter.component';
-import { OrdersTableComponent } from './orders-listing/orders-table.component';
+import { OrdersExplorerComponent } from './orders-explorer/orders-explorer.component';
+import { OrdersFilterComponent } from './orders-explorer/orders-filter.component';
+import { OrdersControlsComponent } from './orders-explorer/orders-controls.component';
+import { OrdersTableComponent } from './orders-explorer/orders-table.component';
 
 import { OrderCreatorComponent } from './order-creator/order-creator.component';
 import { OrderTabbedViewComponent } from './order-tabbed-view/order-tabbed-view.component';
@@ -57,8 +58,9 @@ import { OrderEditorComponent } from './order-editor/order-editor.component';
     OrderTotalsComponent,
     OrderSubmitterComponent,
 
-    OrdersListingComponent,
+    OrdersExplorerComponent,
     OrdersFilterComponent,
+    OrdersControlsComponent,
     OrdersTableComponent,
 
     OrderCreatorComponent,
@@ -67,7 +69,7 @@ import { OrderEditorComponent } from './order-editor/order-editor.component';
   ],
   exports: [
     OrderCreatorComponent,
-    OrdersListingComponent,
+    OrdersExplorerComponent,
     OrderTabbedViewComponent,
   ],
 })

@@ -7,7 +7,7 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -19,16 +19,18 @@ import { View } from '@app/main-layout';
 
 import { ArrayLibrary, clone } from '@app/shared/utils';
 
+import { MessageBoxService } from '@app/shared/containers/message-box';
+
 import { EmptyOrder, EmptyOrderQuery, Order, OrderDescriptor, OrderQuery, OrderQueryType, OrderTypeConfig,
-         mapOrderDescriptorFromOrder } from '@app/models';
+         OrdersOperationType, mapOrderDescriptorFromOrder } from '@app/models';
 
 import { SalesOrdersDataService } from '@app/data-services';
+
+import { OrdersExplorerEventType } from '@app/views/orders/orders-explorer/orders-explorer.component';
 
 import { OrderCreatorEventType } from '@app/views/orders/order-creator/order-creator.component';
 
 import { OrderTabbedViewEventType } from '@app/views/orders/order-tabbed-view/order-tabbed-view.component';
-
-import { OrdersListingEventType } from '@app/views/orders/orders-listing/orders-listing.component';
 
 
 @Component({
@@ -64,7 +66,8 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
 
   constructor(private uiLayer: PresentationLayer,
-              private salesOrdersData: SalesOrdersDataService) {
+              private salesOrdersData: SalesOrdersDataService,
+              private messageBox: MessageBoxService) {
     this.subscriptionHelper = uiLayer.createSubscriptionHelper();
   }
 
@@ -99,24 +102,30 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  onOrdersListingEvent(event: EventInfo) {
-    switch (event.type as OrdersListingEventType) {
-      case OrdersListingEventType.CREATE_ORDER:
+  onOrdersExplorerEvent(event: EventInfo) {
+    switch (event.type as OrdersExplorerEventType) {
+      case OrdersExplorerEventType.CREATE_ORDER:
         this.clearOrderSelected();
         this.displayOrderCreator = true;
         return;
 
-      case OrdersListingEventType.SEARCH_ORDERS:
+      case OrdersExplorerEventType.SEARCH_ORDERS:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
         this.query = event.payload.query as OrderQuery;
         this.clearOrderSelected();
         this.searchOrders(this.query);
         return;
 
-      case OrdersListingEventType.SELECT_ORDER:
+      case OrdersExplorerEventType.SELECT_ORDER:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
         Assertion.assertValue(event.payload.entry.uid, 'event.payload.entry.uid');
         this.getOrder(event.payload.entry.uid);
+        return;
+
+      case OrdersExplorerEventType.EXECUTE_OPERATION:
+        Assertion.assertValue(event.payload.operation, 'event.payload.operation');
+        Assertion.assertValue(event.payload.ordersUID, 'event.payload.ordersUID');
+        this.validateDataOperationToInvoke(event.payload.operation, event.payload.ordersUID);
         return;
 
       default:
@@ -202,6 +211,12 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
+  private getShippingData(operation: OrdersOperationType, ordersUID: string[]) {
+    this.messageBox.showInDevelopment(`Envio por paquetería: ${ordersUID.length} pedidos`,
+      { operation , ordersUID });
+  }
+
+
   private setOrderData(data: OrderDescriptor[]) {
     this.ordersList = data;
     this.queryExecuted = true;
@@ -244,6 +259,20 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
     this.setOrderData(ordersListNew);
     this.clearOrderSelected();
     this.setUserWorkStatusFinished();
+  }
+
+
+  private validateDataOperationToInvoke(operation: Identifiable, ordersUID: string[]) {
+    switch (operation.uid) {
+      case OrdersOperationType.selectParcelService:
+        this.getShippingData(operation.uid, ordersUID);
+        return;
+
+      default:
+        this.messageBox.showInDevelopment('Executar operación: ' + operation.name + ordersUID.length,
+          { operation, ordersUID });
+        return;
+    }
   }
 
 

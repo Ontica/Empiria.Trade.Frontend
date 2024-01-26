@@ -9,26 +9,29 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { ApplicationStatusService, Assertion, EventInfo } from '@app/core';
 
+import { sendEvent } from '@app/shared/utils';
+
 import { EmptyOrder, Order, OrderDescriptor, OrderQueryType, OrderTypeConfig } from '@app/models';
 
 import { OrdersFilterEventType } from './orders-filter.component';
 
-import { sendEvent } from '@app/shared/utils';
+import { OrdersControlsEventType } from './orders-controls.component';
 
 import { OrdersTableEventType } from './orders-table.component';
 
 
-export enum OrdersListingEventType {
-  CREATE_ORDER  = 'OrdersListingComponent.Event.CreateOrder',
-  SEARCH_ORDERS = 'OrdersListingComponent.Event.SearchOrders',
-  SELECT_ORDER  = 'OrdersListingComponent.Event.SelectOrder',
+export enum OrdersExplorerEventType {
+  CREATE_ORDER      = 'OrdersExplorerComponent.Event.CreateOrder',
+  SEARCH_ORDERS     = 'OrdersExplorerComponent.Event.SearchOrders',
+  SELECT_ORDER      = 'OrdersExplorerComponent.Event.SelectOrder',
+  EXECUTE_OPERATION = 'OrdersExplorerComponent.Event.ExecuteOperation',
 }
 
 @Component({
-  selector: 'emp-trade-orders-listing',
-  templateUrl: './orders-listing.component.html',
+  selector: 'emp-trade-orders-explorer',
+  templateUrl: './orders-explorer.component.html',
 })
-export class OrdersListingComponent implements OnChanges {
+export class OrdersExplorerComponent implements OnChanges {
 
   @Input() config: OrderTypeConfig = {
     type: OrderQueryType.Sales,
@@ -45,9 +48,11 @@ export class OrdersListingComponent implements OnChanges {
 
   @Input() queryExecuted = false;
 
-  @Output() ordersListingEvent = new EventEmitter<EventInfo>();
+  @Output() ordersExplorerEvent = new EventEmitter<EventInfo>();
 
   cardHint = 'Seleccionar los filtros';
+
+  ordersSelected: string[] = [];
 
 
   constructor(private appStatus: ApplicationStatusService) { }
@@ -56,6 +61,7 @@ export class OrdersListingComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ordersList) {
       this.setText();
+      this.resetOrderSelected();
     }
   }
 
@@ -63,7 +69,7 @@ export class OrdersListingComponent implements OnChanges {
   onCreateOrderClicked() {
     this.appStatus.canUserContinue()
       .subscribe(x =>
-        x ? sendEvent(this.ordersListingEvent, OrdersListingEventType.CREATE_ORDER) : null
+        x ? sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.CREATE_ORDER) : null
       );
   }
 
@@ -74,7 +80,7 @@ export class OrdersListingComponent implements OnChanges {
 
       case OrdersFilterEventType.SEARCH_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
-        sendEvent(this.ordersListingEvent, OrdersListingEventType.SEARCH_ORDERS, event.payload);
+        sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.SEARCH_ORDERS, event.payload);
         return;
 
       default:
@@ -86,13 +92,36 @@ export class OrdersListingComponent implements OnChanges {
   }
 
 
+  onOrdersControlsEvent(event: EventInfo) {
+    switch (event.type as OrdersControlsEventType) {
+
+      case OrdersControlsEventType.EXECUTE_OPERATION_CLICKED:
+        Assertion.assertValue(event.payload.operation, 'event.payload.operation');
+        Assertion.assertValue(event.payload.ordersUID, 'event.payload.ordersUID');
+
+        sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.EXECUTE_OPERATION, event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+
+    }
+  }
+
+
   onOrdersListEvent(event: EventInfo) {
 
     switch (event.type as OrdersTableEventType) {
 
       case OrdersTableEventType.ENTRY_CLICKED:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
-        sendEvent(this.ordersListingEvent, OrdersListingEventType.SELECT_ORDER, event.payload);
+        sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.SELECT_ORDER, event.payload);
+        return;
+
+      case OrdersTableEventType.SELECTION_CHANGED:
+        Assertion.assertValue(event.payload.ordersUID, 'event.payload.ordersUID');
+        this.ordersSelected = event.payload.ordersUID;
         return;
 
       default:
@@ -111,6 +140,11 @@ export class OrdersListingComponent implements OnChanges {
     }
 
     this.cardHint = `${this.ordersList.length} registros encontrados`;
+  }
+
+
+  private resetOrderSelected() {
+    this.ordersSelected = [];
   }
 
 }

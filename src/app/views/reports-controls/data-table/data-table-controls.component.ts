@@ -19,17 +19,6 @@ export enum DataTableControlsEventType {
 @Component({
   selector: 'emp-ng-data-table-controls',
   templateUrl: './data-table-controls.component.html',
-  styles: [`
-    .controls-container {
-      padding: 5px;
-      margin: 3px;
-    }
-
-    .controls-container-aligned {
-      padding-bottom: 5px;
-      margin-bottom: 3px;
-    }`
-  ],
 })
 export class DataTableControlsComponent {
 

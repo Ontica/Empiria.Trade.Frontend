@@ -1,0 +1,46 @@
+<mat-divider>
+
+</mat-divider>
+
+<div class="controls-container">
+
+
+  <div class="fx-row-container fx-space-between fx-items-center">
+
+    <div class="fx-item-none">
+
+      <div class="text-small-text" [style.marginRight.px]="8">
+
+        ¿Qué debo hacer con
+        <span *ngIf="ordersSelected.length === 1">el pedido?</span>
+        <span *ngIf="ordersSelected.length > 1">los {{ordersSelected.length}} pedidos?</span>
+
+      </div>
+
+    </div>
+
+    <div class="fx-item" [style.width.px]="180">
+
+      <emp-ng-select name="operation"
+        [config]="{bindByValue: false, selectFirst: true}"
+        [(ngModel)]="operationSelected"
+        [items]="operationsList">
+      </emp-ng-select>
+
+    </div>
+
+    <div class="fx-item-none">
+
+      <button class="btn" (click)="onExecuteOperationClicked()">
+        Ejecutar
+      </button>
+
+    </div>
+
+    <div class="fx-item">
+
+    </div>
+
+  </div>
+
+</div>

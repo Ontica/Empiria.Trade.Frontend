@@ -9,11 +9,21 @@
 // mat-table row formats (ItemType)
 //
 
+table.mat-mdc-table th.column-checkbox {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
 table.mat-mdc-table tr.mat-mdc-row {
   background-color: $white;
 
   .item-strikethrough {
     text-decoration: line-through;
+  }
+
+  td.mat-mdc-cell.column-checkbox {
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 
   &.item-type-summary td.mat-mdc-cell,
@@ -230,6 +240,10 @@ table.mat-mdc-table tr.mat-mdc-row.row-selected {
   td:first-of-type {
     padding-left: calc(1rem - 3px);
     border-left: 3px solid darken($grid-selected-background-color, 50%);
+
+    &.column-checkbox {
+      padding-left: calc(1rem - 7px);
+    }
   }
 
   &.Primario {
@@ -268,4 +282,16 @@ table.mat-mdc-table tr.mat-mdc-row.row-selected {
       border-left-color: darken($designer-green-color, 65%);
     }
   }
+}
+
+
+.controls-container {
+  padding: 5px;
+  margin: 3px;
+}
+
+
+.controls-container-aligned {
+  padding-bottom: 5px;
+  margin-bottom: 3px;
 }

@@ -357,3 +357,23 @@ export function mapOrderItemFromProductSelection(product: ProductSelection): Ord
 
   return productForSeeker;
 }
+
+
+export enum OrdersOperationType {
+  selectParcelService = 'select-parcel-service',
+  cancel              = 'cancel',
+  print               = 'print',
+}
+
+
+export interface OrdersOperation extends Identifiable {
+  uid: string;
+  name: string;
+}
+
+
+export const OrdersOperationList: OrdersOperation[] = [
+  { uid: OrdersOperationType.selectParcelService, name: 'Seleccionar paqueteria' },
+  { uid: OrdersOperationType.print,               name: 'Imprimir' },
+  { uid: OrdersOperationType.cancel,              name: 'Cancelar' },
+];

@@ -39,6 +39,12 @@
 
       </emp-trade-orders-filter>
 
+      <emp-trade-orders-controls class="fx-item-none" *ngIf="ordersSelected.length > 0"
+        [ordersSelected]="ordersSelected"
+        (ordersControlsEvent)="onOrdersControlsEvent($event)">
+
+      </emp-trade-orders-controls>
+
       <emp-trade-orders-table class="fx-item"
         [orderType]="config.type"
         [ordersList]="ordersList"

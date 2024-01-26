@@ -12,7 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
-import { InventoryModule } from '../inventory/inventory.module';
 import { OrdersModule } from '../orders/orders.module';
 
 import { SalesMainPageComponent } from './sales-main-page.component';
@@ -26,7 +25,6 @@ import { SalesMainPageComponent } from './sales-main-page.component';
     AngularMaterialModule,
     SharedModule,
 
-    InventoryModule,
     OrdersModule,
   ],
   declarations: [

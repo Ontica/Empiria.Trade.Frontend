@@ -8,15 +8,15 @@
     [class.std-hide]="displaySecondaryView"
     [class.hidden]="displayOrderCreator">
 
-    <emp-trade-orders-listing
+    <emp-trade-orders-explorer
       [config]="salesConfig"
       [ordersList]="ordersList"
       [orderSelected]="orderSelected"
       [isLoading]="isLoading"
       [queryExecuted]="queryExecuted"
-      (ordersListingEvent)="onOrdersListingEvent($event)">
+      (ordersExplorerEvent)="onOrdersExplorerEvent($event)">
 
-    </emp-trade-orders-listing>
+    </emp-trade-orders-explorer>
 
   </div>
 
