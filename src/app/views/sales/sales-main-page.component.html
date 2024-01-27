@@ -29,6 +29,7 @@
 
   </div>
 
+
   <div class="secondary priority" *ngIf="displaySecondaryView">
 
     <emp-trade-order-tabbed-view
@@ -41,3 +42,9 @@
   </div>
 
 </div>
+
+<emp-trade-shipping-editor-modal *ngIf="displayShippingEditor"
+  [shipping]="shippingSelected"
+  (shippingEditorModalEvent)="onShippingEditorModalEvent($event)">
+
+</emp-trade-shipping-editor-modal>

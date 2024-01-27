@@ -21,16 +21,21 @@ import { ArrayLibrary, clone } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { EmptyOrder, EmptyOrderQuery, Order, OrderDescriptor, OrderQuery, OrderQueryType, OrderTypeConfig,
-         OrdersOperationType, mapOrderDescriptorFromOrder } from '@app/models';
+import { EmptyOrder, EmptyOrderQuery, EmptyShipping, Order, OrderDescriptor, OrderQuery, OrderQueryType,
+         OrderTypeConfig, OrdersOperationType, Shipping, ShippingQuery,
+         mapOrderDescriptorFromOrder } from '@app/models';
 
-import { SalesOrdersDataService } from '@app/data-services';
+import { SalesOrdersDataService, ShippingDataService } from '@app/data-services';
 
 import { OrdersExplorerEventType } from '@app/views/orders/orders-explorer/orders-explorer.component';
 
 import { OrderCreatorEventType } from '@app/views/orders/order-creator/order-creator.component';
 
 import { OrderTabbedViewEventType } from '@app/views/orders/order-tabbed-view/order-tabbed-view.component';
+
+import {
+  ShippingEditorModalEventType
+} from '../shipping-and-handling/shipping/shipping-editor-modal/shipping-editor-modal.component';
 
 
 @Component({
@@ -52,21 +57,26 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   query: OrderQuery = EmptyOrderQuery;
 
-  ordersList: OrderDescriptor[] = [];
-
   isLoadingOrder = false;
 
+  ordersList: OrderDescriptor[] = [];
+
   orderSelected: Order = EmptyOrder();
+
+  shippingSelected: Shipping = EmptyShipping;
 
   displaySecondaryView = false;
 
   displayOrderCreator = false;
+
+  displayShippingEditor = false;
 
   subscriptionHelper: SubscriptionHelper;
 
 
   constructor(private uiLayer: PresentationLayer,
               private salesOrdersData: SalesOrdersDataService,
+              private shippingData: ShippingDataService,
               private messageBox: MessageBoxService) {
     this.subscriptionHelper = uiLayer.createSubscriptionHelper();
   }
@@ -124,8 +134,8 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
       case OrdersExplorerEventType.EXECUTE_OPERATION:
         Assertion.assertValue(event.payload.operation, 'event.payload.operation');
-        Assertion.assertValue(event.payload.ordersUID, 'event.payload.ordersUID');
-        this.validateDataOperationToInvoke(event.payload.operation, event.payload.ordersUID);
+        Assertion.assertValue(event.payload.orders, 'event.payload.orders');
+        this.validateDataOperationToInvoke(event.payload.operation, event.payload.orders);
         return;
 
       default:
@@ -150,6 +160,19 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
       case OrderTabbedViewEventType.ORDER_CANCELED:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         this.removeOrderFromList(event.payload.orderUID);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onShippingEditorModalEvent(event: EventInfo) {
+    switch (event.type as ShippingEditorModalEventType) {
+      case ShippingEditorModalEventType.CLOSE_MODAL_CLICKED:
+        this.setShippingSelected(EmptyShipping);
         return;
 
       default:
@@ -211,9 +234,19 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private getShippingData(operation: OrdersOperationType, ordersUID: string[]) {
-    this.messageBox.showInDevelopment(`Envio por paquetería: ${ordersUID.length} pedidos`,
-      { operation , ordersUID });
+  private getShippingOrderForParcelDelivery(query: ShippingQuery) {
+    this.isLoadingOrder = true;
+
+    this.shippingData.getShippingOrderForParcelDelivery(query)
+      .firstValue()
+      .then(x => this.setShippingSelected(x))
+      .finally(() => this.isLoadingOrder = false);
+  }
+
+
+  private setShippingSelected(shipping: Shipping) {
+    this.shippingSelected = shipping;
+    this.displayShippingEditor = shipping.ordersForShipping.length > 0;
   }
 
 
@@ -262,15 +295,15 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private validateDataOperationToInvoke(operation: Identifiable, ordersUID: string[]) {
+  private validateDataOperationToInvoke(operation: Identifiable, orders: string[]) {
     switch (operation.uid) {
-      case OrdersOperationType.selectParcelService:
-        this.getShippingData(operation.uid, ordersUID);
+      case OrdersOperationType.selectParcelDelivery:
+        this.getShippingOrderForParcelDelivery({ orders });
         return;
 
       default:
-        this.messageBox.showInDevelopment('Executar operación: ' + operation.name + ordersUID.length,
-          { operation, ordersUID });
+        this.messageBox.showInDevelopment('Executar operación: ' + operation.name + orders.length,
+          { operation, orders });
         return;
     }
   }

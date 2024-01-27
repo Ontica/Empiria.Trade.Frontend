@@ -25,8 +25,12 @@ import { MissingItemsTableComponent } from './packing-items-edition/missing-item
 import { MissingItemLocationComponent } from './packing-items-edition/missing-item-location.component';
 import { MissingItemsModalComponent } from './packing-view/missing-items-modal.component';
 
-import { ShippingViewComponent } from './shipping-view/shipping-view.component';
-import { ShippingEditorComponent } from './shipping-view/shipping-editor.component';
+import { OrderShippingViewerComponent } from './shipping/order-shipping-viewer/order-shipping-viewer.component';
+import { ShippingDataViewComponent } from './shipping/shipping-data/shipping-data-view.component';
+import { ShippingEditorModalComponent } from './shipping/shipping-editor-modal/shipping-editor-modal.component';
+import { ShippingOrdersResumeComponent } from './shipping/shipping-data/shipping-orders-resume.component';
+import { ShippingOrdersTableComponent } from './shipping/shipping-data/shipping-orders-table.component';
+import { ShippingPalletsTableComponent } from './shipping/shipping-data/shipping-pallets-table.component';
 
 @NgModule({
   imports: [
@@ -50,12 +54,18 @@ import { ShippingEditorComponent } from './shipping-view/shipping-editor.compone
     MissingItemsTableComponent,
     MissingItemLocationComponent,
     MissingItemsModalComponent,
-    ShippingViewComponent,
-    ShippingEditorComponent,
+
+    OrderShippingViewerComponent,
+    ShippingDataViewComponent,
+    ShippingEditorModalComponent,
+    ShippingOrdersResumeComponent,
+    ShippingOrdersTableComponent,
+    ShippingPalletsTableComponent,
   ],
   exports: [
     PackingViewComponent,
-    ShippingViewComponent,
+    OrderShippingViewerComponent,
+    ShippingEditorModalComponent,
   ],
 })
 export class ShippingAndHandlingModule { }

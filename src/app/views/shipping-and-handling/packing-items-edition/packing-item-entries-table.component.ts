@@ -72,7 +72,7 @@ export class PackingItemEntriesTableComponent implements OnChanges {
 
 
   private confirmRemoveOrderItem(packingOrderItem: PackingOrderItem) {
-    const message = `Esta operación eliminara el producto ` +
+    const message = `Esta operación eliminará el producto ` +
       `<strong>${packingOrderItem.product.productCode} - ${packingOrderItem.presentation.description}</strong> ` +
       `del paquete<br><br>¿Elimino el producto?`;
 

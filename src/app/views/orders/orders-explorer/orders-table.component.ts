@@ -111,7 +111,7 @@ export class OrdersTableComponent implements OnChanges, OnInit {
 
   private suscribeToSelectionChanges() {
     this.selection.changed.subscribe(x => {
-      const payload = { ordersUID: this.selection.selected.map(x => x.uid) };
+      const payload = { orders: this.selection.selected.map(x => x.uid) };
       sendEvent(this.ordersTableEvent, OrdersTableEventType.SELECTION_CHANGED, payload);
     });
   }

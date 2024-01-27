@@ -17,7 +17,7 @@ import { CustomerCredit, EmptyCustomerCredit } from './customer';
 
 import { EmptyPacking, Packing } from './packing';
 
-import { EmptyShipping, Shipping } from './shipping';
+import { EmptyShippingData, ShippingData } from './shipping';
 
 
 export interface OrderTypeConfig {
@@ -134,7 +134,7 @@ export interface Order {
   items: OrderItem[];
   authorization: Authorization;
   customerCredit: CustomerCredit;
-  shipping: Shipping;
+  shipping: ShippingData;
   packing: Packing;
   actions: OrderActions;
 }
@@ -294,7 +294,7 @@ export function EmptyOrder(): Order {
     items: [],
     authorization: EmptyAuthorization,
     customerCredit: EmptyCustomerCredit,
-    shipping: EmptyShipping,
+    shipping: EmptyShippingData,
     packing: EmptyPacking,
     actions: EmptyOrderActions,
   });
@@ -360,9 +360,9 @@ export function mapOrderItemFromProductSelection(product: ProductSelection): Ord
 
 
 export enum OrdersOperationType {
-  selectParcelService = 'select-parcel-service',
-  cancel              = 'cancel',
-  print               = 'print',
+  selectParcelDelivery = 'select-parcel-delivery',
+  cancel               = 'cancel',
+  print                = 'print',
 }
 
 
@@ -373,7 +373,7 @@ export interface OrdersOperation extends Identifiable {
 
 
 export const OrdersOperationList: OrdersOperation[] = [
-  { uid: OrdersOperationType.selectParcelService, name: 'Seleccionar paqueteria' },
-  { uid: OrdersOperationType.print,               name: 'Imprimir' },
-  { uid: OrdersOperationType.cancel,              name: 'Cancelar' },
+  { uid: OrdersOperationType.selectParcelDelivery, name: 'Seleccionar paqueteria' },
+  { uid: OrdersOperationType.print,                name: 'Imprimir' },
+  { uid: OrdersOperationType.cancel,               name: 'Cancelar' },
 ];

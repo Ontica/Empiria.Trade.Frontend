@@ -93,7 +93,7 @@ export class PackingItemsTableComponent implements OnChanges {
 
 
   private confirmDeletePackingItem(packingItem: PackingItem) {
-    const message = `Esta operación eliminara el paquete ` +
+    const message = `Esta operación eliminará el paquete ` +
       `<strong>${packingItem.packageID} - ${packingItem.packageTypeName}</strong><br><br>¿Elimino el paquete?`;
 
     this.messageBox.confirm(message, 'Eliminar paquete', 'DeleteCancel')

@@ -1,3 +1,5 @@
+<div class="section-title"> Datos del envío </div>
+
 <form [formGroup]="form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
   autocomplete="off" class="form-section">
 
@@ -17,7 +19,7 @@
         </emp-ng-select>
       </div>
 
-      <div class="fx-item-third">
+      <div class="fx-item">
         <label>Número de guía:</label>
         <input type="text" class="text-box"
           formControlName="shippingGuide"
@@ -29,7 +31,7 @@
         <div class="fx-item-half">
           <label>Importe de la paquetería:</label>
           <input type="text" class="text-box text-align-right" empNgCurrency
-            [empNgInputName]="'parcelAmount' + orderUID"
+            empNgInputName="parcelAmount"
             formControlName="parcelAmount"
             [class.invalid-control]="formHelper.isControlInvalid(form.controls.parcelAmount)">
         </div>
@@ -37,13 +39,20 @@
         <div class="fx-item-half">
           <label>Importe cobrado al cliente:</label>
           <input type="text" class="text-box text-align-right" empNgCurrency
-            [empNgInputName]="'customerAmount' + orderUID"
+            empNgInputName="customerAmount"
             formControlName="customerAmount"
             [class.invalid-control]="formHelper.isControlInvalid(form.controls.customerAmount)">
         </div>
 
       </div>
 
+      <div *ngIf="canEdit && form.value.customerAmount > 0"
+        class="fx-item-none fx-end fx-items-end"
+        [style.paddingBottom.px]="2">
+        <button class="btn" [style.width.px]="100">
+          Autorizar
+        </button>
+      </div>
 
     </div>
 
@@ -57,37 +66,35 @@
 
     <div class="fx-row-container">
 
-      <div class="fx-item fx-start fx-items-center" *ngIf="canSendOrder && !editionMode">
+      <div class="fx-item fx-start fx-items-center">
 
-        <button
+        <button *ngIf="canSendOrder"
           type="button" class="btn"
           (click)="onSendOrder()">
-          Enviar
+          Enviar a embarque
         </button>
 
       </div>
 
+      <div class="fx-item fx-center fx-items-center">
+          <mat-checkbox name="putOnPallets"
+            [ngModel]="putOnPallets" [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="putOnPalletsChange.emit($event)"
+            (click)="$event.stopPropagation">
+            Entarimar paquetes
+          </mat-checkbox>
+      </div>
+
       <div class="fx-item fx-end fx-items-center"*ngIf="canEdit">
 
-        <button *ngIf="!editionMode"
-          class="btn-action"
-          (click)="enableEditor(true)">
-          Editar
-        </button>
-
-        <ng-container *ngIf="editionMode">
+        <ng-container *ngIf="canEdit">
 
           <button
             [class.btn]="!formHelper.isFormReady(form)"
             [class.btn-action]="formHelper.isFormReady(form)"
+            [style.width.px]="100"
             (click)="onSubmitButtonClicked()">
             Guardar
-          </button>
-
-          <button
-            class="btn-base uppercase"
-            (click)="enableEditor(false)">
-            Descartar Cambios
           </button>
 
         </ng-container>

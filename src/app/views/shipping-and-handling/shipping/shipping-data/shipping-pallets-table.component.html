@@ -1,0 +1,75 @@
+<div class="section-title"> Tarimas </div>
+
+<div class="scrollable-container" [style.width.%]="100" [style.max-height.vh]="50">
+
+  <table mat-table [dataSource]="dataSource" class="data-centered">
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef class="column-action">
+        <button title="Agregar tarima"
+          mat-icon-button color="primary"
+          (click)="onCreateShippingPalletClicked()">
+          <mat-icon color="primary">
+            add
+          </mat-icon>
+        </button>
+      </th>
+      <td mat-cell *matCellDef="let row" class="column-action">
+        <button title="Eliminar tarima"
+          mat-icon-button
+          (click)="$event.stopPropagation(); onDeleteShippingPalletClicked(row)">
+          <mat-icon>
+            delete
+          </mat-icon>
+        </button>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ID">
+      <th mat-header-cell *matHeaderCellDef class="nowrap"> </th>
+      <td mat-cell *matCellDef="let row; let i = index" class="nowrap bold-text"> {{ i + 1 }} </td>
+      <td mat-footer-cell *matFooterCellDef class="text-align-right"> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="palletID">
+      <th mat-header-cell *matHeaderCellDef class="nowrap"> ID tarima </th>
+      <td mat-cell *matCellDef="let row" class="nowrap">
+        <a class="link-highlight bold-text" (click)="$event.stopPropagation(); onShippingPalletClicked(row)">
+
+        </a>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalPackages">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right"> Paquetes </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right"> {{ 0 }} </td>
+      <td mat-footer-cell *matFooterCellDef class="text-align-right bold-text"> 0 </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalWeight">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right"> Peso </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right"> {{ 0 | empDecimal }} </td>
+      <td mat-footer-cell *matFooterCellDef class="text-align-right bold-text"> {{0 | empDecimal}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalVolume">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right"> Volumen </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right"> {{ 0 | empDecimal }} </td>
+      <td mat-footer-cell *matFooterCellDef class="text-align-right bold-text"> {{0 | empDecimal}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="notFoundMessage">
+      <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+        No se han creado tarimas.
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="['notFoundMessage']" class="text-not-found"
+      [hidden]="hasShippingPallets"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true;"></tr>
+
+  </table>

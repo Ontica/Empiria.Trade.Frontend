@@ -13,18 +13,17 @@ import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { FormHelper, sendEvent } from '@app/shared/utils';
+
+import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { ShippingDataService } from '@app/data-services';
 
-import { EmptyShipping, Shipping, ShippingFields } from '@app/models';
+import { EmptyShippingData, ShippingData, ShippingDataFields } from '@app/models';
 
-
-export enum ShippingEditorEventType {
-  UPDATE_SHIPPING_CLICKED = 'ShippingEditorComponent.Event.UpdateShippingClicked',
-  SEND_ORDER_CLICKED      = 'ShippingEditorComponent.Event.SendOrderClicked',
+export enum ShippingDataViewEventType {
+  SAVE_SHIPPING_CLICKED = 'ShippingDataViewComponent.Event.SaveShippingClicked',
+  SEND_ORDER_CLICKED      = 'ShippingDataViewComponent.Event.SendOrderClicked',
 }
 
 interface ShippingFormModel extends FormGroup<{
@@ -35,28 +34,24 @@ interface ShippingFormModel extends FormGroup<{
 }> { }
 
 @Component({
-  selector: 'emp-trade-shipping-editor',
-  templateUrl: './shipping-editor.component.html',
+  selector: 'emp-trade-shipping-data-view',
+  templateUrl: './shipping-data-view.component.html',
 })
-export class ShippingEditorComponent implements OnChanges, OnInit, OnDestroy {
+export class ShippingDataViewComponent implements OnChanges, OnInit, OnDestroy {
 
-  @Input() orderUID: string = '';
-
-  @Input() orderNumber: string = '';
-
-  @Input() shipping: Shipping = EmptyShipping;
+  @Input() shippingData: ShippingData = EmptyShippingData;
 
   @Input() canEdit = false;
 
-  // @Input() canSendOrder = false;
+  @Input() putOnPallets: boolean = false; // put packages on pallets || palletizing packages || palletizePackages
 
-  @Output() shippingEditorEvent = new EventEmitter<EventInfo>();
+  @Output() putOnPalletsChange = new EventEmitter<boolean>();
+
+  @Output() shippingDataViewEvent = new EventEmitter<EventInfo>();
 
   form: ShippingFormModel;
 
   formHelper = FormHelper;
-
-  editionMode = false;
 
   isLoading = false;
 
@@ -66,16 +61,15 @@ export class ShippingEditorComponent implements OnChanges, OnInit, OnDestroy {
 
 
   constructor(private uiLayer: PresentationLayer,
-              private shippingData: ShippingDataService,
+              private shippingDataService: ShippingDataService,
               private messageBox: MessageBoxService) {
     this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
-    this.enableEditor(true);
   }
 
 
   ngOnChanges() {
-    this.enableEditor(false);
+    this.setFormData();
   }
 
 
@@ -90,31 +84,17 @@ export class ShippingEditorComponent implements OnChanges, OnInit, OnDestroy {
 
 
   get canSendOrder(): boolean {
-    return this.canEdit && !isEmpty(this.shipping.parcelSupplier);
-  }
-
-
-  enableEditor(enable: boolean) {
-    this.editionMode = enable;
-
-    if (!this.editionMode) {
-      this.setFormData();
-    }
-
-    const disable = !this.editionMode;
-
-    this.formHelper.setDisableForm(this.form, disable);
+    return this.canEdit && !isEmpty(this.shippingData.parcelSupplier);
   }
 
 
   onSubmitButtonClicked() {
     if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
       const payload = {
-        orderUID: this.orderUID,
-        shipping: this.getFormData(),
+        shippingData: this.getFormData(),
       };
 
-      sendEvent(this.shippingEditorEvent, ShippingEditorEventType.UPDATE_SHIPPING_CLICKED, payload);
+      sendEvent(this.shippingDataViewEvent, ShippingDataViewEventType.SAVE_SHIPPING_CLICKED, payload);
     }
   }
 
@@ -127,7 +107,7 @@ export class ShippingEditorComponent implements OnChanges, OnInit, OnDestroy {
   private loadDataList() {
     this.isLoading = true;
 
-    this.shippingData.getParcelSuppliers()
+    this.shippingDataService.getParcelSuppliers()
       .subscribe(x => {
         this.parcelSuppliersList = x;
         this.isLoading = false;
@@ -142,23 +122,25 @@ export class ShippingEditorComponent implements OnChanges, OnInit, OnDestroy {
       parcelSupplier: ['', Validators.required],
       shippingGuide: ['', Validators.required],
       parcelAmount: [null as number, Validators.required],
-      customerAmount: [null as number, Validators.required],
+      customerAmount: [null as number],
     });
   }
 
 
   private setFormData() {
     this.form.reset({
-      parcelSupplier: this.shipping.parcelSupplier.uid,
-      shippingGuide: this.shipping.shippingGuide,
-      parcelAmount: this.validateEmptyAmount(this.shipping.parcelAmount),
-      customerAmount: this.validateEmptyAmount(this.shipping.customerAmount),
+      parcelSupplier: this.shippingData.parcelSupplier.uid,
+      shippingGuide: this.shippingData.shippingGuide,
+      parcelAmount: this.validateEmptyAmount(this.shippingData.parcelAmount),
+      customerAmount: this.validateEmptyAmount(this.shippingData.customerAmount),
     });
+
+    this.formHelper.setDisableForm(this.form, !this.canEdit);
   }
 
 
   private validateEmptyAmount(amount: number): number {
-    if (isEmpty(this.shipping.parcelSupplier) && !amount) {
+    if (isEmpty(this.shippingData.parcelSupplier) && !amount) {
       return null;
     }
 
@@ -166,14 +148,13 @@ export class ShippingEditorComponent implements OnChanges, OnInit, OnDestroy {
   }
 
 
-  private getFormData(): ShippingFields {
+  private getFormData(): ShippingDataFields {
     Assertion.assert(this.form.valid,
       'Programming error: form must be validated before command execution.');
 
     const formModel = this.form.getRawValue();
 
-    const data: ShippingFields = {
-      orderUID: this.orderUID,
+    const data: ShippingDataFields = {
       parcelSupplierUID: formModel.parcelSupplier ?? '',
       shippingGuide: formModel.shippingGuide ?? '',
       parcelAmount: formModel.parcelAmount ?? null,
@@ -185,14 +166,14 @@ export class ShippingEditorComponent implements OnChanges, OnInit, OnDestroy {
 
 
   private confirmSendOrder() {
-    const message = `Esta operación enviará el pedido <strong> ${this.orderNumber} </strong> ` +
-      `con la paquetería <strong> ${this.shipping.parcelSupplier.name} </strong>. <br><br>¿Envío el pedido?`;
+    const message = `Esta operación pasará a embarque los pedidos seleccionados para su envío con la ` +
+      `paquetería <strong> ${this.shippingData.parcelSupplier.name} </strong>. <br><br>¿Envío el pedido?`;
 
-    this.messageBox.confirm(message, 'Enviar pedido')
+    this.messageBox.confirm(message, 'Enviar a embarque')
       .firstValue()
       .then(x => {
         if (x) {
-          sendEvent(this.shippingEditorEvent, ShippingEditorEventType.SEND_ORDER_CLICKED);
+          sendEvent(this.shippingDataViewEvent, ShippingDataViewEventType.SEND_ORDER_CLICKED);
         }
       });
   }

@@ -13,6 +13,7 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { OrdersModule } from '../orders/orders.module';
+import { ShippingAndHandlingModule } from '../shipping-and-handling/shipping-and-handling.module';
 
 import { SalesMainPageComponent } from './sales-main-page.component';
 
@@ -26,6 +27,7 @@ import { SalesMainPageComponent } from './sales-main-page.component';
     SharedModule,
 
     OrdersModule,
+    ShippingAndHandlingModule,
   ],
   declarations: [
     SalesMainPageComponent,

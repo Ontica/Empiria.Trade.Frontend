@@ -97,7 +97,7 @@ export class OrdersExplorerComponent implements OnChanges {
 
       case OrdersControlsEventType.EXECUTE_OPERATION_CLICKED:
         Assertion.assertValue(event.payload.operation, 'event.payload.operation');
-        Assertion.assertValue(event.payload.ordersUID, 'event.payload.ordersUID');
+        Assertion.assertValue(event.payload.orders, 'event.payload.orders');
 
         sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.EXECUTE_OPERATION, event.payload);
         return;
@@ -120,8 +120,8 @@ export class OrdersExplorerComponent implements OnChanges {
         return;
 
       case OrdersTableEventType.SELECTION_CHANGED:
-        Assertion.assertValue(event.payload.ordersUID, 'event.payload.ordersUID');
-        this.ordersSelected = event.payload.ordersUID;
+        Assertion.assertValue(event.payload.orders, 'event.payload.orders');
+        this.ordersSelected = event.payload.orders;
         return;
 
       default:

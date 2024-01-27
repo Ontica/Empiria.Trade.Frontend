@@ -46,7 +46,7 @@ export class OrdersControlsComponent {
     if (this.operationValid) {
       const payload = {
         operation: this.operationSelected,
-        ordersUID: this.ordersSelected,
+        orders: this.ordersSelected,
       };
 
       sendEvent(this.ordersControlsEvent, OrdersControlsEventType.EXECUTE_OPERATION_CLICKED, payload);

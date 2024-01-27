@@ -162,7 +162,7 @@ $tag-default-color: hsl(207, 91%, 40%) !default;
 // grid
 //
 $grid-header-background-color: hsl(240, 1%, 94%) !default;
-$grid-footer-background-color: hsl(240, 1%, 94%);
+$grid-footer-background-color: $disabled-color;
 $grid-border: 0;
 $grid-even-background-color: $white;
 $grid-odd-background-color: hsl(240, 1%, 96%) !default;

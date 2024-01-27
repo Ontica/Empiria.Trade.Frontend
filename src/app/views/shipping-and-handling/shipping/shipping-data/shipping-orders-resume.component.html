@@ -1,0 +1,15 @@
+<div class="fx-row-container fx-space-between fx-items-center info-container" [style.margin-right.px]="8">
+
+  <div class="fx-row-container md-fx-column-container fx-item fx-space-between">
+    <div class="fx-item-none"><strong>No. pedidos:</strong>&nbsp; {{ shipping.shippingData.ordersCount }} &nbsp; &nbsp;</div>
+    <div class="fx-item-none"><strong>Importe:</strong>&nbsp; {{ shipping.shippingData.ordersTotal | empDecimal}} &nbsp; &nbsp;</div>
+    <div class="fx-item-none"><strong>Paquetes:</strong>&nbsp; {{ shipping.shippingData.totalPackages }} &nbsp; &nbsp;</div>
+    <div class="fx-item-none"><strong>Peso:</strong>&nbsp; {{ shipping.shippingData.totalWeight | empDecimal}} &nbsp; &nbsp;</div>
+    <div class="fx-item-none"><strong>Volumen:</strong>&nbsp; {{ shipping.shippingData.totalVolume | empDecimal }} &nbsp; &nbsp; &nbsp; &nbsp;</div>
+  </div>
+
+  <button class="btn">
+    Ver pedidos
+  </button>
+
+</div>
