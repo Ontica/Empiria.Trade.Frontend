@@ -14,16 +14,16 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { ProductsModule } from '../products/products.module';
 
-import { PackingViewComponent } from './packing-view/packing-view.component';
-import { PackingStatusComponent } from './packing-view/packing-status.component';
-import { PackingItemsTableComponent } from './packing-view/packing-items-table.component';
+import { PackingViewComponent } from './packing/packing-view/packing-view.component';
+import { PackingStatusComponent } from './packing/packing-view/packing-status.component';
+import { PackingItemsTableComponent } from './packing/packing-view/packing-items-table.component';
 
-import { PackingItemEditorComponent } from './packing-items-edition/packing-item-editor.component';
-import { PackingItemEntriesEditorComponent } from './packing-items-edition/packing-item-entries-editor.component';
-import { PackingItemEntriesTableComponent } from './packing-items-edition/packing-item-entries-table.component';
-import { MissingItemsTableComponent } from './packing-items-edition/missing-items-table.component';
-import { MissingItemLocationComponent } from './packing-items-edition/missing-item-location.component';
-import { MissingItemsModalComponent } from './packing-view/missing-items-modal.component';
+import { PackingItemEditorComponent } from './packing/packing-items-edition/packing-item-editor.component';
+import { PackingItemEntriesEditorComponent } from './packing/packing-items-edition/packing-item-entries-editor.component';
+import { PackingItemEntriesTableComponent } from './packing/packing-items-edition/packing-item-entries-table.component';
+import { MissingItemsTableComponent } from './packing/packing-items-edition/missing-items-table.component';
+import { MissingItemLocationComponent } from './packing/packing-items-edition/missing-item-location.component';
+import { MissingItemsModalComponent } from './packing/packing-view/missing-items-modal.component';
 
 import { OrderShippingViewerComponent } from './shipping/order-shipping-viewer/order-shipping-viewer.component';
 import { ShippingDataViewComponent } from './shipping/shipping-data/shipping-data-view.component';

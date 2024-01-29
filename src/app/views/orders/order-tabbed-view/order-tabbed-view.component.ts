@@ -13,10 +13,11 @@ import { EmptyOrder, Order, OrderQueryType, OrderTypeConfig } from '@app/models'
 
 import { FormatLibrary, sendEvent } from '@app/shared/utils';
 
+import {
+  PackingViewEventType
+} from '@app/views/shipping-and-handling/packing/packing-view/packing-view.component';
+
 import { OrderEditorEventType } from '../order-editor/order-editor.component';
-
-import { PackingViewEventType } from '@app/views/shipping-and-handling/packing-view/packing-view.component';
-
 
 export enum OrderTabbedViewEventType {
   CLOSE_BUTTON_CLICKED   = 'OrderTabbedViewComponent.Event.CloseButtonClicked',

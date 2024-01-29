@@ -37,7 +37,7 @@
       {{packingItemsCount > 0 ? 'Se han surtido todos los productos.' : 'La orden no tiene productos asignados.'}}
 
       <button class="btn"
-        *ngIf="canEdit && packingItemsCount > 0"
+        *ngIf="canClose"
         (click)="onSendPackingClicked()">
         Cerrar Surtido
       </button>

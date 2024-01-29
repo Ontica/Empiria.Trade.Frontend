@@ -44,6 +44,8 @@ export class PackingViewComponent {
 
   @Input() canEdit: boolean = false;
 
+  @Input() canClose: boolean = false;
+
   @Output() packingViewEvent = new EventEmitter<EventInfo>();
 
   displayPackingItemEditor = false;

@@ -30,6 +30,8 @@ export class PackingStatusComponent {
 
   @Input() canEdit = false;
 
+  @Input() canClose = false;
+
   @Input() isLoading = false;
 
   @Input() hasError = false;
