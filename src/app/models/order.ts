@@ -31,11 +31,19 @@ export interface OrderTypeConfig {
 export const DefaultOrderStatus: string = 'Captured';
 
 
+export enum ShippingMethodTypes {
+  RutaLocal   = 'RutaLocal',
+  RutaForanea = 'RutaForanea',
+  Ocurre      = 'Ocurre',
+  Paqueteria  = 'Paqueteria',
+}
+
+
 export const ShippingMethodList: Identifiable[] = [
-  { uid: 'RutaLocal', name: 'Ruta local' },
-  { uid: 'RutaForanea', name: 'Ruta foránea' },
-  { uid: 'Ocurre', name: 'Ocurre' },
-  { uid: 'Paqueteria', name: 'Paquetería' },
+  { uid: ShippingMethodTypes.RutaLocal, name: 'Ruta local' },
+  { uid: ShippingMethodTypes.RutaForanea, name: 'Ruta foránea' },
+  { uid: ShippingMethodTypes.Ocurre, name: 'Ocurre' },
+  { uid: ShippingMethodTypes.Paqueteria, name: 'Paquetería' },
 ];
 
 
@@ -379,9 +387,9 @@ export function mapOrderItemFromProductSelection(product: ProductSelection): Ord
 
 
 export enum OrdersOperationType {
-  selectParcelDelivery = 'select-parcel-delivery',
-  cancel               = 'cancel',
-  print                = 'print',
+  shipping = 'shipping',
+  cancel   = 'cancel',
+  print    = 'print',
 }
 
 
@@ -392,7 +400,7 @@ export interface OrdersOperation extends Identifiable {
 
 
 export const OrdersOperationList: OrdersOperation[] = [
-  { uid: OrdersOperationType.selectParcelDelivery, name: 'Seleccionar paqueteria' },
-  { uid: OrdersOperationType.print,                name: 'Imprimir' },
-  { uid: OrdersOperationType.cancel,               name: 'Cancelar' },
+  { uid: OrdersOperationType.shipping, name: 'Envío' },
+  { uid: OrdersOperationType.print,    name: 'Imprimir' },
+  { uid: OrdersOperationType.cancel,   name: 'Cancelar' },
 ];

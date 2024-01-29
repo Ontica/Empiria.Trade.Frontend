@@ -25,7 +25,7 @@ export class ShippingDataService {
   }
 
 
-  getShippingOrderForParcelDelivery(query: ShippingQuery): EmpObservable<Shipping> {
+  getShippingByOrders(query: ShippingQuery): EmpObservable<Shipping> {
     const path = 'v4/trade/sales/shipping/parcel-delivery';
 
     return this.http.post<Shipping>(path, query);

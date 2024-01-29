@@ -203,7 +203,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
         return;
 
       default:
-        break;
+        return;
     }
   }
 
@@ -234,10 +234,10 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private getShippingOrderForParcelDelivery(query: ShippingQuery) {
+  private getShippingByOrders(query: ShippingQuery) {
     this.isLoadingOrder = true;
 
-    this.shippingData.getShippingOrderForParcelDelivery(query)
+    this.shippingData.getShippingByOrders(query)
       .firstValue()
       .then(x => this.setShippingSelected(x))
       .finally(() => this.isLoadingOrder = false);
@@ -297,8 +297,8 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   private validateDataOperationToInvoke(operation: Identifiable, orders: string[]) {
     switch (operation.uid) {
-      case OrdersOperationType.selectParcelDelivery:
-        this.getShippingOrderForParcelDelivery({ orders });
+      case OrdersOperationType.shipping:
+        this.getShippingByOrders({ orders });
         return;
 
       default:

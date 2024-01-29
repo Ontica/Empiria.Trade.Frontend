@@ -1,0 +1,20 @@
+<emp-ng-modal-window [config]="{width:'850px'}">
+
+  <emp-ng-card
+    title="Pedidos en el envío"
+    hint="Informacion de los pedidos contenidos en el envío"
+    (cardClose)="onClose()">
+
+    <div class="card-body-without-top">
+
+      <emp-trade-shipping-orders-table
+        [shipping]="shipping"
+        [showTitle]="false">
+
+      </emp-trade-shipping-orders-table>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

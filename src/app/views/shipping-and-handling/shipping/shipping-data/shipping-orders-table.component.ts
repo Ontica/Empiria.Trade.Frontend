@@ -19,6 +19,8 @@ export class ShippingOrdersTableComponent implements OnChanges {
 
   @Input() shipping: Shipping = EmptyShipping;
 
+  @Input() showTitle: boolean = true;
+
   displayedColumns: string[] = ['ID', 'orderName', 'orderTotal', 'totalPackages', 'totalWeight', 'totalVolume' ];
 
   dataSource: MatTableDataSource<OrderForShipping>;

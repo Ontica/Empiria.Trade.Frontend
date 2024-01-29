@@ -8,7 +8,8 @@
     <div class="fx-item-none"><strong>Volumen:</strong>&nbsp; {{ shipping.shippingData.totalVolume | empDecimal }} &nbsp; &nbsp; &nbsp; &nbsp;</div>
   </div>
 
-  <button class="btn">
+  <button class="btn"
+    (click)="onShowDetailClicked()">
     Ver pedidos
   </button>
 

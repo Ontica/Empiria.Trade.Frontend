@@ -7,8 +7,11 @@
 
 import { DateString, Empty, Identifiable } from '@app/core';
 
+import { ShippingMethodTypes } from './order';
+
 
 export interface ShippingQuery {
+  shippingType?: ShippingMethodTypes;
   orders: string[];
 }
 

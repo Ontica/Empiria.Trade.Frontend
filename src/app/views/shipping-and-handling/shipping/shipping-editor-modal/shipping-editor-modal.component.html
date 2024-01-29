@@ -8,7 +8,8 @@
     <div class="card-body-padding">
 
       <emp-trade-shipping-orders-resume *ngIf="putOnPallets"
-        [shipping]="shipping">
+        [shipping]="shipping"
+        (shippingOrdersResumeEvent)="onShippingOrdersResumeEvent($event)">
 
       </emp-trade-shipping-orders-resume>
 
@@ -39,3 +40,10 @@
   </emp-ng-card>
 
 </emp-ng-modal-window>
+
+
+<emp-trade-shipping-orders-modal *ngIf="displayShippingOrdersModal"
+  [shipping]="shipping"
+  (shippingOrdersModalEvent)="onShippingOrdersModalEvent($event)">
+
+</emp-trade-shipping-orders-modal>

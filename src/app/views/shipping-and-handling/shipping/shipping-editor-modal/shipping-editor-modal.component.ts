@@ -17,6 +17,10 @@ import { Shipping, EmptyShipping } from '@app/models';
 
 import { ShippingDataViewEventType } from '../shipping-data/shipping-data-view.component';
 
+import { ShippingOrdersResumeEventType } from '../shipping-data/shipping-orders-resume.component';
+
+import { ShippingOrdersModalEventType } from '../shipping-data/shipping-orders-modal.component';
+
 export enum ShippingEditorModalEventType {
   CLOSE_MODAL_CLICKED = 'ShippingEditorModalComponent.Event.CloseModalClicked',
 }
@@ -36,6 +40,8 @@ export class ShippingEditorModalComponent implements OnChanges {
   hintText = 'Información del envío.';
 
   putOnPallets: boolean = false;
+
+  displayShippingOrdersModal = false;
 
 
   constructor(private messageBox: MessageBoxService) { }
@@ -61,6 +67,21 @@ export class ShippingEditorModalComponent implements OnChanges {
   }
 
 
+  onShippingOrdersResumeEvent(event: EventInfo) {
+    switch (event.type as ShippingOrdersResumeEventType) {
+
+      case ShippingOrdersResumeEventType.SHOW_DETAIL_CLICKED:
+        this.displayShippingOrdersModal = true;
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+
+  }
+
+
   onShippingDataViewEvent(event: EventInfo) {
     switch (event.type as ShippingDataViewEventType) {
 
@@ -74,6 +95,19 @@ export class ShippingEditorModalComponent implements OnChanges {
 
       case ShippingDataViewEventType.SEND_ORDER_CLICKED:
         this.messageBox.showInDevelopment('Enviar a embarque', event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onShippingOrdersModalEvent(event: EventInfo) {
+    switch (event.type as ShippingOrdersModalEventType) {
+      case ShippingOrdersModalEventType.CLOSE_MODAL_CLICKED:
+        this.displayShippingOrdersModal = false;
         return;
 
       default:
