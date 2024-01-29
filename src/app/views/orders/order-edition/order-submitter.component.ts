@@ -87,7 +87,7 @@ export class OrderSubmitterComponent {
 
 
   private confirmCancel() {
-    const message = `Esta operación eliminara el pedido <strong> ${this.order.orderData.orderNumber} </strong>
+    const message = `Esta operación eliminará el pedido <strong> ${this.order.orderData.orderNumber} </strong>
                     <br><br>¿Elimino el pedido?`;
     this.messageBox.confirm(message, 'Eliminar pedido', 'DeleteCancel')
       .firstValue()

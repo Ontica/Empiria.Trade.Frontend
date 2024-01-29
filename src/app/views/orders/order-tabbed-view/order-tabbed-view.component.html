@@ -5,7 +5,7 @@
 
   <mat-tab-group mat-stretch-tabs="false" [(selectedIndex)]="selectedTabIndex" >
 
-    <mat-tab label="Pedido" *ngIf="showOrderTab">
+    <mat-tab label="Pedido" *ngIf="order.actions.show.orderData">
 
       <emp-trade-order-editor
         [order]="order"
@@ -15,7 +15,7 @@
 
     </mat-tab>
 
-    <mat-tab label="Crédito" *ngIf="showCreditTab">
+    <mat-tab label="Crédito" *ngIf="order.actions.show.creditData">
 
       <emp-trade-customer-credit-view
         [customer]="order.orderData.customer"
@@ -25,27 +25,27 @@
 
     </mat-tab>
 
-    <mat-tab label="Surtido" *ngIf="showPackingTab">
+    <mat-tab label="Surtido" *ngIf="order.actions.show.packingData">
 
       <emp-trade-packing-view
         [orderUID]="order.orderData.uid"
         [packing]="order.packing"
-        [canEdit]="canPacking"
+        [canEdit]="order.actions.can.editPacking"
+        [canClose]="order.actions.can.closePacking"
         (packingViewEvent)="onPackingViewEvent($event)">
 
       </emp-trade-packing-view>
 
     </mat-tab>
 
-    <mat-tab label="Envío" *ngIf="showShippingTab" [disabled]="!shippingTabEnabled">
+    <mat-tab label="Envío" *ngIf="showShippingTab" [disabled]="!order.actions.show.shippingData">
 
-      <emp-trade-shipping-view *ngIf="shippingTabEnabled"
+      <emp-trade-order-shipping-viewer *ngIf="order.actions.show.shippingData"
         [orderUID]="order.orderData.uid"
         [orderNumber]="order.orderData.orderNumber"
-        [shipping]="order.shipping"
-        [canEdit]="false">
+        [shippingData]="order.shipping">
 
-      </emp-trade-shipping-view>
+      </emp-trade-order-shipping-viewer>
 
     </mat-tab>
 

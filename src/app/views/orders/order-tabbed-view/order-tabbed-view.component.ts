@@ -60,38 +60,8 @@ export class OrderTabbedViewComponent implements OnChanges {
   }
 
 
-  get showOrderTab(): boolean {
-    return this.config.type === OrderQueryType.Sales || this.config.type === OrderQueryType.SalesAuthorization;
-  }
-
-
-  get showCreditTab(): boolean {
-    return this.config.type === OrderQueryType.SalesAuthorization;
-  }
-
-
-  get showPackingTab(): boolean {
-    return this.config.type === OrderQueryType.SalesPacking;
-  }
-
-
   get showShippingTab(): boolean {
-    return this.config.type === OrderQueryType.Sales;
-  }
-
-
-  get shippingTabEnabled(): boolean {
-    return ['CarrierSelector', 'Delivery'].includes(this.order.orderData.status);
-  }
-
-
-  get canPacking(): boolean {
-    return this.order.orderData.status === 'Packing';
-  }
-
-
-  get canShipping(): boolean {
-    return this.order.orderData.status === 'CarrierSelector';
+    return this.config.type === OrderQueryType.Sales && this.order.actions.show.orderData;
   }
 
 
@@ -163,8 +133,7 @@ export class OrderTabbedViewComponent implements OnChanges {
 
 
   private validateSelectedTabIndex() {
-    if (this.selectedTabIndex === 1 && this.showOrderTab && !this.showCreditTab &&
-        this.showShippingTab && !this.shippingTabEnabled) {
+    if (this.selectedTabIndex === 1 && this.showShippingTab && !this.order.actions.show.shippingData) {
       this.selectedTabIndex = 0;
     }
   }

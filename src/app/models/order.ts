@@ -141,25 +141,44 @@ export interface Order {
 
 
 export interface OrderActions {
-  canEdit: boolean;
-  canApply: boolean;
-  canAuthorize: boolean;
-  canPackaging: boolean;
-  canSelectCarrier: boolean;
-  canShipping: boolean;
-  canClose: boolean;
+  can: {
+    update: boolean;
+    cancel: boolean;
+    apply: boolean;
+    authorize: boolean;
+    editPacking: boolean;
+    closePacking: boolean;
+    editShipping: boolean;
+    sendShipping: boolean;
+  };
+  show: {
+    orderData: boolean;
+    creditData: boolean;
+    packingData: boolean;
+    shippingData: boolean;
+    sendShippingData: boolean;
+  };
 }
 
 
 export const EmptyOrderActions: OrderActions = {
-  canEdit: false,
-  canApply: false,
-
-  canAuthorize: false,
-  canPackaging: false,
-  canSelectCarrier: false,
-  canShipping: false,
-  canClose: false,
+  can: {
+    update: false,
+    cancel: false,
+    apply: false,
+    authorize: false,
+    editPacking: false,
+    closePacking: false,
+    editShipping: false,
+    sendShipping: false,
+  },
+  show: {
+    orderData: false,
+    creditData: false,
+    packingData: false,
+    shippingData: false,
+    sendShippingData: false,
+  },
 };
 
 
