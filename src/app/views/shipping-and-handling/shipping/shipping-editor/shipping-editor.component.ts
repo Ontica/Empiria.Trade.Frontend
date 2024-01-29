@@ -13,7 +13,9 @@ import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { Shipping, EmptyShipping } from '@app/models';
+import { ShippingDataService } from '@app/data-services';
+
+import { Shipping, EmptyShipping, ShippingQuery } from '@app/models';
 
 import { ShippingDataViewEventType } from '../shipping-data/shipping-data-view.component';
 
@@ -21,19 +23,21 @@ import { ShippingOrdersResumeEventType } from '../shipping-data/shipping-orders-
 
 import { ShippingOrdersModalEventType } from '../shipping-data/shipping-orders-modal.component';
 
-export enum ShippingEditorModalEventType {
-  CLOSE_MODAL_CLICKED = 'ShippingEditorModalComponent.Event.CloseModalClicked',
+export enum ShippingEditorEventType {
+  CLOSE_BUTTON_CLICKED = 'ShippingEditorComponent.Event.CloseButtonClicked',
 }
 
 @Component({
-  selector: 'emp-trade-shipping-editor-modal',
-  templateUrl: './shipping-editor-modal.component.html',
+  selector: 'emp-trade-shipping-editor',
+  templateUrl: './shipping-editor.component.html',
 })
-export class ShippingEditorModalComponent implements OnChanges {
+export class ShippingEditorComponent implements OnChanges {
 
-  @Input() shipping: Shipping = EmptyShipping;
+  @Input() orders: string[] = [];
 
-  @Output() shippingEditorModalEvent = new EventEmitter<EventInfo>();
+  @Output() shippingEditorEvent = new EventEmitter<EventInfo>();
+
+  isLoading = false;
 
   titleText = 'Editor de envío por paquetería';
 
@@ -41,14 +45,17 @@ export class ShippingEditorModalComponent implements OnChanges {
 
   putOnPallets: boolean = false;
 
+  shipping: Shipping = EmptyShipping;
+
   displayShippingOrdersModal = false;
 
 
-  constructor(private messageBox: MessageBoxService) { }
+  constructor(private shippingData: ShippingDataService,
+              private messageBox: MessageBoxService) { }
 
 
   ngOnChanges() {
-    this.setTexts();
+    this.loadInitData();
   }
 
 
@@ -63,7 +70,7 @@ export class ShippingEditorModalComponent implements OnChanges {
 
 
   onClose() {
-    sendEvent(this.shippingEditorModalEvent, ShippingEditorModalEventType.CLOSE_MODAL_CLICKED);
+    sendEvent(this.shippingEditorEvent, ShippingEditorEventType.CLOSE_BUTTON_CLICKED);
   }
 
 
@@ -114,6 +121,39 @@ export class ShippingEditorModalComponent implements OnChanges {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private loadInitData() {
+    if (this.orders.length > 0) {
+      const query: ShippingQuery = {orders: this.orders};
+      this.getShippingByOrders(query);
+    } else {
+      this.messageBox.showError('No se han proporcionado datos validos.');
+      this.resolveShippingError();
+    }
+  }
+
+
+  private resolveShippingError() {
+    this.onClose();
+  }
+
+
+  private getShippingByOrders(query: ShippingQuery) {
+    this.isLoading = true;
+
+    this.shippingData.getShippingByOrders(query)
+      .firstValue()
+      .then(x => this.setShipping(x))
+      .catch(x => this.resolveShippingError())
+      .finally(() => this.isLoading = false);
+  }
+
+
+  private setShipping(shipping: Shipping) {
+    this.shipping = shipping;
+    this.setTexts();
   }
 
 

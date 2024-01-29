@@ -27,7 +27,7 @@ import { MissingItemsModalComponent } from './packing/packing-view/missing-items
 
 import { OrderShippingViewerComponent } from './shipping/order-shipping-viewer/order-shipping-viewer.component';
 import { ShippingDataViewComponent } from './shipping/shipping-data/shipping-data-view.component';
-import { ShippingEditorModalComponent } from './shipping/shipping-editor-modal/shipping-editor-modal.component';
+import { ShippingEditorComponent } from './shipping/shipping-editor/shipping-editor.component';
 import { ShippingOrdersResumeComponent } from './shipping/shipping-data/shipping-orders-resume.component';
 import { ShippingOrdersTableComponent } from './shipping/shipping-data/shipping-orders-table.component';
 import { ShippingPalletsTableComponent } from './shipping/shipping-data/shipping-pallets-table.component';
@@ -58,7 +58,7 @@ import { ShippingOrdersModalComponent } from './shipping/shipping-data/shipping-
 
     OrderShippingViewerComponent,
     ShippingDataViewComponent,
-    ShippingEditorModalComponent,
+    ShippingEditorComponent,
     ShippingOrdersResumeComponent,
     ShippingOrdersTableComponent,
     ShippingPalletsTableComponent,
@@ -67,7 +67,7 @@ import { ShippingOrdersModalComponent } from './shipping/shipping-data/shipping-
   exports: [
     PackingViewComponent,
     OrderShippingViewerComponent,
-    ShippingEditorModalComponent,
+    ShippingEditorComponent,
   ],
 })
 export class ShippingAndHandlingModule { }

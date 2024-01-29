@@ -1,0 +1,49 @@
+<emp-ng-card
+  [title]="titleText"
+  [hint]="hintText"
+  (cardClose)="onClose()">
+
+  <div class="card-body-padding" [empNgSpinnerHost]="spinner">
+
+    <emp-ng-spinner #spinner [visible]="isLoading">
+
+    </emp-ng-spinner>
+
+    <emp-trade-shipping-orders-resume *ngIf="putOnPallets"
+      [shipping]="shipping"
+      (shippingOrdersResumeEvent)="onShippingOrdersResumeEvent($event)">
+
+    </emp-trade-shipping-orders-resume>
+
+
+    <emp-trade-shipping-data-view
+      [shippingData]="shipping.shippingData"
+      [canEdit]="true"
+      [(putOnPallets)]="putOnPallets"
+      (shippingDataViewEvent)="onShippingDataViewEvent($event)">
+
+    </emp-trade-shipping-data-view>
+
+
+    <emp-trade-shipping-orders-table *ngIf="!putOnPallets"
+      [shipping]="shipping">
+
+    </emp-trade-shipping-orders-table>
+
+
+    <emp-trade-shipping-pallets-table *ngIf="putOnPallets"
+      [shippingPallets]="shipping.shippingPallets ?? []"
+      [canEdit]="true">
+
+    </emp-trade-shipping-pallets-table>
+
+  </div>
+
+</emp-ng-card>
+
+
+<emp-trade-shipping-orders-modal *ngIf="displayShippingOrdersModal"
+  [shipping]="shipping"
+  (shippingOrdersModalEvent)="onShippingOrdersModalEvent($event)">
+
+</emp-trade-shipping-orders-modal>

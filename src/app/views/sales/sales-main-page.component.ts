@@ -7,7 +7,7 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Assertion, EventInfo, Identifiable } from '@app/core';
+import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -21,11 +21,10 @@ import { ArrayLibrary, clone } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { EmptyOrder, EmptyOrderQuery, EmptyShipping, Order, OrderDescriptor, OrderQuery, OrderQueryType,
-         OrderTypeConfig, OrdersOperationType, Shipping, ShippingQuery,
-         mapOrderDescriptorFromOrder } from '@app/models';
+import { EmptyOrder, EmptyOrderQuery, Order, OrderDescriptor, OrderQuery, OrderQueryType,
+         OrderTypeConfig, OrdersOperationType, mapOrderDescriptorFromOrder } from '@app/models';
 
-import { SalesOrdersDataService, ShippingDataService } from '@app/data-services';
+import { SalesOrdersDataService } from '@app/data-services';
 
 import { OrdersExplorerEventType } from '@app/views/orders/orders-explorer/orders-explorer.component';
 
@@ -34,9 +33,14 @@ import { OrderCreatorEventType } from '@app/views/orders/order-creator/order-cre
 import { OrderTabbedViewEventType } from '@app/views/orders/order-tabbed-view/order-tabbed-view.component';
 
 import {
-  ShippingEditorModalEventType
-} from '../shipping-and-handling/shipping/shipping-editor-modal/shipping-editor-modal.component';
+  ShippingEditorEventType
+} from '../shipping-and-handling/shipping/shipping-editor/shipping-editor.component';
 
+
+interface OrderOperationCommand {
+  operation: Identifiable;
+  orders: string[];
+}
 
 @Component({
   selector: 'emp-trade-sales-main-page',
@@ -63,7 +67,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   orderSelected: Order = EmptyOrder();
 
-  shippingSelected: Shipping = EmptyShipping;
+  operationCommandSeleted: OrderOperationCommand = { orders: [], operation: null }
 
   displaySecondaryView = false;
 
@@ -76,7 +80,6 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   constructor(private uiLayer: PresentationLayer,
               private salesOrdersData: SalesOrdersDataService,
-              private shippingData: ShippingDataService,
               private messageBox: MessageBoxService) {
     this.subscriptionHelper = uiLayer.createSubscriptionHelper();
   }
@@ -169,10 +172,10 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  onShippingEditorModalEvent(event: EventInfo) {
-    switch (event.type as ShippingEditorModalEventType) {
-      case ShippingEditorModalEventType.CLOSE_MODAL_CLICKED:
-        this.setShippingSelected(EmptyShipping);
+  onShippingEditorEvent(event: EventInfo) {
+    switch (event.type as ShippingEditorEventType) {
+      case ShippingEditorEventType.CLOSE_BUTTON_CLICKED:
+        this.clearOperationCommandSelected();
         return;
 
       default:
@@ -234,29 +237,10 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private getShippingByOrders(query: ShippingQuery) {
-    this.isLoadingOrder = true;
-
-    this.shippingData.getShippingByOrders(query)
-      .firstValue()
-      .then(x => this.setShippingSelected(x))
-      .finally(() => this.isLoadingOrder = false);
-  }
-
-
-  private setShippingSelected(shipping: Shipping) {
-    this.shippingSelected = shipping;
-    this.displayShippingEditor = shipping.ordersForShipping.length > 0;
-  }
-
-
   private setOrderData(data: OrderDescriptor[]) {
     this.ordersList = data;
     this.queryExecuted = true;
-
-    if (!this.ordersList.some(x => x.uid === this.orderSelected.orderData.uid)) {
-      this.clearOrderSelected();
-    }
+    this.clearOperationCommandSelected();
   }
 
 
@@ -298,7 +282,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   private validateDataOperationToInvoke(operation: Identifiable, orders: string[]) {
     switch (operation.uid) {
       case OrdersOperationType.shipping:
-        this.getShippingByOrders({ orders });
+        this.setOperationCommandSelected(operation, orders);
         return;
 
       default:
@@ -306,6 +290,17 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
           { operation, orders });
         return;
     }
+  }
+
+
+  private setOperationCommandSelected(operation: Identifiable, orders: string[]) {
+    this.operationCommandSeleted = { operation, orders };
+    this.displayShippingEditor = !isEmpty(operation) && orders.length > 0;
+  }
+
+
+  private clearOperationCommandSelected() {
+    this.setOperationCommandSelected(null, []);
   }
 
 
