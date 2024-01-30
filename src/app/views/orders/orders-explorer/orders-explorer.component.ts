@@ -23,6 +23,7 @@ import { OrdersTableEventType } from './orders-table.component';
 export enum OrdersExplorerEventType {
   CREATE_ORDER      = 'OrdersExplorerComponent.Event.CreateOrder',
   SEARCH_ORDERS     = 'OrdersExplorerComponent.Event.SearchOrders',
+  CLEAR_ORDERS      = 'OrdersExplorerComponent.Event.ClearOrders',
   SELECT_ORDER      = 'OrdersExplorerComponent.Event.SelectOrder',
   EXECUTE_OPERATION = 'OrdersExplorerComponent.Event.ExecuteOperation',
 }
@@ -81,6 +82,11 @@ export class OrdersExplorerComponent implements OnChanges {
       case OrdersFilterEventType.SEARCH_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
         sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.SEARCH_ORDERS, event.payload);
+        return;
+
+      case OrdersFilterEventType.CLEAR_CLICKED:
+        Assertion.assertValue(event.payload.query, 'event.payload.query');
+        sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.CLEAR_ORDERS, event.payload);
         return;
 
       default:

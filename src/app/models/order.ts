@@ -66,6 +66,8 @@ export interface OrderQuery {
   fromDate: DateString;
   toDate: DateString;
   status: string;
+  shippingMethod: string;
+  customerUID: string;
 }
 
 
@@ -75,6 +77,8 @@ export const EmptyOrderQuery: OrderQuery = {
   fromDate: null,
   toDate: null,
   status: null,
+  shippingMethod: null,
+  customerUID: null,
 }
 
 

@@ -129,6 +129,13 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
         this.searchOrders(this.query);
         return;
 
+      case OrdersExplorerEventType.CLEAR_ORDERS:
+        Assertion.assertValue(event.payload.query, 'event.payload.query');
+        this.query = event.payload.query as OrderQuery;
+        this.clearOrderSelected();
+        this.setOrderData([], false);
+        return;
+
       case OrdersExplorerEventType.SELECT_ORDER:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
         Assertion.assertValue(event.payload.entry.uid, 'event.payload.entry.uid');
@@ -237,9 +244,9 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private setOrderData(data: OrderDescriptor[]) {
+  private setOrderData(data: OrderDescriptor[], queryExecuted: boolean = true) {
     this.ordersList = data;
-    this.queryExecuted = true;
+    this.queryExecuted = queryExecuted;
     this.clearOperationCommandSelected();
   }
 
