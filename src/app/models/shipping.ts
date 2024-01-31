@@ -92,7 +92,14 @@ export const EmptyShipping: Shipping = {
 }
 
 
+export interface ShippingFields {
+  orders: string[];
+  shippingData: ShippingDataFields;
+}
+
+
 export interface ShippingDataFields {
+  shippingUID: string;
   parcelSupplierUID: string;
   shippingGuide: string;
   parcelAmount: number;

@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { Shipping, ShippingData, ShippingDataFields, ShippingQuery } from '@app/models';
+import { Shipping, ShippingFields, ShippingQuery } from '@app/models';
 
 @Injectable()
 export class ShippingDataService {
@@ -32,14 +32,22 @@ export class ShippingDataService {
   }
 
 
-  updateOrderShipping(orderUID: string,
-                      shippingFields: ShippingDataFields): EmpObservable<ShippingData> {
-    Assertion.assertValue(orderUID, 'orderUID');
+  createShipping(shippingFields: ShippingFields): EmpObservable<Shipping> {
     Assertion.assertValue(shippingFields, 'shippingFields');
 
-    const path = `v4/trade/shipping-and-handling/shipping/${orderUID}`;
+    const path = `v4/trade/shipping-and-handling/shipping/`;
 
-    return this.http.post<ShippingData>(path, shippingFields);
+    return this.http.post<Shipping>(path, shippingFields);
+  }
+
+
+  updateShipping(shippingUID: string, shippingFields: ShippingFields): EmpObservable<Shipping> {
+    Assertion.assertValue(shippingUID, 'shippingUID');
+    Assertion.assertValue(shippingFields, 'shippingFields');
+
+    const path = `v4/trade/shipping-and-handling/shipping/${shippingUID}`;
+
+    return this.http.put<Shipping>(path, shippingFields);
   }
 
 }

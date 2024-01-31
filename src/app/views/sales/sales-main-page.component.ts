@@ -290,6 +290,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
     switch (operation.uid) {
       case OrdersOperationType.shipping:
         this.setOperationCommandSelected(operation, orders);
+        this.clearOrderSelected();
         return;
 
       default:

@@ -1,13 +1,7 @@
- <div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
-
-  <emp-ng-spinner #spinner [visible]="submitted">
-
-  </emp-ng-spinner>
+ <div class="fx-column-container-fill">
 
   <emp-trade-shipping-data-view
-    [shippingData]="shippingDataValid"
-    [canEdit]="canEdit"
-    (shippingDataViewEvent)="onShippingDataViewEvent($event)">
+    [shippingData]="shippingDataValid">
 
   </emp-trade-shipping-data-view>
 

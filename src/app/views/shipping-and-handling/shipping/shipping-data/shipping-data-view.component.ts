@@ -91,7 +91,7 @@ export class ShippingDataViewComponent implements OnChanges, OnInit, OnDestroy {
   onSubmitButtonClicked() {
     if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
       const payload = {
-        shippingData: this.getFormData(),
+        shippingDataFields: this.getFormData(),
       };
 
       sendEvent(this.shippingDataViewEvent, ShippingDataViewEventType.SAVE_SHIPPING_CLICKED, payload);
@@ -155,6 +155,7 @@ export class ShippingDataViewComponent implements OnChanges, OnInit, OnDestroy {
     const formModel = this.form.getRawValue();
 
     const data: ShippingDataFields = {
+      shippingUID: this.shippingData.shippingUID ?? '',
       parcelSupplierUID: formModel.parcelSupplier ?? '',
       shippingGuide: formModel.shippingGuide ?? '',
       parcelAmount: formModel.parcelAmount ?? null,

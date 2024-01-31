@@ -27,18 +27,26 @@
 
         <div class="fx-item-half">
           <label>Importe de la paquetería:</label>
-          <input type="text" class="text-box text-align-right" empNgCurrency
-            empNgInputName="parcelAmount"
-            formControlName="parcelAmount"
-            [class.invalid-control]="formHelper.isControlInvalid(form.controls.parcelAmount)">
+
+            <emp-ng-input-numeric
+              [id]="'parcelAmount-' + shippingData.shippingUID"
+              formControlName="parcelAmount"
+              [showError]="formHelper.isControlInvalid(form.controls.parcelAmount)">
+
+            </emp-ng-input-numeric>
+
         </div>
 
         <div class="fx-item-half">
           <label>Importe cobrado al cliente:</label>
-          <input type="text" class="text-box text-align-right" empNgCurrency
-            empNgInputName="customerAmount"
+
+          <emp-ng-input-numeric
+            [id]="'customerAmount-' + shippingData.shippingUID"
             formControlName="customerAmount"
-            [class.invalid-control]="formHelper.isControlInvalid(form.controls.customerAmount)">
+            [showError]="formHelper.isControlInvalid(form.controls.customerAmount)">
+
+          </emp-ng-input-numeric>
+
         </div>
 
       </div>

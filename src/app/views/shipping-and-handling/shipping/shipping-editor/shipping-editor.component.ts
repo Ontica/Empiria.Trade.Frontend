@@ -15,7 +15,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { ShippingDataService } from '@app/data-services';
 
-import { Shipping, EmptyShipping, ShippingQuery } from '@app/models';
+import { Shipping, EmptyShipping, ShippingQuery, ShippingFields, ShippingDataFields } from '@app/models';
 
 import { ShippingDataViewEventType } from '../shipping-data/shipping-data-view.component';
 
@@ -38,6 +38,8 @@ export class ShippingEditorComponent implements OnChanges {
   @Output() shippingEditorEvent = new EventEmitter<EventInfo>();
 
   isLoading = false;
+
+  submitted = false;
 
   titleText = 'Editor de envío por paquetería';
 
@@ -93,11 +95,14 @@ export class ShippingEditorComponent implements OnChanges {
     switch (event.type as ShippingDataViewEventType) {
 
       case ShippingDataViewEventType.SAVE_SHIPPING_CLICKED:
-        Assertion.assertValue(event.payload.shippingData, 'event.payload.shippingData');
-        this.messageBox.showInDevelopment('Guardar datos de envio', {
-          shippingUID: this.shipping.shippingData.shippingUID,
-          shippingDataFields: event.payload.shippingData,
-        });
+        Assertion.assertValue(event.payload.shippingDataFields, 'event.payload.shippingDataFields');
+
+        const shippingFields: ShippingFields = {
+          shippingData: event.payload.shippingDataFields as ShippingDataFields,
+          orders: this.orders,
+        };
+
+        this.validateSaveShippingToExecute(shippingFields);
         return;
 
       case ShippingDataViewEventType.SEND_ORDER_CLICKED:
@@ -135,11 +140,6 @@ export class ShippingEditorComponent implements OnChanges {
   }
 
 
-  private resolveShippingError() {
-    this.onClose();
-  }
-
-
   private getShippingByOrders(query: ShippingQuery) {
     this.isLoading = true;
 
@@ -151,16 +151,56 @@ export class ShippingEditorComponent implements OnChanges {
   }
 
 
+  private createShipping(shippingFields: ShippingFields) {
+    this.submitted = true;
+
+    this.shippingData.createShipping(shippingFields)
+      .firstValue()
+      .then(x => this.resolveShippingSaved(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private updateShipping(shippingUID: string, shippingFields: ShippingFields) {
+    this.submitted = true;
+
+    this.shippingData.updateShipping(shippingUID, shippingFields)
+      .firstValue()
+      .then(x => this.resolveShippingSaved(x))
+      .finally(() => this.submitted = false);
+  }
+
+
   private setShipping(shipping: Shipping) {
     this.shipping = shipping;
     this.setTexts();
   }
 
 
+  private resolveShippingSaved(shipping: Shipping) {
+    this.setShipping(shipping);
+    this.messageBox.show('La infomación del envio fue guardada correctamente.', 'Guardar datos de envío');
+  }
+
+
+  private resolveShippingError() {
+    this.onClose();
+  }
+
+
+  private validateSaveShippingToExecute(shippingFields: ShippingFields) {
+    if (!this.shipping.shippingData.shippingUID) {
+      this.createShipping(shippingFields);
+    } else {
+      this.updateShipping(this.shipping.shippingData.shippingUID, shippingFields);
+    }
+  }
+
+
   private setTexts() {
     const customers = this.customers.map(x => x.name).toString();
     const vendors = this.vendors.map(x => x.name).toString();
-    const date = DateStringLibrary.format(this.shipping.shippingData.shippingDate);
+    const date = DateStringLibrary.format(this.shipping.shippingData.shippingDate, 'DMY HH:mm');
 
     this.titleText = 'Editor de envío por paquetería';
     this.hintText = `<strong>Cliente:</strong> ${customers} &nbsp; &nbsp; ` +
