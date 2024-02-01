@@ -21,6 +21,8 @@ import { ShippingDataViewEventType } from '../shipping-data/shipping-data-view.c
 
 import { ShippingOrdersResumeEventType } from '../shipping-data/shipping-orders-resume.component';
 
+import { ShippingOrdersSubmitterEventType } from '../shipping-data/shipping-orders-submitter.component';
+
 import { ShippingOrdersModalEventType } from '../shipping-data/shipping-orders-modal.component';
 
 export enum ShippingEditorEventType {
@@ -51,6 +53,10 @@ export class ShippingEditorComponent implements OnChanges {
 
   displayShippingOrdersModal = false;
 
+  isShippingDataReady = false;
+
+  shippingFields: ShippingFields = {orders: [], shippingData: null};
+
 
   constructor(private shippingData: ShippingDataService,
               private messageBox: MessageBoxService) { }
@@ -58,6 +64,11 @@ export class ShippingEditorComponent implements OnChanges {
 
   ngOnChanges() {
     this.loadInitData();
+  }
+
+
+  get canEdit(): boolean {
+    return true;
   }
 
 
@@ -94,18 +105,29 @@ export class ShippingEditorComponent implements OnChanges {
   onShippingDataViewEvent(event: EventInfo) {
     switch (event.type as ShippingDataViewEventType) {
 
-      case ShippingDataViewEventType.SAVE_SHIPPING_CLICKED:
+      case ShippingDataViewEventType.CHANGE_DATA:
+        Assertion.assertValue(event.payload.isFormReady, 'event.payload.isFormReady');
         Assertion.assertValue(event.payload.shippingDataFields, 'event.payload.shippingDataFields');
 
-        const shippingFields: ShippingFields = {
-          shippingData: event.payload.shippingDataFields as ShippingDataFields,
-          orders: this.orders,
-        };
-
-        this.validateSaveShippingToExecute(shippingFields);
+        this.isShippingDataReady = event.payload.isFormReady as boolean;
+        this.shippingFields.shippingData = event.payload.shippingDataFields as ShippingDataFields;
         return;
 
-      case ShippingDataViewEventType.SEND_ORDER_CLICKED:
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onShippingOrdersSubmitterEvent(event: EventInfo) {
+    switch (event.type as ShippingOrdersSubmitterEventType) {
+
+      case ShippingOrdersSubmitterEventType.SAVE_SHIPPING_CLICKED:
+        this.validateSaveShippingToExecute(this.shippingFields);
+        return;
+
+      case ShippingOrdersSubmitterEventType.SEND_ORDER_CLICKED:
         this.messageBox.showInDevelopment('Enviar a embarque', event.payload);
         return;
 
@@ -126,6 +148,19 @@ export class ShippingEditorComponent implements OnChanges {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private initShippingFields() {
+    this.shippingFields.shippingData = {
+      shippingUID: this.shipping.shippingData.shippingUID ?? '',
+      parcelSupplierUID: this.shipping.shippingData.parcelSupplier.uid ?? '',
+      shippingGuide: this.shipping.shippingData.shippingGuide ?? '',
+      parcelAmount: this.shipping.shippingData.parcelAmount ?? null,
+      customerAmount: this.shipping.shippingData.customerAmount ?? null,
+    }
+
+    this.shippingFields.orders = [...[], ...this.shipping.ordersForShipping.map(x => x.orderUID)];
   }
 
 
@@ -174,6 +209,7 @@ export class ShippingEditorComponent implements OnChanges {
   private setShipping(shipping: Shipping) {
     this.shipping = shipping;
     this.setTexts();
+    this.initShippingFields();
   }
 
 

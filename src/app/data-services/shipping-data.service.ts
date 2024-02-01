@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { Shipping, ShippingFields, ShippingQuery } from '@app/models';
+import { OrderForShipping, Shipping, ShippingFields, ShippingQuery } from '@app/models';
 
 @Injectable()
 export class ShippingDataService {
@@ -29,6 +29,15 @@ export class ShippingDataService {
     const path = 'v4/trade/sales/shipping/parcel-delivery';
 
     return this.http.post<Shipping>(path, query);
+  }
+
+
+  getOrdersForShipping(keywords: string): EmpObservable<OrderForShipping[]> {
+    Assertion.assertValue(keywords, 'keywords');
+
+    const path = `v4/trade/sales/shipping/orders/?keywords=${keywords}`;
+
+    return this.http.get<OrderForShipping[]>(path);
   }
 
 

@@ -51,10 +51,13 @@
 
       </div>
 
-      <div *ngIf="canEdit && form.value.customerAmount > 0"
+      <div *ngIf="canEdit"
         class="fx-item-none fx-end fx-items-end"
         [style.paddingBottom.px]="2">
-        <button class="btn" [style.width.px]="100">
+        <button class="btn"
+          [disabled]="!form.value.parcelAmount || form.value.customerAmount === form.value.parcelAmount"
+          [style.width.px]="100"
+          (click)="onAuthorizeNotChargingShipping()">
           Autorizar
         </button>
       </div>
@@ -62,52 +65,5 @@
     </div>
 
   </div>
-
-  <ng-container *ngIf="canEdit || canSendOrder" #rowFooter>
-
-    <mat-divider class="horizontal">
-
-    </mat-divider>
-
-    <div class="fx-row-container">
-
-      <div class="fx-item fx-start fx-items-center">
-
-        <button *ngIf="canSendOrder"
-          type="button" class="btn"
-          (click)="onSendOrder()">
-          Enviar a embarque
-        </button>
-
-      </div>
-
-      <div class="fx-item fx-center fx-items-center">
-          <mat-checkbox name="putOnPallets"
-            [ngModel]="putOnPallets" [ngModelOptions]="{standalone: true}"
-            (ngModelChange)="putOnPalletsChange.emit($event)"
-            (click)="$event.stopPropagation">
-            Entarimar paquetes
-          </mat-checkbox>
-      </div>
-
-      <div class="fx-item fx-end fx-items-center"*ngIf="canEdit">
-
-        <ng-container *ngIf="canEdit">
-
-          <button
-            [class.btn]="!formHelper.isFormReady(form)"
-            [class.btn-action]="formHelper.isFormReady(form)"
-            [style.width.px]="100"
-            (click)="onSubmitButtonClicked()">
-            Guardar
-          </button>
-
-        </ng-container>
-
-      </div>
-
-    </div>
-
-  </ng-container>
 
 </form>

@@ -32,6 +32,7 @@ import { ShippingOrdersResumeComponent } from './shipping/shipping-data/shipping
 import { ShippingOrdersTableComponent } from './shipping/shipping-data/shipping-orders-table.component';
 import { ShippingPalletsTableComponent } from './shipping/shipping-data/shipping-pallets-table.component';
 import { ShippingOrdersModalComponent } from './shipping/shipping-data/shipping-orders-modal.component';
+import { ShippingOrdersSubmitterComponent } from './shipping/shipping-data/shipping-orders-submitter.component';
 
 @NgModule({
   imports: [
@@ -63,6 +64,7 @@ import { ShippingOrdersModalComponent } from './shipping/shipping-data/shipping-
     ShippingOrdersTableComponent,
     ShippingPalletsTableComponent,
     ShippingOrdersModalComponent,
+    ShippingOrdersSubmitterComponent,
   ],
   exports: [
     PackingViewComponent,

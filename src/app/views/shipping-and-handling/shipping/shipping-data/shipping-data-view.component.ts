@@ -5,13 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
-
-import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
@@ -22,8 +20,7 @@ import { ShippingDataService } from '@app/data-services';
 import { EmptyShippingData, ShippingData, ShippingDataFields } from '@app/models';
 
 export enum ShippingDataViewEventType {
-  SAVE_SHIPPING_CLICKED = 'ShippingDataViewComponent.Event.SaveShippingClicked',
-  SEND_ORDER_CLICKED      = 'ShippingDataViewComponent.Event.SendOrderClicked',
+  CHANGE_DATA = 'ShippingDataViewComponent.Event.ChangeData',
 }
 
 interface ShippingFormModel extends FormGroup<{
@@ -37,15 +34,11 @@ interface ShippingFormModel extends FormGroup<{
   selector: 'emp-trade-shipping-data-view',
   templateUrl: './shipping-data-view.component.html',
 })
-export class ShippingDataViewComponent implements OnChanges, OnInit, OnDestroy {
+export class ShippingDataViewComponent implements OnChanges, OnInit {
 
   @Input() shippingData: ShippingData = EmptyShippingData;
 
   @Input() canEdit = false;
-
-  @Input() putOnPallets: boolean = false; // put packages on pallets || palletizing packages || palletizePackages
-
-  @Output() putOnPalletsChange = new EventEmitter<boolean>();
 
   @Output() shippingDataViewEvent = new EventEmitter<EventInfo>();
 
@@ -57,13 +50,9 @@ export class ShippingDataViewComponent implements OnChanges, OnInit, OnDestroy {
 
   parcelSuppliersList: Identifiable[] = [];
 
-  helper: SubscriptionHelper;
 
-
-  constructor(private uiLayer: PresentationLayer,
-              private shippingDataService: ShippingDataService,
+  constructor(private shippingDataService: ShippingDataService,
               private messageBox: MessageBoxService) {
-    this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
   }
 
@@ -78,29 +67,8 @@ export class ShippingDataViewComponent implements OnChanges, OnInit, OnDestroy {
   }
 
 
-  ngOnDestroy() {
-    this.helper.destroy();
-  }
-
-
-  get canSendOrder(): boolean {
-    return this.canEdit && !isEmpty(this.shippingData.parcelSupplier);
-  }
-
-
-  onSubmitButtonClicked() {
-    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
-      const payload = {
-        shippingDataFields: this.getFormData(),
-      };
-
-      sendEvent(this.shippingDataViewEvent, ShippingDataViewEventType.SAVE_SHIPPING_CLICKED, payload);
-    }
-  }
-
-
-  onSendOrder() {
-    this.confirmSendOrder();
+  onAuthorizeNotChargingShipping() {
+    this.messageBox.showInDevelopment('Solicitar autorización de no cobrar flete.');
   }
 
 
@@ -122,8 +90,20 @@ export class ShippingDataViewComponent implements OnChanges, OnInit, OnDestroy {
       parcelSupplier: ['', Validators.required],
       shippingGuide: ['', Validators.required],
       parcelAmount: [null as number, Validators.required],
-      customerAmount: [null as number],
+      customerAmount: [null as number, Validators.required],
     });
+
+    this.form.valueChanges.subscribe(v => this.emitFormChanges());
+  }
+
+
+  private emitFormChanges() {
+    const payload = {
+      isFormReady: FormHelper.isFormReady(this.form),
+      shippingDataFields: this.getFormData(),
+    };
+
+    sendEvent(this.shippingDataViewEvent, ShippingDataViewEventType.CHANGE_DATA, payload);
   }
 
 
@@ -149,9 +129,6 @@ export class ShippingDataViewComponent implements OnChanges, OnInit, OnDestroy {
 
 
   private getFormData(): ShippingDataFields {
-    Assertion.assert(this.form.valid,
-      'Programming error: form must be validated before command execution.');
-
     const formModel = this.form.getRawValue();
 
     const data: ShippingDataFields = {
@@ -163,20 +140,6 @@ export class ShippingDataViewComponent implements OnChanges, OnInit, OnDestroy {
     };
 
     return data;
-  }
-
-
-  private confirmSendOrder() {
-    const message = `Esta operación pasará a embarque los pedidos seleccionados para su envío con la ` +
-      `paquetería <strong> ${this.shippingData.parcelSupplier.name} </strong>. <br><br>¿Envío el pedido?`;
-
-    this.messageBox.confirm(message, 'Enviar a embarque')
-      .firstValue()
-      .then(x => {
-        if (x) {
-          sendEvent(this.shippingDataViewEvent, ShippingDataViewEventType.SEND_ORDER_CLICKED);
-        }
-      });
   }
 
 }
