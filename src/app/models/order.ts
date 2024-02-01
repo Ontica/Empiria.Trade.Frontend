@@ -392,7 +392,10 @@ export function mapOrderItemFromProductSelection(product: ProductSelection): Ord
 
 
 export enum OrdersOperationType {
-  shipping = 'shipping',
+  parcel_delivery = 'parcel-delivery',
+  customer_delivery = 'customer-delivery',
+  local_route_delivery = 'local-route-delivery',
+  local_foreign_delivery = 'local-foreign-delivery',
   cancel   = 'cancel',
   print    = 'print',
 }
@@ -405,7 +408,10 @@ export interface OrdersOperation extends Identifiable {
 
 
 export const OrdersOperationList: OrdersOperation[] = [
-  { uid: OrdersOperationType.shipping, name: 'Envío' },
-  { uid: OrdersOperationType.print,    name: 'Imprimir' },
-  { uid: OrdersOperationType.cancel,   name: 'Cancelar' },
+  { uid: OrdersOperationType.parcel_delivery,        name: 'Enviar por paquetería' },
+  { uid: OrdersOperationType.customer_delivery,      name: 'Entrega por ocurre' },
+  { uid: OrdersOperationType.local_route_delivery,   name: 'Enviar por ruta local' },
+  { uid: OrdersOperationType.local_foreign_delivery, name: 'Enviar por ruta foránea' },
+  { uid: OrdersOperationType.print,                  name: 'Imprimir' },
+  { uid: OrdersOperationType.cancel,                 name: 'Cancelar' },
 ];

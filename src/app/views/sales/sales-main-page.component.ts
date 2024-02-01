@@ -288,7 +288,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   private validateDataOperationToInvoke(operation: Identifiable, orders: string[]) {
     switch (operation.uid) {
-      case OrdersOperationType.shipping:
+      case OrdersOperationType.parcel_delivery:
         this.setOperationCommandSelected(operation, orders);
         this.clearOrderSelected();
         return;
