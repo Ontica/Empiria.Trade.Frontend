@@ -78,6 +78,18 @@ export interface ShippingPalletWithPackages {
 }
 
 
+export const EmptyShippingPalletWithPackages: ShippingPalletWithPackages = {
+  shippingPalletUID: '',
+  shippingPalletName: '',
+
+  packages: [],
+
+  totalPackages: 0,
+  totalWeight: 0,
+  totalVolume: 0,
+}
+
+
 export const EmptyShippingData: ShippingData = {
   shippingUID: '',
 

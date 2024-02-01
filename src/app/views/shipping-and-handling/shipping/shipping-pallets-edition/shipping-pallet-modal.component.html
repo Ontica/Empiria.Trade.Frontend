@@ -1,0 +1,154 @@
+<emp-ng-modal-window [config]="{width: '960px', maxHeight: '90vh'}">
+
+  <emp-ng-card
+    [title]="titleText"
+    [hint]="hintText"
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding" [empNgSpinnerHost]="spinner">
+
+      <emp-ng-spinner #spinner [visible]="submitted">
+
+      </emp-ng-spinner>
+
+
+      <div class="section-title"> Datos de la tarima </div>
+
+      <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+
+        <div class="fx-column-container fx-gap-three-quarter">
+
+          <div class="fx-row-container">
+
+            <div class="fx-item-half">
+              <label>Identificador de la tarima:</label>
+              <input type="text" class="text-box"
+                [(ngModel)]="palletName"
+                [class.invalid-control]="!palletName"
+                [ngModelOptions]="{standalone: true}">
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+
+
+      <div class="section-title"> Seleccion de paquetes </div>
+
+
+      <div class="fx-row-container fx-space-between fx-items-center info-container"
+        [style.margin-right.px]="8">
+
+        <div class="fx-row-container md-fx-column-container fx-item fx-space-between"
+          [style.padding.px]="4">
+          <div class="fx-item-none"><strong>Paquetes:</strong>&nbsp; {{ pallet.totalPackages }} &nbsp; &nbsp;</div>
+          <div class="fx-item-none"><strong>Peso:</strong>&nbsp; {{ pallet.totalWeight | empDecimal}} &nbsp; &nbsp;</div>
+          <div class="fx-item-none"><strong>Volumen:</strong>&nbsp; {{ pallet.totalVolume| empDecimal }} &nbsp; &nbsp; &nbsp; &nbsp;</div>
+        </div>
+
+      </div>
+
+      <br>
+
+      <div class="fx-row-container fx-wrap fx-space-between md-fx-column-container">
+
+        <div *ngFor="let order of orders"
+          class="fx-item-half"
+          [style.margin-bottom.px]="8">
+
+          <mat-expansion-panel [style.size.rem]="0.25" [style.margin-right.px]="8" >
+
+            <mat-expansion-panel-header [style.height.px]="42">
+
+              <mat-panel-title>
+
+                <div [style.margin]="'0 8px 0 0'">
+
+                  <emp-ng-check-box-all title="Todos"
+                    [(selection)]="selection"
+                    [values]="getValuesByOrder(order.packages)">
+
+                  </emp-ng-check-box-all>
+
+                </div>
+
+                <span class="text-expandable-selection">
+
+                  {{order.orderName}}
+
+                </span>
+
+
+              </mat-panel-title>
+
+            </mat-expansion-panel-header>
+
+            <ul [style.list-style]="'none'">
+
+              <li *ngFor="let package of order.packages" class="text-expandable-selection">
+
+                <div class="fx-row-container ">
+
+                  <div [style.margin]="'0 8px 0 0'">
+
+                    <mat-checkbox [checked]="selection.isSelected(package.packingItemUID)"
+                      (click)="$event.stopPropagation()"
+                      (change)="selection.toggle(package.packingItemUID)">
+
+                    </mat-checkbox>
+
+                  </div>
+
+
+                  <div class="fx-item-half fx-start fx-items-center">
+                    <strong>{{package.packageTypeName}} {{package.packageID}}</strong>
+                  </div>
+
+                  <div class="fx-item-quarter fx-end fx-items-center">
+                    {{package.totalVolume}}
+                  </div>
+
+                  <div class="fx-item-quarter fx-end fx-items-center">
+                    {{package.totalWeight}}
+                  </div>
+
+                </div>
+
+              </li>
+
+            </ul>
+
+          </mat-expansion-panel>
+
+        </div>
+
+      </div>
+
+
+      <mat-divider class="horizontal">
+
+      </mat-divider>
+
+      <div class="fx-row-container fx-end" [style.margin-right.px]="8">
+
+        <div class="fx-item fx-end fx-items-center" >
+
+          <button
+            [class.btn]="!palletName"
+            [class.btn-action]="!!palletName"
+            [style.width.px]="100">
+            Asignar
+          </button>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

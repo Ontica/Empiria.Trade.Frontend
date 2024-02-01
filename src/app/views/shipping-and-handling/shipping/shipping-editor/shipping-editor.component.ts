@@ -15,7 +15,8 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { ShippingDataService } from '@app/data-services';
 
-import { Shipping, EmptyShipping, ShippingQuery, ShippingFields, ShippingDataFields } from '@app/models';
+import { Shipping, EmptyShipping, ShippingQuery, ShippingFields, ShippingDataFields,
+         ShippingPalletWithPackages, EmptyShippingPalletWithPackages } from '@app/models';
 
 import { ShippingDataViewEventType } from '../shipping-data/shipping-data-view.component';
 
@@ -24,6 +25,10 @@ import { ShippingOrdersResumeEventType } from '../shipping-data/shipping-orders-
 import { ShippingOrdersSubmitterEventType } from '../shipping-data/shipping-orders-submitter.component';
 
 import { ShippingOrdersModalEventType } from '../shipping-data/shipping-orders-modal.component';
+
+import { ShippingPalletsTableEventType } from '../shipping-data/shipping-pallets-table.component';
+
+import { ShippingPalletModalEventType } from '../shipping-pallets-edition/shipping-pallet-modal.component';
 
 export enum ShippingEditorEventType {
   CLOSE_BUTTON_CLICKED = 'ShippingEditorComponent.Event.CloseButtonClicked',
@@ -56,6 +61,10 @@ export class ShippingEditorComponent implements OnChanges {
   isShippingDataReady = false;
 
   shippingFields: ShippingFields = {orders: [], shippingData: null};
+
+  displayShippingPalletModal = false;
+
+  shippingPalletSelected: ShippingPalletWithPackages = EmptyShippingPalletWithPackages;
 
 
   constructor(private shippingData: ShippingDataService,
@@ -142,6 +151,44 @@ export class ShippingEditorComponent implements OnChanges {
     switch (event.type as ShippingOrdersModalEventType) {
       case ShippingOrdersModalEventType.CLOSE_MODAL_CLICKED:
         this.displayShippingOrdersModal = false;
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onShippingPalletsTableEvent(event: EventInfo) {
+    switch (event.type as ShippingPalletsTableEventType) {
+      case ShippingPalletsTableEventType.CREATE_ITEM_CLICKED:
+        this.displayShippingPalletModal = true;
+        this.shippingPalletSelected = EmptyShippingPalletWithPackages;
+        return;
+
+      case ShippingPalletsTableEventType.ITEM_CLICKED:
+        Assertion.assertValue(event.payload.item, 'event.payload.item');
+        this.displayShippingPalletModal = true;
+        this.shippingPalletSelected = event.payload.item as ShippingPalletWithPackages;
+        return;
+
+      case ShippingPalletsTableEventType.DELETE_ITEM_CLICKED:
+
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onShippingPalletModalEvent(event: EventInfo) {
+    switch (event.type as ShippingPalletModalEventType) {
+      case ShippingPalletModalEventType.CLOSE_MODAL_CLICKED:
+        this.displayShippingPalletModal = false;
+        this.shippingPalletSelected = EmptyShippingPalletWithPackages;
         return;
 
       default:

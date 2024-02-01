@@ -42,7 +42,8 @@
 
     <emp-trade-shipping-pallets-table *ngIf="putOnPallets"
       [shippingPallets]="shipping.shippingPalletsWithPackages ?? []"
-      [canEdit]="canEdit">
+      [canEdit]="canEdit"
+      (shippingPalletsTableEvent)="onShippingPalletsTableEvent($event)">
 
     </emp-trade-shipping-pallets-table>
 
@@ -56,3 +57,11 @@
   (shippingOrdersModalEvent)="onShippingOrdersModalEvent($event)">
 
 </emp-trade-shipping-orders-modal>
+
+
+<emp-trade-shipping-pallet-modal *ngIf="displayShippingPalletModal"
+  [orders]="shipping.ordersForShipping"
+  [pallet]="shippingPalletSelected"
+  (shippingPalletModalEvent)="onShippingPalletModalEvent($event)">
+
+</emp-trade-shipping-pallet-modal>
