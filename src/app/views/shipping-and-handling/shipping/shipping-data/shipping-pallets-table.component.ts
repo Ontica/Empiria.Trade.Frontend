@@ -15,7 +15,7 @@ import { sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { ShippingPallet } from '@app/models';
+import { ShippingPalletWithPackages } from '@app/models';
 
 export enum ShippingPalletsTableEventType {
   ITEM_CLICKED        = 'ShippingPalletsTableComponent.Event.ItemClicked',
@@ -29,7 +29,7 @@ export enum ShippingPalletsTableEventType {
 })
 export class ShippingPalletsTableComponent implements OnChanges {
 
-  @Input() shippingPallets: ShippingPallet[] = [];
+  @Input() shippingPallets: ShippingPalletWithPackages[] = [];
 
   @Input() canEdit = false;
 
@@ -39,7 +39,7 @@ export class ShippingPalletsTableComponent implements OnChanges {
 
   displayedColumns = [...this.displayedColumnsDefault];
 
-  dataSource: MatTableDataSource<ShippingPallet>;
+  dataSource: MatTableDataSource<ShippingPalletWithPackages>;
 
 
   constructor(private messageBox: MessageBoxService) { }
@@ -58,7 +58,7 @@ export class ShippingPalletsTableComponent implements OnChanges {
   }
 
 
-  onShippingPalletClicked(pallet: ShippingPallet) {
+  onShippingPalletClicked(pallet: ShippingPalletWithPackages) {
     sendEvent(this.shippingPalletsTableEvent, ShippingPalletsTableEventType.ITEM_CLICKED, { item: pallet });
   }
 
@@ -68,7 +68,7 @@ export class ShippingPalletsTableComponent implements OnChanges {
   }
 
 
-  onDeleteShippingPalletClicked(pallet: ShippingPallet) {
+  onDeleteShippingPalletClicked(pallet: ShippingPalletWithPackages) {
     this.confirmDeleteShippingPallet(pallet);
   }
 
@@ -84,9 +84,9 @@ export class ShippingPalletsTableComponent implements OnChanges {
   }
 
 
-  private confirmDeleteShippingPallet(pallet: ShippingPallet) {
+  private confirmDeleteShippingPallet(pallet: ShippingPalletWithPackages) {
     const message = `Esta operación eliminará la tarima ` +
-      `<strong>${pallet.palledID}</strong><br><br>¿Elimino la tarima?`;
+      `<strong>${pallet.shippingPalletName}</strong><br><br>¿Elimino la tarima?`;
 
     this.messageBox.confirm(message, 'Eliminar tarima', 'DeleteCancel')
       .firstValue()

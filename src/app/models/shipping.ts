@@ -19,10 +19,7 @@ export interface ShippingQuery {
 export interface Shipping {
   shippingData: ShippingData;
   ordersForShipping: OrderForShipping[];
-
-  // optionals
-  shippingPallets?: ShippingPallet[];
-  missingShippingPallets?: MissingShippingPallets[];
+  shippingPalletsWithPackages?: ShippingPalletWithPackages[];
 }
 
 
@@ -50,19 +47,34 @@ export interface OrderForShipping {
   orderTotal: number;
   customer: Identifiable;
   vendor: Identifiable;
+
+  packages: OrderPackage[];
+
   totalPackages: number;
   totalWeight: number;
   totalVolume: number;
 }
 
 
-export interface MissingShippingPallets {
+export interface OrderPackage {
+  packingItemUID: string;
+  packageID: string;
+  packageTypeName: string;
 
+  totalWeight: number;
+  totalVolume: number;
 }
 
 
-export interface ShippingPallet {
-  palledID: string;
+export interface ShippingPalletWithPackages {
+  shippingPalletUID: string;
+  shippingPalletName: string;
+
+  packages: string[];
+
+  totalPackages: number;
+  totalWeight: number;
+  totalVolume: number;
 }
 
 
@@ -87,8 +99,7 @@ export const EmptyShippingData: ShippingData = {
 export const EmptyShipping: Shipping = {
   shippingData: EmptyShippingData,
   ordersForShipping: [],
-  shippingPallets: [],
-  missingShippingPallets: [],
+  shippingPalletsWithPackages: [],
 }
 
 

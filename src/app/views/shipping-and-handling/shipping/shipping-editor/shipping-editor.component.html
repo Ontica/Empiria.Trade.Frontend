@@ -32,7 +32,7 @@
 
 
     <emp-trade-shipping-pallets-table *ngIf="putOnPallets"
-      [shippingPallets]="shipping.shippingPallets ?? []"
+      [shippingPallets]="shipping.shippingPalletsWithPackages ?? []"
       [canEdit]="true">
 
     </emp-trade-shipping-pallets-table>
