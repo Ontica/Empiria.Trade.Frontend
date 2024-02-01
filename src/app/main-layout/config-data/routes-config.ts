@@ -77,6 +77,13 @@ export const ROUTES = {
     fullpath: '/ventas/autorizaciones',
   },
 
+  ventas_envios: {
+    permission: PERMISSIONS.NOT_REQUIRED,
+    parent: 'ventas',
+    path: 'envios',
+    fullpath: '/ventas/envios',
+  },
+
   ventas_cuentas_x_cobrar: {
     permission: PERMISSIONS.NOT_REQUIRED,
     parent: 'ventas',

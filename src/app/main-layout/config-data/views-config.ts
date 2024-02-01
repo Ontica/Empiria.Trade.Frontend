@@ -24,6 +24,12 @@ export const VentasViews: View[] = [
     permission: ROUTES.ventas_autorizaciones.permission
   },
   {
+    name: 'VentasViews.Envios',
+    title: 'Envíos',
+    url: ROUTES.ventas_envios.fullpath,
+    permission: ROUTES.ventas_envios.permission
+  },
+  {
     name: 'VentasViews.CuentasXCobrar',
     title: 'Cuentas x cobrar',
     url: ROUTES.ventas_cuentas_x_cobrar.fullpath,
