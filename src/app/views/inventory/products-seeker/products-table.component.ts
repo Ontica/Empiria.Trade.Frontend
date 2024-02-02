@@ -21,6 +21,8 @@ import { GalleryImage } from '@app/shared/components/gallery/gallery.component';
 
 import { ProductDataEventType } from '../../products/product-data/product-data.component';
 
+import { ProductPresentationsEventType } from '@app/views/products/product-data/product-presentations.component';
+
 export enum ProductsTableEventType {
   SELECT_PRODUCT_CLICKED = 'ProductsTableComponent.Event.SelectProductClicked',
   ADD_PRODUCT_CLICKED    = 'ProductsTableComponent.Event.AddProductClicked',
@@ -80,7 +82,13 @@ export class ProductsTableComponent implements OnChanges {
 
 
   onProductPresentationEvent(event: EventInfo) {
-    sendEvent(this.productsTableEvent, ProductsTableEventType.ADD_PRODUCT_CLICKED, event.payload);
+    switch (event.type as ProductPresentationsEventType) {
+      case ProductPresentationsEventType.ADD_PRODUCT_CLICKED:
+        sendEvent(this.productsTableEvent, ProductsTableEventType.ADD_PRODUCT_CLICKED, event.payload);
+        return;
+      default:
+        return;
+    }
   }
 
 

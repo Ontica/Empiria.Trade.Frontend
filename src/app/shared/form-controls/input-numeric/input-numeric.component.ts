@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, forwardRef } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -26,6 +26,8 @@ import { FormatLibrary } from '@app/shared/utils';
 })
 export class InputNumericComponent implements ControlValueAccessor {
 
+  @ViewChild("input") inputField: ElementRef;
+
   @Input() id: string;
 
   @Input() minDecimals = 2;
@@ -40,6 +42,10 @@ export class InputNumericComponent implements ControlValueAccessor {
 
   @Output() valueChange = new EventEmitter<number>();
 
+  @Output() keyupEnter = new EventEmitter<number>();
+
+  @Output() keyupEscape = new EventEmitter<void>();
+
   disabled = false;
 
   formattedValue = '';
@@ -53,6 +59,7 @@ export class InputNumericComponent implements ControlValueAccessor {
     this.propagateTouch();
   }
 
+
   onInputChange(newValue: string) {
     const numericValue = this.getNumericValue(newValue);
     this.setFormattedValue(numericValue);
@@ -61,6 +68,17 @@ export class InputNumericComponent implements ControlValueAccessor {
     this.valueChange.emit(numericValue);
     this.onBlur();
   }
+
+
+  onKeyupEnter(value) {
+    this.keyupEnter.emit(value);
+  }
+
+
+  onKeyupScape() {
+    this.keyupEscape.emit();
+  }
+
 
   writeValue(value: any): void {
     this.setFormattedValue(value);

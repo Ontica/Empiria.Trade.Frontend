@@ -121,10 +121,10 @@
 
     <div class="fx-column-container fx-center fx-items-center fx-spacing-2" *ngIf="editionMode || (!editionMode && !hasItems)">
 
-      <button class="btn-base" *ngIf="editionMode"
+      <!-- <button class="btn-base" *ngIf="editionMode"
         (click)="onAddOrderItemClicked()">
         <mat-icon [style.margin]="'0 0.5rem 0 0'">add</mat-icon> Agregar Producto
-      </button>
+      </button> -->
 
       <div class="text-not-found" *ngIf="!editionMode && !hasItems">
         No se han agregado productos.

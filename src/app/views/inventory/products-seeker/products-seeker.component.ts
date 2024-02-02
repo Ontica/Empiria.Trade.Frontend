@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 import { Assertion, EmpObservable, EventInfo } from '@app/core';
 
@@ -15,7 +15,7 @@ import { OrderFields, ProductDescriptor, ProductQuery } from '@app/models';
 
 import { ProductsDataService } from '@app/data-services';
 
-import { ProductsFilterEventType } from './products-filter.component';
+import { ProductsFilterComponent, ProductsFilterEventType } from './products-filter.component';
 
 import { ProductsTableEventType } from './products-table.component';
 
@@ -30,6 +30,8 @@ export enum ProductsSeekerEventType {
 })
 export class ProductsSeekerComponent implements OnInit {
 
+  @ViewChild('productsFilter') productsFilter: ProductsFilterComponent;
+
   @Input() order: OrderFields = null;
 
   @Input() displayFlat = null;
@@ -43,6 +45,8 @@ export class ProductsSeekerComponent implements OnInit {
   isLoading = false;
 
   data: ProductDescriptor[] = [];
+
+  clearDataAfterAddProduct = true;
 
 
   constructor(private productsData: ProductsDataService) {
@@ -85,6 +89,7 @@ export class ProductsSeekerComponent implements OnInit {
       case ProductsTableEventType.ADD_PRODUCT_CLICKED:
         Assertion.assertValue(event.payload.selection, 'event.payload.selection');
         sendEvent(this.productsSeekerEvent, ProductsSeekerEventType.ADD_PRODUCT, event.payload);
+        this.validateClearData();
         return;
 
       default:
@@ -98,6 +103,14 @@ export class ProductsSeekerComponent implements OnInit {
     this.queryExecuted = false;
     this.data = [];
     this.setResultText();
+  }
+
+
+  private validateClearData() {
+    if (this.clearDataAfterAddProduct) {
+      this.clearData();
+      this.productsFilter.clearFilters();
+    }
   }
 
 

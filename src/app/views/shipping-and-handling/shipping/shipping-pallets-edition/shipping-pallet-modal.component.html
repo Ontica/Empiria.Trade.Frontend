@@ -41,7 +41,7 @@
       <div class="fx-row-container fx-space-between fx-items-center info-container"
         [style.margin-right.px]="8">
 
-        <div class="fx-row-container md-fx-column-container fx-item fx-space-between"
+        <div class="fx-row-container fx-item fx-space-between"
           [style.padding.px]="4">
           <div class="fx-item-none"><strong>Paquetes:</strong>&nbsp; {{ pallet.totalPackages }} &nbsp; &nbsp;</div>
           <div class="fx-item-none"><strong>Peso:</strong>&nbsp; {{ pallet.totalWeight | empDecimal}} &nbsp; &nbsp;</div>
@@ -55,7 +55,7 @@
       <div class="fx-row-container fx-wrap fx-space-between md-fx-column-container">
 
         <div *ngFor="let order of orders"
-          class="fx-item-half"
+          class="fx-item-half md-fx-item"
           [style.margin-bottom.px]="8">
 
           <mat-expansion-panel [style.size.rem]="0.25" [style.margin-right.px]="8" >

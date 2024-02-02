@@ -76,7 +76,9 @@
               [maxDecimals]="2"
               [(ngModel)]="quantity"
               [showError]="isQuantityInvalid"
-              [ngModelOptions]="{standalone: true}">
+              [ngModelOptions]="{standalone: true}"
+              (keyupEnter)="onQuantityEnter($event)"
+              (keyupEscape)="quantity = null">
 
             </emp-ng-input-numeric>
 
@@ -84,7 +86,7 @@
 
           <div class="fx-items-end" [style.marginBottom.px]="2">
 
-            <button class="btn" (click)="onAddProductClicked();">Agregar</button>
+            <button class="btn" (click)="onAddProductClicked()">Agregar</button>
 
           </div>
 

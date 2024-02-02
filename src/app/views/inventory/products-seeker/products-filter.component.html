@@ -8,12 +8,12 @@
 
         <div class="input-search-container">
 
-          <input type="text" class="text-box" name="keywords"
+          <input type="text" class="text-box" name="keywords" #inputKeywords
             placeholder="Buscar..."
             formControlName="keywords"
             [class.invalid-control]="formHelper.isControlInvalid(form.controls.keywords)"
             (keyup.enter)="onSearchClicked()"
-            (keyup.escape)="form.controls.keywords.reset()">
+            (keyup.escape)="onClearClicked()">
 
         </div>
 

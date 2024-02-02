@@ -89,4 +89,10 @@ export class ProductPresentationsComponent implements OnChanges {
     this.vendor = presentation?.vendors.length > 0 ? presentation?.vendors[0] : null;
   }
 
+
+  onQuantityEnter(quantity: number) {
+    this.quantity = quantity;
+    setTimeout(() => this.onAddProductClicked());
+  }
+
 }

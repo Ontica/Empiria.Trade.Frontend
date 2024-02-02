@@ -5,15 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { EventInfo } from '@app/core';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
-
-import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { ProductQuery } from '@app/models';
 
@@ -32,7 +30,9 @@ interface ProductsFilterFormModel extends FormGroup<{
   selector: 'emp-trade-products-filter',
   templateUrl: './products-filter.component.html',
 })
-export class ProductsFilterComponent implements OnDestroy {
+export class ProductsFilterComponent implements AfterViewInit {
+
+  @ViewChild("inputKeywords") inputKeywordsField: ElementRef;
 
   @Output() productsFilterEvent = new EventEmitter<EventInfo>();
 
@@ -42,23 +42,20 @@ export class ProductsFilterComponent implements OnDestroy {
 
   isLoading = false;
 
-  subscriptionHelper: SubscriptionHelper;
 
-
-  constructor(private uiLayer: PresentationLayer) {
+  constructor() {
     this.initForm();
-    this.subscriptionHelper = uiLayer.createSubscriptionHelper();
   }
 
 
-  ngOnDestroy() {
-    this.subscriptionHelper.destroy();
+  ngAfterViewInit() {
+    this.inputKeywordsField.nativeElement.focus();
   }
 
 
-  onClearFilters() {
+  onClearClicked() {
     this.form.reset();
-    sendEvent(this.productsFilterEvent, ProductsFilterEventType.CLEAR_CLICKED, { query: this.form.value });
+    // sendEvent(this.productsFilterEvent, ProductsFilterEventType.CLEAR_CLICKED, { query: this.form.value });
   }
 
 
@@ -67,6 +64,12 @@ export class ProductsFilterComponent implements OnDestroy {
       sendEvent(this.productsFilterEvent, ProductsFilterEventType.SEARCH_CLICKED,
         { query: this.getProductQuery() });
     }
+  }
+
+
+  clearFilters() {
+    this.form.reset();
+    this.inputKeywordsField.nativeElement.focus();
   }
 
 
