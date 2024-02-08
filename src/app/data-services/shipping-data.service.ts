@@ -59,4 +59,13 @@ export class ShippingDataService {
     return this.http.put<Shipping>(path, shippingFields);
   }
 
+
+  sendShipment(shippingUID: string): EmpObservable<Shipping> {
+    Assertion.assertValue(shippingUID, 'shippingUID');
+
+    const path = `v4/trade/sales/shipping/${shippingUID}/send`;
+
+    return this.http.post<Shipping>(path);
+  }
+
 }

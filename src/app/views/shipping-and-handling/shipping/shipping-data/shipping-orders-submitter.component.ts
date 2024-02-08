@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { EventInfo, isEmpty } from '@app/core';
+import { EventInfo } from '@app/core';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -17,7 +17,7 @@ import { EmptyShippingData, ShippingData } from '@app/models';
 
 export enum ShippingOrdersSubmitterEventType {
   SAVE_SHIPPING_CLICKED = 'ShippingOrdersSubmitterComponent.Event.SaveShippingClicked',
-  SEND_ORDER_CLICKED    = 'ShippingOrdersSubmitterComponent.Event.SendOrderClicked',
+  SEND_SHIPPING_CLICKED = 'ShippingOrdersSubmitterComponent.Event.SendShippingClicked',
 }
 
 @Component({
@@ -45,7 +45,7 @@ export class ShippingOrdersSubmitterComponent {
 
 
   get canSendOrder(): boolean {
-    return this.canEdit && !isEmpty(this.shippingData.parcelSupplier);
+    return this.canEdit && !!this.shippingData.shippingUID;
   }
 
 
@@ -69,7 +69,7 @@ export class ShippingOrdersSubmitterComponent {
       .firstValue()
       .then(x => {
         if (x) {
-          sendEvent(this.shippingOrdersSubmitterEvent, ShippingOrdersSubmitterEventType.SEND_ORDER_CLICKED);
+          sendEvent(this.shippingOrdersSubmitterEvent, ShippingOrdersSubmitterEventType.SEND_SHIPPING_CLICKED);
         }
       });
   }

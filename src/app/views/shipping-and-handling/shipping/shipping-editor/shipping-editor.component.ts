@@ -111,11 +111,9 @@ export class ShippingEditorComponent implements OnChanges {
 
   onShippingDataViewEvent(event: EventInfo) {
     switch (event.type as ShippingDataViewEventType) {
-
       case ShippingDataViewEventType.CHANGE_DATA:
         Assertion.assertValue(event.payload.isFormReady, 'event.payload.isFormReady');
         Assertion.assertValue(event.payload.shippingDataFields, 'event.payload.shippingDataFields');
-
         this.isShippingDataReady = event.payload.isFormReady as boolean;
         this.shippingFields.shippingData = event.payload.shippingDataFields as ShippingDataFields;
         return;
@@ -129,13 +127,12 @@ export class ShippingEditorComponent implements OnChanges {
 
   onShippingOrdersSubmitterEvent(event: EventInfo) {
     switch (event.type as ShippingOrdersSubmitterEventType) {
-
       case ShippingOrdersSubmitterEventType.SAVE_SHIPPING_CLICKED:
         this.validateSaveShippingToExecute(this.shippingFields);
         return;
 
-      case ShippingOrdersSubmitterEventType.SEND_ORDER_CLICKED:
-        this.messageBox.showInDevelopment('Enviar a embarque', event.payload);
+      case ShippingOrdersSubmitterEventType.SEND_SHIPPING_CLICKED:
+        this.sendShipment(this.shipping.shippingData.shippingUID);
         return;
 
       default:
@@ -250,6 +247,15 @@ export class ShippingEditorComponent implements OnChanges {
       .finally(() => this.submitted = false);
   }
 
+  private sendShipment(shippingUID: string) {
+    this.submitted = true;
+
+    this.shippingData.sendShipment(shippingUID)
+      .firstValue()
+      .then(x => this.resolveSendShipment(x))
+      .finally(() => this.submitted = false);
+  }
+
 
   private setShipping(shipping: Shipping) {
     this.shipping = shipping;
@@ -260,7 +266,13 @@ export class ShippingEditorComponent implements OnChanges {
 
   private resolveShippingSaved(shipping: Shipping) {
     this.setShipping(shipping);
-    this.messageBox.show('La infomación del envio fue guardada correctamente.', 'Guardar datos de envío');
+    this.messageBox.show('La infomación fue guardada correctamente.', 'Envío por paquetería');
+  }
+
+
+  private resolveSendShipment(shipping: Shipping) {
+    this.setShipping(shipping);
+    this.messageBox.show('La infomación fue guardada correctamente.', 'Enviar a embarque');
   }
 
 
