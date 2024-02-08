@@ -339,11 +339,6 @@ export class ShippingEditorComponent implements OnChanges {
     this.putOnPallets = this.displayShippingOrdersModal ? true :
       this.shipping.shippingPalletsWithPackages?.length > 0;
 
-    // Tmp: this should be validated in the backend
-    this.shipping.canEdit = true;
-    // this.shipping.shippingPalletsWithPackages = [DummyShippingPalletWithPackages];
-    // End-Tmp: this should be validated in the backend
-
     this.setTexts();
     this.initShippingFields();
   }
