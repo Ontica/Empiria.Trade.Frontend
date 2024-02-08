@@ -61,7 +61,7 @@
 
 
 <emp-trade-shipping-pallet-modal *ngIf="displayShippingPalletModal"
-  [orders]="shipping.ordersForShipping"
+  [shipping]="shipping"
   [pallet]="shippingPalletSelected"
   (shippingPalletModalEvent)="onShippingPalletModalEvent($event)">
 

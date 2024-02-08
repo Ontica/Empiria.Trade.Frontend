@@ -1,4 +1,4 @@
-<emp-ng-modal-window [config]="{width: '960px', maxHeight: '90vh'}">
+<emp-ng-modal-window [config]="{width: '960px', maxHeight: '95vh'}">
 
   <emp-ng-card
     [title]="titleText"
@@ -24,6 +24,7 @@
               <label>Identificador de la tarima:</label>
               <input type="text" class="text-box"
                 [(ngModel)]="palletName"
+                [disabled]="!shipping.canEdit"
                 [class.invalid-control]="!palletName"
                 [ngModelOptions]="{standalone: true}">
             </div>
@@ -34,31 +35,29 @@
 
       </form>
 
-
       <div class="section-title"> Seleccion de paquetes </div>
 
+       <div class="fx-row-container">
+        <mat-checkbox #checkExpandAll
+          (click)="$event.stopPropagation"
+          (change)="onToggleExpansionPanels(checkExpandAll.checked)">
+          {{checkExpandAll.checked ? 'Ocultar todos los paquetes' : 'Mostrar todos los paquetes'}}
+        </mat-checkbox>
+       </div>
 
-      <div class="fx-row-container fx-space-between fx-items-center info-container"
+      <mat-divider class="horizontal">
+
+      </mat-divider>
+
+      <div class="fx-row-container fx-wrap fx-space-between md-fx-column-container scrollable-container"
+        [style.max-height.vh]="48"
         [style.margin-right.px]="8">
 
-        <div class="fx-row-container fx-item fx-space-between"
-          [style.padding.px]="4">
-          <div class="fx-item-none"><strong>Paquetes:</strong>&nbsp; {{ pallet.totalPackages }} &nbsp; &nbsp;</div>
-          <div class="fx-item-none"><strong>Peso:</strong>&nbsp; {{ pallet.totalWeight | empDecimal}} &nbsp; &nbsp;</div>
-          <div class="fx-item-none"><strong>Volumen:</strong>&nbsp; {{ pallet.totalVolume| empDecimal }} &nbsp; &nbsp; &nbsp; &nbsp;</div>
-        </div>
-
-      </div>
-
-      <br>
-
-      <div class="fx-row-container fx-wrap fx-space-between md-fx-column-container">
-
-        <div *ngFor="let order of orders"
+        <div *ngFor="let item of palletOrdersSelection"
           class="fx-item-half md-fx-item"
           [style.margin-bottom.px]="8">
 
-          <mat-expansion-panel [style.size.rem]="0.25" [style.margin-right.px]="8" >
+          <mat-expansion-panel [style.size.rem]="0.25" [style.margin-right.px]="4" [(expanded)]="item.expanded">
 
             <mat-expansion-panel-header [style.height.px]="42">
 
@@ -67,8 +66,10 @@
                 <div [style.margin]="'0 8px 0 0'">
 
                   <emp-ng-check-box-all title="Todos"
-                    [(selection)]="selection"
-                    [values]="getValuesByOrder(order.packages)">
+                    [selection]="item.selection"
+                    [values]="item.packages"
+                    [disabled]="!shipping.canEdit"
+                    (selectionChange)="onSelectAllPackagesFromOrder(item, $event)">
 
                   </emp-ng-check-box-all>
 
@@ -76,7 +77,7 @@
 
                 <span class="text-expandable-selection">
 
-                  {{order.orderName}}
+                  {{item.order.orderNumber}}
 
                 </span>
 
@@ -85,33 +86,48 @@
 
             </mat-expansion-panel-header>
 
-            <ul [style.list-style]="'none'">
 
-              <li *ngFor="let package of order.packages" class="text-expandable-selection">
+            <ul [style.list-style]="'none'" [style.width.%]="100">
 
+              <li class="small-italic-bold">
                 <div class="fx-row-container ">
+                  <div class="fx-item-none" [style.width.px]="28"></div>
+                  <div class="fx-item-half"></div>
+                  <div class="fx-item-quarter fx-end fx-items-center">Volumen</div>
+                  <div class="fx-item-quarter fx-end fx-items-center">Peso</div>
+                </div>
+              </li>
 
-                  <div [style.margin]="'0 8px 0 0'">
+              <li *ngFor="let package of item.order.packages" class="text-expandable-selection">
 
-                    <mat-checkbox [checked]="selection.isSelected(package.packingItemUID)"
+                <div class="fx-row-container">
+
+                  <div class="fx-item-none"
+                    [style.width.px]="28"
+                    [style.margin]="'0 8px 0 0'">
+
+                    <mat-checkbox
+                      [value]="package.packingItemUID"
+                      [checked]="item.selection.isSelected(package.packingItemUID)"
+                      [indeterminate]="packagesDisabled.includes(package.packingItemUID)"
+                      [disabled]="!shipping.canEdit || packagesDisabled.includes(package.packingItemUID)"
                       (click)="$event.stopPropagation()"
-                      (change)="selection.toggle(package.packingItemUID)">
+                      (change)="onSelectPackageToOrder(item, package)">
 
                     </mat-checkbox>
 
                   </div>
 
-
                   <div class="fx-item-half fx-start fx-items-center">
-                    <strong>{{package.packageTypeName}} {{package.packageID}}</strong>
+                    <strong>{{package.packageTypeName}} - {{package.packageID}}</strong>
                   </div>
 
                   <div class="fx-item-quarter fx-end fx-items-center">
-                    {{package.totalVolume}}
+                    {{package.totalVolume | empDecimal}}
                   </div>
 
                   <div class="fx-item-quarter fx-end fx-items-center">
-                    {{package.totalWeight}}
+                    {{package.totalWeight | empDecimal}}
                   </div>
 
                 </div>
@@ -119,6 +135,18 @@
               </li>
 
             </ul>
+
+            <mat-divider class="horizontal" [style.margin]="'8px -24px'">
+
+            </mat-divider>
+
+
+            <div class="fx-row-container text-expandable-selection">
+              <div class="fx-item-none fx-center fx-items-center" [style.width.px]="28">{{item.totals.totalPackages}}</div>
+              <div class="fx-item-half fx-start fx-items-center"></div>
+              <div class="fx-item-quarter fx-end fx-items-center">{{item.totals.totalVolume | empDecimal}}</div>
+              <div class="fx-item-quarter fx-end fx-items-center">{{item.totals.totalWeight | empDecimal}}</div>
+            </div>
 
           </mat-expansion-panel>
 
@@ -131,14 +159,27 @@
 
       </mat-divider>
 
-      <div class="fx-row-container fx-end" [style.margin-right.px]="8">
+      <emp-trade-shipping-orders-resume
+        [shippingTotals]="pallet"
+        [showDetailForOrders]="false">
+
+      </emp-trade-shipping-orders-resume>
+
+
+      <mat-divider class="horizontal" *ngIf="shipping.canEdit">
+
+      </mat-divider>
+
+
+      <div class="fx-row-container fx-end" [style.margin-right.px]="8" *ngIf="shipping.canEdit">
 
         <div class="fx-item fx-end fx-items-center" >
 
           <button
-            [class.btn]="!palletName"
-            [class.btn-action]="!!palletName"
-            [style.width.px]="100">
+            [class.btn]="!isReady"
+            [class.btn-action]="isReady"
+            [style.width.px]="100"
+            (click)="onSubmitButtonClicked()">
             Asignar
           </button>
 

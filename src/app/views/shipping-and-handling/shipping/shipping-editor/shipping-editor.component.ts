@@ -198,18 +198,16 @@ export class ShippingEditorComponent implements OnChanges {
   onShippingPalletsTableEvent(event: EventInfo) {
     switch (event.type as ShippingPalletsTableEventType) {
       case ShippingPalletsTableEventType.CREATE_ITEM_CLICKED:
-        this.displayShippingPalletModal = true;
-        this.shippingPalletSelected = EmptyShippingPalletWithPackages;
+        this.setShippingPalletSelected(EmptyShippingPalletWithPackages, true);
         return;
 
       case ShippingPalletsTableEventType.ITEM_CLICKED:
         Assertion.assertValue(event.payload.item, 'event.payload.item');
-        this.displayShippingPalletModal = true;
-        this.shippingPalletSelected = event.payload.item as ShippingPalletWithPackages;
+        this.setShippingPalletSelected(event.payload.item as ShippingPalletWithPackages);
         return;
 
       case ShippingPalletsTableEventType.DELETE_ITEM_CLICKED:
-
+        this.messageBox.showInDevelopment('Eliminar tarima');
         return;
 
       default:
@@ -222,8 +220,13 @@ export class ShippingEditorComponent implements OnChanges {
   onShippingPalletModalEvent(event: EventInfo) {
     switch (event.type as ShippingPalletModalEventType) {
       case ShippingPalletModalEventType.CLOSE_MODAL_CLICKED:
-        this.displayShippingPalletModal = false;
-        this.shippingPalletSelected = EmptyShippingPalletWithPackages;
+        this.setShippingPalletSelected(EmptyShippingPalletWithPackages);
+        return;
+
+      case ShippingPalletModalEventType.PALLET_SAVED:
+        Assertion.assertValue(event.payload.shipping, 'event.payload.shipping');
+        this.setShipping(event.payload.shipping as Shipping);
+        this.setShippingPalletSelected(EmptyShippingPalletWithPackages);
         return;
 
       default:
@@ -385,6 +388,12 @@ export class ShippingEditorComponent implements OnChanges {
     this.titleText = 'Editor de envío por paquetería';
     this.hintText = `<strong>Cliente:</strong> ${customers} &nbsp; &nbsp; ` +
       `<strong>Vendedor:</strong> ${vendors}  &nbsp; &nbsp; <strong>Fecha:</strong> ${date}`;
+  }
+
+
+  private setShippingPalletSelected(pallet: ShippingPalletWithPackages, display?: boolean) {
+    this.shippingPalletSelected = pallet;
+    this.displayShippingPalletModal = display ?? !!this.shippingPalletSelected.shippingPalletUID;
   }
 
 }
