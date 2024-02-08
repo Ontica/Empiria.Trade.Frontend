@@ -420,9 +420,9 @@ a.warning-indicator-text:hover {
   color: $icon-color-dark;
 }
 
-.small-italic-notification {
+.small-italic-bold {
   font: $control-small-font;
-  font-weight: $text-bold;
+  font-weight: $font-weight-bold;
   font-style: $text-italic;
 }
 
