@@ -10,7 +10,7 @@
     </emp-ng-spinner>
 
     <emp-trade-shipping-orders-resume *ngIf="putOnPallets"
-      [shipping]="shipping"
+      [shippingTotals]="shipping.shippingData"
       (shippingOrdersResumeEvent)="onShippingOrdersResumeEvent($event)">
 
     </emp-trade-shipping-orders-resume>

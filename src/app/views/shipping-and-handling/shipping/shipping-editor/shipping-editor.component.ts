@@ -98,7 +98,6 @@ export class ShippingEditorComponent implements OnChanges {
 
   onShippingOrdersResumeEvent(event: EventInfo) {
     switch (event.type as ShippingOrdersResumeEventType) {
-
       case ShippingOrdersResumeEventType.SHOW_DETAIL_CLICKED:
         this.displayShippingOrdersModal = true;
         return;
@@ -107,7 +106,6 @@ export class ShippingEditorComponent implements OnChanges {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
-
   }
 
 

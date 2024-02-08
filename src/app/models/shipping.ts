@@ -23,7 +23,7 @@ export interface Shipping {
 }
 
 
-export interface ShippingData {
+export interface ShippingData extends ShippingTotals {
   shippingUID: string;
 
   shippingDate: DateString;
@@ -32,8 +32,18 @@ export interface ShippingData {
   parcelAmount: number;
   customerAmount: number;
 
+  totalPackages: number;
+  totalWeight: number;
+  totalVolume: number;
+
   ordersCount: number;
   ordersTotal: number;
+}
+
+
+export interface ShippingTotals {
+  ordersCount?: number;
+  ordersTotal?: number;
 
   totalPackages: number;
   totalWeight: number;
@@ -41,7 +51,7 @@ export interface ShippingData {
 }
 
 
-export interface OrderForShipping {
+export interface OrderForShipping extends ShippingTotals {
   orderUID: string;
   orderName: string;
   orderTotal: number;
@@ -66,7 +76,7 @@ export interface OrderPackage {
 }
 
 
-export interface ShippingPalletWithPackages {
+export interface ShippingPalletWithPackages extends ShippingTotals {
   shippingPalletUID: string;
   shippingPalletName: string;
 
@@ -75,6 +85,13 @@ export interface ShippingPalletWithPackages {
   totalPackages: number;
   totalWeight: number;
   totalVolume: number;
+}
+
+
+export const EmptyShippingTotals: ShippingTotals = {
+  totalPackages: 0,
+  totalWeight: 0,
+  totalVolume: 0,
 }
 
 

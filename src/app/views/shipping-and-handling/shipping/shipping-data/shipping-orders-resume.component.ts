@@ -11,7 +11,7 @@ import { EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyShipping, Shipping } from '@app/models';
+import { EmptyShippingData, EmptyShippingTotals, ShippingData, ShippingTotals } from '@app/models';
 
 export enum ShippingOrdersResumeEventType {
   SHOW_DETAIL_CLICKED = 'ShippingOrdersResumeComponent.Event.ShowDetailClicked',
@@ -23,7 +23,9 @@ export enum ShippingOrdersResumeEventType {
 })
 export class ShippingOrdersResumeComponent {
 
-  @Input() shipping: Shipping = EmptyShipping;
+  @Input() shippingTotals: ShippingTotals = EmptyShippingTotals;
+
+  @Input() showDetailForOrders: boolean = true;
 
   @Output() shippingOrdersResumeEvent = new EventEmitter<EventInfo>();
 
