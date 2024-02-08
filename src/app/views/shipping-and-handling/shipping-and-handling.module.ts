@@ -26,14 +26,14 @@ import { MissingItemLocationComponent } from './packing/packing-items-edition/mi
 import { MissingItemsModalComponent } from './packing/packing-view/missing-items-modal.component';
 
 import { OrderShippingViewerComponent } from './shipping/order-shipping-viewer/order-shipping-viewer.component';
-import { ShippingDataViewComponent } from './shipping/shipping-data/shipping-data-view.component';
+import { ShippingDataViewComponent } from './shipping/shipping-edition/shipping-data-view.component';
 import { ShippingEditorComponent } from './shipping/shipping-editor/shipping-editor.component';
-import { ShippingOrdersResumeComponent } from './shipping/shipping-data/shipping-orders-resume.component';
-import { ShippingOrdersTableComponent } from './shipping/shipping-data/shipping-orders-table.component';
-import { ShippingPalletsTableComponent } from './shipping/shipping-data/shipping-pallets-table.component';
-import { ShippingOrdersModalComponent } from './shipping/shipping-data/shipping-orders-modal.component';
-import { ShippingOrdersSubmitterComponent } from './shipping/shipping-data/shipping-orders-submitter.component';
-import { ShippingPalletModalComponent } from './shipping/shipping-pallets-edition/shipping-pallet-modal.component';
+import { ShippingOrdersResumeComponent } from './shipping/shipping-edition/shipping-orders-resume.component';
+import { ShippingOrdersTableComponent } from './shipping/shipping-edition/shipping-orders-table.component';
+import { ShippingPalletsTableComponent } from './shipping/shipping-edition/shipping-pallets-table.component';
+import { ShippingOrdersModalComponent } from './shipping/shipping-edition/shipping-orders-modal.component';
+import { ShippingOrdersSubmitterComponent } from './shipping/shipping-edition/shipping-orders-submitter.component';
+import { ShippingPalletModalComponent } from './shipping/shipping-edition/shipping-pallet-modal.component';
 
 @NgModule({
   imports: [

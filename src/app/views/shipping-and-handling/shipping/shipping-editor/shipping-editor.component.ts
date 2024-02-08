@@ -18,19 +18,19 @@ import { ShippingDataService } from '@app/data-services';
 import { Shipping, EmptyShipping, ShippingFieldsQuery, ShippingFields, ShippingDataFields,
          ShippingPalletWithPackages, EmptyShippingPalletWithPackages } from '@app/models';
 
-import { ShippingDataViewEventType } from '../shipping-data/shipping-data-view.component';
+import { ShippingDataViewEventType } from '../shipping-edition/shipping-data-view.component';
 
-import { ShippingOrdersResumeEventType } from '../shipping-data/shipping-orders-resume.component';
+import { ShippingOrdersResumeEventType } from '../shipping-edition/shipping-orders-resume.component';
 
-import { ShippingOrdersSubmitterEventType } from '../shipping-data/shipping-orders-submitter.component';
+import { ShippingOrdersSubmitterEventType } from '../shipping-edition/shipping-orders-submitter.component';
 
-import { ShippingOrdersTableEventType } from '../shipping-data/shipping-orders-table.component';
+import { ShippingOrdersTableEventType } from '../shipping-edition/shipping-orders-table.component';
 
-import { ShippingPalletsTableEventType } from '../shipping-data/shipping-pallets-table.component';
+import { ShippingPalletsTableEventType } from '../shipping-edition/shipping-pallets-table.component';
 
-import { ShippingOrdersModalEventType } from '../shipping-data/shipping-orders-modal.component';
+import { ShippingOrdersModalEventType } from '../shipping-edition/shipping-orders-modal.component';
 
-import { ShippingPalletModalEventType } from '../shipping-pallets-edition/shipping-pallet-modal.component';
+import { ShippingPalletModalEventType } from '../shipping-edition/shipping-pallet-modal.component';
 
 export enum ShippingEditorEventType {
   CLOSE_BUTTON_CLICKED = 'ShippingEditorComponent.Event.CloseButtonClicked',
@@ -341,6 +341,7 @@ export class ShippingEditorComponent implements OnChanges {
 
     // Tmp: this should be validated in the backend
     this.shipping.canEdit = true;
+    // this.shipping.shippingPalletsWithPackages = [DummyShippingPalletWithPackages];
     // End-Tmp: this should be validated in the backend
 
     this.setTexts();
