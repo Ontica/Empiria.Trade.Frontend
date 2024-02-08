@@ -19,7 +19,7 @@ export class ShippingDataService {
 
 
   getParcelSuppliers(): EmpObservable<Identifiable[]> {
-    const path = 'v4/trade/shipping-and-handling/shipping/parcel-suppliers';
+    const path = 'v4/trade/sales/shipping/parcel-suppliers';
 
     return this.http.get<Identifiable[]>(path);
   }
@@ -44,7 +44,7 @@ export class ShippingDataService {
   createShipping(shippingFields: ShippingFields): EmpObservable<Shipping> {
     Assertion.assertValue(shippingFields, 'shippingFields');
 
-    const path = `v4/trade/shipping-and-handling/shipping/`;
+    const path = `v4/trade/sales/shipping/`;
 
     return this.http.post<Shipping>(path, shippingFields);
   }
@@ -54,7 +54,7 @@ export class ShippingDataService {
     Assertion.assertValue(shippingUID, 'shippingUID');
     Assertion.assertValue(shippingFields, 'shippingFields');
 
-    const path = `v4/trade/shipping-and-handling/shipping/${shippingUID}`;
+    const path = `v4/trade/sales/shipping/${shippingUID}`;
 
     return this.http.put<Shipping>(path, shippingFields);
   }
