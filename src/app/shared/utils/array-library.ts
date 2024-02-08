@@ -40,4 +40,21 @@ export class ArrayLibrary {
     }, []);
   }
 
+
+
+  static sortByArrayKeyLenght<T, K extends keyof T>(array: T[], key: K): T[] {
+    return array.sort((a, b) => this.compareArrayValuesLenght(a[key], b[key]));
+  }
+
+
+  static compareArrayValuesLenght(previus: any, current: any): number {
+    if (previus.length > current.length) {
+      return 1;
+    }
+    if (previus.length < current.length) {
+      return -1;
+    }
+    return 0;
+  }
+
 }
