@@ -10,6 +10,11 @@ import { DateString, Empty, Identifiable } from '@app/core';
 import { OrderDescriptor, ShippingMethodTypes } from './order';
 
 
+export interface ShippingQuery {
+  keywords: string;
+}
+
+
 export interface ShippingFieldsQuery {
   shippingType?: ShippingMethodTypes;
   orders: string[];

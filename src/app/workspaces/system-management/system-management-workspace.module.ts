@@ -39,9 +39,5 @@ import { ControlPanelMainPageComponent } from './control-panel-main-page/control
     ControlPanelMainPageComponent,
   ],
 
-  exports: [
-
-  ]
-
 })
 export class SystemManagementWorkspaceModule { }

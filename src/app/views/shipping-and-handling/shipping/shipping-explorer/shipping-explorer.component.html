@@ -1,0 +1,53 @@
+<div class="card card-border">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      Explorador de envíos
+
+      <div class="card-hint" empNgProgressText
+        loadingText="Cargando"
+        [finalText]="cardHint"
+        [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+    <div class="card-header-options">
+
+      <button
+        class="btn-action" fxFlexOffset="1.5rem"
+        (click)="onCreateShipingClicked()">
+        Agregar envío
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner">
+
+    <div class="fx-column-container-fill">
+
+      <emp-ng-spinner #spinner [visible]="isLoading">
+
+      </emp-ng-spinner>
+
+     <emp-trade-shipping-filter class="fx-item-none"
+        [queryExecuted]="queryExecuted"
+        (shippingFilterEvent)="onShippingFilterEvent($event)">
+
+      </emp-trade-shipping-filter>
+
+      <emp-trade-shipping-table class="fx-item"
+        [shippingList]="shippingList"
+        [queryExecuted]="queryExecuted"
+        [isLoading]="isLoading">
+
+      </emp-trade-shipping-table>
+
+    </div>
+
+  </div>
+
+</div>

@@ -11,12 +11,21 @@ import { SalesModule } from '@app/views/sales/sales.module';
 
 import { SalesWorkspaceRoutingModule } from './sales-workspace-routing.module';
 
+import { ShippingAndHandlingModule } from '@app/views/shipping-and-handling/shipping-and-handling.module';
+
+import { ShippingMainPageComponent } from './shipping-main-page/shipping-main-page.component';
+
 
 @NgModule({
 
   imports: [
-    SalesModule,
     SalesWorkspaceRoutingModule,
+    SalesModule,
+    ShippingAndHandlingModule,
+  ],
+
+  declarations: [
+    ShippingMainPageComponent,
   ]
 
 })

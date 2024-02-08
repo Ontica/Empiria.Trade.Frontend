@@ -1,0 +1,88 @@
+<cdk-virtual-scroll-viewport tvsItemSize="32">
+
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="shippingDate">
+      <th mat-header-cell *matHeaderCellDef> Fecha </th>
+      <td mat-cell *matCellDef="let row">
+        {{!!row.shippingDate ? (row.shippingDate | dateTimeFormat) : '-'}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="parcelSupplier">
+      <th mat-header-cell *matHeaderCellDef> Paquetería </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.parcelSupplier.name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="shippingGuide">
+      <th mat-header-cell *matHeaderCellDef class="nowrap"> Número de guía </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.shippingGuide }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="parcelAmount">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right nowrap"> Importe paquetería </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right">
+        {{ row.parcelAmount ?? 0 | empDecimal }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="customerAmount">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right nowrap"> Importe al cliente </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right">
+        {{ row.customerAmount ?? 0 | empDecimal }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ordersCount">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right"> No. pedidos </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right">
+        {{ row.ordersCount ?? 0 }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ordersTotal">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right nowrap"> Importe pedidos </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right">
+        {{ row.ordersTotal ?? 0 | empDecimal }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalPackages">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right"> Paquetes </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right">
+        {{ row.totalPackages ?? 0 }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalWeight">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right nowrap"> Peso </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right">
+        {{ row.totalWeight ?? 0 | empDecimal }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalVolume">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right nowrap"> Volumen </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right">
+        {{ row.totalVolume ?? 0 | empDecimal }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+
+  <div *ngIf="!queryExecuted" class="text-not-found">
+    {{isLoading ? 'Cargando...' : 'No se ha invocado la consulta.'}}
+  </div>
+
+  <div *ngIf="queryExecuted && shippingList.length === 0" class="text-not-found">
+    No se encontraron registros con el filtro proporcionado.
+  </div>
+
+</cdk-virtual-scroll-viewport>

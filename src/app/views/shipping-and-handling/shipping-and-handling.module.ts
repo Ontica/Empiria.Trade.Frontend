@@ -26,14 +26,18 @@ import { MissingItemLocationComponent } from './packing/packing-items-edition/mi
 import { MissingItemsModalComponent } from './packing/packing-view/missing-items-modal.component';
 
 import { OrderShippingViewerComponent } from './shipping/order-shipping-viewer/order-shipping-viewer.component';
-import { ShippingDataViewComponent } from './shipping/shipping-edition/shipping-data-view.component';
 import { ShippingEditorComponent } from './shipping/shipping-editor/shipping-editor.component';
+import { ShippingDataViewComponent } from './shipping/shipping-edition/shipping-data-view.component';
 import { ShippingOrdersResumeComponent } from './shipping/shipping-edition/shipping-orders-resume.component';
 import { ShippingOrdersTableComponent } from './shipping/shipping-edition/shipping-orders-table.component';
 import { ShippingPalletsTableComponent } from './shipping/shipping-edition/shipping-pallets-table.component';
 import { ShippingOrdersModalComponent } from './shipping/shipping-edition/shipping-orders-modal.component';
 import { ShippingOrdersSubmitterComponent } from './shipping/shipping-edition/shipping-orders-submitter.component';
 import { ShippingPalletModalComponent } from './shipping/shipping-edition/shipping-pallet-modal.component';
+
+import { ShippingExplorerComponent } from './shipping/shipping-explorer/shipping-explorer.component';
+import { ShippingFilterComponent } from './shipping/shipping-explorer/shipping-filter.component';
+import { ShippingTableComponent } from './shipping/shipping-explorer/shipping-table.component';
 
 @NgModule({
   imports: [
@@ -59,19 +63,24 @@ import { ShippingPalletModalComponent } from './shipping/shipping-edition/shippi
     MissingItemsModalComponent,
 
     OrderShippingViewerComponent,
-    ShippingDataViewComponent,
     ShippingEditorComponent,
+    ShippingDataViewComponent,
     ShippingOrdersResumeComponent,
     ShippingOrdersTableComponent,
     ShippingPalletsTableComponent,
     ShippingOrdersModalComponent,
     ShippingOrdersSubmitterComponent,
     ShippingPalletModalComponent,
+
+    ShippingExplorerComponent,
+    ShippingFilterComponent,
+    ShippingTableComponent,
   ],
   exports: [
     PackingViewComponent,
     OrderShippingViewerComponent,
     ShippingEditorComponent,
+    ShippingExplorerComponent,
   ],
 })
 export class ShippingAndHandlingModule { }

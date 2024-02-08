@@ -11,8 +11,8 @@ import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 import { map } from 'rxjs';
 
-import { OrderDescriptor, OrderForShipping, OrderQuery, Shipping, ShippingFields, ShippingFieldsQuery,
-         mapOrdersDescriptorToOrdersForShipping } from '@app/models';
+import { OrderDescriptor, OrderForShipping, OrderQuery, Shipping, ShippingData, ShippingFields,
+         ShippingFieldsQuery, ShippingQuery, mapOrdersDescriptorToOrdersForShipping } from '@app/models';
 
 @Injectable()
 export class ShippingDataService {
@@ -28,12 +28,20 @@ export class ShippingDataService {
   }
 
 
+  searchShipping(query: ShippingQuery): EmpObservable<ShippingData[]> {
+    Assertion.assertValue(query, 'query');
+
+    const path = 'v4/trade/sales/shipping/search';
+
+    return this.http.post<ShippingData[]>(path, query);
+  }
+
+
   getShippingByOrders(query: ShippingFieldsQuery): EmpObservable<Shipping> {
     const path = 'v4/trade/sales/shipping/parcel-delivery';
 
     return this.http.post<Shipping>(path, query);
   }
-
 
 
   searchOrdersForShipping(query: OrderQuery): EmpObservable<OrderForShipping[]> {
