@@ -15,7 +15,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { ShippingDataService } from '@app/data-services';
 
-import { Shipping, EmptyShipping, ShippingQuery, ShippingFields, ShippingDataFields,
+import { Shipping, EmptyShipping, ShippingFieldsQuery, ShippingFields, ShippingDataFields,
          ShippingPalletWithPackages, EmptyShippingPalletWithPackages } from '@app/models';
 
 import { ShippingDataViewEventType } from '../shipping-data/shipping-data-view.component';
@@ -24,9 +24,11 @@ import { ShippingOrdersResumeEventType } from '../shipping-data/shipping-orders-
 
 import { ShippingOrdersSubmitterEventType } from '../shipping-data/shipping-orders-submitter.component';
 
-import { ShippingOrdersModalEventType } from '../shipping-data/shipping-orders-modal.component';
+import { ShippingOrdersTableEventType } from '../shipping-data/shipping-orders-table.component';
 
 import { ShippingPalletsTableEventType } from '../shipping-data/shipping-pallets-table.component';
+
+import { ShippingOrdersModalEventType } from '../shipping-data/shipping-orders-modal.component';
 
 import { ShippingPalletModalEventType } from '../shipping-pallets-edition/shipping-pallet-modal.component';
 
@@ -73,11 +75,6 @@ export class ShippingEditorComponent implements OnChanges {
 
   ngOnChanges() {
     this.loadInitData();
-  }
-
-
-  get canEdit(): boolean {
-    return true;
   }
 
 
@@ -142,10 +139,53 @@ export class ShippingEditorComponent implements OnChanges {
   }
 
 
+  onShippingOrdersTableEvent(event: EventInfo) {
+    switch (event.type as ShippingOrdersTableEventType) {
+      case ShippingOrdersTableEventType.CHANGE_ORDERS:
+        Assertion.assertValue(event.payload.orders, 'event.payload.orders');
+        this.validateRefreshShipping(event.payload.orders)
+        return;
+
+      case ShippingOrdersTableEventType.ADD_ORDER:
+        Assertion.assertValue(event.payload.shippingUID, 'event.payload.shippingUID');
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        this.AddOrderToShipping(event.payload.shippingUID, event.payload.orderUID);
+        return;
+
+      case ShippingOrdersTableEventType.REMOVE_ORDER:
+        Assertion.assertValue(event.payload.shippingUID, 'event.payload.shippingUID');
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        this.removeOrderToShipping(event.payload.shippingUID, event.payload.orderUID);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
   onShippingOrdersModalEvent(event: EventInfo) {
     switch (event.type as ShippingOrdersModalEventType) {
       case ShippingOrdersModalEventType.CLOSE_MODAL_CLICKED:
         this.displayShippingOrdersModal = false;
+        return;
+
+      case ShippingOrdersModalEventType.CHANGE_ORDERS:
+        Assertion.assertValue(event.payload.orders, 'event.payload.orders');
+        this.validateRefreshShipping(event.payload.orders);
+        return;
+
+      case ShippingOrdersModalEventType.ADD_ORDER:
+        Assertion.assertValue(event.payload.shippingUID, 'event.payload.shippingUID');
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        this.AddOrderToShipping(event.payload.shippingUID, event.payload.orderUID);
+        return;
+
+      case ShippingOrdersModalEventType.REMOVE_ORDER:
+        Assertion.assertValue(event.payload.shippingUID, 'event.payload.shippingUID');
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        this.removeOrderToShipping(event.payload.shippingUID, event.payload.orderUID);
         return;
 
       default:
@@ -208,7 +248,7 @@ export class ShippingEditorComponent implements OnChanges {
 
   private loadInitData() {
     if (this.orders.length > 0) {
-      const query: ShippingQuery = {orders: this.orders};
+      const query: ShippingFieldsQuery = {orders: this.orders};
       this.getShippingByOrders(query);
     } else {
       this.messageBox.showError('No se han proporcionado datos validos.');
@@ -217,7 +257,20 @@ export class ShippingEditorComponent implements OnChanges {
   }
 
 
-  private getShippingByOrders(query: ShippingQuery) {
+  private validateRefreshShipping(orders: string[]) {
+    if (!orders || orders.length === 0) {
+      this.messageBox.showError('Es necesaria al menos un pedido en el envío.');
+      return;
+    }
+
+    if (!this.shipping.shippingData.shippingUID) {
+      const query: ShippingFieldsQuery = { orders };
+      this.getShippingByOrders(query);
+    }
+  }
+
+
+  private getShippingByOrders(query: ShippingFieldsQuery) {
     this.isLoading = true;
 
     this.shippingData.getShippingByOrders(query)
@@ -247,6 +300,27 @@ export class ShippingEditorComponent implements OnChanges {
       .finally(() => this.submitted = false);
   }
 
+
+  private AddOrderToShipping(shippingUID: string, orderUID: string) {
+    this.submitted = true;
+
+    this.shippingData.AddOrderToShipping(shippingUID, orderUID)
+      .firstValue()
+      .then(x => this.resolveShippingOrdersUpdated(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private removeOrderToShipping(shippingUID: string, orderUID: string) {
+    this.submitted = true;
+
+    this.shippingData.removeOrderFromShipping(shippingUID, orderUID)
+      .firstValue()
+      .then(x => this.resolveShippingOrdersUpdated(x))
+      .finally(() => this.submitted = false);
+  }
+
+
   private sendShipment(shippingUID: string) {
     this.submitted = true;
 
@@ -259,6 +333,13 @@ export class ShippingEditorComponent implements OnChanges {
 
   private setShipping(shipping: Shipping) {
     this.shipping = shipping;
+    this.putOnPallets = this.displayShippingOrdersModal ? true :
+      this.shipping.shippingPalletsWithPackages?.length > 0;
+
+    // Tmp: this should be validated in the backend
+    this.shipping.canEdit = true;
+    // End-Tmp: this should be validated in the backend
+
     this.setTexts();
     this.initShippingFields();
   }
@@ -267,6 +348,12 @@ export class ShippingEditorComponent implements OnChanges {
   private resolveShippingSaved(shipping: Shipping) {
     this.setShipping(shipping);
     this.messageBox.show('La infomación fue guardada correctamente.', 'Envío por paquetería');
+  }
+
+
+  private resolveShippingOrdersUpdated(shipping: Shipping) {
+    this.setShipping(shipping);
+    this.messageBox.show('La infomación fue guardada correctamente.', 'Actualizar pedidos del envío');
   }
 
 

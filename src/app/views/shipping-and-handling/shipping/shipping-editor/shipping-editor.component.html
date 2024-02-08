@@ -18,21 +18,15 @@
 
     <emp-trade-shipping-data-view
       [shippingData]="shipping.shippingData"
-      [canEdit]="canEdit"
+      [canEdit]="shipping.canEdit"
       (shippingDataViewEvent)="onShippingDataViewEvent($event)">
 
     </emp-trade-shipping-data-view>
 
 
-    <emp-trade-shipping-orders-table *ngIf="!putOnPallets"
-      [shipping]="shipping">
-
-    </emp-trade-shipping-orders-table>
-
-
     <emp-trade-shipping-orders-submitter
       [shippingData]="shipping.shippingData"
-      [canEdit]="canEdit"
+      [canEdit]="shipping.canEdit"
       [isReady]="isShippingDataReady"
       [(putOnPallets)]="putOnPallets"
       (shippingOrdersSubmitterEvent)="onShippingOrdersSubmitterEvent($event)">
@@ -40,9 +34,16 @@
     </emp-trade-shipping-orders-submitter>
 
 
+    <emp-trade-shipping-orders-table *ngIf="!putOnPallets"
+      [shipping]="shipping"
+      (shippingOrdersTableEvent)="onShippingOrdersTableEvent($event)">
+
+    </emp-trade-shipping-orders-table>
+
+
     <emp-trade-shipping-pallets-table *ngIf="putOnPallets"
       [shippingPallets]="shipping.shippingPalletsWithPackages ?? []"
-      [canEdit]="canEdit"
+      [canEdit]="shipping.canEdit"
       (shippingPalletsTableEvent)="onShippingPalletsTableEvent($event)">
 
     </emp-trade-shipping-pallets-table>

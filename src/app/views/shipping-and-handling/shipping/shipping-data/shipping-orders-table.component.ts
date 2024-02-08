@@ -16,12 +16,17 @@ import { EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
+import { MessageBoxService } from '@app/shared/containers/message-box';
+
 import { ShippingDataService } from '@app/data-services';
 
-import { EmptyShipping, OrderForShipping, Shipping } from '@app/models';
+import { EmptyShipping, OrderForShipping, OrderQuery, OrderQueryType, Shipping,
+         ShippingMethodTypes } from '@app/models';
 
 export enum ShippingOrdersTableEventType {
-  CHANGE_DATA = 'ShippingOrdersTableComponent.Event.ChangeData',
+  CHANGE_ORDERS = 'ShippingOrdersTableComponent.Event.ChangeOrders',
+  ADD_ORDER     = 'ShippingOrdersTableComponent.Event.AddOrder',
+  REMOVE_ORDER  = 'ShippingOrdersTableComponent.Event.RemoveOrder',
 }
 
 @Component({
@@ -36,12 +41,15 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
 
   @Output() shippingOrdersTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumns: string[] = ['ID', 'orderName', 'orderTotal',
-                                'totalPackages', 'totalWeight', 'totalVolume', 'action'];
+
+  displayedColumnsDefault: string[] = ['ID', 'orderNumber', 'orderTotal',
+                                        'totalPackages', 'totalWeight', 'totalVolume'];
+
+  displayedColumns = [...this.displayedColumnsDefault];
 
   dataSource: MatTableDataSource<OrderForShipping>;
 
-  orderForShippingToAdd: OrderForShipping = null;
+  orderFromSearcher: OrderForShipping = null;
 
   ordersList$: Observable<OrderForShipping[]>;
 
@@ -54,7 +62,8 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
   ordersForShipping: OrderForShipping[] = [];
 
 
-  constructor(private shippingData: ShippingDataService) {
+  constructor(private shippingData: ShippingDataService,
+              private messageBox: MessageBoxService) {
 
   }
 
@@ -62,21 +71,29 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
   ngOnChanges() {
     this.ordersForShipping = [...this.shipping.ordersForShipping];
     this.setDataTable();
+    this.resetColumns();
   }
 
 
   ngOnInit() {
-    this.subscribeOrdersSearch();
+    this.subscribeSearchOrders();
   }
 
 
-  onOrderToAddChanges() {
+  get isSaved(): boolean {
+    return !!this.shipping.shippingData.shippingUID;
+  }
+
+
+  onOrderSearcherChanges() {
     setTimeout(() => {
-      if (!this.isOrderInShipping(this.orderForShippingToAdd.orderUID)) {
-        this.addOrderToShipping();
+      if (!this.isOrderInShipping(this.orderFromSearcher.orderUID)) {
+        this.addOrderToShipping(this.orderFromSearcher.orderUID);
+      } else {
+        this.messageBox.showError('El pedido ya se encuentra en el envío.');
       }
 
-      this.resetOrderForShippingToAdd();
+      this.resetSearchOrders();
     });
   }
 
@@ -87,33 +104,8 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
         this.removeOrderToShipping(order.orderUID);
       }
 
-      this.resetOrderForShippingToAdd();
+      this.resetSearchOrders();
     });
-  }
-
-
-  private isOrderInShipping(orderUID: string): boolean {
-    return this.ordersForShipping.some(x => x.orderUID === orderUID);
-  }
-
-
-  private addOrderToShipping() {
-    this.ordersForShipping.push(this.orderForShippingToAdd);
-    this.setDataTable();
-    this.emitChangeData();
-  }
-
-
-  private removeOrderToShipping(orderUID: string) {
-    this.ordersForShipping = this.ordersForShipping.filter(x => x.orderUID !== orderUID);
-    this.setDataTable();
-    this.emitChangeData();
-  }
-
-
-  private resetOrderForShippingToAdd() {
-    this.orderForShippingToAdd = null;
-    this.subscribeOrdersSearch();
   }
 
 
@@ -122,7 +114,54 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
   }
 
 
-  private subscribeOrdersSearch() {
+  private resetColumns() {
+    this.displayedColumns = [...this.displayedColumnsDefault];
+
+    if (this.shipping.canEdit) {
+      this.displayedColumns.push('action');
+    }
+  }
+
+
+  private isOrderInShipping(orderUID: string): boolean {
+    return this.ordersForShipping.some(x => x.orderUID === orderUID);
+  }
+
+
+  private addOrderToShipping(orderUID: string) {
+    if (this.isSaved) {
+      sendEvent(this.shippingOrdersTableEvent, ShippingOrdersTableEventType.ADD_ORDER,
+        { shippingUID: this.shipping.shippingData.shippingUID, orderUID });
+    } else {
+      const orders = [...this.ordersForShipping.map(x => x.orderUID), orderUID];
+      this.emitUpdateOrders(orders);
+    }
+  }
+
+
+  private removeOrderToShipping(orderUID: string) {
+    if (this.isSaved) {
+      sendEvent(this.shippingOrdersTableEvent, ShippingOrdersTableEventType.REMOVE_ORDER,
+        { shippingUID: this.shipping.shippingData.shippingUID, orderUID });
+    } else {
+      const orders = this.ordersForShipping.map(x => x.orderUID).filter(x => x !== orderUID);
+      this.emitUpdateOrders(orders);
+    }
+  }
+
+
+  private emitUpdateOrders(orders: string[]) {
+    sendEvent(this.shippingOrdersTableEvent, ShippingOrdersTableEventType.CHANGE_ORDERS, { orders });
+  }
+
+
+  private resetSearchOrders() {
+    this.orderFromSearcher = null;
+    this.subscribeSearchOrders();
+  }
+
+
+  private subscribeSearchOrders() {
     this.ordersList$ = concat(
       of([]),
       this.ordersInput$.pipe(
@@ -131,7 +170,7 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
         debounceTime(800),
         tap(() => this.isOrdersLoading = true),
         switchMap(keyword =>
-          this.shippingData.getOrdersForShipping(keyword)
+          this.shippingData.searchOrdersForShipping(this.getQueryForSearchOrders(keyword))
             .pipe(
               delay(2000),
               catchError(() => of([])),
@@ -142,12 +181,19 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
   }
 
 
-  private emitChangeData() {
-    const payload = {
-      orders: this.ordersForShipping.map(x => x.orderUID),
+  private getQueryForSearchOrders(keywords: string): OrderQuery {
+    const query: OrderQuery = {
+      queryType: OrderQueryType.Sales,
+      keywords: keywords,
+      status: 'Shipping',
+      shippingMethod: ShippingMethodTypes.Paqueteria,
+
+      fromDate: null,
+      toDate: null,
+      customerUID: null,
     };
 
-    sendEvent(this.shippingOrdersTableEvent, ShippingOrdersTableEventType.CHANGE_DATA, payload);
+    return query;
   }
 
 }

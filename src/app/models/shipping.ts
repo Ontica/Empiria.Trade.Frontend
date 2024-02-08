@@ -7,16 +7,17 @@
 
 import { DateString, Empty, Identifiable } from '@app/core';
 
-import { ShippingMethodTypes } from './order';
+import { OrderDescriptor, ShippingMethodTypes } from './order';
 
 
-export interface ShippingQuery {
+export interface ShippingFieldsQuery {
   shippingType?: ShippingMethodTypes;
   orders: string[];
 }
 
 
 export interface Shipping {
+  canEdit: boolean;
   shippingData: ShippingData;
   ordersForShipping: OrderForShipping[];
   shippingPalletsWithPackages?: ShippingPalletWithPackages[];
@@ -53,7 +54,7 @@ export interface ShippingTotals {
 
 export interface OrderForShipping extends ShippingTotals {
   orderUID: string;
-  orderName: string;
+  orderNumber: string;
   orderTotal: number;
   customer: Identifiable;
   vendor: Identifiable;
@@ -63,6 +64,23 @@ export interface OrderForShipping extends ShippingTotals {
   totalPackages: number;
   totalWeight: number;
   totalVolume: number;
+}
+
+
+export function mapOrdersDescriptorToOrdersForShipping(ordersDesc: OrderDescriptor[]): OrderForShipping[] {
+  return ordersDesc.map<OrderForShipping>(x => mapToOrderForShipping(x));
+}
+
+
+function mapToOrderForShipping(orderDesc: OrderDescriptor): OrderForShipping {
+  return {
+    orderUID: orderDesc.uid,
+    orderNumber: orderDesc.orderNumber,
+    orderTotal: orderDesc.orderTotal,
+    totalPackages: orderDesc.totalPackages,
+    totalWeight: orderDesc.weight,
+    customer: Empty, vendor: Empty, packages: [], totalVolume: null,
+  }
 }
 
 
@@ -126,6 +144,7 @@ export const EmptyShippingData: ShippingData = {
 
 
 export const EmptyShipping: Shipping = {
+  canEdit: false,
   shippingData: EmptyShippingData,
   ordersForShipping: [],
   shippingPalletsWithPackages: [],

@@ -9,7 +9,10 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { OrderForShipping, Shipping, ShippingFields, ShippingQuery } from '@app/models';
+import { map } from 'rxjs';
+
+import { OrderDescriptor, OrderForShipping, OrderQuery, Shipping, ShippingFields, ShippingFieldsQuery,
+         mapOrdersDescriptorToOrdersForShipping } from '@app/models';
 
 @Injectable()
 export class ShippingDataService {
@@ -25,19 +28,22 @@ export class ShippingDataService {
   }
 
 
-  getShippingByOrders(query: ShippingQuery): EmpObservable<Shipping> {
+  getShippingByOrders(query: ShippingFieldsQuery): EmpObservable<Shipping> {
     const path = 'v4/trade/sales/shipping/parcel-delivery';
 
     return this.http.post<Shipping>(path, query);
   }
 
 
-  getOrdersForShipping(keywords: string): EmpObservable<OrderForShipping[]> {
-    Assertion.assertValue(keywords, 'keywords');
 
-    const path = `v4/trade/sales/shipping/orders/?keywords=${keywords}`;
+  searchOrdersForShipping(query: OrderQuery): EmpObservable<OrderForShipping[]> {
+    Assertion.assertValue(query, 'query');
 
-    return this.http.get<OrderForShipping[]>(path);
+    const path = 'v4/trade/sales/orders/search';
+
+    return new EmpObservable<OrderForShipping[]> (
+      this.http.post<OrderDescriptor[]>(path, query).pipe(map(x => mapOrdersDescriptorToOrdersForShipping(x)))
+    );
   }
 
 
@@ -57,6 +63,27 @@ export class ShippingDataService {
     const path = `v4/trade/sales/shipping/${shippingUID}`;
 
     return this.http.put<Shipping>(path, shippingFields);
+  }
+
+
+  AddOrderToShipping(shippingUID: string, orderUID: string): EmpObservable<Shipping> {
+    Assertion.assertValue(shippingUID, 'shippingUID');
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v4/trade/sales/shipping/${shippingUID}/order/${orderUID}`;
+
+    return this.http.post<Shipping>(path);
+  }
+
+
+
+  removeOrderFromShipping(shippingUID: string, orderUID: string): EmpObservable<Shipping> {
+    Assertion.assertValue(shippingUID, 'shippingUID');
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v4/trade/sales/shipping/${shippingUID}/order/${orderUID}`;
+
+    return this.http.delete<Shipping>(path);
   }
 
 
