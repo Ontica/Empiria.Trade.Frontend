@@ -185,6 +185,10 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
         this.clearOperationCommandSelected();
         return;
 
+      case ShippingEditorEventType.SHIPPING_SENT:
+        this.searchOrders(this.query);
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;

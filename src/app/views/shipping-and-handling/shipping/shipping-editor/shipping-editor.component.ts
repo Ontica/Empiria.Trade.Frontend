@@ -34,6 +34,7 @@ import { ShippingPalletModalEventType } from '../shipping-edition/shipping-palle
 
 export enum ShippingEditorEventType {
   CLOSE_BUTTON_CLICKED = 'ShippingEditorComponent.Event.CloseButtonClicked',
+  SHIPPING_SENT        = 'ShippingEditorComponent.Event.ShippingSent',
 }
 
 @Component({
@@ -359,6 +360,7 @@ export class ShippingEditorComponent implements OnChanges {
   private resolveSendShipment(shipping: Shipping) {
     this.setShipping(shipping);
     this.messageBox.show('La infomación fue guardada correctamente.', 'Enviar a embarque');
+    sendEvent(this.shippingEditorEvent, ShippingEditorEventType.SHIPPING_SENT);
   }
 
 
