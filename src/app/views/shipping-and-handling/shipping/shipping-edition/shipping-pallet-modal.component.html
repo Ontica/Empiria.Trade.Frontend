@@ -37,13 +37,19 @@
 
       <div class="section-title"> Seleccion de paquetes </div>
 
-       <div class="fx-row-container">
-        <mat-checkbox #checkExpandAll
+      <div class="fx-row-container">
+        <mat-checkbox #checkExpandAllOrders class="fx-item-half"
           (click)="$event.stopPropagation"
-          (change)="onToggleExpansionPanels(checkExpandAll.checked)">
-          {{checkExpandAll.checked ? 'Ocultar todos los paquetes' : 'Mostrar todos los paquetes'}}
+          (change)="onToggleExpandAllOrders(checkExpandAllOrders.checked)">
+          {{checkExpandAllOrders.checked ? 'Ocultar todos los paquetes' : 'Mostrar todos los paquetes'}}
         </mat-checkbox>
-       </div>
+
+        <mat-checkbox #checkSelectAllOrders class="fx-item-half"
+          (click)="$event.stopPropagation"
+          (change)="onToggleSelectAllOrders(checkSelectAllOrders.checked)">
+          {{checkSelectAllOrders.checked ? 'Desseleccionar todos los paquetes' : 'Seleccionar todos los paquetes'}}
+        </mat-checkbox>
+      </div>
 
       <mat-divider class="horizontal">
 
@@ -77,10 +83,11 @@
 
                 <span class="text-expandable-selection">
 
-                  {{item.order.orderNumber}}
+                  <strong>{{item.order.orderNumber}}</strong>
+                  &nbsp; &nbsp; | &nbsp; &nbsp;
+                  {{item.order.orderTotal | empDecimal}}
 
                 </span>
-
 
               </mat-panel-title>
 
@@ -93,8 +100,8 @@
                 <div class="fx-row-container ">
                   <div class="fx-item-none" [style.width.px]="28"></div>
                   <div class="fx-item-half"></div>
-                  <div class="fx-item-quarter fx-end fx-items-center">Volumen</div>
                   <div class="fx-item-quarter fx-end fx-items-center">Peso</div>
+                  <div class="fx-item-quarter fx-end fx-items-center">Volumen</div>
                 </div>
               </li>
 
@@ -123,11 +130,11 @@
                   </div>
 
                   <div class="fx-item-quarter fx-end fx-items-center">
-                    {{package.totalVolume | empDecimal}}
+                    {{package.totalWeight | empDecimal}}
                   </div>
 
                   <div class="fx-item-quarter fx-end fx-items-center">
-                    {{package.totalWeight | empDecimal}}
+                    {{package.totalVolume | empDecimal}}
                   </div>
 
                 </div>
@@ -144,8 +151,8 @@
             <div class="fx-row-container text-expandable-selection">
               <div class="fx-item-none fx-center fx-items-center" [style.width.px]="28">{{item.totals.totalPackages}}</div>
               <div class="fx-item-half fx-start fx-items-center"></div>
-              <div class="fx-item-quarter fx-end fx-items-center">{{item.totals.totalVolume | empDecimal}}</div>
               <div class="fx-item-quarter fx-end fx-items-center">{{item.totals.totalWeight | empDecimal}}</div>
+              <div class="fx-item-quarter fx-end fx-items-center">{{item.totals.totalVolume | empDecimal}}</div>
             </div>
 
           </mat-expansion-panel>
@@ -180,13 +187,12 @@
             [class.btn-action]="isReady"
             [style.width.px]="100"
             (click)="onSubmitButtonClicked()">
-            Asignar
+            Guardar
           </button>
 
         </div>
 
       </div>
-
 
     </div>
 

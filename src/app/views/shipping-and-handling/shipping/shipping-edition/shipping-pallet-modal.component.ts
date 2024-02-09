@@ -75,8 +75,23 @@ export class ShippingPalletModalComponent implements OnInit {
   }
 
 
-  onToggleExpansionPanels(expanded: boolean) {
+  onToggleExpandAllOrders(expanded: boolean) {
     this.palletOrdersSelection.forEach(x => x.expanded = expanded);
+  }
+
+
+  onToggleSelectAllOrders(select: boolean) {
+    this.palletOrdersSelection.forEach(x => {
+      if (select) {
+        x.selection.select(...x.packages);
+        x.selection.deselect(...this.packagesDisabled)
+      } else {
+        x.selection.clear();
+      }
+    });
+
+    this.recalculateOrderTotals();
+    this.recalculateTotals();
   }
 
 
