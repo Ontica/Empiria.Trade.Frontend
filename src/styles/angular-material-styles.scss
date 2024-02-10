@@ -255,7 +255,9 @@ table.mat-mdc-table {
     }
 
     a.item-link {
-      color: $link-color;
+      color: $primary-color;
+      text-decoration: underline;
+      white-space: nowrap;
     }
 
     a.item-link:hover {
@@ -767,8 +769,8 @@ table.mat-mdc-table.emp-designer {
     }
 
     .mdc-checkbox__native-control {
-      width: 28px !important;
-      height: 28px !important;
+      width: $checkbox-size !important;
+      height: $checkbox-size !important;
     }
 
     .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true]) ~ .mdc-checkbox__background {
@@ -805,7 +807,7 @@ table.mat-mdc-table.emp-designer {
 //
 
 .mat-mdc-radio-group {
-  height: 28px;
+  height: $checkbox-size;
   display: flex;
   align-items: center;
   margin: 2px 0;

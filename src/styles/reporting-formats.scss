@@ -10,8 +10,14 @@
 //
 
 table.mat-mdc-table th.column-checkbox {
-    padding-top: 4px;
-    padding-bottom: 4px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  width: calc($checkbox-size + $grid-entry-padding-horizontal);
+
+  &:first-of-type {
+    width: calc($checkbox-size + $grid-entry-padding-horizontal + $grid-entry-padding-vertical);
+  }
+
 }
 
 table.mat-mdc-table tr.mat-mdc-row {
@@ -242,6 +248,7 @@ table.mat-mdc-table tr.mat-mdc-row.row-selected {
     border-left: 3px solid darken($grid-selected-background-color, 50%);
 
     &.column-checkbox {
+      width: calc($checkbox-size + $grid-entry-padding-horizontal + $grid-entry-padding-vertical);
       padding-left: calc(1rem - 7px);
     }
   }

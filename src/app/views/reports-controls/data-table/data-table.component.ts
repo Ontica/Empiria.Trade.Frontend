@@ -5,27 +5,30 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges,
          ViewChild } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry, DataTableColumnType,
-         SummaryItemTypeList, GroupItemTypeList, TotalItemTypeList, EntryItemTypeList,
-         ClickeableItemTypeList } from '@app/models';
+import { SelectionModel } from '@angular/cdk/collections';
+
+import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+
+import { EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry, DataTableColumnType, SummaryItemTypeList,
+         GroupItemTypeList, TotalItemTypeList, EntryItemTypeList, ClickeableItemTypeList,
+         CheckBoxDataTableColumn } from '@app/models';
 
 import { DataTableControlsEventType } from './data-table-controls.component';
 
 export enum DataTableEventType {
-  COUNT_FILTERED_ENTRIES = 'DataTableComponent.Event.CountFilteredEntries',
-  ENTRY_CLICKED          = 'DataTableComponent.Event.EntryClicked',
-  EXPORT_DATA            = 'DataTableComponent.Event.ExportData',
+  COUNT_FILTERED_ENTRIES     = 'DataTableComponent.Event.CountFilteredEntries',
+  ENTRY_CLICKED              = 'DataTableComponent.Event.EntryClicked',
+  EXPORT_DATA                = 'DataTableComponent.Event.ExportData',
+  CHECKBOX_SELECTION_CHANGED = 'DataTableComponent.Event.CheckboxSelectionChanged',
 }
 
 @Component({
@@ -41,9 +44,15 @@ export class DataTableComponent implements OnChanges {
 
   @Input() selectedEntry: DataTableEntry = null;
 
+  @Input() selectedUID: string = null;
+
   @Input() executed = true;
 
   @Input() controlsAligned = false;
+
+  @Input() showControls = true;
+
+  @Input() showCheckboxSelection = false;
 
   @Input() showExportButton = true;
 
@@ -67,6 +76,8 @@ export class DataTableComponent implements OnChanges {
 
   filter = '';
 
+  selection = new SelectionModel<DataTableEntry>(true, []);
+
   dataTableColumnType = DataTableColumnType;
 
   summaryItemTypeList = SummaryItemTypeList;
@@ -77,12 +88,22 @@ export class DataTableComponent implements OnChanges {
 
   entryItemTypeList = EntryItemTypeList;
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.dataTable) {
       this.filter = '';
+      this.clearSelection();
       this.initDataSource();
       this.scrollToTop();
     }
+
+    if (changes.showCheckboxSelection) {
+      this.suscribeToSelectionChanges();
+    }
+  }
+
+
+  get hasItems(): boolean {
+    return !!this.dataSource && this.dataSource?.data.length > 0;
   }
 
 
@@ -149,10 +170,10 @@ export class DataTableComponent implements OnChanges {
 
 
   private getValidatedColumns(): DataTableColumn[] {
-    const columns = this.dataTable.columns.filter((value, index, self) =>
+    const columns: DataTableColumn[] = this.dataTable.columns.filter((value, index, self) =>
       index === self.findIndex((t) => (!!value.field && t.field === value.field)));
 
-    return columns;
+    return this.showCheckboxSelection ? [CheckBoxDataTableColumn, ...columns] : columns;
   }
 
 
@@ -205,6 +226,21 @@ export class DataTableComponent implements OnChanges {
     if (window.getSelection().toString().length <= 0) {
       sendEvent(this.dataTableEvent, DataTableEventType.ENTRY_CLICKED, { entry });
     }
+  }
+
+
+  private suscribeToSelectionChanges() {
+    if (this.showCheckboxSelection) {
+      this.selection.changed.subscribe(x => {
+        const payload = { entries: this.selection.selected.map(x => x.uid) };
+        sendEvent(this.dataTableEvent, DataTableEventType.CHECKBOX_SELECTION_CHANGED, payload);
+      });
+    }
+  }
+
+
+  private clearSelection() {
+    this.selection.clear();
   }
 
 }
