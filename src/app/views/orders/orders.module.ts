@@ -28,7 +28,6 @@ import { OrderSubmitterComponent } from './order-edition/order-submitter.compone
 import { OrdersExplorerComponent } from './orders-explorer/orders-explorer.component';
 import { OrdersFilterComponent } from './orders-explorer/orders-filter.component';
 import { OrdersControlsComponent } from './orders-explorer/orders-controls.component';
-import { OrdersTableComponent } from './orders-explorer/orders-table.component';
 
 import { OrderCreatorComponent } from './order-creator/order-creator.component';
 import { OrderTabbedViewComponent } from './order-tabbed-view/order-tabbed-view.component';
@@ -61,7 +60,6 @@ import { OrderEditorComponent } from './order-editor/order-editor.component';
     OrdersExplorerComponent,
     OrdersFilterComponent,
     OrdersControlsComponent,
-    OrdersTableComponent,
 
     OrderCreatorComponent,
     OrderTabbedViewComponent,

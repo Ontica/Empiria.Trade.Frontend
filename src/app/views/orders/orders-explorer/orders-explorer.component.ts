@@ -11,13 +11,14 @@ import { ApplicationStatusService, Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyOrder, Order, OrderDescriptor, OrderQueryType, OrderTypeConfig } from '@app/models';
+import { EmptyOrder, EmptyOrderDataTable, Order, OrderDataTable, OrderQueryType,
+         OrderTypeConfig } from '@app/models';
 
 import { OrdersFilterEventType } from './orders-filter.component';
 
 import { OrdersControlsEventType } from './orders-controls.component';
 
-import { OrdersTableEventType } from './orders-table.component';
+import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
 
 
 export enum OrdersExplorerEventType {
@@ -41,7 +42,7 @@ export class OrdersExplorerComponent implements OnChanges {
     canAdd: false,
   };
 
-  @Input() ordersList: OrderDescriptor[] = [];
+  @Input() ordersData: OrderDataTable = Object.assign({}, EmptyOrderDataTable);
 
   @Input() orderSelected: Order = EmptyOrder();
 
@@ -60,10 +61,15 @@ export class OrdersExplorerComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.ordersList) {
+    if (changes.ordersData) {
       this.setText();
       this.resetOrderSelected();
     }
+  }
+
+
+  get canSelectOrders(): boolean {
+    return this.config.type === OrderQueryType.Sales;
   }
 
 
@@ -76,7 +82,6 @@ export class OrdersExplorerComponent implements OnChanges {
 
 
   onOrdersFilterEvent(event: EventInfo) {
-
     switch (event.type as OrdersFilterEventType) {
 
       case OrdersFilterEventType.SEARCH_CLICKED:
@@ -116,18 +121,17 @@ export class OrdersExplorerComponent implements OnChanges {
   }
 
 
-  onOrdersListEvent(event: EventInfo) {
+  onOrdersTableEvent(event: EventInfo) {
+    switch (event.type as DataTableEventType) {
 
-    switch (event.type as OrdersTableEventType) {
-
-      case OrdersTableEventType.ENTRY_CLICKED:
+      case DataTableEventType.ENTRY_CLICKED:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
         sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.SELECT_ORDER, event.payload);
         return;
 
-      case OrdersTableEventType.SELECTION_CHANGED:
-        Assertion.assertValue(event.payload.orders, 'event.payload.orders');
-        this.ordersSelected = event.payload.orders;
+      case DataTableEventType.CHECKBOX_SELECTION_CHANGED:
+        Assertion.assertValue(event.payload.entries, 'event.payload.entries');
+        this.ordersSelected = event.payload.entries;
         return;
 
       default:
@@ -145,7 +149,7 @@ export class OrdersExplorerComponent implements OnChanges {
       return;
     }
 
-    this.cardHint = `${this.ordersList.length} registros encontrados`;
+    this.cardHint = `${this.ordersData.entries.length} registros encontrados`;
   }
 
 

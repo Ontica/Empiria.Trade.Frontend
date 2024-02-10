@@ -46,15 +46,16 @@
 
       </emp-trade-orders-controls>
 
-      <emp-trade-orders-table class="fx-item"
-        [orderType]="config.type"
-        [ordersList]="ordersList"
-        [orderSelected]="orderSelected"
-        [queryExecuted]="queryExecuted"
-        [isLoading]="isLoading"
-        (ordersTableEvent)="onOrdersListEvent($event)">
+      <emp-ng-data-table class="fx-item"
+        [dataTable]="ordersData"
+        [executed]="queryExecuted"
+        [selectedUID]="orderSelected.orderData.uid"
+        [notQueryExecutedText]="isLoading ? 'Cargando...' : 'No se ha invocado la consulta.'"
+        [showControls]="false"
+        [showCheckboxSelection]="canSelectOrders"
+        (dataTableEvent)="onOrdersTableEvent($event)">
 
-      </emp-trade-orders-table>
+      </emp-ng-data-table>
 
     </div>
 

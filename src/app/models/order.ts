@@ -19,6 +19,8 @@ import { EmptyPacking, Packing } from './packing';
 
 import { EmptyShippingData, ShippingData } from './shipping';
 
+import { DataTable, DataTableColumn, DataTableColumnType, DataTableEntry, DataTableQuery } from './data-table';
+
 
 export interface OrderTypeConfig {
   type: OrderQueryType;
@@ -61,7 +63,7 @@ export enum OrderQueryType {
 }
 
 
-export interface OrderQuery {
+export interface OrderQuery extends DataTableQuery {
   queryType: OrderQueryType;
   keywords: string;
   fromDate: DateString;
@@ -72,18 +74,7 @@ export interface OrderQuery {
 }
 
 
-export const EmptyOrderQuery: OrderQuery = {
-  queryType: OrderQueryType.Sales,
-  keywords: null,
-  fromDate: null,
-  toDate: null,
-  status: null,
-  shippingMethod: null,
-  customerUID: null,
-}
-
-
-export interface OrderDescriptor {
+export interface OrderDescriptor extends DataTableEntry {
   uid: string;
   orderNumber: string;
   customerName: string;
@@ -97,6 +88,89 @@ export interface OrderDescriptor {
   totalPackages: number;
   weight: number;
 }
+
+
+export interface OrderDataTable extends DataTable {
+  query: OrderQuery;
+  columns: DataTableColumn[];
+  entries: OrderDescriptor[];
+}
+
+
+export function getOrderColumns(type: OrderQueryType) {
+
+    switch (type) {
+
+      case OrderQueryType.Sales:
+        return DefaultOrderColumns;
+
+      case OrderQueryType.SalesAuthorization:
+        return [...DefaultOrderColumns,
+               { field: 'totalDebt', title: 'Adeudo', type: DataTableColumnType.decimal }];
+
+      case OrderQueryType.SalesPacking:
+        return [...DefaultOrderColumns, 'weight',
+               { field: 'weight', title: 'Peso', type: DataTableColumnType.decimal },
+               { field: 'totalPackages', title: 'No. Paquetes', type: DataTableColumnType.decimal, digits: 0 }];
+
+      default:
+        return DefaultOrderColumns;
+
+    }
+
+}
+
+
+const DefaultOrderColumns: DataTableColumn[] = [
+  {
+    field: 'orderNumber',
+    title: 'No. Orden',
+    type: DataTableColumnType.text_link,
+  },
+  {
+    field: 'orderTime',
+    title: 'Fecha',
+    type: DataTableColumnType.date,
+  },
+  {
+    field: 'customerName',
+    title: 'Cliente',
+    type: DataTableColumnType.text,
+  },
+  {
+    field: 'statusName',
+    title: 'Estatus',
+    type: DataTableColumnType.text_tag,
+  },
+  {
+    field: 'salesAgentName',
+    title: 'Vendedor',
+    type: DataTableColumnType.text,
+  },
+  {
+    field: 'orderTotal',
+    title: 'Total',
+    type: DataTableColumnType.decimal,
+  },
+];
+
+
+export const EmptyOrderQuery: OrderQuery = {
+  queryType: OrderQueryType.Sales,
+  keywords: null,
+  fromDate: null,
+  toDate: null,
+  status: null,
+  shippingMethod: null,
+  customerUID: null,
+};
+
+
+export const EmptyOrderDataTable: OrderDataTable = {
+  query: EmptyOrderQuery,
+  columns: DefaultOrderColumns,
+  entries: [],
+};
 
 
 export interface OrderGeneralData extends OrderAdditionalData {

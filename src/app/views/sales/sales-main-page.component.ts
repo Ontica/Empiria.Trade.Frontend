@@ -21,8 +21,9 @@ import { ArrayLibrary, clone } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { EmptyOrder, EmptyOrderQuery, Order, OrderDescriptor, OrderQuery, OrderQueryType,
-         OrderTypeConfig, OrdersOperationType, mapOrderDescriptorFromOrder } from '@app/models';
+import { EmptyOrder, EmptyOrderDataTable, EmptyOrderQuery, Order, OrderDataTable, OrderDescriptor, OrderQuery,
+         OrderQueryType, OrderTypeConfig, OrdersOperationType, getOrderColumns,
+         mapOrderDescriptorFromOrder } from '@app/models';
 
 import { SalesOrdersDataService } from '@app/data-services';
 
@@ -63,7 +64,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   isLoadingOrder = false;
 
-  ordersList: OrderDescriptor[] = [];
+  ordersData: OrderDataTable = Object.assign({}, EmptyOrderDataTable);
 
   orderSelected: Order = EmptyOrder();
 
@@ -249,14 +250,16 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
 
   private setOrderData(data: OrderDescriptor[], queryExecuted: boolean = true) {
-    this.ordersList = data;
+    this.ordersData = Object.assign({}, this.ordersData,
+      { query: this.query, columns: getOrderColumns(this.salesConfig.type), entries: data });
     this.queryExecuted = queryExecuted;
     this.clearOperationCommandSelected();
   }
 
 
   private clearData() {
-    this.ordersList = [];
+    this.ordersData = Object.assign({}, this.ordersData,
+      { query: this.query, columns: getOrderColumns(this.salesConfig.type), entries: [] });;
     this.isLoading = true;
     this.queryExecuted = false;
   }
@@ -275,7 +278,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   private insertOrderToList(order: Order) {
     const orderToInsert = mapOrderDescriptorFromOrder(order);
-    const ordersListNew = ArrayLibrary.insertItemTop(this.ordersList, orderToInsert, 'uid');
+    const ordersListNew = ArrayLibrary.insertItemTop(this.ordersData.entries, orderToInsert, 'uid');
     this.setOrderData(ordersListNew);
     this.setOrderSelected(order);
     this.setUserWorkStatusFinished();
@@ -283,7 +286,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
 
   private removeOrderFromList(orderUID: string) {
-    const ordersListNew = this.ordersList.filter(x => x.uid !== orderUID);
+    const ordersListNew = this.ordersData.entries.filter(x => x.uid !== orderUID);
     this.setOrderData(ordersListNew);
     this.clearOrderSelected();
     this.setUserWorkStatusFinished();
