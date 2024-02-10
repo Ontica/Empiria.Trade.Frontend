@@ -1,0 +1,21 @@
+<form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+
+  <div class="fx-column-container fx-gap-three-quarter">
+
+    <div class="fx-row-container">
+
+      <div class="fx-item-half">
+        <label>Identificador de la tarima:</label>
+        <input type="text" class="text-box"
+          [(ngModel)]="palletName"
+          [disabled]="!canEdit"
+          [class.invalid-control]="!palletName"
+          [ngModelOptions]="{standalone: true}"
+          (change)="onDataChanges()">
+      </div>
+
+    </div>
+
+  </div>
+
+</form>

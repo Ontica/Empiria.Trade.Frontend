@@ -1,0 +1,60 @@
+<emp-ng-modal-window [config]="{width: '960px', maxHeight: '95vh'}">
+
+  <emp-ng-card
+    [title]="titleText"
+    [hint]="hintText"
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding" [empNgSpinnerHost]="spinner">
+
+      <emp-ng-spinner #spinner [visible]="submitted">
+
+      </emp-ng-spinner>
+
+      <div class="section-title"> Datos de la tarima </div>
+
+      <emp-trade-pallet-header
+        [pallet]="pallet"
+        [canEdit]="shipping.canEdit"
+        (palletHeaderEvent)="onPalletHeaderEvent($event)">
+
+      </emp-trade-pallet-header>
+
+      <div class="section-title"> Seleccion de paquetes </div>
+
+      <emp-trade-packages-selector
+        [shipping]="shipping"
+        [pallet]="pallet"
+        (packagesSelectorEvent)="onPackagesSelectorEvent($event)">
+
+      </emp-trade-packages-selector>
+
+      <ng-container *ngIf="shipping.canEdit">
+
+        <mat-divider class="horizontal" >
+
+        </mat-divider>
+
+        <div class="fx-row-container fx-end" [style.margin-right.px]="8">
+
+          <div class="fx-item fx-end fx-items-center" >
+
+            <button
+              [class.btn]="!isReady"
+              [class.btn-action]="isReady"
+              [style.width.px]="100"
+              (click)="onSubmitButtonClicked()">
+              Guardar
+            </button>
+
+          </div>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

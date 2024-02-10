@@ -5,23 +5,17 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
 import { SelectionModel } from '@angular/cdk/collections';
 
-import { EventInfo } from '@app/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { EmptyShipping, EmptyShippingPalletWithPackages, EmptyShippingTotals, OrderForShipping, OrderPackage,
-         Shipping, ShippingPalletWithPackages, ShippingTotals} from '@app/models';
+         Shipping, ShippingPalletWithPackages, ShippingTotals } from '@app/models';
 
-export enum ShippingPalletModalEventType {
-  CLOSE_MODAL_CLICKED = 'ShippingPalletModalComponent.Event.CloseButtonClicked',
-  PALLET_SAVED        = 'ShippingPalletModalComponent.Event.PalletSaved',
-}
+import { EventInfo } from '@app/core';
+
 
 interface PalletOrderSelection {
   order: OrderForShipping;
@@ -32,46 +26,32 @@ interface PalletOrderSelection {
   totals: ShippingTotals;
 }
 
+export enum PackagesSelectorEventType {
+  SELECTION_CHANGES = 'PackagesSelectorComponent.Event.SelectionChanges',
+}
+
 @Component({
-  selector: 'emp-trade-shipping-pallet-modal',
-  templateUrl: './shipping-pallet-modal.component.html',
+  selector: 'emp-trade-packages-selector',
+  templateUrl: './packages-selector.component.html',
 })
-export class ShippingPalletModalComponent implements OnInit {
+export class PackagesSelectorComponent implements OnInit {
 
   @Input() shipping: Shipping = EmptyShipping;
 
   @Input() pallet: ShippingPalletWithPackages = EmptyShippingPalletWithPackages;
 
-  @Output() shippingPalletModalEvent = new EventEmitter<EventInfo>();
-
-  titleText = 'Agregar tarima';
-
-  hintText = 'Información del contenido de la tarima.';
-
-  submitted = false;
-
-  palletName: string = '';
+  @Output() packagesSelectorEvent = new EventEmitter<EventInfo>();
 
   palletOrdersSelection: PalletOrderSelection[] = [];
 
   packagesDisabled: string[] = [];
 
-
-  constructor(private messageBox: MessageBoxService) { }
+  packagesTotal: ShippingTotals = EmptyShippingTotals;
 
 
   ngOnInit() {
     this.setInitData();
-  }
-
-
-  get isReady(): boolean {
-    return !!this.palletName && this.palletOrdersSelection.some(x => x.selection.hasValue());
-  }
-
-
-  onClose() {
-    sendEvent(this.shippingPalletModalEvent, ShippingPalletModalEventType.CLOSE_MODAL_CLICKED);
+    this.emitPalletOrderSelection();
   }
 
 
@@ -84,7 +64,7 @@ export class ShippingPalletModalComponent implements OnInit {
     this.palletOrdersSelection.forEach(x => {
       if (select) {
         x.selection.select(...x.packages);
-        x.selection.deselect(...this.packagesDisabled)
+        x.selection.deselect(...this.packagesDisabled);
       } else {
         x.selection.clear();
       }
@@ -92,15 +72,17 @@ export class ShippingPalletModalComponent implements OnInit {
 
     this.recalculateOrderTotals();
     this.recalculateTotals();
+    this.emitPalletOrderSelection();
   }
 
 
   onSelectAllPackagesFromOrder(order: PalletOrderSelection, selection) {
-    selection.deselect(...this.packagesDisabled)
+    selection.deselect(...this.packagesDisabled);
     order.selection = selection;
 
     this.recalculateOrderTotals();
     this.recalculateTotals();
+    this.emitPalletOrderSelection();
   }
 
 
@@ -108,52 +90,16 @@ export class ShippingPalletModalComponent implements OnInit {
     order.selection.toggle(packageItem.packingItemUID);
     this.recalculateOrderTotals();
     this.recalculateTotals();
-  }
-
-
-  onSubmitButtonClicked() {
-    if (this.isReady) {
-      let packagesUID: string[] = [];
-
-      this.palletOrdersSelection
-        .forEach(x => packagesUID = [...packagesUID, ...x.selection.selected]);
-
-      const palletFields = {
-        shippingUID: this.shipping.shippingData.shippingUID,
-        shippingPalletName: this.palletName,
-        packagesUID
-      }
-
-      this.saveShippingPallet(palletFields);
-    }
-  }
-
-
-  private saveShippingPallet(palletFields: any) {
-    this.submitted = true;
-    setTimeout(() => {
-      this.submitted = false;
-      this.messageBox.showInDevelopment(this.titleText, palletFields);
-      sendEvent(this.shippingPalletModalEvent, ShippingPalletModalEventType.PALLET_SAVED,
-        {shipping: this.shipping});
-    }, 600);
+    this.emitPalletOrderSelection();
   }
 
 
   private setInitData() {
-    this.setFormData();
     this.setPalletOrdersSelectionOrdered();
     this.setPackagesDisabled();
     this.setPackagesSelected();
     this.recalculateOrderTotals();
     this.recalculateTotals();
-  }
-
-
-  private setFormData() {
-    this.titleText = this.pallet.shippingPalletUID ?
-      'Editar tarima - ' + this.pallet.shippingPalletName : 'Agregar tarima';
-    this.palletName = this.pallet.shippingPalletName;
   }
 
 
@@ -192,7 +138,7 @@ export class ShippingPalletModalComponent implements OnInit {
         totalWeight: packages.reduce((acum, value) => acum + value.totalWeight, 0),
         totalVolume: packages.reduce((acum, value) => acum + value.totalVolume, 0),
       };
-    })
+    });
   }
 
 
@@ -205,9 +151,9 @@ export class ShippingPalletModalComponent implements OnInit {
       this.shipping.ordersForShipping.forEach(item => packages = [...packages, ...item.packages]);
       const packagesSelected = packages.filter(x => selected.includes(x.packingItemUID));
 
-      this.pallet.totalPackages = packagesSelected.length;
-      this.pallet.totalWeight = packagesSelected.reduce((acum, value) => acum + value.totalWeight, 0);
-      this.pallet.totalVolume = packagesSelected.reduce((acum, value) => acum + value.totalVolume, 0);
+      this.packagesTotal.totalPackages = packagesSelected.length;
+      this.packagesTotal.totalWeight = packagesSelected.reduce((acum, value) => acum + value.totalWeight, 0);
+      this.packagesTotal.totalVolume = packagesSelected.reduce((acum, value) => acum + value.totalVolume, 0);
     });
   }
 
@@ -220,7 +166,20 @@ export class ShippingPalletModalComponent implements OnInit {
       expanded: false,
       selection: new SelectionModel<string>(true, []),
       totals: EmptyShippingTotals,
-    }
+    };
+  }
+
+
+  private emitPalletOrderSelection() {
+    let packages: string[] = [];
+    this.palletOrdersSelection.forEach(x => packages = [...packages, ...x.selection.selected]);
+
+    const payload = {
+      packages,
+      totals: this.packagesTotal,
+    };
+
+    sendEvent(this.packagesSelectorEvent, PackagesSelectorEventType.SELECTION_CHANGES, payload);
   }
 
 }

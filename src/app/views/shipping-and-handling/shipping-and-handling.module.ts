@@ -33,7 +33,9 @@ import { ShippingOrdersTableComponent } from './shipping/shipping-edition/shippi
 import { ShippingPalletsTableComponent } from './shipping/shipping-edition/shipping-pallets-table.component';
 import { ShippingOrdersModalComponent } from './shipping/shipping-edition/shipping-orders-modal.component';
 import { ShippingOrdersSubmitterComponent } from './shipping/shipping-edition/shipping-orders-submitter.component';
-import { ShippingPalletModalComponent } from './shipping/shipping-edition/shipping-pallet-modal.component';
+import { ShippingPalletModalComponent } from './shipping/pallet-edition/shipping-pallet-modal.component';
+import { PalletHeaderComponent } from './shipping/pallet-edition/pallet-header.component';
+import { PackagesSelectorComponent } from './shipping/pallet-edition/packages-selector.component';
 
 import { ShippingExplorerComponent } from './shipping/shipping-explorer/shipping-explorer.component';
 import { ShippingFilterComponent } from './shipping/shipping-explorer/shipping-filter.component';
@@ -71,6 +73,8 @@ import { ShippingTableComponent } from './shipping/shipping-explorer/shipping-ta
     ShippingOrdersModalComponent,
     ShippingOrdersSubmitterComponent,
     ShippingPalletModalComponent,
+    PackagesSelectorComponent,
+    PalletHeaderComponent,
 
     ShippingExplorerComponent,
     ShippingFilterComponent,

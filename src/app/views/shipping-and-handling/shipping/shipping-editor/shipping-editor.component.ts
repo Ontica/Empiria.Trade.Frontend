@@ -30,7 +30,7 @@ import { ShippingPalletsTableEventType } from '../shipping-edition/shipping-pall
 
 import { ShippingOrdersModalEventType } from '../shipping-edition/shipping-orders-modal.component';
 
-import { ShippingPalletModalEventType } from '../shipping-edition/shipping-pallet-modal.component';
+import { ShippingPalletModalEventType } from '../pallet-edition/shipping-pallet-modal.component';
 
 export enum ShippingEditorEventType {
   CLOSE_BUTTON_CLICKED = 'ShippingEditorComponent.Event.CloseButtonClicked',
