@@ -124,7 +124,7 @@ export function getOrderColumns(type: OrderQueryType) {
 const DefaultOrderColumns: DataTableColumn[] = [
   {
     field: 'orderNumber',
-    title: 'No. Orden',
+    title: 'No. Pedido',
     type: DataTableColumnType.text_link,
   },
   {

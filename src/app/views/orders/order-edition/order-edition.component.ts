@@ -269,7 +269,7 @@ export class OrderEditionComponent implements OnChanges, OnDestroy {
   }
 
 
-  private isItemInOrden(item: OrderItem): boolean {
+  private isItemInOrder(item: OrderItem): boolean {
     return this.orderForEdition.items.some(x => this.isSameOrderItem(x, item));
   }
 
@@ -300,7 +300,7 @@ export class OrderEditionComponent implements OnChanges, OnDestroy {
 
 
   private addOrderItem(item: OrderItem) {
-    if (this.isItemInOrden(item)) {
+    if (this.isItemInOrder(item)) {
       this.showMessageItemInOrder(item);
       return;
     }
@@ -352,7 +352,7 @@ export class OrderEditionComponent implements OnChanges, OnDestroy {
 
   private handleCalculateOrderError() {
     this.setOrderForEdition(this.orderForEdition);
-    this.messageBox.showError('Ocurrió un error al procesar la orden.');
+    this.messageBox.showError('Ocurrió un error al procesar el pedido.');
   }
 
 
@@ -363,9 +363,9 @@ export class OrderEditionComponent implements OnChanges, OnDestroy {
 
 
   private showMessageItemInOrder(item: OrderItem) {
-    const title = 'Producto duplicado en la orden';
+    const title = 'Producto duplicado en el pedido';
 
-    const message = `El producto ya se encuentra agregado, edite la cantidad en el detalle de la orden.<br>
+    const message = `El producto ya se encuentra agregado, edite la cantidad en el detalle del pedido.<br>
       <table class="confirm-data">
         <tr><td>Clave: </td><td><strong>${item.product?.productCode}</strong></td></tr>
         <tr><td>Presentación: </td><td><strong>${item.presentation.description}</strong></td></tr>

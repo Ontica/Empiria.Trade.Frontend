@@ -61,7 +61,7 @@ export class OrderItemsComponent implements OnChanges {
 
   onAddOrderItemClicked() {
     if (!this.canEdit) {
-      this.messageBox.show('Seleccione los datos de la orden para continuar.', 'Agregar producto');
+      this.messageBox.show('Seleccione los datos del pedido para continuar.', 'Agregar producto');
       return;
     }
 
