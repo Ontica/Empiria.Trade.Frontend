@@ -23,6 +23,7 @@ export enum ProductsFilterEventType {
 
 interface ProductsFilterFormModel extends FormGroup<{
   keywords: FormControl<string>;
+  onStock: FormControl<boolean>;
 }> { }
 
 
@@ -76,13 +77,17 @@ export class ProductsFilterComponent implements AfterViewInit {
   private initForm() {
     const fb = new FormBuilder();
 
-    this.form = fb.group({ keywords: ['', Validators.required] });
+    this.form = fb.group({
+      keywords: ['', Validators.required],
+      onStock: [true],
+    });
   }
 
 
   private getProductQuery(): ProductQuery {
     const query: ProductQuery = {
       keywords: this.form.value.keywords,
+      onStock: this.form.value.onStock,
     };
 
     return query;

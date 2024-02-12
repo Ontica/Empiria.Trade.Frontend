@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
@@ -37,7 +37,7 @@ export class ProductsSelectorComponent implements OnChanges {
   orderForQuery: OrderFields = null;
 
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     this.orderForQuery = mapOrderFieldsFromOrder(this.order);
   }
 
