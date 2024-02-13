@@ -34,6 +34,7 @@ import { ShippingPalletModalEventType } from '../pallet-edition/shipping-pallet-
 
 export enum ShippingEditorEventType {
   CLOSE_BUTTON_CLICKED = 'ShippingEditorComponent.Event.CloseButtonClicked',
+  SHIPPING_UPDATED     = 'ShippingEditorComponent.Event.ShippingUpdated',
   SHIPPING_SENT        = 'ShippingEditorComponent.Event.ShippingSent',
 }
 
@@ -43,7 +44,9 @@ export enum ShippingEditorEventType {
 })
 export class ShippingEditorComponent implements OnChanges {
 
-  @Input() orders: string[] = [];
+  @Input() shippingUID: string = null;
+
+  @Input() orders: string[] = null;
 
   @Output() shippingEditorEvent = new EventEmitter<EventInfo>();
 
@@ -75,6 +78,7 @@ export class ShippingEditorComponent implements OnChanges {
 
 
   ngOnChanges() {
+    debugger
     this.loadInitData();
   }
 
@@ -250,10 +254,19 @@ export class ShippingEditorComponent implements OnChanges {
   }
 
 
+  get isQueryByShippingUID(): boolean {
+    return !!this.shippingUID;
+  }
+
+
+  get isQueryByOrders(): boolean {
+    return !!this.orders && this.orders.length > 0;
+  }
+
+
   private loadInitData() {
-    if (this.orders.length > 0) {
-      const query: ShippingFieldsQuery = {orders: this.orders};
-      this.getShippingByOrders(query);
+    if (this.isQueryByShippingUID || this.isQueryByOrders) {
+      this.validateGetShippingToExecute();
     } else {
       this.messageBox.showError('No se han proporcionado datos validos.');
       this.resolveShippingError();
@@ -267,10 +280,35 @@ export class ShippingEditorComponent implements OnChanges {
       return;
     }
 
-    if (!this.shipping.shippingData.shippingUID) {
+    if (!this.shipping.shippingData.shippingUID && !this.shippingUID) {
       const query: ShippingFieldsQuery = { orders };
       this.getShippingByOrders(query);
     }
+  }
+
+
+  private validateGetShippingToExecute() {
+    if (this.isQueryByShippingUID) {
+      this.getShipping();
+      return;
+    }
+
+    if (this.isQueryByOrders) {
+      const query: ShippingFieldsQuery = { orders: this.orders };
+      this.getShippingByOrders(query);
+      return;
+    }
+  }
+
+
+  private getShipping() {
+    this.isLoading = true;
+
+    this.shippingData.getShipping(this.shippingUID)
+      .firstValue()
+      .then(x => this.setShipping(x))
+      .catch(x => this.resolveShippingError())
+      .finally(() => this.isLoading = false);
   }
 
 
@@ -347,20 +385,25 @@ export class ShippingEditorComponent implements OnChanges {
 
   private resolveShippingSaved(shipping: Shipping) {
     this.setShipping(shipping);
+    sendEvent(this.shippingEditorEvent, ShippingEditorEventType.SHIPPING_UPDATED,
+      { shippingData: shipping.shippingData});
     this.messageBox.show('La infomación fue guardada correctamente.', 'Envío por paquetería');
   }
 
 
   private resolveShippingOrdersUpdated(shipping: Shipping) {
     this.setShipping(shipping);
+    sendEvent(this.shippingEditorEvent, ShippingEditorEventType.SHIPPING_UPDATED,
+      { shippingData: shipping.shippingData });
     this.messageBox.show('La infomación fue guardada correctamente.', 'Actualizar pedidos del envío');
   }
 
 
   private resolveSendShipment(shipping: Shipping) {
     this.setShipping(shipping);
+    sendEvent(this.shippingEditorEvent, ShippingEditorEventType.SHIPPING_SENT,
+      { shippingData: shipping.shippingData });
     this.messageBox.show('La infomación fue guardada correctamente.', 'Enviar a embarque');
-    sendEvent(this.shippingEditorEvent, ShippingEditorEventType.SHIPPING_SENT);
   }
 
 

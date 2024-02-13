@@ -37,6 +37,13 @@ export class ShippingDataService {
   }
 
 
+  getShipping(shippingUID: string): EmpObservable<Shipping> {
+    const path = `v4/trade/sales/shipping/parcel-delivery/${shippingUID}`;
+
+    return this.http.get<Shipping>(path);
+  }
+
+
   getShippingByOrders(query: ShippingFieldsQuery): EmpObservable<Shipping> {
     const path = 'v4/trade/sales/shipping/parcel-delivery';
 
