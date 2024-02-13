@@ -40,6 +40,7 @@ import { PackagesSelectorComponent } from './shipping/pallet-edition/packages-se
 import { ShippingExplorerComponent } from './shipping/shipping-explorer/shipping-explorer.component';
 import { ShippingFilterComponent } from './shipping/shipping-explorer/shipping-filter.component';
 import { ShippingTableComponent } from './shipping/shipping-explorer/shipping-table.component';
+import { ShippingViewerComponent } from './shipping/shipping-viewer/shipping-viewer.component';
 
 @NgModule({
   imports: [
@@ -79,12 +80,14 @@ import { ShippingTableComponent } from './shipping/shipping-explorer/shipping-ta
     ShippingExplorerComponent,
     ShippingFilterComponent,
     ShippingTableComponent,
+    ShippingViewerComponent,
   ],
   exports: [
     PackingViewComponent,
     OrderShippingViewerComponent,
     ShippingEditorComponent,
     ShippingExplorerComponent,
+    ShippingViewerComponent,
   ],
 })
 export class ShippingAndHandlingModule { }

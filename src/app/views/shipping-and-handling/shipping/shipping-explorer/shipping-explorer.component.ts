@@ -5,49 +5,61 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { sendEvent } from '@app/shared/utils';
 
-import { ShippingDataService } from '@app/data-services';
-
-import { ShippingData, ShippingQuery } from '@app/models';
+import { EmptyShippingData, ShippingData } from '@app/models';
 
 import { ShippingFilterEventType } from './shipping-filter.component';
 
+import { ShippingTableEventType } from './shipping-table.component';
+
+export enum ShippingExplorerEventType {
+  CREATE_SHIPPING_BUTTON_CLICKED = 'ShippingExplorerComponent.Event.CreateShippingButtonClicked',
+  SEARCH_SHIPPINGS_CLICKED       = 'ShippingExplorerComponent.Event.SearchShippingClicked',
+  SELECT_SHIPPING_CLICKED        = 'ShippingExplorerComponent.Event.SelectShippingClicked',
+}
 
 @Component({
   selector: 'emp-trade-shipping-explorer',
   templateUrl: './shipping-explorer.component.html',
 })
-export class ShippingExplorerComponent {
+export class ShippingExplorerComponent implements OnChanges {
+
+  @Input() shippingList: ShippingData[] = [];
+
+  @Input() isLoading = false;
+
+  @Input() queryExecuted = false;
+
+  @Input() shippingSelected: ShippingData = EmptyShippingData;
+
+  @Output() shippingExplorerEvent = new EventEmitter<EventInfo>();
 
   cardHint = 'Seleccionar los filtros';
 
-  shippingList: ShippingData[] = [];
 
-  isLoading = false;
-
-  queryExecuted = false;
-
-
-  constructor(private shippingData: ShippingDataService,
-              private messageBox: MessageBoxService) { }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.shippingList) {
+      this.setText();
+    }
+  }
 
 
   onCreateShipingClicked() {
-    this.messageBox.showInDevelopment('Agregar envío');
+    sendEvent(this.shippingExplorerEvent, ShippingExplorerEventType.CREATE_SHIPPING_BUTTON_CLICKED);
   }
 
 
   onShippingFilterEvent(event: EventInfo) {
     switch (event.type as ShippingFilterEventType) {
-
       case ShippingFilterEventType.SEARCH_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
-        this.searchShipping(event.payload.query as ShippingQuery);
+        sendEvent(this.shippingExplorerEvent,
+          ShippingExplorerEventType.SEARCH_SHIPPINGS_CLICKED, event.payload);
         return;
 
       default:
@@ -57,32 +69,18 @@ export class ShippingExplorerComponent {
   }
 
 
-  private searchShipping(query: ShippingQuery) {
-    this.clearData();
+  onShippingTableEvent(event: EventInfo) {
+    switch (event.type as ShippingTableEventType) {
+      case ShippingTableEventType.ITEM_CLICKED:
+        Assertion.assertValue(event.payload.shippingData.shippingUID, 'event.payload.shippingData.shippingUID');
+        sendEvent(this.shippingExplorerEvent,
+          ShippingExplorerEventType.SELECT_SHIPPING_CLICKED, event.payload);
+        return;
 
-    this.shippingData.searchShipping(query)
-      .firstValue()
-      .then(x => this.resolveSearchData(x))
-      .finally(() => this.isLoading = false);
-  }
-
-
-  private resolveSearchData(data: ShippingData[]) {
-    this.setShippingData(data)
-    this.setText();
-  }
-
-
-  private setShippingData(data: ShippingData[], queryExecuted: boolean = true) {
-    this.shippingList = data;
-    this.queryExecuted = queryExecuted;
-  }
-
-
-  private clearData() {
-    this.shippingList = [];
-    this.isLoading = true;
-    this.queryExecuted = false;
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 

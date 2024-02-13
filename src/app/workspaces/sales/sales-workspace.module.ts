@@ -7,6 +7,10 @@
 
 import { NgModule } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
+
+import { SharedModule } from '@app/shared/shared.module';
+
 import { SalesModule } from '@app/views/sales/sales.module';
 
 import { SalesWorkspaceRoutingModule } from './sales-workspace-routing.module';
@@ -19,6 +23,9 @@ import { ShippingMainPageComponent } from './shipping-main-page/shipping-main-pa
 @NgModule({
 
   imports: [
+    CommonModule,
+    SharedModule,
+
     SalesWorkspaceRoutingModule,
     SalesModule,
     ShippingAndHandlingModule,

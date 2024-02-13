@@ -42,7 +42,9 @@
       <emp-trade-shipping-table class="fx-item"
         [shippingList]="shippingList"
         [queryExecuted]="queryExecuted"
-        [isLoading]="isLoading">
+        [isLoading]="isLoading"
+        [shippingSelected]="shippingSelected"
+        (shippingTableEvent)="onShippingTableEvent($event)">
 
       </emp-trade-shipping-table>
 

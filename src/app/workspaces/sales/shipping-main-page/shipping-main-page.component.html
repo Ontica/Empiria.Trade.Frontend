@@ -1,10 +1,31 @@
+<emp-ng-spinner #spinner [visible]="isLoadingShipping">
+
+</emp-ng-spinner>
+
 <div class="explorer">
 
-  <div class="primary priority">
+  <div class="primary"
+    [class.std-hide]="displayShippingViewer">
 
-    <emp-trade-shipping-explorer>
+    <emp-trade-shipping-explorer
+      [shippingList]="shippingList"
+      [isLoading]="isLoading"
+      [queryExecuted]="queryExecuted"
+      [shippingSelected]="shippingDataSelected"
+      (shippingExplorerEvent)="onShippingExplorerEvent($event)">
 
     </emp-trade-shipping-explorer>
+
+  </div>
+
+
+  <div class="secondary priority" *ngIf="displayShippingViewer">
+
+    <emp-trade-shipping-viewer
+      [shippingData]="shippingDataSelected"
+      (shippingViewerEvent)="onShippingViewerEvent($event)">
+
+    </emp-trade-shipping-viewer>
 
   </div>
 
