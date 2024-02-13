@@ -5,7 +5,7 @@
 <div class="explorer">
 
   <div class="primary"
-    [class.std-hide]="displaySecondaryView"
+    [class.std-hide]="displayOrderTabbedView"
     [class.hidden]="displayOrderCreator">
 
     <emp-trade-orders-explorer
@@ -30,7 +30,7 @@
   </div>
 
 
-  <div class="secondary priority" *ngIf="displaySecondaryView">
+  <div class="secondary priority" *ngIf="displayOrderTabbedView">
 
     <emp-trade-order-tabbed-view
       [config]="salesConfig"

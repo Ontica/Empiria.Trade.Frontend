@@ -70,7 +70,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   operationCommandSeleted: OrderOperationCommand = { orders: [], operation: null }
 
-  displaySecondaryView = false;
+  displayOrderTabbedView = false;
 
   displayOrderCreator = false;
 
@@ -267,7 +267,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   private setOrderSelected(order: Order) {
     this.orderSelected = clone<Order>(order);
-    this.displaySecondaryView = !!this.orderSelected.orderData.uid;
+    this.displayOrderTabbedView = !!this.orderSelected.orderData.uid;
   }
 
 
