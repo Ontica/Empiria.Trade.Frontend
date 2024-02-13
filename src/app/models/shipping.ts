@@ -16,7 +16,6 @@ export interface ShippingQuery {
 
 
 export interface ShippingFieldsQuery {
-  shippingType?: ShippingMethodTypes;
   orders: string[];
 }
 
@@ -37,6 +36,7 @@ export interface ShippingData extends ShippingTotals {
   shippingGuide: string;
   parcelAmount: number;
   customerAmount: number;
+  status: boolean;
 
   totalPackages: number;
   totalWeight: number;
@@ -138,6 +138,7 @@ export const EmptyShippingData: ShippingData = {
   parcelAmount: null,
   customerAmount: null,
   shippingDate: '',
+  status: false,
 
   ordersCount: 0,
   ordersTotal: 0,

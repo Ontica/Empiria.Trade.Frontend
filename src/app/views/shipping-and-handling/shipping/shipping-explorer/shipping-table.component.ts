@@ -5,14 +5,21 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
-import { ShippingData } from '@app/models';
+import { EventInfo } from '@app/core';
 
+import { sendEvent } from '@app/shared/utils';
+
+import { EmptyShippingData, ShippingData } from '@app/models';
+
+export enum ShippingTableEventType {
+  ITEM_CLICKED = 'ShippingTableComponent.Event.ItemClicked',
+}
 
 @Component({
   selector: 'emp-trade-shipping-table',
@@ -28,8 +35,12 @@ export class ShippingTableComponent implements OnChanges {
 
   @Input() isLoading = false;
 
-  displayedColumns = ['shippingDate', 'parcelSupplier', 'shippingGuide', 'parcelAmount', 'customerAmount',
-                      'ordersCount', 'ordersTotal', 'totalPackages', 'totalWeight', 'totalVolume'];
+  @Input() shippingSelected: ShippingData = EmptyShippingData;
+
+  @Output() shippingTableEvent = new EventEmitter<EventInfo>();
+
+  displayedColumns = ['shippingDate', 'parcelSupplier', 'shippingGuide', 'status',
+                      'ordersCount','totalPackages', 'totalWeight', 'totalVolume'];
 
   dataSource: TableVirtualScrollDataSource<ShippingData>;
 
@@ -39,6 +50,11 @@ export class ShippingTableComponent implements OnChanges {
       this.setDataTable();
       this.scrollToTop();
     }
+  }
+
+
+  onShippingClicked(shippingData: ShippingData) {
+    sendEvent(this.shippingTableEvent, ShippingTableEventType.ITEM_CLICKED, { shippingData });
   }
 
 
