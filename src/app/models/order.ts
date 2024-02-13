@@ -19,7 +19,7 @@ import { EmptyPacking, Packing } from './packing';
 
 import { EmptyShippingData, ShippingData } from './shipping';
 
-import { DataTable, DataTableColumn, DataTableColumnType, DataTableEntry, DataTableQuery } from './data-table';
+import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './data-table';
 
 
 export interface OrderTypeConfig {
@@ -87,6 +87,7 @@ export interface OrderDescriptor extends DataTableEntry {
   totalDebt: number;
   totalPackages: number;
   weight: number;
+  shipment: string;
 }
 
 
@@ -95,64 +96,6 @@ export interface OrderDataTable extends DataTable {
   columns: DataTableColumn[];
   entries: OrderDescriptor[];
 }
-
-
-export function getOrderColumns(type: OrderQueryType) {
-
-    switch (type) {
-
-      case OrderQueryType.Sales:
-        return DefaultOrderColumns;
-
-      case OrderQueryType.SalesAuthorization:
-        return [...DefaultOrderColumns,
-               { field: 'totalDebt', title: 'Adeudo', type: DataTableColumnType.decimal }];
-
-      case OrderQueryType.SalesPacking:
-        return [...DefaultOrderColumns, 'weight',
-               { field: 'weight', title: 'Peso', type: DataTableColumnType.decimal },
-               { field: 'totalPackages', title: 'No. Paquetes', type: DataTableColumnType.decimal, digits: 0 }];
-
-      default:
-        return DefaultOrderColumns;
-
-    }
-
-}
-
-
-const DefaultOrderColumns: DataTableColumn[] = [
-  {
-    field: 'orderNumber',
-    title: 'No. Pedido',
-    type: DataTableColumnType.text_link,
-  },
-  {
-    field: 'orderTime',
-    title: 'Fecha',
-    type: DataTableColumnType.date,
-  },
-  {
-    field: 'customerName',
-    title: 'Cliente',
-    type: DataTableColumnType.text,
-  },
-  {
-    field: 'statusName',
-    title: 'Estatus',
-    type: DataTableColumnType.text_tag,
-  },
-  {
-    field: 'salesAgentName',
-    title: 'Vendedor',
-    type: DataTableColumnType.text,
-  },
-  {
-    field: 'orderTotal',
-    title: 'Total',
-    type: DataTableColumnType.decimal,
-  },
-];
 
 
 export const EmptyOrderQuery: OrderQuery = {
@@ -168,7 +111,7 @@ export const EmptyOrderQuery: OrderQuery = {
 
 export const EmptyOrderDataTable: OrderDataTable = {
   query: EmptyOrderQuery,
-  columns: DefaultOrderColumns,
+  columns: [],
   entries: [],
 };
 
@@ -328,6 +271,7 @@ export function mapOrderDescriptorFromOrder(order: Order): OrderDescriptor {
     orderTotal: order.orderData.orderTotal,
     totalPackages: order.packing.data.totalPackages,
     weight: order.packing.data.totalWeight,
+    shipment: 'Pendiente',
   };
 }
 
@@ -466,12 +410,12 @@ export function mapOrderItemFromProductSelection(product: ProductSelection): Ord
 
 
 export enum OrdersOperationType {
-  parcel_delivery = 'parcel-delivery',
-  customer_delivery = 'customer-delivery',
-  local_route_delivery = 'local-route-delivery',
+  parcel_delivery        = 'parcel-delivery',
+  customer_delivery      = 'customer-delivery',
+  local_route_delivery   = 'local-route-delivery',
   local_foreign_delivery = 'local-foreign-delivery',
-  cancel   = 'cancel',
-  print    = 'print',
+  cancel                 = 'cancel',
+  print                  = 'print',
 }
 
 

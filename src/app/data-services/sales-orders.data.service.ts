@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { Order, OrderDescriptor, OrderFields, OrderQuery, OrderQueryType } from '@app/models';
+import { Order, OrderDataTable, OrderFields, OrderQuery, OrderQueryType } from '@app/models';
 
 
 @Injectable()
@@ -39,12 +39,12 @@ export class SalesOrdersDataService {
   }
 
 
-  searchOrders(query: OrderQuery): EmpObservable<OrderDescriptor[]> {
+  searchOrders(query: OrderQuery): EmpObservable<OrderDataTable> {
     Assertion.assertValue(query, 'query');
 
     const path = 'v4/trade/sales/orders/search';
 
-    return this.http.post<OrderDescriptor[]>(path, query);
+    return this.http.post<OrderDataTable>(path, query);
   }
 
 

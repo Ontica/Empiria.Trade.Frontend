@@ -22,8 +22,7 @@ import { ArrayLibrary, clone } from '@app/shared/utils';
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { EmptyOrder, EmptyOrderDataTable, EmptyOrderQuery, Order, OrderDataTable, OrderDescriptor, OrderQuery,
-         OrderQueryType, OrderTypeConfig, OrdersOperationType, getOrderColumns,
-         mapOrderDescriptorFromOrder } from '@app/models';
+         OrderQueryType, OrderTypeConfig, OrdersOperationType, mapOrderDescriptorFromOrder } from '@app/models';
 
 import { SalesOrdersDataService } from '@app/data-services';
 
@@ -134,7 +133,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
         Assertion.assertValue(event.payload.query, 'event.payload.query');
         this.query = event.payload.query as OrderQuery;
         this.clearOrderSelected();
-        this.setOrderData([], false);
+        this.setOrderDataEntries([], false);
         return;
 
       case OrdersExplorerEventType.SELECT_ORDER:
@@ -249,9 +248,15 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private setOrderData(data: OrderDescriptor[], queryExecuted: boolean = true) {
-    this.ordersData = Object.assign({}, this.ordersData,
-      { query: this.query, columns: getOrderColumns(this.salesConfig.type), entries: data });
+  private setOrderData(data: OrderDataTable, queryExecuted: boolean = true) {
+    this.ordersData = data;
+    this.queryExecuted = queryExecuted;
+    this.clearOperationCommandSelected();
+  }
+
+
+  private setOrderDataEntries(entries: OrderDescriptor[], queryExecuted: boolean = true) {
+    this.ordersData = Object.assign({}, this.ordersData, { query: this.query, entries });
     this.queryExecuted = queryExecuted;
     this.clearOperationCommandSelected();
   }
@@ -259,7 +264,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   private clearData() {
     this.ordersData = Object.assign({}, this.ordersData,
-      { query: this.query, columns: getOrderColumns(this.salesConfig.type), entries: [] });;
+      { query: this.query, columns: [], entries: [] });;
     this.isLoading = true;
     this.queryExecuted = false;
   }
@@ -279,7 +284,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   private insertOrderToList(order: Order) {
     const orderToInsert = mapOrderDescriptorFromOrder(order);
     const ordersListNew = ArrayLibrary.insertItemTop(this.ordersData.entries, orderToInsert, 'uid');
-    this.setOrderData(ordersListNew);
+    this.setOrderDataEntries(ordersListNew);
     this.setOrderSelected(order);
     this.setUserWorkStatusFinished();
   }
@@ -287,7 +292,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
   private removeOrderFromList(orderUID: string) {
     const ordersListNew = this.ordersData.entries.filter(x => x.uid !== orderUID);
-    this.setOrderData(ordersListNew);
+    this.setOrderDataEntries(ordersListNew);
     this.clearOrderSelected();
     this.setUserWorkStatusFinished();
   }

@@ -173,7 +173,7 @@ export class DataTableComponent implements OnChanges {
     const columns: DataTableColumn[] = this.dataTable.columns.filter((value, index, self) =>
       index === self.findIndex((t) => (!!value.field && t.field === value.field)));
 
-    return this.showCheckboxSelection ? [CheckBoxDataTableColumn, ...columns] : columns;
+    return this.showCheckboxSelection && columns.length > 0 ? [CheckBoxDataTableColumn, ...columns] : columns;
   }
 
 

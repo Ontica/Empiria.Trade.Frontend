@@ -20,7 +20,6 @@ import { OrdersControlsEventType } from './orders-controls.component';
 
 import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
 
-
 export enum OrdersExplorerEventType {
   CREATE_ORDER      = 'OrdersExplorerComponent.Event.CreateOrder',
   SEARCH_ORDERS     = 'OrdersExplorerComponent.Event.SearchOrders',
@@ -83,7 +82,6 @@ export class OrdersExplorerComponent implements OnChanges {
 
   onOrdersFilterEvent(event: EventInfo) {
     switch (event.type as OrdersFilterEventType) {
-
       case OrdersFilterEventType.SEARCH_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
         sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.SEARCH_ORDERS, event.payload);
@@ -97,15 +95,12 @@ export class OrdersExplorerComponent implements OnChanges {
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
-
     }
-
   }
 
 
   onOrdersControlsEvent(event: EventInfo) {
     switch (event.type as OrdersControlsEventType) {
-
       case OrdersControlsEventType.EXECUTE_OPERATION_CLICKED:
         Assertion.assertValue(event.payload.operation, 'event.payload.operation');
         Assertion.assertValue(event.payload.orders, 'event.payload.orders');
@@ -116,14 +111,12 @@ export class OrdersExplorerComponent implements OnChanges {
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
-
     }
   }
 
 
   onOrdersTableEvent(event: EventInfo) {
     switch (event.type as DataTableEventType) {
-
       case DataTableEventType.ENTRY_CLICKED:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
         sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.SELECT_ORDER, event.payload);
@@ -137,9 +130,7 @@ export class OrdersExplorerComponent implements OnChanges {
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
-
     }
-
   }
 
 
