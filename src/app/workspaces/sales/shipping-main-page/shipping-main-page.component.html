@@ -30,3 +30,14 @@
   </div>
 
 </div>
+
+
+<emp-ng-modal-window *ngIf="displayShippingCreator"
+  [config]="{width: '960px', maxHeight: '95vh'}">
+
+  <emp-trade-shipping-editor
+    (shippingEditorEvent)="onShippingCreatorEvent($event)">
+
+  </emp-trade-shipping-editor>
+
+</emp-ng-modal-window>

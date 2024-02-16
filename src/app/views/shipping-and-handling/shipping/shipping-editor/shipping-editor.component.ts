@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
 import { Assertion, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
@@ -42,7 +42,7 @@ export enum ShippingEditorEventType {
   selector: 'emp-trade-shipping-editor',
   templateUrl: './shipping-editor.component.html',
 })
-export class ShippingEditorComponent implements OnChanges {
+export class ShippingEditorComponent implements OnChanges, OnInit {
 
   @Input() shippingUID: string = null;
 
@@ -75,6 +75,11 @@ export class ShippingEditorComponent implements OnChanges {
 
   constructor(private shippingData: ShippingDataService,
               private messageBox: MessageBoxService) { }
+
+
+  ngOnInit() {
+    this.setTexts()
+  }
 
 
   ngOnChanges() {
@@ -435,9 +440,14 @@ export class ShippingEditorComponent implements OnChanges {
     const vendors = this.vendors.map(x => x.name).toString();
     const date = DateStringLibrary.format(this.shipping.shippingData.shippingDate, 'DMY HH:mm');
 
-    this.titleText = 'Editor de envío por paquetería';
-    this.hintText = `<strong>Cliente:</strong> ${customers} &nbsp; &nbsp; ` +
-      `<strong>Vendedor:</strong> ${vendors}  &nbsp; &nbsp; <strong>Fecha:</strong> ${date}`;
+    this.titleText = this.isSaved ? 'Editor de envío por paquetería' : 'Agregar envío por paquetería';
+
+    if (this.shipping.ordersForShipping.length > 0) {
+      this.hintText = `<strong>Cliente:</strong> ${customers} &nbsp; &nbsp; ` +
+        `<strong>Vendedor:</strong> ${vendors}  &nbsp; &nbsp; <strong>Fecha:</strong> ${date}`;
+    } else{
+      this.hintText = 'Información del envío.';
+    }
   }
 
 

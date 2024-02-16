@@ -45,8 +45,8 @@ import { ShippingViewerComponent } from './shipping/shipping-viewer/shipping-vie
 @NgModule({
   imports: [
     CommonModule,
-    CommonModule,
     FormsModule,
+    ReactiveFormsModule,
 
     ReactiveFormsModule,
     AngularMaterialModule,

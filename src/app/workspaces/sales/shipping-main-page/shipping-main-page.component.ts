@@ -11,8 +11,6 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { ArrayLibrary } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { ShippingDataService } from '@app/data-services';
 
 import { EmptyShippingData, ShippingData, ShippingQuery } from '@app/models';
@@ -24,6 +22,10 @@ import {
 import {
   ShippingViewerEventType
 } from '@app/views/shipping-and-handling/shipping/shipping-viewer/shipping-viewer.component';
+
+import {
+  ShippingEditorEventType
+} from '@app/views/shipping-and-handling/shipping/shipping-editor/shipping-editor.component';
 
 @Component({
   selector: 'emp-trade-shipping-main-page',
@@ -39,19 +41,20 @@ export class ShippingMainPageComponent {
 
   isLoadingShipping = false;
 
+  displayShippingCreator = false;
+
   displayShippingViewer = false;
 
   shippingDataSelected: ShippingData = EmptyShippingData;
 
 
-  constructor(private shippingData: ShippingDataService,
-              private messageBox: MessageBoxService) { }
+  constructor(private shippingData: ShippingDataService) { }
 
 
   onShippingExplorerEvent(event: EventInfo) {
     switch (event.type as ShippingExplorerEventType) {
       case ShippingExplorerEventType.CREATE_SHIPPING_BUTTON_CLICKED:
-        this.messageBox.showInDevelopment('Agregar envío');
+        this.displayShippingCreator = true;
         return;
 
       case ShippingExplorerEventType.SEARCH_SHIPPINGS_CLICKED:
@@ -90,6 +93,27 @@ export class ShippingMainPageComponent {
   }
 
 
+  onShippingCreatorEvent(event: EventInfo) {
+    switch (event.type as ShippingEditorEventType) {
+      case ShippingEditorEventType.CLOSE_BUTTON_CLICKED:
+        this.displayShippingCreator = false;
+        return;
+
+      case ShippingEditorEventType.SHIPPING_UPDATED:
+      case ShippingEditorEventType.SHIPPING_SENT:
+        Assertion.assertValue(event.payload.shippingData, 'event.payload.shippingData');
+        this.insertShippingToList(event.payload.shippingData as ShippingData);
+        this.setShippingDataSelected(event.payload.shippingData as ShippingData);
+        this.displayShippingCreator = false;
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
   private searchShipping(query: ShippingQuery) {
     this.clearData();
 
@@ -102,6 +126,7 @@ export class ShippingMainPageComponent {
 
   private resolveSearchData(data: ShippingData[]) {
     this.setShippingData(data);
+    this.setShippingDataSelected(EmptyShippingData);
   }
 
 
