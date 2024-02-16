@@ -78,8 +78,22 @@ export class ShippingEditorComponent implements OnChanges {
 
 
   ngOnChanges() {
-    debugger
     this.loadInitData();
+  }
+
+
+  get isQueryByShippingUID(): boolean {
+    return !!this.shippingUID;
+  }
+
+
+  get isQueryByOrders(): boolean {
+    return !!this.orders && this.orders.length > 0;
+  }
+
+
+  get isSaved(): boolean {
+    return !!this.shipping.shippingData.shippingUID;
   }
 
 
@@ -90,6 +104,11 @@ export class ShippingEditorComponent implements OnChanges {
 
   get vendors(): Identifiable[] {
     return ArrayLibrary.getUniqueItems(this.shipping.ordersForShipping.map(x => x.vendor), 'uid');
+  }
+
+
+  get canEdit(): boolean {
+    return !this.isSaved || (this.isSaved && this.shipping.canEdit);
   }
 
 
@@ -251,16 +270,6 @@ export class ShippingEditorComponent implements OnChanges {
     }
 
     this.shippingFields.orders = [...[], ...this.shipping.ordersForShipping.map(x => x.orderUID)];
-  }
-
-
-  get isQueryByShippingUID(): boolean {
-    return !!this.shippingUID;
-  }
-
-
-  get isQueryByOrders(): boolean {
-    return !!this.orders && this.orders.length > 0;
   }
 
 

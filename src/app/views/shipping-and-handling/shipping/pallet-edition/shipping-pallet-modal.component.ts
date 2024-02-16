@@ -33,6 +33,8 @@ export class ShippingPalletModalComponent implements OnInit {
 
   @Input() shipping: Shipping = EmptyShipping;
 
+  @Input() canEdit = false;
+
   @Input() pallet: ShippingPalletWithPackages = EmptyShippingPalletWithPackages;
 
   @Output() shippingPalletModalEvent = new EventEmitter<EventInfo>();

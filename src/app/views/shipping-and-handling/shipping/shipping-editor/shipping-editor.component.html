@@ -18,7 +18,7 @@
 
     <emp-trade-shipping-data-view
       [shippingData]="shipping.shippingData"
-      [canEdit]="shipping.canEdit"
+      [canEdit]="canEdit"
       (shippingDataViewEvent)="onShippingDataViewEvent($event)">
 
     </emp-trade-shipping-data-view>
@@ -26,8 +26,8 @@
 
     <emp-trade-shipping-orders-submitter
       [shippingData]="shipping.shippingData"
-      [canEdit]="shipping.canEdit"
-      [isReady]="isShippingDataReady"
+      [canEdit]="canEdit"
+      [isReady]="isShippingDataReady && shipping.ordersForShipping.length > 0"
       [(putOnPallets)]="putOnPallets"
       (shippingOrdersSubmitterEvent)="onShippingOrdersSubmitterEvent($event)">
 
@@ -36,6 +36,7 @@
 
     <emp-trade-shipping-orders-table *ngIf="!putOnPallets"
       [shipping]="shipping"
+      [canEdit]="canEdit"
       (shippingOrdersTableEvent)="onShippingOrdersTableEvent($event)">
 
     </emp-trade-shipping-orders-table>
@@ -43,7 +44,7 @@
 
     <emp-trade-shipping-pallets-table *ngIf="putOnPallets"
       [shippingPallets]="shipping.shippingPalletsWithPackages ?? []"
-      [canEdit]="shipping.canEdit"
+      [canEdit]="canEdit"
       (shippingPalletsTableEvent)="onShippingPalletsTableEvent($event)">
 
     </emp-trade-shipping-pallets-table>
@@ -55,6 +56,7 @@
 
 <emp-trade-shipping-orders-modal *ngIf="displayShippingOrdersModal"
   [shipping]="shipping"
+  [canEdit]="canEdit"
   (shippingOrdersModalEvent)="onShippingOrdersModalEvent($event)">
 
 </emp-trade-shipping-orders-modal>
@@ -63,6 +65,7 @@
 <emp-trade-shipping-pallet-modal *ngIf="displayShippingPalletModal"
   [shipping]="shipping"
   [pallet]="shippingPalletSelected"
+  [canEdit]="canEdit"
   (shippingPalletModalEvent)="onShippingPalletModalEvent($event)">
 
 </emp-trade-shipping-pallet-modal>

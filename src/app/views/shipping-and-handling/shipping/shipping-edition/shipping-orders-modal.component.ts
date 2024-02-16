@@ -30,6 +30,8 @@ export class ShippingOrdersModalComponent {
 
   @Input() shipping: Shipping = EmptyShipping;
 
+  @Input() canEdit = false;
+
   @Output() shippingOrdersModalEvent = new EventEmitter<EventInfo>();
 
 

@@ -37,10 +37,11 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
 
   @Input() shipping: Shipping = EmptyShipping;
 
+  @Input() canEdit = false;
+
   @Input() showTitle: boolean = true;
 
   @Output() shippingOrdersTableEvent = new EventEmitter<EventInfo>();
-
 
   displayedColumnsDefault: string[] = ['ID', 'orderNumber', 'orderTotal',
                                         'totalPackages', 'totalWeight', 'totalVolume'];
@@ -85,6 +86,11 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
   }
 
 
+  get hasItems(): boolean {
+    return this.ordersForShipping.length > 0;
+  }
+
+
   onOrderSearcherChanges() {
     setTimeout(() => {
       if (!this.isOrderInShipping(this.orderFromSearcher.orderUID)) {
@@ -117,7 +123,7 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
   private resetColumns() {
     this.displayedColumns = [...this.displayedColumnsDefault];
 
-    if (this.shipping.canEdit) {
+    if (this.canEdit) {
       this.displayedColumns.push('action');
     }
   }

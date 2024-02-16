@@ -15,7 +15,7 @@
 
       <emp-trade-pallet-header
         [pallet]="pallet"
-        [canEdit]="shipping.canEdit"
+        [canEdit]="canEdit"
         (palletHeaderEvent)="onPalletHeaderEvent($event)">
 
       </emp-trade-pallet-header>
@@ -29,7 +29,7 @@
 
       </emp-trade-packages-selector>
 
-      <ng-container *ngIf="shipping.canEdit">
+      <ng-container *ngIf="canEdit">
 
         <mat-divider class="horizontal" >
 

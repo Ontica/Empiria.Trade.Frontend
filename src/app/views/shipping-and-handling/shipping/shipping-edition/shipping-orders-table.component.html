@@ -1,6 +1,6 @@
 <div class="section-title" *ngIf="showTitle"> Pedidos </div>
 
-<div class="fx-row-container fx-end" *ngIf="shipping.canEdit"
+<div class="fx-row-container fx-end" *ngIf="canEdit"
   [style.padding-bottom.px]="8"
   [style.margin-right.px]="showTitle ? 0 : -8">
 
@@ -91,8 +91,16 @@
       <td mat-footer-cell *matFooterCellDef> </td>
     </ng-container>
 
+    <ng-container matColumnDef="notFoundMessage">
+      <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+        No se han agregado ordenes.
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="['notFoundMessage']" class="text-not-found"
+      [hidden]="hasItems"></tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true;"></tr>
 
   </table>
