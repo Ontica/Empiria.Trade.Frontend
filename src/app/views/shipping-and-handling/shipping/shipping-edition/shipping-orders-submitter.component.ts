@@ -16,8 +16,10 @@ import { sendEvent } from '@app/shared/utils';
 import { EmptyShippingData, ShippingData } from '@app/models';
 
 export enum ShippingOrdersSubmitterEventType {
-  SAVE_SHIPPING_CLICKED = 'ShippingOrdersSubmitterComponent.Event.SaveShippingClicked',
-  SEND_SHIPPING_CLICKED = 'ShippingOrdersSubmitterComponent.Event.SendShippingClicked',
+  TOGGLE_EDITION_MODE_CLICKED = 'ShippingOrdersSubmitterComponent.Event.ToggleEditionModeClicked',
+  SAVE_SHIPPING_CLICKED       = 'ShippingOrdersSubmitterComponent.Event.SaveShippingClicked',
+  SEND_SHIPPING_CLICKED       = 'ShippingOrdersSubmitterComponent.Event.SendShippingClicked',
+  CANCEL_SHIPPING_CLICKED     = 'ShippingOrdersSubmitterComponent.Event.CancelShippingClicked',
 }
 
 @Component({
@@ -32,6 +34,8 @@ export class ShippingOrdersSubmitterComponent {
 
   @Input() isReady = false;
 
+  @Input() editionMode = false;
+
   @Input() putOnPallets: boolean = false;
 
   @Output() putOnPalletsChange = new EventEmitter<boolean>();
@@ -44,8 +48,13 @@ export class ShippingOrdersSubmitterComponent {
   }
 
 
-  get canSendOrder(): boolean {
-    return this.canEdit && !!this.shippingData.shippingUID;
+  get isSaved(): boolean {
+    return !!this.shippingData.shippingUID;
+  }
+
+
+  onToggleEditionMode() {
+    sendEvent(this.shippingOrdersSubmitterEvent, ShippingOrdersSubmitterEventType.TOGGLE_EDITION_MODE_CLICKED);
   }
 
 
@@ -56,12 +65,17 @@ export class ShippingOrdersSubmitterComponent {
   }
 
 
-  onSendOrder() {
-    this.confirmSendOrder();
+  onSendShipping() {
+    this.confirmSendShipping();
   }
 
 
-  private confirmSendOrder() {
+  onCancelShipping() {
+    this.confirmCancelShipping();
+  }
+
+
+  private confirmSendShipping() {
     const message = `Esta operación pasará a embarque los pedidos seleccionados para su envío con la ` +
       `paquetería <strong> ${this.shippingData.parcelSupplier.name} </strong>. <br><br>¿Envío el pedido?`;
 
@@ -70,6 +84,20 @@ export class ShippingOrdersSubmitterComponent {
       .then(x => {
         if (x) {
           sendEvent(this.shippingOrdersSubmitterEvent, ShippingOrdersSubmitterEventType.SEND_SHIPPING_CLICKED);
+        }
+      });
+  }
+
+
+  private confirmCancelShipping() {
+    const message = `Esta operación cancelara el envío de los pedidos seleccionados por la paquetería ` +
+      `<strong> ${this.shippingData.parcelSupplier.name} </strong>. <br><br>¿Cancelo el envío?`;
+
+    this.messageBox.confirm(message, 'Cancelar Envío')
+      .firstValue()
+      .then(x => {
+        if (x) {
+          sendEvent(this.shippingOrdersSubmitterEvent, ShippingOrdersSubmitterEventType.CANCEL_SHIPPING_CLICKED);
         }
       });
   }

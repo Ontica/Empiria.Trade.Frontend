@@ -14,6 +14,7 @@
   <emp-trade-shipping-data-view
     [shippingData]="shipping.shippingData"
     [canEdit]="canEdit"
+    [editionMode]="editionMode"
     (shippingDataViewEvent)="onShippingDataViewEvent($event)">
 
   </emp-trade-shipping-data-view>
@@ -23,6 +24,7 @@
     [shippingData]="shipping.shippingData"
     [canEdit]="canEdit"
     [isReady]="isShippingDataReady && shipping.ordersForShipping.length > 0"
+    [editionMode]="editionMode"
     [(putOnPallets)]="putOnPallets"
     (shippingOrdersSubmitterEvent)="onShippingOrdersSubmitterEvent($event)">
 

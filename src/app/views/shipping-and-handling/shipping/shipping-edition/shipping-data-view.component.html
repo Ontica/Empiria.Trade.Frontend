@@ -54,7 +54,7 @@
       <div *ngIf="canEdit"
         class="fx-item-none fx-end fx-items-end"
         [style.paddingBottom.px]="2">
-        <button class="btn"
+        <button class="btn" *ngIf="editionMode"
           [disabled]="!form.value.parcelAmount || form.value.customerAmount === form.value.parcelAmount"
           [style.width.px]="100"
           (click)="onAuthorizeNotChargingShipping()">

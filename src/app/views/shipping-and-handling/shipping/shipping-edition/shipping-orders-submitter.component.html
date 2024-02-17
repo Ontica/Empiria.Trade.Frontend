@@ -7,11 +7,21 @@
 
     <div class="fx-item fx-start fx-items-center">
 
-      <button *ngIf="canSendOrder"
-        type="button" class="btn"
-        (click)="onSendOrder()">
-        Enviar a embarque
-      </button>
+      <ng-container *ngIf="isSaved && canEdit">
+
+        <button *ngIf="editionMode"
+          type="button" class="btn-warning"
+          (click)="onCancelShipping()">
+          Cancelar
+        </button>
+
+        <button *ngIf="!editionMode"
+          type="button" class="btn"
+          (click)="onSendShipping()">
+          Enviar a embarque
+        </button>
+
+      </ng-container>
 
     </div>
 
@@ -27,13 +37,41 @@
 
     <div class="fx-item fx-end fx-items-center">
 
-      <button *ngIf="canEdit"
+      <button *ngIf="!isSaved"
         [class.btn]="!isReady"
         [class.btn-action]="isReady"
         [style.width.px]="100"
         (click)="onSubmitButtonClicked()">
-        Guardar
+        Agregar
       </button>
+
+      <div class="fx-row-container fx-gap-half" *ngIf="isSaved">
+
+        <button *ngIf="!editionMode && canEdit"
+          class="btn-action"
+          (click)="onToggleEditionMode()">
+          Editar
+        </button>
+
+        <ng-container *ngIf="editionMode">
+
+          <button
+            [class.btn]="!isReady"
+            [class.btn-action]="isReady"
+            [style.width.px]="100"
+            (click)="onSubmitButtonClicked()">
+            Guardar
+          </button>
+
+          <button
+            class="btn-base uppercase"
+            (click)="onToggleEditionMode()">
+            Descartar Cambios
+          </button>
+
+        </ng-container>
+
+      </div>
 
     </div>
 

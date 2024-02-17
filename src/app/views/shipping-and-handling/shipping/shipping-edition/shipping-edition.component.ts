@@ -62,6 +62,8 @@ export class ShippingEditionComponent implements OnChanges {
 
   displayShippingOrdersModal = false;
 
+  editionMode = true;
+
   isShippingDataReady = false;
 
   shippingFields: ShippingFields = { orders: [], shippingData: null };
@@ -131,12 +133,20 @@ export class ShippingEditionComponent implements OnChanges {
 
   onShippingOrdersSubmitterEvent(event: EventInfo) {
     switch (event.type as ShippingOrdersSubmitterEventType) {
+      case ShippingOrdersSubmitterEventType.TOGGLE_EDITION_MODE_CLICKED:
+        this.toggleEditionMode();
+        return;
+
       case ShippingOrdersSubmitterEventType.SAVE_SHIPPING_CLICKED:
         this.validateSaveShippingToExecute(this.shippingFields);
         return;
 
       case ShippingOrdersSubmitterEventType.SEND_SHIPPING_CLICKED:
         this.sendShipment(this.shipping.shippingData.shippingUID);
+        return;
+
+      case ShippingOrdersSubmitterEventType.CANCEL_SHIPPING_CLICKED:
+        this.messageBox.showInDevelopment('Cancelar envío');
         return;
 
       default:
@@ -280,9 +290,6 @@ export class ShippingEditionComponent implements OnChanges {
       this.getShippingByOrders(query);
       return;
     }
-
-    // this.messageBox.showError('No se han proporcionado datos validos.');
-    // this.resolveShippingError();
   }
 
 
@@ -360,6 +367,7 @@ export class ShippingEditionComponent implements OnChanges {
 
   private setShipping(shipping: Shipping) {
     this.shipping = shipping;
+    this.editionMode = !this.isSaved;
     this.putOnPallets = this.displayShippingOrdersModal ? true :
       this.shipping.shippingPalletsWithPackages?.length > 0;
 
@@ -368,11 +376,15 @@ export class ShippingEditionComponent implements OnChanges {
   }
 
 
+  private toggleEditionMode() {
+    this.editionMode = !this.editionMode;
+  }
+
+
   private resolveShippingSaved(shipping: Shipping) {
     this.setShipping(shipping);
     sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_UPDATED,
       { shippingData: shipping.shippingData });
-    this.messageBox.show('La infomación fue guardada correctamente.', 'Envío por paquetería');
   }
 
 
@@ -380,7 +392,6 @@ export class ShippingEditionComponent implements OnChanges {
     this.setShipping(shipping);
     sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_UPDATED,
       { shippingData: shipping.shippingData });
-    this.messageBox.show('La infomación fue guardada correctamente.', 'Actualizar pedidos del envío');
   }
 
 

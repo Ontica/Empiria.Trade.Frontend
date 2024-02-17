@@ -40,6 +40,8 @@ export class ShippingDataViewComponent implements OnChanges, OnInit {
 
   @Input() canEdit = false;
 
+  @Input() editionMode = false;
+
   @Output() shippingDataViewEvent = new EventEmitter<EventInfo>();
 
   form: ShippingFormModel;
@@ -115,7 +117,7 @@ export class ShippingDataViewComponent implements OnChanges, OnInit {
       customerAmount: this.validateEmptyAmount(this.shippingData.customerAmount),
     });
 
-    this.formHelper.setDisableForm(this.form, !this.canEdit);
+    this.formHelper.setDisableForm(this.form, !this.editionMode);
   }
 
 
