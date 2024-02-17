@@ -26,7 +26,10 @@ import { MissingItemLocationComponent } from './packing/packing-items-edition/mi
 import { MissingItemsModalComponent } from './packing/packing-view/missing-items-modal.component';
 
 import { OrderShippingViewerComponent } from './shipping/order-shipping-viewer/order-shipping-viewer.component';
-import { ShippingEditorComponent } from './shipping/shipping-editor/shipping-editor.component';
+
+import { ShippingEditorModalComponent } from './shipping/shipping-editor-modal/shipping-editor-modal.component';
+
+import { ShippingEditionComponent } from './shipping/shipping-edition/shipping-edition.component';
 import { ShippingDataViewComponent } from './shipping/shipping-edition/shipping-data-view.component';
 import { ShippingOrdersResumeComponent } from './shipping/shipping-edition/shipping-orders-resume.component';
 import { ShippingOrdersTableComponent } from './shipping/shipping-edition/shipping-orders-table.component';
@@ -40,7 +43,8 @@ import { PackagesSelectorComponent } from './shipping/pallet-edition/packages-se
 import { ShippingExplorerComponent } from './shipping/shipping-explorer/shipping-explorer.component';
 import { ShippingFilterComponent } from './shipping/shipping-explorer/shipping-filter.component';
 import { ShippingTableComponent } from './shipping/shipping-explorer/shipping-table.component';
-import { ShippingViewerComponent } from './shipping/shipping-viewer/shipping-viewer.component';
+
+import { ShippingTabbedViewComponent } from './shipping/shipping-tabbed-view/shipping-tabbed-view.component';
 
 @NgModule({
   imports: [
@@ -66,7 +70,10 @@ import { ShippingViewerComponent } from './shipping/shipping-viewer/shipping-vie
     MissingItemsModalComponent,
 
     OrderShippingViewerComponent,
-    ShippingEditorComponent,
+
+    ShippingEditorModalComponent,
+
+    ShippingEditionComponent,
     ShippingDataViewComponent,
     ShippingOrdersResumeComponent,
     ShippingOrdersTableComponent,
@@ -80,14 +87,15 @@ import { ShippingViewerComponent } from './shipping/shipping-viewer/shipping-vie
     ShippingExplorerComponent,
     ShippingFilterComponent,
     ShippingTableComponent,
-    ShippingViewerComponent,
+
+    ShippingTabbedViewComponent,
   ],
   exports: [
     PackingViewComponent,
     OrderShippingViewerComponent,
-    ShippingEditorComponent,
+    ShippingEditorModalComponent,
     ShippingExplorerComponent,
-    ShippingViewerComponent,
+    ShippingTabbedViewComponent,
   ],
 })
 export class ShippingAndHandlingModule { }

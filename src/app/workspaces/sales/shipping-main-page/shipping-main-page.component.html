@@ -21,23 +21,18 @@
 
   <div class="secondary priority" *ngIf="displayShippingViewer">
 
-    <emp-trade-shipping-viewer
+    <emp-trade-shipping-tabbed-view
       [shippingData]="shippingDataSelected"
-      (shippingViewerEvent)="onShippingViewerEvent($event)">
+      (shippingTabbedViewEvent)="onShippingTabbedViewEvent($event)">
 
-    </emp-trade-shipping-viewer>
+    </emp-trade-shipping-tabbed-view>
 
   </div>
 
 </div>
 
 
-<emp-ng-modal-window *ngIf="displayShippingCreator"
-  [config]="{width: '960px', maxHeight: '95vh'}">
+<emp-trade-shipping-editor-modal *ngIf="displayShippingCreator"
+  (shippingEditorModalEvent)="onShippingCreatorEvent($event)">
 
-  <emp-trade-shipping-editor
-    (shippingEditorEvent)="onShippingCreatorEvent($event)">
-
-  </emp-trade-shipping-editor>
-
-</emp-ng-modal-window>
+</emp-trade-shipping-editor-modal>

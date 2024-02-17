@@ -5,9 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { Assertion, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
+import { Assertion, DateStringLibrary, EventInfo } from '@app/core';
 
 import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
@@ -32,31 +32,29 @@ import { ShippingOrdersModalEventType } from '../shipping-edition/shipping-order
 
 import { ShippingPalletModalEventType } from '../pallet-edition/shipping-pallet-modal.component';
 
-export enum ShippingEditorEventType {
-  CLOSE_BUTTON_CLICKED = 'ShippingEditorComponent.Event.CloseButtonClicked',
-  SHIPPING_UPDATED     = 'ShippingEditorComponent.Event.ShippingUpdated',
-  SHIPPING_SENT        = 'ShippingEditorComponent.Event.ShippingSent',
+
+export enum ShippingEditionEventType {
+  SHIPPING_UPDATED = 'ShippingEditionComponent.Event.ShippingUpdated',
+  SHIPPING_SENT    = 'ShippingEditionComponent.Event.ShippingSent',
+  DATA_ERROR       = 'ShippingEditionComponent.Event.DataError',
+  DATA_DESCRIPTION = 'ShippingEditionComponent.Event.DataDescription',
 }
 
 @Component({
-  selector: 'emp-trade-shipping-editor',
-  templateUrl: './shipping-editor.component.html',
+  selector: 'emp-trade-shipping-edition',
+  templateUrl: './shipping-edition.component.html',
 })
-export class ShippingEditorComponent implements OnChanges, OnInit {
+export class ShippingEditionComponent implements OnChanges {
 
   @Input() shippingUID: string = null;
 
   @Input() orders: string[] = null;
 
-  @Output() shippingEditorEvent = new EventEmitter<EventInfo>();
+  @Output() shippingEditionEvent = new EventEmitter<EventInfo>();
 
   isLoading = false;
 
   submitted = false;
-
-  titleText = 'Editor de envío por paquetería';
-
-  hintText = 'Información del envío.';
 
   putOnPallets: boolean = false;
 
@@ -66,7 +64,7 @@ export class ShippingEditorComponent implements OnChanges, OnInit {
 
   isShippingDataReady = false;
 
-  shippingFields: ShippingFields = {orders: [], shippingData: null};
+  shippingFields: ShippingFields = { orders: [], shippingData: null };
 
   displayShippingPalletModal = false;
 
@@ -74,12 +72,7 @@ export class ShippingEditorComponent implements OnChanges, OnInit {
 
 
   constructor(private shippingData: ShippingDataService,
-              private messageBox: MessageBoxService) { }
-
-
-  ngOnInit() {
-    this.setTexts()
-  }
+    private messageBox: MessageBoxService) { }
 
 
   ngOnChanges() {
@@ -102,23 +95,8 @@ export class ShippingEditorComponent implements OnChanges, OnInit {
   }
 
 
-  get customers(): Identifiable[] {
-    return ArrayLibrary.getUniqueItems(this.shipping.ordersForShipping.map(x => x.customer), 'uid');
-  }
-
-
-  get vendors(): Identifiable[] {
-    return ArrayLibrary.getUniqueItems(this.shipping.ordersForShipping.map(x => x.vendor), 'uid');
-  }
-
-
   get canEdit(): boolean {
     return !this.isSaved || (this.isSaved && this.shipping.canEdit);
-  }
-
-
-  onClose() {
-    sendEvent(this.shippingEditorEvent, ShippingEditorEventType.CLOSE_BUTTON_CLICKED);
   }
 
 
@@ -172,7 +150,7 @@ export class ShippingEditorComponent implements OnChanges, OnInit {
     switch (event.type as ShippingOrdersTableEventType) {
       case ShippingOrdersTableEventType.CHANGE_ORDERS:
         Assertion.assertValue(event.payload.orders, 'event.payload.orders');
-        this.validateRefreshShipping(event.payload.orders)
+        this.validateRefreshShipping(event.payload.orders);
         return;
 
       case ShippingOrdersTableEventType.ADD_ORDER:
@@ -272,19 +250,9 @@ export class ShippingEditorComponent implements OnChanges, OnInit {
       shippingGuide: this.shipping.shippingData.shippingGuide ?? '',
       parcelAmount: this.shipping.shippingData.parcelAmount ?? null,
       customerAmount: this.shipping.shippingData.customerAmount ?? null,
-    }
+    };
 
     this.shippingFields.orders = [...[], ...this.shipping.ordersForShipping.map(x => x.orderUID)];
-  }
-
-
-  private loadInitData() {
-    if (this.isQueryByShippingUID || this.isQueryByOrders) {
-      this.validateGetShippingToExecute();
-    } else {
-      this.messageBox.showError('No se han proporcionado datos validos.');
-      this.resolveShippingError();
-    }
   }
 
 
@@ -301,7 +269,7 @@ export class ShippingEditorComponent implements OnChanges, OnInit {
   }
 
 
-  private validateGetShippingToExecute() {
+  private loadInitData() {
     if (this.isQueryByShippingUID) {
       this.getShipping();
       return;
@@ -312,6 +280,9 @@ export class ShippingEditorComponent implements OnChanges, OnInit {
       this.getShippingByOrders(query);
       return;
     }
+
+    // this.messageBox.showError('No se han proporcionado datos validos.');
+    // this.resolveShippingError();
   }
 
 
@@ -392,22 +363,22 @@ export class ShippingEditorComponent implements OnChanges, OnInit {
     this.putOnPallets = this.displayShippingOrdersModal ? true :
       this.shipping.shippingPalletsWithPackages?.length > 0;
 
-    this.setTexts();
     this.initShippingFields();
+    this.emitDataDescription();
   }
 
 
   private resolveShippingSaved(shipping: Shipping) {
     this.setShipping(shipping);
-    sendEvent(this.shippingEditorEvent, ShippingEditorEventType.SHIPPING_UPDATED,
-      { shippingData: shipping.shippingData});
+    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_UPDATED,
+      { shippingData: shipping.shippingData });
     this.messageBox.show('La infomación fue guardada correctamente.', 'Envío por paquetería');
   }
 
 
   private resolveShippingOrdersUpdated(shipping: Shipping) {
     this.setShipping(shipping);
-    sendEvent(this.shippingEditorEvent, ShippingEditorEventType.SHIPPING_UPDATED,
+    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_UPDATED,
       { shippingData: shipping.shippingData });
     this.messageBox.show('La infomación fue guardada correctamente.', 'Actualizar pedidos del envío');
   }
@@ -415,14 +386,14 @@ export class ShippingEditorComponent implements OnChanges, OnInit {
 
   private resolveSendShipment(shipping: Shipping) {
     this.setShipping(shipping);
-    sendEvent(this.shippingEditorEvent, ShippingEditorEventType.SHIPPING_SENT,
+    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_SENT,
       { shippingData: shipping.shippingData });
     this.messageBox.show('La infomación fue guardada correctamente.', 'Enviar a embarque');
   }
 
 
   private resolveShippingError() {
-    this.onClose();
+    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.DATA_ERROR);
   }
 
 
@@ -435,25 +406,38 @@ export class ShippingEditorComponent implements OnChanges, OnInit {
   }
 
 
-  private setTexts() {
-    const customers = this.customers.map(x => x.name).toString();
-    const vendors = this.vendors.map(x => x.name).toString();
-    const date = DateStringLibrary.format(this.shipping.shippingData.shippingDate, 'DMY HH:mm');
-
-    this.titleText = this.isSaved ? 'Editor de envío por paquetería' : 'Agregar envío por paquetería';
-
-    if (this.shipping.ordersForShipping.length > 0) {
-      this.hintText = `<strong>Cliente:</strong> ${customers} &nbsp; &nbsp; ` +
-        `<strong>Vendedor:</strong> ${vendors}  &nbsp; &nbsp; <strong>Fecha:</strong> ${date}`;
-    } else{
-      this.hintText = 'Información del envío.';
-    }
-  }
-
-
   private setShippingPalletSelected(pallet: ShippingPalletWithPackages, display?: boolean) {
     this.shippingPalletSelected = pallet;
     this.displayShippingPalletModal = display ?? !!this.shippingPalletSelected.shippingPalletUID;
+  }
+
+
+  private emitDataDescription() {
+    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.DATA_DESCRIPTION,
+      { description: this.getDataDescription()})
+  }
+
+
+  private getDataDescription(): string {
+    let dataDescription: string = ''
+
+    if (this.shipping.ordersForShipping.length > 0) {
+      const customersList =
+        ArrayLibrary.getUniqueItems(this.shipping.ordersForShipping.map(x => x.customer), 'uid');
+      const vendorsList =
+        ArrayLibrary.getUniqueItems(this.shipping.ordersForShipping.map(x => x.vendor), 'uid');
+
+      dataDescription += `<strong>Cliente:</strong> ${customersList.map(x => x.name).toString()} &nbsp; &nbsp;` +
+        `<strong>Vendedor:</strong> ${vendorsList.map(x => x.name).toString()}`;
+    }
+
+    if (this.shipping.shippingData.shippingUID) {
+      const date = DateStringLibrary.format(this.shipping.shippingData.shippingDate, 'DMY HH:mm');
+
+      dataDescription += `&nbsp; &nbsp;<strong>Fecha:</strong> ${date}`;
+    }
+
+    return dataDescription
   }
 
 }

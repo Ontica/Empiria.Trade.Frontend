@@ -1,0 +1,20 @@
+<emp-ng-card
+  [title]="titleText"
+  [hint]="hintText"
+  (cardClose)="onClose()">
+
+  <mat-tab-group mat-stretch-tabs="false" >
+
+    <mat-tab label="Envío">
+
+      <emp-trade-shipping-edition
+        [shippingUID]="shippingData.shippingUID"
+        (shippingEditionEvent)="onShippingEditionEvent($event)">
+
+      </emp-trade-shipping-edition>
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+</emp-ng-card>

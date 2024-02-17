@@ -7,17 +7,17 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ShippingEditorComponent } from './shipping-editor.component';
+import { ShippingTabbedViewComponent } from './shipping-tabbed-view.component';
 
-describe('ShippingEditorComponent', () => {
-  let component: ShippingEditorComponent;
-  let fixture: ComponentFixture<ShippingEditorComponent>;
+describe('ShippingTabbedViewComponent', () => {
+  let component: ShippingTabbedViewComponent;
+  let fixture: ComponentFixture<ShippingTabbedViewComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ShippingEditorComponent]
+      declarations: [ShippingTabbedViewComponent]
     });
-    fixture = TestBed.createComponent(ShippingEditorComponent);
+    fixture = TestBed.createComponent(ShippingTabbedViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

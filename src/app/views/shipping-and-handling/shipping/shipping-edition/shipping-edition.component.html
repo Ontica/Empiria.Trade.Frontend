@@ -1,0 +1,64 @@
+<div [empNgSpinnerHost]="spinner">
+
+  <emp-ng-spinner #spinner [visible]="isLoading || submitted">
+
+  </emp-ng-spinner>
+
+  <emp-trade-shipping-orders-resume *ngIf="putOnPallets"
+    [shippingTotals]="shipping.shippingData"
+    (shippingOrdersResumeEvent)="onShippingOrdersResumeEvent($event)">
+
+  </emp-trade-shipping-orders-resume>
+
+
+  <emp-trade-shipping-data-view
+    [shippingData]="shipping.shippingData"
+    [canEdit]="canEdit"
+    (shippingDataViewEvent)="onShippingDataViewEvent($event)">
+
+  </emp-trade-shipping-data-view>
+
+
+  <emp-trade-shipping-orders-submitter
+    [shippingData]="shipping.shippingData"
+    [canEdit]="canEdit"
+    [isReady]="isShippingDataReady && shipping.ordersForShipping.length > 0"
+    [(putOnPallets)]="putOnPallets"
+    (shippingOrdersSubmitterEvent)="onShippingOrdersSubmitterEvent($event)">
+
+  </emp-trade-shipping-orders-submitter>
+
+
+  <emp-trade-shipping-orders-table *ngIf="!putOnPallets"
+    [shipping]="shipping"
+    [canEdit]="canEdit"
+    (shippingOrdersTableEvent)="onShippingOrdersTableEvent($event)">
+
+  </emp-trade-shipping-orders-table>
+
+
+  <emp-trade-shipping-pallets-table *ngIf="putOnPallets"
+    [shippingPallets]="shipping.shippingPalletsWithPackages ?? []"
+    [canEdit]="canEdit"
+    (shippingPalletsTableEvent)="onShippingPalletsTableEvent($event)">
+
+  </emp-trade-shipping-pallets-table>
+
+</div>
+
+
+<emp-trade-shipping-orders-modal *ngIf="displayShippingOrdersModal"
+  [shipping]="shipping"
+  [canEdit]="canEdit"
+  (shippingOrdersModalEvent)="onShippingOrdersModalEvent($event)">
+
+</emp-trade-shipping-orders-modal>
+
+
+<emp-trade-shipping-pallet-modal *ngIf="displayShippingPalletModal"
+  [shipping]="shipping"
+  [pallet]="shippingPalletSelected"
+  [canEdit]="canEdit"
+  (shippingPalletModalEvent)="onShippingPalletModalEvent($event)">
+
+</emp-trade-shipping-pallet-modal>

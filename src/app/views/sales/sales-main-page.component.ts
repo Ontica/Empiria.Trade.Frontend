@@ -33,8 +33,8 @@ import { OrderCreatorEventType } from '@app/views/orders/order-creator/order-cre
 import { OrderTabbedViewEventType } from '@app/views/orders/order-tabbed-view/order-tabbed-view.component';
 
 import {
-  ShippingEditorEventType
-} from '../shipping-and-handling/shipping/shipping-editor/shipping-editor.component';
+  ShippingEditorModalEventType
+} from '../shipping-and-handling/shipping/shipping-editor-modal/shipping-editor-modal.component';
 
 
 interface OrderOperationCommand {
@@ -179,13 +179,13 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  onShippingEditorEvent(event: EventInfo) {
-    switch (event.type as ShippingEditorEventType) {
-      case ShippingEditorEventType.CLOSE_BUTTON_CLICKED:
+  onShippingEditorModalEvent(event: EventInfo) {
+    switch (event.type as ShippingEditorModalEventType) {
+      case ShippingEditorModalEventType.CLOSE_BUTTON_CLICKED:
         this.clearOperationCommandSelected();
         return;
 
-      case ShippingEditorEventType.SHIPPING_SENT:
+      case ShippingEditorModalEventType.SHIPPING_SENT:
         this.searchOrders(this.query);
         return;
 

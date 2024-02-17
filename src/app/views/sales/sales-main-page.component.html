@@ -44,13 +44,8 @@
 </div>
 
 
-<emp-ng-modal-window *ngIf="displayShippingEditor"
-  [config]="{width: '960px', maxHeight: '95vh'}">
+<emp-trade-shipping-editor-modal *ngIf="displayShippingEditor"
+  [orders]="operationCommandSeleted.orders"
+  (shippingEditorModalEvent)="onShippingEditorModalEvent($event)">
 
-  <emp-trade-shipping-editor
-    [orders]="operationCommandSeleted.orders"
-    (shippingEditorEvent)="onShippingEditorEvent($event)">
-
-  </emp-trade-shipping-editor>
-
-</emp-ng-modal-window>
+</emp-trade-shipping-editor-modal>

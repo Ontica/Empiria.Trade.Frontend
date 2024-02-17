@@ -20,12 +20,12 @@ import {
 } from '@app/views/shipping-and-handling/shipping/shipping-explorer/shipping-explorer.component';
 
 import {
-  ShippingViewerEventType
-} from '@app/views/shipping-and-handling/shipping/shipping-viewer/shipping-viewer.component';
+  ShippingTabbedViewEventType
+} from '@app/views/shipping-and-handling/shipping/shipping-tabbed-view/shipping-tabbed-view.component';
 
 import {
-  ShippingEditorEventType
-} from '@app/views/shipping-and-handling/shipping/shipping-editor/shipping-editor.component';
+  ShippingEditorModalEventType
+} from '@app/views/shipping-and-handling/shipping/shipping-editor-modal/shipping-editor-modal.component';
 
 @Component({
   selector: 'emp-trade-shipping-main-page',
@@ -75,13 +75,13 @@ export class ShippingMainPageComponent {
 
 
 
-  onShippingViewerEvent(event: EventInfo) {
-    switch (event.type as ShippingViewerEventType) {
-      case ShippingViewerEventType.CLOSE_BUTTON_CLICKED:
+  onShippingTabbedViewEvent(event: EventInfo) {
+    switch (event.type as ShippingTabbedViewEventType) {
+      case ShippingTabbedViewEventType.CLOSE_BUTTON_CLICKED:
         this.setShippingDataSelected(EmptyShippingData);
         return;
 
-      case ShippingViewerEventType.SHIPPING_UPDATED:
+      case ShippingTabbedViewEventType.SHIPPING_UPDATED:
         Assertion.assertValue(event.payload.shippingData, 'event.payload.shippingData');
         this.insertShippingToList(event.payload.shippingData as ShippingData);
         return;
@@ -94,13 +94,13 @@ export class ShippingMainPageComponent {
 
 
   onShippingCreatorEvent(event: EventInfo) {
-    switch (event.type as ShippingEditorEventType) {
-      case ShippingEditorEventType.CLOSE_BUTTON_CLICKED:
+    switch (event.type as ShippingEditorModalEventType) {
+      case ShippingEditorModalEventType.CLOSE_BUTTON_CLICKED:
         this.displayShippingCreator = false;
         return;
 
-      case ShippingEditorEventType.SHIPPING_UPDATED:
-      case ShippingEditorEventType.SHIPPING_SENT:
+      case ShippingEditorModalEventType.SHIPPING_UPDATED:
+      case ShippingEditorModalEventType.SHIPPING_SENT:
         Assertion.assertValue(event.payload.shippingData, 'event.payload.shippingData');
         this.insertShippingToList(event.payload.shippingData as ShippingData);
         this.setShippingDataSelected(event.payload.shippingData as ShippingData);
