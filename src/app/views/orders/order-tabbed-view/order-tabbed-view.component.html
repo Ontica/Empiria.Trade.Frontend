@@ -41,7 +41,8 @@
     <mat-tab label="Envío" *ngIf="showShippingTab" [disabled]="!order.actions.show.shippingData">
 
       <emp-trade-order-shipping-viewer *ngIf="order.actions.show.shippingData"
-        [shippingData]="order.shipping">
+        [shippingData]="order.shipping"
+        [packingData]="order.packing.data">
 
       </emp-trade-order-shipping-viewer>
 
