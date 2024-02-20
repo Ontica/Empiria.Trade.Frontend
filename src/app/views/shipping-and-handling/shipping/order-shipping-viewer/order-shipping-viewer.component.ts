@@ -7,7 +7,7 @@
 
 import { Component, Input } from '@angular/core';
 
-import { EmptyShippingData, ShippingData } from '@app/models';
+import { EmptyPackingData, EmptyShippingData, PackingData, ShippingData } from '@app/models';
 
 @Component({
   selector: 'emp-trade-order-shipping-viewer',
@@ -16,6 +16,13 @@ import { EmptyShippingData, ShippingData } from '@app/models';
 export class OrderShippingViewerComponent {
 
   @Input() shippingData: ShippingData = EmptyShippingData;
+
+  @Input() packingData: PackingData = EmptyPackingData;
+
+
+  get packingDataValid(): PackingData {
+    return this.packingData ?? EmptyPackingData;
+  }
 
 
   get shippingDataValid(): ShippingData {

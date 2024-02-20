@@ -7,7 +7,9 @@
 
 import { DateString, Empty, Identifiable } from '@app/core';
 
-import { OrderDescriptor, ShippingMethodTypes } from './order';
+import { OrderDescriptor } from './order';
+
+import { PackagingTotals } from './packing';
 
 
 export interface ShippingQuery {
@@ -28,7 +30,7 @@ export interface Shipping {
 }
 
 
-export interface ShippingData extends ShippingTotals {
+export interface ShippingData extends PackagingTotals {
   shippingUID: string;
 
   shippingDate: DateString;
@@ -47,17 +49,7 @@ export interface ShippingData extends ShippingTotals {
 }
 
 
-export interface ShippingTotals {
-  ordersCount?: number;
-  ordersTotal?: number;
-
-  totalPackages: number;
-  totalWeight: number;
-  totalVolume: number;
-}
-
-
-export interface OrderForShipping extends ShippingTotals {
+export interface OrderForShipping extends PackagingTotals {
   orderUID: string;
   orderNumber: string;
   orderTotal: number;
@@ -99,7 +91,7 @@ export interface OrderPackage {
 }
 
 
-export interface ShippingPalletWithPackages extends ShippingTotals {
+export interface ShippingPalletWithPackages extends PackagingTotals {
   shippingPalletUID: string;
   shippingPalletName: string;
 
@@ -108,13 +100,6 @@ export interface ShippingPalletWithPackages extends ShippingTotals {
   totalPackages: number;
   totalWeight: number;
   totalVolume: number;
-}
-
-
-export const EmptyShippingTotals: ShippingTotals = {
-  totalPackages: 0,
-  totalWeight: 0,
-  totalVolume: 0,
 }
 
 

@@ -15,11 +15,21 @@ export interface Packing {
 }
 
 
-export interface PackingData {
+export interface PackingData extends PackagingTotals {
   totalPackages: number;
   totalWeight: number;
   totalVolume: number;
   packingTypesData: PackingTypeData[];
+}
+
+
+export interface PackagingTotals {
+  ordersCount?: number;
+  ordersTotal?: number;
+
+  totalPackages: number;
+  totalWeight: number;
+  totalVolume: number;
 }
 
 
@@ -40,13 +50,11 @@ export interface PackingItem {
 }
 
 
-
 export interface PackingItemFields {
   orderUID: string;
   packageID: string;
   packageTypeUID: string;
 }
-
 
 
 export interface PackingOrderItem {
@@ -80,7 +88,6 @@ export interface PackingOrderItemField {
 }
 
 
-
 export interface Warehouse {
   uid: string;
   code: string;
@@ -97,13 +104,23 @@ export interface WarehouseBin {
 }
 
 
+export const EmptyPackagingTotals: PackagingTotals = {
+  totalPackages: 0,
+  totalWeight: 0,
+  totalVolume: 0,
+}
+
+
+export const EmptyPackingData: PackingData = {
+  totalPackages: 0,
+  totalWeight: 0,
+  totalVolume: 0,
+  packingTypesData: [],
+};
+
+
 export const EmptyPacking: Packing = {
-  data: {
-    totalPackages: 0,
-    totalWeight: 0,
-    totalVolume: 0,
-    packingTypesData: [],
-  },
+  data: EmptyPackingData,
   packagedItems: [],
   missingItems: [],
 }

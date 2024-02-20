@@ -11,8 +11,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
-import { EmptyShipping, EmptyShippingPalletWithPackages, EmptyShippingTotals, OrderForShipping, OrderPackage,
-         Shipping, ShippingPalletWithPackages, ShippingTotals } from '@app/models';
+import { EmptyShipping, EmptyShippingPalletWithPackages, EmptyPackagingTotals, OrderForShipping, OrderPackage,
+         Shipping, ShippingPalletWithPackages, PackagingTotals } from '@app/models';
 
 import { EventInfo } from '@app/core';
 
@@ -23,7 +23,7 @@ interface PalletOrderSelection {
   disabled: string[];
   expanded: boolean;
   selection: SelectionModel<string>;
-  totals: ShippingTotals;
+  totals: PackagingTotals;
 }
 
 export enum PackagesSelectorEventType {
@@ -46,7 +46,7 @@ export class PackagesSelectorComponent implements OnInit {
 
   packagesDisabled: string[] = [];
 
-  packagesTotal: ShippingTotals = EmptyShippingTotals;
+  packagesTotal: PackagingTotals = EmptyPackagingTotals;
 
 
   ngOnInit() {
@@ -165,7 +165,7 @@ export class PackagesSelectorComponent implements OnInit {
       disabled: [],
       expanded: false,
       selection: new SelectionModel<string>(true, []),
-      totals: EmptyShippingTotals,
+      totals: EmptyPackagingTotals,
     };
   }
 

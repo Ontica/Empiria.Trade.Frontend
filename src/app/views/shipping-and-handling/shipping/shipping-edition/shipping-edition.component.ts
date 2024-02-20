@@ -20,7 +20,7 @@ import { Shipping, EmptyShipping, ShippingFieldsQuery, ShippingFields, ShippingD
 
 import { ShippingDataViewEventType } from '../shipping-edition/shipping-data-view.component';
 
-import { ShippingOrdersResumeEventType } from '../shipping-edition/shipping-orders-resume.component';
+import { PackagingResumeEventType } from './packaging-resume.component';
 
 import { ShippingOrdersSubmitterEventType } from '../shipping-edition/shipping-orders-submitter.component';
 
@@ -102,9 +102,9 @@ export class ShippingEditionComponent implements OnChanges {
   }
 
 
-  onShippingOrdersResumeEvent(event: EventInfo) {
-    switch (event.type as ShippingOrdersResumeEventType) {
-      case ShippingOrdersResumeEventType.SHOW_DETAIL_CLICKED:
+  onPackagingResumeEvent(event: EventInfo) {
+    switch (event.type as PackagingResumeEventType) {
+      case PackagingResumeEventType.SHOW_DETAIL_CLICKED:
         this.displayShippingOrdersModal = true;
         return;
 

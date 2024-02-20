@@ -31,14 +31,14 @@ import { ShippingEditorModalComponent } from './shipping/shipping-editor-modal/s
 
 import { ShippingEditionComponent } from './shipping/shipping-edition/shipping-edition.component';
 import { ShippingDataViewComponent } from './shipping/shipping-edition/shipping-data-view.component';
-import { ShippingOrdersResumeComponent } from './shipping/shipping-edition/shipping-orders-resume.component';
 import { ShippingOrdersTableComponent } from './shipping/shipping-edition/shipping-orders-table.component';
 import { ShippingPalletsTableComponent } from './shipping/shipping-edition/shipping-pallets-table.component';
 import { ShippingOrdersModalComponent } from './shipping/shipping-edition/shipping-orders-modal.component';
 import { ShippingOrdersSubmitterComponent } from './shipping/shipping-edition/shipping-orders-submitter.component';
 import { ShippingPalletModalComponent } from './shipping/pallet-edition/shipping-pallet-modal.component';
-import { PalletHeaderComponent } from './shipping/pallet-edition/pallet-header.component';
 import { PackagesSelectorComponent } from './shipping/pallet-edition/packages-selector.component';
+import { PackagingResumeComponent } from './shipping/shipping-edition/packaging-resume.component';
+import { PalletHeaderComponent } from './shipping/pallet-edition/pallet-header.component';
 
 import { ShippingExplorerComponent } from './shipping/shipping-explorer/shipping-explorer.component';
 import { ShippingFilterComponent } from './shipping/shipping-explorer/shipping-filter.component';
@@ -75,13 +75,13 @@ import { ShippingTabbedViewComponent } from './shipping/shipping-tabbed-view/shi
 
     ShippingEditionComponent,
     ShippingDataViewComponent,
-    ShippingOrdersResumeComponent,
     ShippingOrdersTableComponent,
     ShippingPalletsTableComponent,
     ShippingOrdersModalComponent,
     ShippingOrdersSubmitterComponent,
     ShippingPalletModalComponent,
     PackagesSelectorComponent,
+    PackagingResumeComponent,
     PalletHeaderComponent,
 
     ShippingExplorerComponent,
