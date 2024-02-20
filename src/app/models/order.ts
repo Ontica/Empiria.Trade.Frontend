@@ -9,7 +9,7 @@ import { DateString, Empty, Identifiable } from '@app/core';
 
 import { clone } from '@app/shared/utils';
 
-import { Contact, Customer, Party, EmptyCustomer, EmptyContact } from './contacts';
+import { Contact, Customer, Party, EmptyCustomer, EmptyContact, Address, EmptyAddress } from './contacts';
 
 import { Presentation, Product, ProductSelection, Vendor } from './product';
 
@@ -122,13 +122,14 @@ export interface OrderGeneralData extends OrderAdditionalData {
   orderTime: DateString;
   status: string;
   statusName: string;
+  priceList: string;
   customer: Customer;
   customerContact: Contact;
-  salesAgent: Party;
+  customerAddress: Address;
   supplier: Party;
+  salesAgent: Party;
   paymentCondition: string;
   shippingMethod: string;
-  priceList: string;
   notes?: string;
 }
 
@@ -234,6 +235,7 @@ export interface OrderFields {
   status: string;
   customerUID: string;
   customerContactUID: string;
+  customerAddressUID: string;
   salesAgentUID: string;
   supplierUID: string;
   paymentCondition: string;
@@ -285,6 +287,7 @@ export const EmptyOrderGeneralData: OrderGeneralData = {
   statusName: '',
   customer: EmptyCustomer,
   customerContact: EmptyContact,
+  customerAddress: EmptyAddress,
   supplier: Empty,
   salesAgent: Empty,
   paymentCondition: '',
@@ -318,6 +321,7 @@ export const EmptyOrderData: OrderData = {
   statusName: '',
   customer: EmptyCustomer,
   customerContact: EmptyContact,
+  customerAddress: EmptyAddress,
   supplier: Empty,
   salesAgent: Empty,
   paymentCondition: '',
@@ -360,6 +364,7 @@ export function mapOrderFieldsFromOrder(order: Order): OrderFields {
     status: order.orderData.status,
     customerUID: order.orderData.customer?.uid ?? '',
     customerContactUID: order.orderData.customerContact?.uid ?? '',
+    customerAddressUID: order.orderData.customerAddress?.uid ?? '',
     salesAgentUID: order.orderData.salesAgent?.uid ?? '',
     supplierUID: order.orderData.supplier?.uid ?? '',
     paymentCondition: order.orderData.paymentCondition,

@@ -4,48 +4,51 @@
 
     <div class="fx-row-container">
 
-        <div class="fx-item-third">
-          <label>Pedido:</label>
-          <input type="text" class="text-box"
-            formControlName="orderNumber"
-            [class.invalid-control]="formHelper.isControlInvalid(form.controls.orderNumber)">
-        </div>
+      <div class="fx-item-third">
+        <label>Pedido:</label>
+        <input type="text" class="text-box"
+          formControlName="orderNumber"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.orderNumber)">
+      </div>
 
-        <div class="fx-item-third">
-          <label>Proveedor:</label>
-          <emp-ng-select
-            formControlName="supplier"
-            [config]="{bindByValue: false}"
-            [items]="suppliersList"
-            [showError]="formHelper.isControlInvalid(form.controls.supplier)">
-          </emp-ng-select>
-        </div>
+      <div class="fx-item">
+        <label>Lista de precio:</label>
+        <input type="text" class="text-box"
+          formControlName="priceList"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.priceList)">
+      </div>
 
-        <div class="fx-item-third fx-row-container">
+      <div class="fx-item-none">
+        <label>Fecha:</label>
+        <emp-ng-datepicker
+          formControlName="orderTime"
+          [showError]="formHelper.isControlInvalid(form.controls.orderTime)">
 
-          <div class="fx-item-none">
-            <label>Fecha:</label>
-            <emp-ng-datepicker
-              formControlName="orderTime"
-              [showError]="formHelper.isControlInvalid(form.controls.orderTime)">
+        </emp-ng-datepicker>
+      </div>
 
-            </emp-ng-datepicker>
-          </div>
-
-          <div class="fx-item">
-            <label>Estatus:</label>
-            <emp-ng-select
-              formControlName="status"
-              [items]="statusList"
-              [showError]="formHelper.isControlInvalid(form.controls.status)">
-            </emp-ng-select>
-          </div>
-
-        </div>
+      <div class="fx-item-third">
+        <label>Estatus:</label>
+        <emp-ng-select
+          formControlName="status"
+          [items]="statusList"
+          [showError]="formHelper.isControlInvalid(form.controls.status)">
+        </emp-ng-select>
+      </div>
 
     </div>
 
     <div class="fx-row-container">
+
+      <div class="fx-item-third">
+        <label>Proveedor:</label>
+        <emp-ng-select
+          formControlName="supplier"
+          [config]="{bindByValue: false}"
+          [items]="suppliersList"
+          [showError]="formHelper.isControlInvalid(form.controls.supplier)">
+        </emp-ng-select>
+      </div>
 
       <div class="fx-item-third">
         <label>Vendedor:</label>
@@ -57,7 +60,7 @@
         </emp-ng-select>
       </div>
 
-      <div class="fx-item-third">
+      <div class="fx-item-sixth">
         <label>Forma de envío:</label>
         <emp-ng-select
           formControlName="shippingMethod"
@@ -66,7 +69,7 @@
         </emp-ng-select>
       </div>
 
-      <div class="fx-item-third">
+      <div class="fx-item-sixth">
         <label>Condiciones de pago:</label>
         <emp-ng-select
           formControlName="paymentCondition"
@@ -114,14 +117,19 @@
               {{item.name}} {{item.phone ? '(' + item.phone + ')' : ''}}
             </ng-template>
 
-          </emp-ng-select>
+        </emp-ng-select>
       </div>
 
       <div class="fx-item-third">
-        <label>Lista de precio:</label>
-        <input type="text" class="text-box"
-          formControlName="priceList"
-          [class.invalid-control]="formHelper.isControlInvalid(form.controls.priceList)">
+        <label>Dirección:</label>
+
+        <emp-ng-select
+          formControlName="customerAddress"
+          [config]="{bindByValue: false, clearable: true}"
+          [items]="customerAddressesList"
+          [placeholder]="addressesPlaceholder"
+          [showError]="formHelper.isControlInvalid(form.controls.customerAddress)">
+        </emp-ng-select>
       </div>
 
     </div>

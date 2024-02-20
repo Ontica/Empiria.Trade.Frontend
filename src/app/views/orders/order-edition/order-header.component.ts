@@ -16,7 +16,7 @@ import { DateString, DateStringLibrary, EventInfo, Identifiable, isEmpty } from 
 
 import { ContactsDataService, SalesOrdersDataService } from '@app/data-services';
 
-import { Contact, Customer, DefaultOrderStatus, EmptyOrderGeneralData, OrderGeneralData, Party,
+import { Address, Contact, Customer, DefaultOrderStatus, EmptyOrderGeneralData, OrderGeneralData, Party,
          PaymentConditionList, ShippingMethodList } from '@app/models';
 
 import { ArrayLibrary, FormHelper, sendEvent } from '@app/shared/utils';
@@ -30,13 +30,14 @@ interface OrderFormModel extends FormGroup<{
   orderNumber: FormControl<string>;
   orderTime: FormControl<DateString>;
   status: FormControl<string>;
-  customer: FormControl<Customer>;
-  customerContact: FormControl<Contact>;
   priceList: FormControl<string>;
-  salesAgent: FormControl<Party>;
   supplier: FormControl<Party>;
+  salesAgent: FormControl<Party>;
   paymentCondition: FormControl<string>;
   shippingMethod: FormControl<string>;
+  customer: FormControl<Customer>;
+  customerContact: FormControl<Contact>;
+  customerAddress: FormControl<Identifiable>;
 }> { }
 
 @Component({
@@ -73,6 +74,8 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
 
   customerContactsList: Contact[] = [];
 
+  customerAddressesList: Address[] = [];
+
   customersList$: Observable<Customer[]>;
 
   customersInput$ = new Subject<string>();
@@ -107,6 +110,10 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
 
 
   get contactsPlaceholder(): string {
+    if (!this.editionMode) {
+      return 'No definido';
+    }
+
     if (this.form.controls.customer.invalid) {
       return 'Seleccione al cliente';
     }
@@ -117,8 +124,24 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
   }
 
 
+  get addressesPlaceholder(): string {
+    if (!this.editionMode) {
+      return 'No definido';
+    }
+
+    if (this.form.controls.customer.invalid) {
+      return 'Seleccione al cliente';
+    }
+
+    return this.form.value.customer.addresses?.length === 0 ?
+      'El cliente no tiene direcciones' :
+      'Seleccione la dirección';
+  }
+
+
   onCustomertChange() {
     this.customerContactsList = this.form.value.customer.contacts ?? [];
+    this.customerAddressesList = this.form.value.customer.addresses ?? [];
     this.form.controls.customerContact.reset();
   }
 
@@ -135,13 +158,14 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
       orderNumber: [''],
       orderTime: [DateStringLibrary.today(), Validators.required],
       status: [DefaultOrderStatus, Validators.required],
-      customer: [null as Customer, Validators.required],
-      customerContact: [null],
       priceList: ['', Validators.required],
-      salesAgent: [null as Party, Validators.required],
       supplier: [null as Party, Validators.required],
+      salesAgent: [null as Party, Validators.required],
       paymentCondition: ['', Validators.required],
       shippingMethod: ['', Validators.required],
+      customer: [null as Customer, Validators.required],
+      customerContact: [null],
+      customerAddress: [null],
     });
 
     this.form.valueChanges.subscribe(v => this.emitFormChanges());
@@ -172,13 +196,14 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
         orderNumber: this.orderData.orderNumber,
         orderTime: this.orderData.orderTime,
         status: this.orderData.status,
-        customer: this.orderData.customer,
-        customerContact: this.orderData.customerContact ?? null,
         priceList: this.orderData.priceList,
-        salesAgent: this.orderData.salesAgent,
         supplier: this.orderData.supplier,
+        salesAgent: this.orderData.salesAgent,
         paymentCondition: this.orderData.paymentCondition,
         shippingMethod: this.orderData.shippingMethod,
+        customer: this.orderData.customer,
+        customerContact: this.orderData.customerContact ?? null,
+        customerAddress: this.orderData.customerAddress ?? null,
       });
 
       this.initLists();
@@ -208,13 +233,14 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
       orderTime: formModel.orderTime ?? '',
       status: formModel.status ?? null,
       statusName: formModel.status ?? null,
-      customer: formModel.customer ?? null,
-      customerContact: formModel.customerContact ?? null,
       priceList: formModel.priceList ?? '',
-      salesAgent: formModel.salesAgent ?? null,
       supplier: formModel.supplier ?? null,
+      salesAgent: formModel.salesAgent ?? null,
       paymentCondition: formModel.paymentCondition ?? '',
       shippingMethod: formModel.shippingMethod ?? '',
+      customer: formModel.customer ?? null,
+      customerContact: formModel.customerContact ?? null,
+      customerAddress: formModel.customerAddress ?? null,
     };
 
     return data;
@@ -239,12 +265,14 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
 
 
   private initLists() {
-    this.customerContactsList = isEmpty(this.orderData.customerContact) ? this.customerContactsList :
-      ArrayLibrary.insertIfNotExist(this.customerContactsList ?? [], this.orderData.customerContact , 'uid');
-    this.salesAgentsList = isEmpty(this.orderData.salesAgent) ? this.customerContactsList :
-      ArrayLibrary.insertIfNotExist(this.salesAgentsList ?? [], this.orderData.salesAgent, 'uid');
     this.suppliersList = isEmpty(this.orderData.supplier) ? this.suppliersList :
       ArrayLibrary.insertIfNotExist(this.suppliersList ?? [], this.orderData.supplier, 'uid');
+    this.salesAgentsList = isEmpty(this.orderData.salesAgent) ? this.customerContactsList :
+      ArrayLibrary.insertIfNotExist(this.salesAgentsList ?? [], this.orderData.salesAgent, 'uid');
+    this.customerContactsList = isEmpty(this.orderData.customerContact) ? this.customerContactsList :
+      ArrayLibrary.insertIfNotExist(this.customerContactsList ?? [], this.orderData.customerContact , 'uid');
+    this.customerAddressesList = isEmpty(this.orderData.customerAddress) ? this.customerAddressesList :
+      ArrayLibrary.insertIfNotExist(this.customerAddressesList ?? [], this.orderData.customerAddress, 'uid');
     this.subscribeCustomersList();
   }
 
