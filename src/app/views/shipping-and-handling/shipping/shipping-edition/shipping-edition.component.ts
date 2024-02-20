@@ -35,6 +35,7 @@ import { ShippingPalletModalEventType } from '../pallet-edition/shipping-pallet-
 
 export enum ShippingEditionEventType {
   SHIPPING_UPDATED = 'ShippingEditionComponent.Event.ShippingUpdated',
+  SHIPPING_DELETED = 'ShippingEditionComponent.Event.ShippingDeleted',
   SHIPPING_SENT    = 'ShippingEditionComponent.Event.ShippingSent',
   DATA_ERROR       = 'ShippingEditionComponent.Event.DataError',
   DATA_DESCRIPTION = 'ShippingEditionComponent.Event.DataDescription',
@@ -141,12 +142,12 @@ export class ShippingEditionComponent implements OnChanges {
         this.validateSaveShippingToExecute(this.shippingFields);
         return;
 
-      case ShippingOrdersSubmitterEventType.SEND_SHIPPING_CLICKED:
-        this.sendShipment(this.shipping.shippingData.shippingUID);
+      case ShippingOrdersSubmitterEventType.DELETE_SHIPPING_CLICKED:
+        this.deleteShipping(this.shipping.shippingData.shippingUID);
         return;
 
-      case ShippingOrdersSubmitterEventType.CANCEL_SHIPPING_CLICKED:
-        this.messageBox.showInDevelopment('Cancelar envío');
+      case ShippingOrdersSubmitterEventType.SEND_SHIPPING_CLICKED:
+        this.sendShipment(this.shipping.shippingData.shippingUID);
         return;
 
       default:
@@ -335,6 +336,16 @@ export class ShippingEditionComponent implements OnChanges {
   }
 
 
+  private deleteShipping(shippingUID: string) {
+    this.submitted = true;
+
+    this.shippingData.deleteShipping(shippingUID)
+      .firstValue()
+      .then(() => this.resolveShippingDeleted())
+      .finally(() => this.submitted = false);
+  }
+
+
   private AddOrderToShipping(shippingUID: string, orderUID: string) {
     this.submitted = true;
 
@@ -385,6 +396,12 @@ export class ShippingEditionComponent implements OnChanges {
     this.setShipping(shipping);
     sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_UPDATED,
       { shippingData: shipping.shippingData });
+  }
+
+
+  private resolveShippingDeleted() {
+    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_DELETED);
+    this.messageBox.show('El envío fue cancelado correctamente.', 'Cancelar envío');
   }
 
 

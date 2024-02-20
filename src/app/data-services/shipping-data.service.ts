@@ -11,7 +11,7 @@ import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 import { map } from 'rxjs';
 
-import { OrderDataTable, OrderDescriptor, OrderForShipping, OrderQuery, Shipping, ShippingData, ShippingFields,
+import { OrderDataTable, OrderForShipping, OrderQuery, Shipping, ShippingData, ShippingFields,
          ShippingFieldsQuery, ShippingQuery, mapOrdersDescriptorToOrdersForShipping } from '@app/models';
 
 @Injectable()
@@ -79,6 +79,15 @@ export class ShippingDataService {
     const path = `v4/trade/sales/shipping/${shippingUID}`;
 
     return this.http.put<Shipping>(path, shippingFields);
+  }
+
+
+  deleteShipping(shippingUID: string): EmpObservable<void> {
+    Assertion.assertValue(shippingUID, 'shippingUID');
+
+    const path = `v4/trade/sales/shipping/${shippingUID}`;
+
+    return this.http.delete<void>(path);
   }
 
 

@@ -86,6 +86,11 @@ export class ShippingMainPageComponent {
         this.insertShippingToList(event.payload.shippingData as ShippingData);
         return;
 
+      case ShippingTabbedViewEventType.SHIPPING_DELETED:
+        Assertion.assertValue(event.payload.shippingUID, 'event.payload.shippingUID');
+        this.removeShippingToList(event.payload.shippingUID as string);
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -153,6 +158,13 @@ export class ShippingMainPageComponent {
     const shippingListNew = ArrayLibrary.insertItemTop(this.shippingList, shippingData, 'shippingUID');
     this.setShippingData(shippingListNew);
     this.setShippingDataSelected(shippingData);
+  }
+
+
+  private removeShippingToList(shippingUID: string) {
+    const shippingListNew = this.shippingList.filter(x => x.shippingUID !== shippingUID);
+    this.setShippingData(shippingListNew);
+    this.setShippingDataSelected(EmptyShippingData);
   }
 
 }

@@ -19,7 +19,7 @@ export enum ShippingOrdersSubmitterEventType {
   TOGGLE_EDITION_MODE_CLICKED = 'ShippingOrdersSubmitterComponent.Event.ToggleEditionModeClicked',
   SAVE_SHIPPING_CLICKED       = 'ShippingOrdersSubmitterComponent.Event.SaveShippingClicked',
   SEND_SHIPPING_CLICKED       = 'ShippingOrdersSubmitterComponent.Event.SendShippingClicked',
-  CANCEL_SHIPPING_CLICKED     = 'ShippingOrdersSubmitterComponent.Event.CancelShippingClicked',
+  DELETE_SHIPPING_CLICKED     = 'ShippingOrdersSubmitterComponent.Event.DeleteShippingClicked',
 }
 
 @Component({
@@ -70,8 +70,8 @@ export class ShippingOrdersSubmitterComponent {
   }
 
 
-  onCancelShipping() {
-    this.confirmCancelShipping();
+  onDeleteShipping() {
+    this.confirmDeleteShipping();
   }
 
 
@@ -89,7 +89,7 @@ export class ShippingOrdersSubmitterComponent {
   }
 
 
-  private confirmCancelShipping() {
+  private confirmDeleteShipping() {
     const message = `Esta operación cancelara el envío de los pedidos seleccionados por la paquetería ` +
       `<strong> ${this.shippingData.parcelSupplier.name} </strong>. <br><br>¿Cancelo el envío?`;
 
@@ -97,7 +97,7 @@ export class ShippingOrdersSubmitterComponent {
       .firstValue()
       .then(x => {
         if (x) {
-          sendEvent(this.shippingOrdersSubmitterEvent, ShippingOrdersSubmitterEventType.CANCEL_SHIPPING_CLICKED);
+          sendEvent(this.shippingOrdersSubmitterEvent, ShippingOrdersSubmitterEventType.DELETE_SHIPPING_CLICKED);
         }
       });
   }

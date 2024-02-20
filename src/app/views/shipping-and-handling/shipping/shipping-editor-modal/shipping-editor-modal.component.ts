@@ -17,6 +17,7 @@ import { ShippingEditionEventType } from '../shipping-edition/shipping-edition.c
 export enum ShippingEditorModalEventType {
   CLOSE_BUTTON_CLICKED = 'ShippingEditorModalComponent.Event.CloseButtonClicked',
   SHIPPING_UPDATED     = 'ShippingEditorModalComponent.Event.ShippingUpdated',
+  SHIPPING_DELETED     = 'ShippingEditorModalComponent.Event.ShippingDeleted',
   SHIPPING_SENT        = 'ShippingEditorModalComponent.Event.ShippingSent',
 }
 
@@ -49,6 +50,10 @@ export class ShippingEditorModalComponent implements OnInit {
     switch (event.type as ShippingEditionEventType) {
       case ShippingEditionEventType.SHIPPING_UPDATED:
         sendEvent(this.shippingEditorModalEvent, ShippingEditorModalEventType.SHIPPING_UPDATED, event.payload);
+        return;
+
+      case ShippingEditionEventType.SHIPPING_DELETED:
+        sendEvent(this.shippingEditorModalEvent, ShippingEditorModalEventType.SHIPPING_DELETED);
         return;
 
       case ShippingEditionEventType.SHIPPING_SENT:

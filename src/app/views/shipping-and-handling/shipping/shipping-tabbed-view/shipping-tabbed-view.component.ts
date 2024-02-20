@@ -18,6 +18,7 @@ import { ShippingEditionEventType } from '../shipping-edition/shipping-edition.c
 export enum ShippingTabbedViewEventType {
   CLOSE_BUTTON_CLICKED = 'ShippingTabbedViewComponent.Event.CloseButtonClicked',
   SHIPPING_UPDATED     = 'ShippingTabbedViewComponent.Event.ShippingUpdated',
+  SHIPPING_DELETED     = 'ShippingTabbedViewComponent.Event.ShippingDeleted',
 }
 
 @Component({
@@ -52,6 +53,11 @@ export class ShippingTabbedViewComponent implements OnInit {
         sendEvent(this.shippingTabbedViewEvent, ShippingTabbedViewEventType.SHIPPING_UPDATED, event.payload);
         return;
 
+      case ShippingEditionEventType.SHIPPING_DELETED:
+        sendEvent(this.shippingTabbedViewEvent, ShippingTabbedViewEventType.SHIPPING_DELETED,
+          { shippingUID: this.shippingData.shippingUID });
+        return;
+
       case ShippingEditionEventType.DATA_DESCRIPTION:
         Assertion.assertValue(event.payload.description, 'event.payload.description');
         this.hintText = event.payload.description;
@@ -70,18 +76,6 @@ export class ShippingTabbedViewComponent implements OnInit {
 
 
   private setTexts() {
-    // const customers = this.customers.map(x => x.name).toString();
-    // const vendors = this.vendors.map(x => x.name).toString();
-    // const date = DateStringLibrary.format(this.shipping.shippingData.shippingDate, 'DMY HH:mm');
-
-    // this.titleText = this.isSaved ? 'Editor de envío por paquetería' : 'Agregar envío por paquetería';
-
-    // if (this.shipping.ordersForShipping.length > 0) {
-    //   this.hintText = `<strong>Cliente:</strong> ${customers} &nbsp; &nbsp; ` +
-    //     `<strong>Vendedor:</strong> ${vendors}  &nbsp; &nbsp; <strong>Fecha:</strong> ${date}`;
-    // } else{
-    //   this.hintText = 'Información del envío.';
-    // }
     this.titleText = `${this.shippingData.parcelSupplier.name} - ${this.shippingData.shippingGuide} ` +
       `<span class="tag tag-small"> ${this.shippingData.status ? 'Abierto' : 'Cerrado'} </span>`;
   }

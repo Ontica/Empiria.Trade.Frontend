@@ -186,6 +186,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
         return;
 
       case ShippingEditorModalEventType.SHIPPING_SENT:
+      case ShippingEditorModalEventType.SHIPPING_DELETED:
         this.searchOrders(this.query);
         return;
 
