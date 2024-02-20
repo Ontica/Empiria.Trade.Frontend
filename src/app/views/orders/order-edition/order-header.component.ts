@@ -17,7 +17,7 @@ import { DateString, DateStringLibrary, EventInfo, Identifiable, isEmpty } from 
 import { ContactsDataService, SalesOrdersDataService } from '@app/data-services';
 
 import { Address, Contact, Customer, DefaultOrderStatus, EmptyOrderGeneralData, OrderGeneralData, Party,
-         PaymentConditionList, ShippingMethodList } from '@app/models';
+         PaymentConditionList, ShippingMethodList, ShippingMethodTypes } from '@app/models';
 
 import { ArrayLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
@@ -109,6 +109,13 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
   }
 
 
+  get shippingRequired(): boolean {
+    return [ShippingMethodTypes.RutaForanea,
+            ShippingMethodTypes.RutaLocal,
+            ShippingMethodTypes.Paqueteria].includes(this.form.value.shippingMethod as ShippingMethodTypes);
+  }
+
+
   get contactsPlaceholder(): string {
     if (!this.editionMode) {
       return 'No definido';
@@ -139,15 +146,19 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
   }
 
 
+  onShippingMethodChange() {
+    this.validateCustomerAddressRequired();
+    this.emitFormChanges();
+  }
+
+
   onCustomertChange() {
-    this.customerContactsList = this.form.value.customer.contacts ?? [];
-    this.customerAddressesList = this.form.value.customer.addresses ?? [];
-    this.form.controls.customerContact.reset();
+    this.resetCustomerData();
   }
 
 
   invalidateForm() {
-    this.formHelper.markFormControlsAsTouched(this.form);
+    FormHelper.markFormControlsAsTouched(this.form);
   }
 
 
@@ -216,12 +227,29 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
   private validateEditionMode() {
     this.setFormData();
 
-    this.formHelper.setDisableForm(this.form, !this.editionMode);
+    FormHelper.setDisableForm(this.form, !this.editionMode);
 
-    this.formHelper.setDisableControl(this.form.controls.orderNumber);
-    this.formHelper.setDisableControl(this.form.controls.orderTime);
-    this.formHelper.setDisableControl(this.form.controls.status);
-    this.formHelper.setDisableControl(this.form.controls.priceList);
+    FormHelper.setDisableControl(this.form.controls.orderNumber);
+    FormHelper.setDisableControl(this.form.controls.orderTime);
+    FormHelper.setDisableControl(this.form.controls.status);
+    FormHelper.setDisableControl(this.form.controls.priceList);
+  }
+
+
+  private validateCustomerAddressRequired() {
+    FormHelper.clearControlValidators(this.form.controls.customerAddress);
+
+    if (this.shippingRequired) {
+      FormHelper.setControlValidators(this.form.controls.customerAddress, [Validators.required]);
+    }
+  }
+
+
+  private resetCustomerData() {
+    this.customerContactsList = this.form.value.customer.contacts ?? [];
+    this.customerAddressesList = this.form.value.customer.addresses ?? [];
+    this.form.controls.customerContact.reset();
+    this.form.controls.customerAddress.reset();
   }
 
 

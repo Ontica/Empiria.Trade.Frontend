@@ -65,7 +65,8 @@
         <emp-ng-select
           formControlName="shippingMethod"
           [items]="shippingMethodList"
-          [showError]="formHelper.isControlInvalid(form.controls.shippingMethod)">
+          [showError]="formHelper.isControlInvalid(form.controls.shippingMethod)"
+          (changes)="onShippingMethodChange()">
         </emp-ng-select>
       </div>
 
@@ -125,10 +126,15 @@
 
         <emp-ng-select
           formControlName="customerAddress"
-          [config]="{bindByValue: false, clearable: true}"
+          [config]="{bindByValue: false, clearable: !shippingRequired}"
           [items]="customerAddressesList"
           [placeholder]="addressesPlaceholder"
           [showError]="formHelper.isControlInvalid(form.controls.customerAddress)">
+          <ng-template #optionTemplate let-item="item">
+            <div class="wrap" [style.padding]="'0.25rem 0'">
+              {{item.name}}
+            </div>
+          </ng-template>
         </emp-ng-select>
       </div>
 
