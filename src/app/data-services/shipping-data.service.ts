@@ -63,22 +63,23 @@ export class ShippingDataService {
   }
 
 
-  createShipping(shippingFields: ShippingFields): EmpObservable<Shipping> {
-    Assertion.assertValue(shippingFields, 'shippingFields');
+  createShipping(dataFields: ShippingFields): EmpObservable<Shipping> {
+    Assertion.assertValue(dataFields, 'shippingFields');
 
     const path = `v4/trade/sales/shipping/`;
 
-    return this.http.post<Shipping>(path, shippingFields);
+    return this.http.post<Shipping>(path, dataFields);
   }
 
 
-  updateShipping(shippingUID: string, shippingFields: ShippingFields): EmpObservable<Shipping> {
+  updateShipping(shippingUID: string,
+                 dataFields: ShippingFields): EmpObservable<Shipping> {
     Assertion.assertValue(shippingUID, 'shippingUID');
-    Assertion.assertValue(shippingFields, 'shippingFields');
+    Assertion.assertValue(dataFields, 'dataFields');
 
     const path = `v4/trade/sales/shipping/${shippingUID}`;
 
-    return this.http.put<Shipping>(path, shippingFields);
+    return this.http.put<Shipping>(path, dataFields);
   }
 
 
@@ -91,7 +92,8 @@ export class ShippingDataService {
   }
 
 
-  AddOrderToShipping(shippingUID: string, orderUID: string): EmpObservable<Shipping> {
+  AddOrderToShipping(shippingUID: string,
+                     orderUID: string): EmpObservable<Shipping> {
     Assertion.assertValue(shippingUID, 'shippingUID');
     Assertion.assertValue(orderUID, 'orderUID');
 
@@ -101,8 +103,8 @@ export class ShippingDataService {
   }
 
 
-
-  removeOrderFromShipping(shippingUID: string, orderUID: string): EmpObservable<Shipping> {
+  removeOrderFromShipping(shippingUID: string,
+                          orderUID: string): EmpObservable<Shipping> {
     Assertion.assertValue(shippingUID, 'shippingUID');
     Assertion.assertValue(orderUID, 'orderUID');
 
