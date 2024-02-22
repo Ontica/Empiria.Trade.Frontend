@@ -46,7 +46,7 @@ export class PackagesSelectorComponent implements OnInit {
 
   packagesDisabled: string[] = [];
 
-  packagesTotal: PackagingTotals = EmptyPackagingTotals;
+  packagesTotal: PackagingTotals = {...{}, ...EmptyPackagingTotals};
 
 
   ngOnInit() {
@@ -170,7 +170,7 @@ export class PackagesSelectorComponent implements OnInit {
       disabled: [],
       expanded: false,
       selection: new SelectionModel<string>(true, []),
-      totals: EmptyPackagingTotals,
+      totals: {...{}, ...EmptyPackagingTotals},
     };
   }
 

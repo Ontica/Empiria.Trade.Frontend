@@ -23,7 +23,7 @@ export enum PackagingResumeEventType {
 })
 export class PackagingResumeComponent {
 
-  @Input() totals: PackagingTotals = EmptyPackagingTotals;
+  @Input() totals: PackagingTotals = {...{}, ...EmptyPackagingTotals};
 
   @Input() showOrdersTotals: boolean = true;
 

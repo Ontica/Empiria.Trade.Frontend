@@ -45,7 +45,7 @@ export class ShippingPalletsTableComponent implements OnChanges {
 
   dataSource: MatTableDataSource<ShippingPalletWithPackages>;
 
-  palletsTotals: PackagingTotals = EmptyPackagingTotals;
+  palletsTotals: PackagingTotals = {...{}, ...EmptyPackagingTotals};
 
   missingPackages: number = 0;
 
@@ -55,19 +55,10 @@ export class ShippingPalletsTableComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.shippingPallets) {
-      this.resetColumns();
       this.dataSource = new MatTableDataSource(this.shippingPallets);
+      this.resetColumns();
       this.setPalletsTotals();
     }
-  }
-
-
-  private setPalletsTotals() {
-    this.palletsTotals.totalPackages = this.shippingPallets.reduce((acum, value) => acum + value.totalPackages, 0);
-    this.palletsTotals.totalWeight = this.shippingPallets.reduce((acum, value) => acum + value.totalWeight, 0);
-    this.palletsTotals.totalVolume = this.shippingPallets.reduce((acum, value) => acum + value.totalVolume, 0);
-
-    this.missingPackages = this.totalPackages - this.palletsTotals.totalPackages;
   }
 
 
@@ -100,6 +91,15 @@ export class ShippingPalletsTableComponent implements OnChanges {
     }
 
     this.displayedColumns = [...this.displayedColumns, ...this.displayedColumnsDefault];
+  }
+
+
+  private setPalletsTotals() {
+    this.palletsTotals.totalPackages = this.shippingPallets.reduce((acum, value) => acum + value.totalPackages, 0);
+    this.palletsTotals.totalWeight = this.shippingPallets.reduce((acum, value) => acum + value.totalWeight, 0);
+    this.palletsTotals.totalVolume = this.shippingPallets.reduce((acum, value) => acum + value.totalVolume, 0);
+
+    this.missingPackages = this.totalPackages - this.palletsTotals.totalPackages;
   }
 
 
