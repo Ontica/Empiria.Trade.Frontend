@@ -119,7 +119,12 @@ export class OrdersExplorerComponent implements OnChanges {
     switch (event.type as DataTableEventType) {
       case DataTableEventType.ENTRY_CLICKED:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
-        sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.SELECT_ORDER, event.payload);
+
+        this.appStatus.canUserContinue()
+          .subscribe(x =>
+            x ? sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.SELECT_ORDER, event.payload) : null
+          );
+
         return;
 
       case DataTableEventType.CHECKBOX_SELECTION_CHANGED:

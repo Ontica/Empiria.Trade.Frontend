@@ -448,7 +448,6 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
 
   private setShipping(shipping: Shipping) {
-    debugger
     this.shipping = shipping;
     this.initialLoadExecuted = true;
 

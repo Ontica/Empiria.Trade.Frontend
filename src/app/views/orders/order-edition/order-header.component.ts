@@ -37,7 +37,7 @@ interface OrderFormModel extends FormGroup<{
   shippingMethod: FormControl<string>;
   customer: FormControl<Customer>;
   customerContact: FormControl<Contact>;
-  customerAddress: FormControl<Identifiable>;
+  customerAddress: FormControl<Address>;
 }> { }
 
 @Component({
@@ -112,7 +112,8 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
   get shippingRequired(): boolean {
     return [ShippingMethodTypes.RutaForanea,
             ShippingMethodTypes.RutaLocal,
-            ShippingMethodTypes.Paqueteria].includes(this.form.value.shippingMethod as ShippingMethodTypes);
+            ShippingMethodTypes.Paqueteria,
+            ShippingMethodTypes.Ocurre].includes(this.form.value.shippingMethod as ShippingMethodTypes);
   }
 
 
@@ -176,7 +177,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
       shippingMethod: ['', Validators.required],
       customer: [null as Customer, Validators.required],
       customerContact: [null],
-      customerAddress: [null],
+      customerAddress: [null as Address, Validators.required],
     });
 
     this.form.valueChanges.subscribe(v => this.emitFormChanges());
@@ -212,10 +213,13 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
         salesAgent: this.orderData.salesAgent,
         paymentCondition: this.orderData.paymentCondition,
         shippingMethod: this.orderData.shippingMethod,
-        customer: this.orderData.customer,
-        customerContact: this.orderData.customerContact ?? null,
-        customerAddress: this.orderData.customerAddress ?? null,
+        customer: isEmpty(this.orderData.customer) ? null : this.orderData.customer,
+        customerContact: isEmpty(this.orderData.customerContact) ? null : this.orderData.customerContact,
+        customerAddress: isEmpty(this.orderData.customerAddress) ? null : this.orderData.customerAddress,
       });
+
+      // FIX: this breaks the app
+      // this.validateCustomerAddressRequired();
 
       this.initLists();
     } else {

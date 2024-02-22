@@ -69,7 +69,7 @@ export class ProductsFilterComponent implements AfterViewInit {
 
 
   clearFilters() {
-    this.form.reset();
+    this.form.controls.keywords.reset();
     this.inputKeywordsField.nativeElement.focus();
   }
 

@@ -283,9 +283,11 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
 
   private insertOrderToList(order: Order) {
-    const orderToInsert = mapOrderDescriptorFromOrder(order);
-    const ordersListNew = ArrayLibrary.insertItemTop(this.ordersData.entries, orderToInsert, 'uid');
-    this.setOrderDataEntries(ordersListNew);
+    if (this.queryExecuted) {
+      const orderToInsert = mapOrderDescriptorFromOrder(order);
+      const ordersListNew = ArrayLibrary.insertItemTop(this.ordersData.entries, orderToInsert, 'uid');
+      this.setOrderDataEntries(ordersListNew);
+    }
     this.setOrderSelected(order);
     this.setUserWorkStatusFinished();
   }
