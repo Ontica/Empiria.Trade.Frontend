@@ -55,6 +55,11 @@ export class PackagesSelectorComponent implements OnInit {
   }
 
 
+  isOrderDisabled(packages: string[]): boolean {
+    return packages.every( x => this.packagesDisabled.includes(x));
+  }
+
+
   onToggleExpandAllOrders(expanded: boolean) {
     this.palletOrdersSelection.forEach(x => x.expanded = expanded);
   }

@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
 import { Assertion, DateStringLibrary, EventInfo } from '@app/core';
 
@@ -16,7 +16,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { ShippingDataService } from '@app/data-services';
 
 import { Shipping, EmptyShipping, ShippingFieldsQuery, ShippingFields, ShippingDataFields,
-         ShippingPalletWithPackages, EmptyShippingPalletWithPackages } from '@app/models';
+         ShippingPalletWithPackages, EmptyShippingPalletWithPackages, ShippingPalletFields } from '@app/models';
 
 import { ShippingDataViewEventType } from '../shipping-edition/shipping-data-view.component';
 
@@ -26,7 +26,7 @@ import { ShippingOrdersSubmitterEventType } from '../shipping-edition/shipping-o
 
 import { ShippingOrdersTableEventType } from '../shipping-edition/shipping-orders-table.component';
 
-import { ShippingPalletsTableEventType } from '../shipping-edition/shipping-pallets-table.component';
+import { ShippingPalletsTableEventType } from '../pallet-edition/shipping-pallets-table.component';
 
 import { ShippingOrdersModalEventType } from '../shipping-edition/shipping-orders-modal.component';
 
@@ -45,7 +45,7 @@ export enum ShippingEditionEventType {
   selector: 'emp-trade-shipping-edition',
   templateUrl: './shipping-edition.component.html',
 })
-export class ShippingEditionComponent implements OnChanges {
+export class ShippingEditionComponent implements OnChanges, OnInit {
 
   @Input() shippingUID: string = null;
 
@@ -57,15 +57,19 @@ export class ShippingEditionComponent implements OnChanges {
 
   submitted = false;
 
+  initialLoadExecuted = false;
+
   putOnPallets: boolean = false;
 
   shipping: Shipping = EmptyShipping;
 
   displayShippingOrdersModal = false;
 
-  editionMode = true;
+  editionMode = false;
 
   isShippingDataReady = false;
+
+  isShippingDataDirty = false;
 
   shippingFields: ShippingFields = { orders: [], shippingData: null };
 
@@ -75,10 +79,18 @@ export class ShippingEditionComponent implements OnChanges {
 
 
   constructor(private shippingData: ShippingDataService,
-    private messageBox: MessageBoxService) { }
+              private messageBox: MessageBoxService) { }
+
+
+  ngOnInit() {
+    if(this.isShippingCreator) {
+      this.setShipping(EmptyShipping);
+    }
+  }
 
 
   ngOnChanges() {
+    this.resetFlags();
     this.loadInitData();
   }
 
@@ -90,6 +102,11 @@ export class ShippingEditionComponent implements OnChanges {
 
   get isQueryByOrders(): boolean {
     return !!this.orders && this.orders.length > 0;
+  }
+
+
+  get isShippingCreator(): boolean {
+    return !this.isQueryByOrders && !this.isQueryByShippingUID;
   }
 
 
@@ -120,8 +137,10 @@ export class ShippingEditionComponent implements OnChanges {
     switch (event.type as ShippingDataViewEventType) {
       case ShippingDataViewEventType.CHANGE_DATA:
         Assertion.assertValue(event.payload.isFormReady, 'event.payload.isFormReady');
+        Assertion.assertValue(event.payload.isFormDirty, 'event.payload.isFormDirty');
         Assertion.assertValue(event.payload.shippingDataFields, 'event.payload.shippingDataFields');
         this.isShippingDataReady = event.payload.isFormReady as boolean;
+        this.isShippingDataDirty = event.payload.isFormDirty as boolean;
         this.shippingFields.shippingData = event.payload.shippingDataFields as ShippingDataFields;
         return;
 
@@ -215,17 +234,18 @@ export class ShippingEditionComponent implements OnChanges {
 
   onShippingPalletsTableEvent(event: EventInfo) {
     switch (event.type as ShippingPalletsTableEventType) {
-      case ShippingPalletsTableEventType.CREATE_ITEM_CLICKED:
+      case ShippingPalletsTableEventType.CREATE_PALLET_CLICKED:
         this.setShippingPalletSelected(EmptyShippingPalletWithPackages, true);
         return;
 
-      case ShippingPalletsTableEventType.ITEM_CLICKED:
+      case ShippingPalletsTableEventType.UPDATE_PALLET_CLICKED:
         Assertion.assertValue(event.payload.item, 'event.payload.item');
         this.setShippingPalletSelected(event.payload.item as ShippingPalletWithPackages);
         return;
 
-      case ShippingPalletsTableEventType.DELETE_ITEM_CLICKED:
-        this.messageBox.showInDevelopment('Eliminar tarima');
+      case ShippingPalletsTableEventType.DELETE_PALLET_CLICKED:
+        Assertion.assertValue(event.payload.shippingPalletUID, 'event.payload.shippingPalletUID');
+        this.deleteShippingPallet(this.shipping.shippingData.shippingUID, event.payload.shippingPalletUID);
         return;
 
       default:
@@ -240,11 +260,21 @@ export class ShippingEditionComponent implements OnChanges {
       case ShippingPalletModalEventType.CLOSE_MODAL_CLICKED:
         this.setShippingPalletSelected(EmptyShippingPalletWithPackages);
         return;
+      // TODO verificar aqui que todo se refresque bien y renombrar eventos de todos los componentes de envio
+      case ShippingPalletModalEventType.CREATE_PALLET:
+        Assertion.assertValue(event.payload.shippingPalletFields, 'event.payload.shippingPalletFields');
 
-      case ShippingPalletModalEventType.PALLET_SAVED:
-        Assertion.assertValue(event.payload.shipping, 'event.payload.shipping');
-        this.setShipping(event.payload.shipping as Shipping);
-        this.setShippingPalletSelected(EmptyShippingPalletWithPackages);
+        this.createShippingPallet(this.shipping.shippingData.shippingUID,
+                                  event.payload.shippingPalletFields as ShippingPalletFields);
+        return;
+
+      case ShippingPalletModalEventType.UPDATE_PALLET:
+        Assertion.assertValue(event.payload.shippingPalletFields, 'event.payload.shippingPalletFields');
+        Assertion.assertValue(event.payload.shippingPalletUID, 'event.payload.shippingPalletUID');
+
+        this.updateShippingPallet(this.shipping.shippingData.shippingUID,
+                                  event.payload.shippingPalletUID as string,
+                                  event.payload.shippingPalletFields as ShippingPalletFields);
         return;
 
       default:
@@ -255,13 +285,15 @@ export class ShippingEditionComponent implements OnChanges {
 
 
   private initShippingFields() {
-    this.shippingFields.shippingData = {
-      shippingUID: this.shipping.shippingData.shippingUID ?? '',
-      parcelSupplierUID: this.shipping.shippingData.parcelSupplier.uid ?? '',
-      shippingGuide: this.shipping.shippingData.shippingGuide ?? '',
-      parcelAmount: this.shipping.shippingData.parcelAmount ?? null,
-      customerAmount: this.shipping.shippingData.customerAmount ?? null,
-    };
+    if (!this.isShippingDataDirty) {
+      this.shippingFields.shippingData = {
+        shippingUID: this.shipping.shippingData.shippingUID ?? '',
+        parcelSupplierUID: this.shipping.shippingData.parcelSupplier.uid ?? '',
+        shippingGuide: this.shipping.shippingData.shippingGuide ?? '',
+        parcelAmount: this.shipping.shippingData.parcelAmount ?? null,
+        customerAmount: this.shipping.shippingData.customerAmount ?? null,
+      };
+    }
 
     this.shippingFields.orders = [...[], ...this.shipping.ordersForShipping.map(x => x.orderUID)];
   }
@@ -277,6 +309,13 @@ export class ShippingEditionComponent implements OnChanges {
       const query: ShippingFieldsQuery = { orders };
       this.getShippingByOrders(query);
     }
+  }
+
+
+  private resetFlags() {
+    this.initialLoadExecuted = false;
+    this.isShippingDataDirty = false;
+    this.putOnPallets = false;
   }
 
 
@@ -310,8 +349,8 @@ export class ShippingEditionComponent implements OnChanges {
 
     this.shippingData.getShippingByOrders(query)
       .firstValue()
-      .then(x => this.setShipping(x))
-      .catch(x => this.resolveShippingError())
+      .then(x => this.resolveGetShippingByOrders(x))
+      .catch(x => this.resolveGetShippingByOrdersError())
       .finally(() => this.isLoading = false);
   }
 
@@ -351,7 +390,7 @@ export class ShippingEditionComponent implements OnChanges {
 
     this.shippingData.AddOrderToShipping(shippingUID, orderUID)
       .firstValue()
-      .then(x => this.resolveShippingOrdersUpdated(x))
+      .then(x => this.resolveShippingOrderSaved(x))
       .finally(() => this.submitted = false);
   }
 
@@ -361,7 +400,39 @@ export class ShippingEditionComponent implements OnChanges {
 
     this.shippingData.removeOrderFromShipping(shippingUID, orderUID)
       .firstValue()
-      .then(x => this.resolveShippingOrdersUpdated(x))
+      .then(x => this.resolveShippingOrderSaved(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private createShippingPallet(shippingUID: string,
+                               dataFields: ShippingPalletFields) {
+    this.submitted = true;
+
+    this.shippingData.createShippingPallet(shippingUID, dataFields)
+      .firstValue()
+      .then(x => this.resolveShippingSaved(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private updateShippingPallet(shippingUID: string,
+                               shippingPalletUID: string,
+                               dataFields: ShippingPalletFields) {
+    this.submitted = true;
+    this.shippingData.updateShippingPallet(shippingUID, shippingPalletUID, dataFields)
+      .firstValue()
+      .then(x => this.resolveShippingSaved(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private deleteShippingPallet(shippingUID: string, shippingPalletUID: string) {
+    this.submitted = true;
+
+    this.shippingData.deleteShippingPallet(shippingUID, shippingPalletUID)
+      .firstValue()
+      .then(x => this.resolveShippingSaved(x))
       .finally(() => this.submitted = false);
   }
 
@@ -377,13 +448,23 @@ export class ShippingEditionComponent implements OnChanges {
 
 
   private setShipping(shipping: Shipping) {
+    debugger
     this.shipping = shipping;
-    this.editionMode = !this.isSaved;
-    this.putOnPallets = this.displayShippingOrdersModal ? true :
-      this.shipping.shippingPalletsWithPackages?.length > 0;
+    this.initialLoadExecuted = true;
 
+    this.validateSetPutOnPallets();
+    this.validateSetEditionMode();
     this.initShippingFields();
     this.emitDataDescription();
+  }
+
+
+  private validateSetEditionMode() {
+    if (this.isShippingCreator || !this.isSaved) {
+      this.editionMode = true;
+    } else {
+      this.editionMode = this.editionMode && this.isShippingDataDirty ? true : false;
+    }
   }
 
 
@@ -392,7 +473,33 @@ export class ShippingEditionComponent implements OnChanges {
   }
 
 
+  private validateSetPutOnPallets() {
+    if (this.displayShippingOrdersModal) {
+      this.putOnPallets = true;
+    } else {
+      this.putOnPallets = this.shipping.shippingPalletsWithPackages?.length > 0;
+    }
+  }
+
+
+  private resolveGetShippingByOrders(shipping: Shipping) {
+    if (this.isShippingCreator && !!shipping.shippingData.shippingUID) {
+      this.messageBox.showError('El pedido ya se encuentra en otro envío.');
+    } else {
+      this.setShipping(shipping);
+    }
+  }
+
+
   private resolveShippingSaved(shipping: Shipping) {
+    this.isShippingDataDirty = false;
+    this.setShipping(shipping);
+    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_UPDATED,
+      { shippingData: shipping.shippingData });
+  }
+
+
+  private resolveShippingOrderSaved(shipping: Shipping) {
     this.setShipping(shipping);
     sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_UPDATED,
       { shippingData: shipping.shippingData });
@@ -402,13 +509,6 @@ export class ShippingEditionComponent implements OnChanges {
   private resolveShippingDeleted() {
     sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_DELETED);
     this.messageBox.show('El envío fue cancelado correctamente.', 'Cancelar envío');
-  }
-
-
-  private resolveShippingOrdersUpdated(shipping: Shipping) {
-    this.setShipping(shipping);
-    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_UPDATED,
-      { shippingData: shipping.shippingData });
   }
 
 
@@ -422,6 +522,13 @@ export class ShippingEditionComponent implements OnChanges {
 
   private resolveShippingError() {
     sendEvent(this.shippingEditionEvent, ShippingEditionEventType.DATA_ERROR);
+  }
+
+
+  private resolveGetShippingByOrdersError() {
+    if (!this.initialLoadExecuted) {
+      this.resolveShippingError();
+    }
   }
 
 
@@ -465,7 +572,7 @@ export class ShippingEditionComponent implements OnChanges {
       dataDescription += `&nbsp; &nbsp;<strong>Fecha:</strong> ${date}`;
     }
 
-    return dataDescription
+    return !dataDescription ? 'Información del envío.' : dataDescription;
   }
 
 }

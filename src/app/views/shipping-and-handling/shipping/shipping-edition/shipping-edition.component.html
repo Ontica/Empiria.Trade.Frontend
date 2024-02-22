@@ -41,6 +41,7 @@
 
   <emp-trade-shipping-pallets-table *ngIf="putOnPallets"
     [shippingPallets]="shipping.shippingPalletsWithPackages ?? []"
+    [totalPackages]="shipping.shippingData.totalPackages"
     [canEdit]="canEdit"
     (shippingPalletsTableEvent)="onShippingPalletsTableEvent($event)">
 

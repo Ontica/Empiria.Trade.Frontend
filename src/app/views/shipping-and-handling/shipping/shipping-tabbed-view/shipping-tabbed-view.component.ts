@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
@@ -25,7 +25,7 @@ export enum ShippingTabbedViewEventType {
   selector: 'emp-trade-shipping-tabbed-view',
   templateUrl: './shipping-tabbed-view.component.html',
 })
-export class ShippingTabbedViewComponent implements OnInit {
+export class ShippingTabbedViewComponent implements OnChanges {
 
   @Input() shippingData: ShippingData = EmptyShippingData;
 
@@ -36,7 +36,7 @@ export class ShippingTabbedViewComponent implements OnInit {
   hintText = 'Información del envío.';
 
 
-  ngOnInit() {
+  ngOnChanges() {
     this.setTexts();
   }
 

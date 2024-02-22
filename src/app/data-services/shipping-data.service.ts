@@ -12,7 +12,8 @@ import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 import { map } from 'rxjs';
 
 import { OrderDataTable, OrderForShipping, OrderQuery, Shipping, ShippingData, ShippingFields,
-         ShippingFieldsQuery, ShippingQuery, mapOrdersDescriptorToOrdersForShipping } from '@app/models';
+         ShippingFieldsQuery, ShippingPalletFields, ShippingQuery,
+         mapOrdersDescriptorToOrdersForShipping } from '@app/models';
 
 @Injectable()
 export class ShippingDataService {
@@ -109,6 +110,41 @@ export class ShippingDataService {
     Assertion.assertValue(orderUID, 'orderUID');
 
     const path = `v4/trade/sales/shipping/${shippingUID}/order/${orderUID}`;
+
+    return this.http.delete<Shipping>(path);
+  }
+
+
+  createShippingPallet(shippingUID: string,
+                       dataFields: ShippingPalletFields): EmpObservable<Shipping> {
+    Assertion.assertValue(shippingUID, 'shippingUID');
+    Assertion.assertValue(dataFields, 'dataFields');
+
+    const path = `v4/trade/sales/shipping/${shippingUID}/pallet`;
+
+    return this.http.post<Shipping>(path, dataFields);
+  }
+
+
+  updateShippingPallet(shippingUID: string,
+                       shippingPalletUID: string,
+                       dataFields: ShippingPalletFields): EmpObservable<Shipping> {
+    Assertion.assertValue(shippingUID, 'shippingUID');
+    Assertion.assertValue(shippingPalletUID, 'shippingPalletUID');
+    Assertion.assertValue(dataFields, 'dataFields');
+
+    const path = `v4/trade/sales/shipping/${shippingUID}/pallet/${shippingPalletUID}`;
+
+    return this.http.put<Shipping>(path, dataFields);
+  }
+
+
+  deleteShippingPallet(shippingUID: string,
+                       shippingPalletUID: string): EmpObservable<Shipping> {
+    Assertion.assertValue(shippingUID, 'shippingUID');
+    Assertion.assertValue(shippingPalletUID, 'shippingPalletUID');
+
+    const path = `v4/trade/sales/shipping/${shippingUID}/pallet/${shippingPalletUID}`;
 
     return this.http.delete<Shipping>(path);
   }

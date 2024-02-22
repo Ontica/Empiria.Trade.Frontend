@@ -25,14 +25,17 @@
 
     </div>
 
-    <div class="fx-item fx-center fx-items-center">
+    <div class="fx-item fx-center fx-items-center"
+      [title]="!isSaved ? 'Es necesario guardar el envío para entarimar los paquetes' : ''">
+
         <mat-checkbox name="putOnPallets"
           [ngModel]="putOnPallets" [ngModelOptions]="{standalone: true}"
-          [disabled]="!canEdit"
+          [disabled]="!canEdit || !isSaved"
           (ngModelChange)="putOnPalletsChange.emit($event)"
           (click)="$event.stopPropagation">
           Entarimar paquetes
         </mat-checkbox>
+
     </div>
 
     <div class="fx-item fx-end fx-items-center">

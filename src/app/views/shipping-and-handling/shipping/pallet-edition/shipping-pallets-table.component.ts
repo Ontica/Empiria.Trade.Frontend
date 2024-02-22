@@ -15,12 +15,12 @@ import { sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { ShippingPalletWithPackages } from '@app/models';
+import { EmptyPackagingTotals, PackagingTotals, ShippingPalletWithPackages } from '@app/models';
 
 export enum ShippingPalletsTableEventType {
-  ITEM_CLICKED        = 'ShippingPalletsTableComponent.Event.ItemClicked',
-  CREATE_ITEM_CLICKED = 'ShippingPalletsTableComponent.Event.CreateItemClicked',
-  DELETE_ITEM_CLICKED = 'ShippingPalletsTableComponent.Event.DeleteItemClicked',
+  UPDATE_PALLET_CLICKED = 'ShippingPalletsTableComponent.Event.UpdatePalletClicked',
+  CREATE_PALLET_CLICKED = 'ShippingPalletsTableComponent.Event.CreatePalletClicked',
+  DELETE_PALLET_CLICKED = 'ShippingPalletsTableComponent.Event.DeletePalletClicked',
 }
 
 @Component({
@@ -28,6 +28,10 @@ export enum ShippingPalletsTableEventType {
   templateUrl: './shipping-pallets-table.component.html',
 })
 export class ShippingPalletsTableComponent implements OnChanges {
+
+  @Input() shippingUID: string = '';
+
+  @Input() totalPackages: number = 0;
 
   @Input() shippingPallets: ShippingPalletWithPackages[] = [];
 
@@ -41,15 +45,29 @@ export class ShippingPalletsTableComponent implements OnChanges {
 
   dataSource: MatTableDataSource<ShippingPalletWithPackages>;
 
+  palletsTotals: PackagingTotals = EmptyPackagingTotals;
+
+  missingPackages: number = 0;
+
 
   constructor(private messageBox: MessageBoxService) { }
 
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.shippingPallets) {
-      this.dataSource = new MatTableDataSource(this.shippingPallets);
       this.resetColumns();
+      this.dataSource = new MatTableDataSource(this.shippingPallets);
+      this.setPalletsTotals();
     }
+  }
+
+
+  private setPalletsTotals() {
+    this.palletsTotals.totalPackages = this.shippingPallets.reduce((acum, value) => acum + value.totalPackages, 0);
+    this.palletsTotals.totalWeight = this.shippingPallets.reduce((acum, value) => acum + value.totalWeight, 0);
+    this.palletsTotals.totalVolume = this.shippingPallets.reduce((acum, value) => acum + value.totalVolume, 0);
+
+    this.missingPackages = this.totalPackages - this.palletsTotals.totalPackages;
   }
 
 
@@ -59,12 +77,13 @@ export class ShippingPalletsTableComponent implements OnChanges {
 
 
   onShippingPalletClicked(pallet: ShippingPalletWithPackages) {
-    sendEvent(this.shippingPalletsTableEvent, ShippingPalletsTableEventType.ITEM_CLICKED, { item: pallet });
+    sendEvent(this.shippingPalletsTableEvent, ShippingPalletsTableEventType.UPDATE_PALLET_CLICKED,
+      { item: pallet });
   }
 
 
   onCreateShippingPalletClicked() {
-    sendEvent(this.shippingPalletsTableEvent, ShippingPalletsTableEventType.CREATE_ITEM_CLICKED);
+    sendEvent(this.shippingPalletsTableEvent, ShippingPalletsTableEventType.CREATE_PALLET_CLICKED);
   }
 
 
@@ -92,8 +111,8 @@ export class ShippingPalletsTableComponent implements OnChanges {
       .firstValue()
       .then(x => {
         if (x) {
-          sendEvent(this.shippingPalletsTableEvent,
-            ShippingPalletsTableEventType.DELETE_ITEM_CLICKED, { pallet });
+          sendEvent(this.shippingPalletsTableEvent, ShippingPalletsTableEventType.DELETE_PALLET_CLICKED,
+            { shippingPalletUID: pallet.shippingPalletUID });
         }
       });
   }

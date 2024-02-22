@@ -64,20 +64,18 @@ export interface OrderForShipping extends PackagingTotals {
 }
 
 
-export function mapOrdersDescriptorToOrdersForShipping(ordersDesc: OrderDescriptor[]): OrderForShipping[] {
-  return ordersDesc.map<OrderForShipping>(x => mapToOrderForShipping(x));
+export interface ShippingFields {
+  orders: string[];
+  shippingData: ShippingDataFields;
 }
 
 
-function mapToOrderForShipping(orderDesc: OrderDescriptor): OrderForShipping {
-  return {
-    orderUID: orderDesc.uid,
-    orderNumber: orderDesc.orderNumber,
-    orderTotal: orderDesc.orderTotal,
-    totalPackages: orderDesc.totalPackages,
-    totalWeight: orderDesc.weight,
-    customer: Empty, vendor: Empty, packages: [], totalVolume: null,
-  }
+export interface ShippingDataFields {
+  shippingUID: string;
+  parcelSupplierUID: string;
+  shippingGuide: string;
+  parcelAmount: number;
+  customerAmount: number;
 }
 
 
@@ -100,6 +98,29 @@ export interface ShippingPalletWithPackages extends PackagingTotals {
   totalPackages: number;
   totalWeight: number;
   totalVolume: number;
+}
+
+
+export interface ShippingPalletFields {
+  shippingPalletName: string;
+  packages: string[];
+}
+
+
+export function mapOrdersDescriptorToOrdersForShipping(ordersDesc: OrderDescriptor[]): OrderForShipping[] {
+  return ordersDesc.map<OrderForShipping>(x => mapToOrderForShipping(x));
+}
+
+
+function mapToOrderForShipping(orderDesc: OrderDescriptor): OrderForShipping {
+  return {
+    orderUID: orderDesc.uid,
+    orderNumber: orderDesc.orderNumber,
+    orderTotal: orderDesc.orderTotal,
+    totalPackages: orderDesc.totalPackages,
+    totalWeight: orderDesc.weight,
+    customer: Empty, vendor: Empty, packages: [], totalVolume: null,
+  };
 }
 
 
@@ -139,19 +160,4 @@ export const EmptyShipping: Shipping = {
   shippingData: EmptyShippingData,
   ordersForShipping: [],
   shippingPalletsWithPackages: [],
-}
-
-
-export interface ShippingFields {
-  orders: string[];
-  shippingData: ShippingDataFields;
-}
-
-
-export interface ShippingDataFields {
-  shippingUID: string;
-  parcelSupplierUID: string;
-  shippingGuide: string;
-  parcelAmount: number;
-  customerAmount: number;
 }

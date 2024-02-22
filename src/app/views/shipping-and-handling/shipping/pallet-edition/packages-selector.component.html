@@ -9,7 +9,7 @@
   <mat-checkbox #checkSelectAllOrders class="fx-item-half"
     (click)="$event.stopPropagation"
     (change)="onToggleSelectAllOrders(checkSelectAllOrders.checked)">
-    {{checkSelectAllOrders.checked ? 'Desseleccionar todos los paquetes' : 'Seleccionar todos los paquetes'}}
+    Todos los paquetes
   </mat-checkbox>
 
 </div>
@@ -39,7 +39,8 @@
             <emp-ng-check-box-all title="Todos"
               [selection]="item.selection"
               [values]="item.packages"
-              [disabled]="!shipping.canEdit"
+              [indeterminated]="isOrderDisabled(item.packages)"
+              [disabled]="!shipping.canEdit || isOrderDisabled(item.packages)"
               (selectionChange)="onSelectAllPackagesFromOrder(item, $event)">
 
             </emp-ng-check-box-all>

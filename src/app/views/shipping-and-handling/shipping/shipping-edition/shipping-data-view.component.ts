@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -59,8 +59,10 @@ export class ShippingDataViewComponent implements OnChanges, OnInit {
   }
 
 
-  ngOnChanges() {
-    this.setFormData();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.editionMode || (changes.shippingData && !this.form.dirty)) {
+      this.setFormData();
+    }
   }
 
 
@@ -102,6 +104,7 @@ export class ShippingDataViewComponent implements OnChanges, OnInit {
   private emitFormChanges() {
     const payload = {
       isFormReady: FormHelper.isFormReady(this.form),
+      isFormDirty: this.form.dirty,
       shippingDataFields: this.getFormData(),
     };
 

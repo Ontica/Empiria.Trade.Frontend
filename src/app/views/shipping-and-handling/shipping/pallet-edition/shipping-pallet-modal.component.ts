@@ -11,9 +11,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { EmptyShipping, EmptyShippingPalletWithPackages, Shipping,
+import { EmptyShipping, EmptyShippingPalletWithPackages, Shipping, ShippingPalletFields,
          ShippingPalletWithPackages } from '@app/models';
 
 import { PackagesSelectorEventType } from './packages-selector.component';
@@ -22,7 +20,8 @@ import { PalletHeaderEventType } from './pallet-header.component';
 
 export enum ShippingPalletModalEventType {
   CLOSE_MODAL_CLICKED = 'ShippingPalletModalComponent.Event.CloseButtonClicked',
-  PALLET_SAVED        = 'ShippingPalletModalComponent.Event.PalletSaved',
+  CREATE_PALLET       = 'ShippingPalletModalComponent.Event.CreatePallet',
+  UPDATE_PALLET       = 'ShippingPalletModalComponent.Event.UpdatePallet',
 }
 
 @Component({
@@ -45,12 +44,7 @@ export class ShippingPalletModalComponent implements OnInit {
 
   submitted = false;
 
-  palletName: string = '';
-
-  packagesSelected: string[] = [];
-
-
-  constructor(private messageBox: MessageBoxService) { }
+  palletFields: ShippingPalletFields = { shippingPalletName: '', packages: [] }
 
 
   ngOnInit() {
@@ -58,8 +52,13 @@ export class ShippingPalletModalComponent implements OnInit {
   }
 
 
+  get isSaved(): boolean {
+    return !!this.pallet.shippingPalletUID;
+  }
+
+
   get isReady(): boolean {
-    return !!this.palletName && this.packagesSelected.length > 0;
+    return !!this.palletFields.shippingPalletName && this.palletFields.packages.length > 0;
   }
 
 
@@ -72,7 +71,7 @@ export class ShippingPalletModalComponent implements OnInit {
     switch (event.type as PalletHeaderEventType) {
       case PalletHeaderEventType.DATA_CHANGES:
         Assertion.assertValue(event.payload.data, 'event.payload.data');
-        this.palletName = event.payload.data.palletName ?? '';
+        this.palletFields.shippingPalletName = event.payload.data.palletName ?? '';
         return;
 
       default:
@@ -87,7 +86,7 @@ export class ShippingPalletModalComponent implements OnInit {
       case PackagesSelectorEventType.SELECTION_CHANGES:
         Assertion.assertValue(event.payload.packages, 'event.payload.packages');
         Assertion.assertValue(event.payload.totals, 'event.payload.totals');
-        this.packagesSelected = event.payload.packages;
+        this.palletFields.packages = event.payload.packages;
         return;
 
       default:
@@ -99,32 +98,28 @@ export class ShippingPalletModalComponent implements OnInit {
 
   onSubmitButtonClicked() {
     if (this.isReady) {
-
-      const palletFields = {
-        shippingUID: this.shipping.shippingData.shippingUID,
-        shippingPalletName: this.palletName,
-        packages: this.packagesSelected,
-      }
-
-      this.saveShippingPallet(palletFields);
+      this.validateSaveShippingToEmit();
     }
   }
 
 
-  private saveShippingPallet(palletFields: any) {
-    this.submitted = true;
-    setTimeout(() => {
-      this.submitted = false;
-      this.messageBox.showInDevelopment(this.titleText, palletFields);
-      sendEvent(this.shippingPalletModalEvent, ShippingPalletModalEventType.PALLET_SAVED,
-        {shipping: this.shipping});
-    }, 600);
+  private validateSaveShippingToEmit() {
+    if (this.isSaved) {
+
+      sendEvent(this.shippingPalletModalEvent, ShippingPalletModalEventType.UPDATE_PALLET,
+        { shippingPalletUID: this.pallet.shippingPalletUID, shippingPalletFields: this.palletFields });
+
+    } else {
+
+      sendEvent(this.shippingPalletModalEvent, ShippingPalletModalEventType.CREATE_PALLET,
+        { shippingPalletFields: this.palletFields });
+
+    }
   }
 
 
   private setTitles() {
-    this.titleText = this.pallet.shippingPalletUID ?
-      'Editar tarima - ' + this.pallet.shippingPalletName : 'Agregar tarima';
+    this.titleText = this.isSaved ? 'Editar tarima - ' + this.pallet.shippingPalletName : 'Agregar tarima';
   }
 
 }

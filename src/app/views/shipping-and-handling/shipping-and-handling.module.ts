@@ -32,7 +32,7 @@ import { ShippingEditorModalComponent } from './shipping/shipping-editor-modal/s
 import { ShippingEditionComponent } from './shipping/shipping-edition/shipping-edition.component';
 import { ShippingDataViewComponent } from './shipping/shipping-edition/shipping-data-view.component';
 import { ShippingOrdersTableComponent } from './shipping/shipping-edition/shipping-orders-table.component';
-import { ShippingPalletsTableComponent } from './shipping/shipping-edition/shipping-pallets-table.component';
+import { ShippingPalletsTableComponent } from './shipping/pallet-edition/shipping-pallets-table.component';
 import { ShippingOrdersModalComponent } from './shipping/shipping-edition/shipping-orders-modal.component';
 import { ShippingOrdersSubmitterComponent } from './shipping/shipping-edition/shipping-orders-submitter.component';
 import { ShippingPalletModalComponent } from './shipping/pallet-edition/shipping-pallet-modal.component';
