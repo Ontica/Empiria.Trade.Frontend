@@ -39,7 +39,7 @@ export class ShippingPalletsTableComponent implements OnChanges {
 
   @Output() shippingPalletsTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumnsDefault: string[] = ['ID', 'palletID', 'totalPackages', 'totalWeight', 'totalVolume'];
+  displayedColumnsDefault: string[] = ['palletID', 'totalPackages', 'totalWeight', 'totalVolume'];
 
   displayedColumns = [...this.displayedColumnsDefault];
 

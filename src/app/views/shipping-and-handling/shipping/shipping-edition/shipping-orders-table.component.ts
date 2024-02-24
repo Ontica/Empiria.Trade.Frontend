@@ -43,7 +43,7 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
 
   @Output() shippingOrdersTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumnsDefault: string[] = ['ID', 'orderNumber', 'orderTotal',
+  displayedColumnsDefault: string[] = ['orderNumber', 'orderTotal',
                                        'totalPackages', 'totalWeight', 'totalVolume'];
 
   displayedColumns = [...this.displayedColumnsDefault];

@@ -309,7 +309,7 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
         return;
 
       default:
-        this.messageBox.showInDevelopment('Executar operación: ' + operation.name + orders.length,
+        this.messageBox.showInDevelopment('Executar operación: ' + operation.name + ' ( ' + orders.length + ' pedido )',
           { operation, orders });
         return;
     }

@@ -411,7 +411,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
     this.shippingData.createShippingPallet(shippingUID, dataFields)
       .firstValue()
-      .then(x => this.resolveShippingSaved(x))
+      .then(x => this.resolveShippingPalletSaved(x))
       .finally(() => this.submitted = false);
   }
 
@@ -422,7 +422,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
     this.submitted = true;
     this.shippingData.updateShippingPallet(shippingUID, shippingPalletUID, dataFields)
       .firstValue()
-      .then(x => this.resolveShippingSaved(x))
+      .then(x => this.resolveShippingPalletSaved(x))
       .finally(() => this.submitted = false);
   }
 
@@ -500,6 +500,14 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
   private resolveShippingOrderSaved(shipping: Shipping) {
     this.setShipping(shipping);
+    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_UPDATED,
+      { shippingData: shipping.shippingData });
+  }
+
+
+  private resolveShippingPalletSaved(shipping: Shipping) {
+    this.setShipping(shipping);
+    this.setShippingPalletSelected(EmptyShippingPalletWithPackages);
     sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_UPDATED,
       { shippingData: shipping.shippingData });
   }
