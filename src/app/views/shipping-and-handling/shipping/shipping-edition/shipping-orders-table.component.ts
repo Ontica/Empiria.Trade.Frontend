@@ -18,10 +18,9 @@ import { sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { ShippingDataService } from '@app/data-services';
+import { SalesOrdersDataService } from '@app/data-services';
 
-import { EmptyShipping, OrderForShipping, OrderQuery, OrderQueryType, Shipping,
-         ShippingMethodTypes } from '@app/models';
+import { EmptyShipping, OrderDescriptor, OrderForShipping, Shipping } from '@app/models';
 
 export enum ShippingOrdersTableEventType {
   CHANGE_ORDERS = 'ShippingOrdersTableComponent.Event.ChangeOrders',
@@ -50,9 +49,9 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
 
   dataSource: MatTableDataSource<OrderForShipping>;
 
-  orderFromSearcher: OrderForShipping = null;
+  orderFromSearcher: OrderDescriptor = null;
 
-  ordersList$: Observable<OrderForShipping[]>;
+  ordersList$: Observable<OrderDescriptor[]>;
 
   ordersInput$ = new Subject<string>();
 
@@ -63,7 +62,7 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
   ordersForShipping: OrderForShipping[] = [];
 
 
-  constructor(private shippingData: ShippingDataService,
+  constructor(private orderData: SalesOrdersDataService,
               private messageBox: MessageBoxService) {
 
   }
@@ -93,8 +92,8 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
 
   onOrderSearcherChanges() {
     setTimeout(() => {
-      if (!this.isOrderInShipping(this.orderFromSearcher.orderUID)) {
-        this.addOrderToShipping(this.orderFromSearcher.orderUID);
+      if (!this.isOrderInShipping(this.orderFromSearcher.uid)) {
+        this.addOrderToShipping(this.orderFromSearcher.uid);
       } else {
         this.messageBox.showError('El pedido ya se encuentra en el envío.');
       }
@@ -176,7 +175,7 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
         debounceTime(800),
         tap(() => this.isOrdersLoading = true),
         switchMap(keyword =>
-          this.shippingData.searchOrdersForShipping(this.getQueryForSearchOrders(keyword))
+          this.orderData.searchOrdersForShipping(keyword)
             .pipe(
               delay(2000),
               catchError(() => of([])),
@@ -184,22 +183,6 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
             )
         ))
     );
-  }
-
-
-  private getQueryForSearchOrders(keywords: string): OrderQuery {
-    const query: OrderQuery = {
-      queryType: OrderQueryType.Sales,
-      keywords: keywords,
-      status: 'Shipping',
-      shippingMethod: ShippingMethodTypes.Paqueteria,
-
-      fromDate: null,
-      toDate: null,
-      customerUID: null,
-    };
-
-    return query;
   }
 
 }

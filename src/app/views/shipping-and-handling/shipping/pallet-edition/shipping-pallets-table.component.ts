@@ -20,7 +20,7 @@ import { EmptyPackagingTotals, PackagingTotals, ShippingPalletWithPackages } fro
 export enum ShippingPalletsTableEventType {
   UPDATE_PALLET_CLICKED = 'ShippingPalletsTableComponent.Event.UpdatePalletClicked',
   CREATE_PALLET_CLICKED = 'ShippingPalletsTableComponent.Event.CreatePalletClicked',
-  DELETE_PALLET_CLICKED = 'ShippingPalletsTableComponent.Event.DeletePalletClicked',
+  DELETE_PALLET         = 'ShippingPalletsTableComponent.Event.DeletePallet',
 }
 
 @Component({
@@ -111,7 +111,7 @@ export class ShippingPalletsTableComponent implements OnChanges {
       .firstValue()
       .then(x => {
         if (x) {
-          sendEvent(this.shippingPalletsTableEvent, ShippingPalletsTableEventType.DELETE_PALLET_CLICKED,
+          sendEvent(this.shippingPalletsTableEvent, ShippingPalletsTableEventType.DELETE_PALLET,
             { shippingPalletUID: pallet.shippingPalletUID });
         }
       });

@@ -7,8 +7,6 @@
 
 import { DateString, Empty, Identifiable } from '@app/core';
 
-import { OrderDescriptor } from './order';
-
 import { PackagingTotals } from './packing';
 
 
@@ -104,23 +102,6 @@ export interface ShippingPalletWithPackages extends PackagingTotals {
 export interface ShippingPalletFields {
   shippingPalletName: string;
   packages: string[];
-}
-
-
-export function mapOrdersDescriptorToOrdersForShipping(ordersDesc: OrderDescriptor[]): OrderForShipping[] {
-  return ordersDesc.map<OrderForShipping>(x => mapToOrderForShipping(x));
-}
-
-
-function mapToOrderForShipping(orderDesc: OrderDescriptor): OrderForShipping {
-  return {
-    orderUID: orderDesc.uid,
-    orderNumber: orderDesc.orderNumber,
-    orderTotal: orderDesc.orderTotal,
-    totalPackages: orderDesc.totalPackages,
-    totalWeight: orderDesc.weight,
-    customer: Empty, vendor: Empty, packages: [], totalVolume: null,
-  };
 }
 
 

@@ -9,11 +9,8 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { map } from 'rxjs';
-
-import { OrderDataTable, OrderForShipping, OrderQuery, Shipping, ShippingData, ShippingFields,
-         ShippingFieldsQuery, ShippingPalletFields, ShippingQuery,
-         mapOrdersDescriptorToOrdersForShipping } from '@app/models';
+import { Shipping, ShippingData, ShippingFields, ShippingFieldsQuery, ShippingPalletFields,
+         ShippingQuery } from '@app/models';
 
 @Injectable()
 export class ShippingDataService {
@@ -49,18 +46,6 @@ export class ShippingDataService {
     const path = 'v4/trade/sales/shipping/parcel-delivery';
 
     return this.http.post<Shipping>(path, query);
-  }
-
-
-  searchOrdersForShipping(query: OrderQuery): EmpObservable<OrderForShipping[]> {
-    Assertion.assertValue(query, 'query');
-
-    const path = 'v4/trade/sales/orders/search';
-
-    return new EmpObservable<OrderForShipping[]> (
-      this.http.post<OrderDataTable>(path, query)
-        .pipe(map(x => mapOrdersDescriptorToOrdersForShipping(x.entries)))
-    );
   }
 
 

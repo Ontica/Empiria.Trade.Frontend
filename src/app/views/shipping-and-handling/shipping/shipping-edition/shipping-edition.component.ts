@@ -243,7 +243,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
         this.setShippingPalletSelected(event.payload.item as ShippingPalletWithPackages);
         return;
 
-      case ShippingPalletsTableEventType.DELETE_PALLET_CLICKED:
+      case ShippingPalletsTableEventType.DELETE_PALLET:
         Assertion.assertValue(event.payload.shippingPalletUID, 'event.payload.shippingPalletUID');
         this.deleteShippingPallet(this.shipping.shippingData.shippingUID, event.payload.shippingPalletUID);
         return;
@@ -260,7 +260,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
       case ShippingPalletModalEventType.CLOSE_MODAL_CLICKED:
         this.setShippingPalletSelected(EmptyShippingPalletWithPackages);
         return;
-      // TODO verificar aqui que todo se refresque bien y renombrar eventos de todos los componentes de envio
+
       case ShippingPalletModalEventType.CREATE_PALLET:
         Assertion.assertValue(event.payload.shippingPalletFields, 'event.payload.shippingPalletFields');
 

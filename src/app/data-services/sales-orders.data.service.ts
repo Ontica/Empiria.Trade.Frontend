@@ -7,9 +7,12 @@
 
 import { Injectable } from '@angular/core';
 
+import { map } from 'rxjs';
+
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { Order, OrderDataTable, OrderFields, OrderQuery, OrderQueryType } from '@app/models';
+import { Order, OrderDataTable, OrderDescriptor, OrderFields, OrderQuery, OrderQueryType,
+         getQueryForSearchOrders } from '@app/models';
 
 
 @Injectable()
@@ -45,6 +48,20 @@ export class SalesOrdersDataService {
     const path = 'v4/trade/sales/orders/search';
 
     return this.http.post<OrderDataTable>(path, query);
+  }
+
+
+  searchOrdersForShipping(keywords: string): EmpObservable<OrderDescriptor[]> {
+    Assertion.assertValue(keywords, 'keywords');
+
+    const path = 'v4/trade/sales/orders/search';
+
+    return new EmpObservable<OrderDescriptor[]>(
+
+      this.http.post<OrderDataTable>(path, getQueryForSearchOrders(keywords))
+        .pipe(map(x => x.entries))
+
+    );
   }
 
 

@@ -414,6 +414,18 @@ export function mapOrderItemFromProductSelection(product: ProductSelection): Ord
 }
 
 
+export function getQueryForSearchOrders(keywords: string): OrderQuery {
+  const query: OrderQuery ={ ...EmptyOrderQuery,  ...{
+      queryType: OrderQueryType.Sales,
+      status: 'Shipping',
+      shippingMethod: ShippingMethodTypes.Paqueteria,
+      keywords: keywords,
+    }};
+
+  return query;
+}
+
+
 export enum OrdersOperationType {
   parcel_delivery        = 'parcel-delivery',
   customer_delivery      = 'customer-delivery',
