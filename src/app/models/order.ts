@@ -42,10 +42,10 @@ export enum ShippingMethodTypes {
 
 
 export const ShippingMethodList: Identifiable[] = [
-  { uid: ShippingMethodTypes.RutaLocal, name: 'Ruta local' },
+  { uid: ShippingMethodTypes.RutaLocal,   name: 'Ruta local' },
   { uid: ShippingMethodTypes.RutaForanea, name: 'Ruta foránea' },
-  { uid: ShippingMethodTypes.Ocurre, name: 'Ocurre' },
-  { uid: ShippingMethodTypes.Paqueteria, name: 'Paquetería' },
+  { uid: ShippingMethodTypes.Ocurre,      name: 'Ocurre' },
+  { uid: ShippingMethodTypes.Paqueteria,  name: 'Paquetería' },
 ];
 
 

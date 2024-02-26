@@ -4,7 +4,29 @@
 
     <div class="fx-row-container md-fx-column-container md-fx-gap-half">
 
-      <div class="fx-item-half fx-items-end md-fx-item">
+      <div class="fx-item-third">
+        <label>Paquetería:</label>
+        <emp-ng-select
+          formControlName="parcelSupplierUID"
+          [config]="{clearable: true}"
+          [items]="parcelSuppliersList"
+          [loading]="isLoading"
+          placeholder="Todas">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item-third">
+        <label>Estatus:</label>
+        <emp-ng-select
+          formControlName="status"
+          [config]="{bindByValue: false, clearable: true}"
+          [bindLabel]="null"
+          [items]="shippingStatusList"
+          placeholder="Todos">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item fx-items-end md-fx-item">
 
         <div class="input-search-container">
 

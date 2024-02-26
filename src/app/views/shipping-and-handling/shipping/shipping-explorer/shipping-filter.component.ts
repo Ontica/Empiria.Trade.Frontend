@@ -5,15 +5,17 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { EventInfo } from '@app/core';
+import { EventInfo, Identifiable } from '@app/core';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
-import { ShippingQuery } from '@app/models';
+import { ShippingDataService } from '@app/data-services';
+
+import { ShippingQuery, ShippingStatusList } from '@app/models';
 
 export enum ShippingFilterEventType {
   SEARCH_CLICKED = 'ShippingFilterComponent.Event.SearchClicked',
@@ -21,13 +23,15 @@ export enum ShippingFilterEventType {
 
 interface ShippingFilterFormModel extends FormGroup<{
   keywords: FormControl<string>;
+  parcelSupplierUID: FormControl<string>;
+  status: FormControl<string>;
 }> { }
 
 @Component({
   selector: 'emp-trade-shipping-filter',
   templateUrl: './shipping-filter.component.html',
 })
-export class ShippingFilterComponent {
+export class ShippingFilterComponent implements OnInit {
 
   @Input() queryExecuted: boolean = false;
 
@@ -37,9 +41,20 @@ export class ShippingFilterComponent {
 
   formHelper = FormHelper;
 
+  isLoading = false;
 
-  constructor() {
+  parcelSuppliersList: Identifiable[] = [];
+
+  shippingStatusList: string[] = ShippingStatusList;
+
+
+  constructor(private shippingDataService: ShippingDataService) {
     this.initForm();
+  }
+
+
+  ngOnInit() {
+    this.loadDataList();
   }
 
 
@@ -51,11 +66,24 @@ export class ShippingFilterComponent {
   }
 
 
+  private loadDataList() {
+    this.isLoading = true;
+
+    this.shippingDataService.getParcelSuppliers()
+      .subscribe(x => {
+        this.parcelSuppliersList = x;
+        this.isLoading = false;
+      });
+  }
+
+
   private initForm() {
     const fb = new FormBuilder();
 
     this.form = fb.group({
-      keywords: [''],
+      keywords: [null],
+      parcelSupplierUID: [null],
+      status: [null],
     });
   }
 
@@ -63,6 +91,8 @@ export class ShippingFilterComponent {
   private getShippingQuery(): ShippingQuery {
     const query: ShippingQuery = {
       keywords: this.form.value.keywords ?? null,
+      parcelSupplierUID: this.form.value.parcelSupplierUID ?? null,
+      status: this.form.value.status ?? null,
     };
 
     return query;

@@ -10,8 +10,22 @@ import { DateString, Empty, Identifiable } from '@app/core';
 import { PackagingTotals } from './packing';
 
 
+export enum ShippingStatus {
+  Abierto = 'Abierto',
+  Cerrado = 'Cerrado',
+}
+
+
+export const ShippingStatusList: string[] = [
+  ShippingStatus.Abierto,
+  ShippingStatus.Cerrado,
+];
+
+
 export interface ShippingQuery {
   keywords: string;
+  parcelSupplierUID: string;
+  status: string;
 }
 
 
