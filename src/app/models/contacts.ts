@@ -21,6 +21,7 @@ export interface Contact {
 export interface Address {
   uid: string;
   name: string;
+  description: string;
 }
 
 
@@ -50,4 +51,5 @@ export const EmptyContact: Contact = {
 export const EmptyAddress: Address = {
   uid: '',
   name: '',
+  description: '',
 };

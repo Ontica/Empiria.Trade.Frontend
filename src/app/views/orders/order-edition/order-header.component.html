@@ -130,9 +130,15 @@
           [items]="customerAddressesList"
           [placeholder]="addressesPlaceholder"
           [showError]="formHelper.isControlInvalid(form.controls.customerAddress)">
+
+          <ng-template #labelTemplate let-item="item">
+            {{item.name}} - {{item.description}}
+          </ng-template>
+
           <ng-template #optionTemplate let-item="item">
             <div class="wrap" [style.padding]="'0.25rem 0'">
-              {{item.name}}
+              <span class="item-highlight">{{item.name}}</span> <br>
+              <span class="item-text-xs">{{item.description}}</span>
             </div>
           </ng-template>
         </emp-ng-select>
