@@ -175,7 +175,7 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
         debounceTime(800),
         tap(() => this.isOrdersLoading = true),
         switchMap(keyword =>
-          this.orderData.searchOrdersForShipping(keyword)
+          this.orderData.searchOrdersForShipping(keyword.trim())
             .pipe(
               delay(2000),
               catchError(() => of([])),

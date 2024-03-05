@@ -11,8 +11,7 @@ import { map } from 'rxjs';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { Order, OrderDataTable, OrderDescriptor, OrderFields, OrderQuery, OrderQueryType,
-         getQueryForSearchOrders } from '@app/models';
+import { Order, OrderDataTable, OrderDescriptor, OrderFields, OrderQuery, OrderQueryType } from '@app/models';
 
 
 @Injectable()
@@ -54,14 +53,9 @@ export class SalesOrdersDataService {
   searchOrdersForShipping(keywords: string): EmpObservable<OrderDescriptor[]> {
     Assertion.assertValue(keywords, 'keywords');
 
-    const path = 'v4/trade/sales/orders/search';
+    const path = `v4/trade/sales/orders/search-for-shipping/?keywords=${keywords}`;
 
-    return new EmpObservable<OrderDescriptor[]>(
-
-      this.http.post<OrderDataTable>(path, getQueryForSearchOrders(keywords))
-        .pipe(map(x => x.entries))
-
-    );
+    return this.http.get<OrderDescriptor[]>(path);
   }
 
 

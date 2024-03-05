@@ -18,6 +18,15 @@
       [loading]="isOrdersLoading"
       (changes)="onOrderSearcherChanges()">
 
+      <ng-template #optionTemplate let-item="item">
+
+        <div class="wrap" [style.padding]="'0.25rem 0'">
+          <span class="item-highlight">{{item.orderNumber}}</span> <br>
+          <span class="item-text-xs">{{item.customerName}}</span>
+        </div>
+        
+      </ng-template>
+
     </emp-ng-select>
 
   </div>
