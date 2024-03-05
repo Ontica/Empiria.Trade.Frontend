@@ -358,9 +358,9 @@ textarea:focus {
   white-space: normal !important;
 }
 
- .nowrap {
-   white-space: nowrap;
- }
+.nowrap {
+  white-space: nowrap;
+}
 
 .info-text {
   color: $primary-color;
@@ -737,25 +737,19 @@ ul.default-list {
   padding: 8px;
 }
 
+
 .list-selection-item {
   padding: 8px 8px 8px 4px;
 }
+
 
 .list-selection-item:not(:last-child) {
   border-bottom: 1px dashed $secondary-color-light;
 }
 
+
 .workarea-color {
   background: hsl(207, 91%, 98%);
-}
-
-
-@mixin message-container() {
-  display: flex;
-  padding: 0.5rem;
-  font-size: $font-size-grid;
-  border-radius: $control-border-radius;
-  border: 1px solid #000;
 }
 
 
@@ -783,6 +777,7 @@ ul.default-list {
   max-height: 85vh;
   overflow-y: auto;
 }
+
 
 .text-expandable-selection {
   font-size: 0.75rem;

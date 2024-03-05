@@ -81,3 +81,21 @@
 @mixin raised-header {
   box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.28);
 }
+
+
+@mixin explorer-defaults {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  flex: auto;
+  margin: 8px;
+}
+
+
+@mixin message-container() {
+  display: flex;
+  padding: 0.5rem;
+  font-size: $font-size-grid;
+  border-radius: $control-border-radius;
+  border: 1px solid #000;
+}
