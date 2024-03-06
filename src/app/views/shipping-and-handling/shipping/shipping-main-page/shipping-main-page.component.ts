@@ -5,15 +5,21 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
+
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { View } from '@app/main-layout';
+
+import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { ArrayLibrary } from '@app/shared/utils';
 
 import { ShippingDataService } from '@app/data-services';
 
-import { EmptyShippingData, ShippingData, ShippingQuery } from '@app/models';
+import { EmptyShippingData, ShippingData, ShippingQuery, ShippingQueryType } from '@app/models';
 
 import {
   ShippingExplorerEventType
@@ -27,11 +33,14 @@ import {
   ShippingEditorModalEventType
 } from '@app/views/shipping-and-handling/shipping/shipping-editor-modal/shipping-editor-modal.component';
 
+
 @Component({
   selector: 'emp-trade-shipping-main-page',
   templateUrl: './shipping-main-page.component.html',
 })
-export class ShippingMainPageComponent {
+export class ShippingMainPageComponent implements OnInit, OnDestroy {
+
+  queryType: ShippingQueryType = ShippingQueryType.Shipping;
 
   shippingList: ShippingData[] = [];
 
@@ -47,8 +56,23 @@ export class ShippingMainPageComponent {
 
   shippingDataSelected: ShippingData = EmptyShippingData;
 
+  subscriptionHelper: SubscriptionHelper;
 
-  constructor(private shippingData: ShippingDataService) { }
+
+  constructor(private uiLayer: PresentationLayer,
+              private shippingData: ShippingDataService) {
+    this.subscriptionHelper = uiLayer.createSubscriptionHelper();
+  }
+
+
+  ngOnInit() {
+    this.getCurrentView();
+  }
+
+
+  ngOnDestroy() {
+    this.subscriptionHelper.destroy();
+  }
 
 
   onShippingExplorerEvent(event: EventInfo) {
@@ -114,6 +138,27 @@ export class ShippingMainPageComponent {
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  private getCurrentView() {
+    this.subscriptionHelper.select<View>(MainUIStateSelector.CURRENT_VIEW)
+      .subscribe(x => this.validateCurrentView(x.name));
+  }
+
+
+  private validateCurrentView(view: string) {
+    switch (view) {
+
+      case 'AlmacenesViews.Embarques':
+        this.queryType = ShippingQueryType.Delivery;
+        return;
+
+      case 'VentasViews.Envios':
+      default:
+        this.queryType = ShippingQueryType.Shipping;
         return;
     }
   }

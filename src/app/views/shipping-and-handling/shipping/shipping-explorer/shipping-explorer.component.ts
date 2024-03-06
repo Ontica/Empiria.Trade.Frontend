@@ -11,7 +11,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyShippingData, ShippingData } from '@app/models';
+import { EmptyShippingData, ShippingData, ShippingQueryType } from '@app/models';
 
 import { ShippingFilterEventType } from './shipping-filter.component';
 
@@ -29,6 +29,8 @@ export enum ShippingExplorerEventType {
 })
 export class ShippingExplorerComponent implements OnChanges {
 
+  @Input() queryType: ShippingQueryType = ShippingQueryType.Shipping;
+
   @Input() shippingList: ShippingData[] = [];
 
   @Input() isLoading = false;
@@ -39,13 +41,20 @@ export class ShippingExplorerComponent implements OnChanges {
 
   @Output() shippingExplorerEvent = new EventEmitter<EventInfo>();
 
+  cardTitle = 'Explorador de envíos';
+
   cardHint = 'Seleccionar los filtros';
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.shippingList) {
+    if (changes.queryType || changes.shippingList) {
       this.setText();
     }
+  }
+
+
+  get canCreateShipping(): boolean {
+    return this.queryType === ShippingQueryType.Shipping;
   }
 
 
@@ -85,6 +94,9 @@ export class ShippingExplorerComponent implements OnChanges {
 
 
   private setText() {
+    this.cardTitle = this.queryType === ShippingQueryType.Delivery ? 'Explorador de embarques' :
+      'Explorador de envíos';
+
     if (!this.queryExecuted) {
       this.cardHint = 'Seleccionar los filtros';
       return;

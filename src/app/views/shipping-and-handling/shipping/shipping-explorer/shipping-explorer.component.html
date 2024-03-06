@@ -3,7 +3,7 @@
   <div class="card-header card-header-flat">
 
     <div class="card-title">
-      Explorador de envíos
+      {{ cardTitle }}
 
       <div class="card-hint" empNgProgressText
         loadingText="Cargando"
@@ -15,7 +15,7 @@
 
     <div class="card-header-options">
 
-      <button
+      <button *ngIf="canCreateShipping"
         class="btn-action" fxFlexOffset="1.5rem"
         (click)="onCreateShipingClicked()">
         Agregar envío

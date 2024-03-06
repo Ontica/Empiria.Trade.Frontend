@@ -13,9 +13,12 @@ import { ROUTES } from '@app/main-layout';
 
 import { DefaultComponent } from '@app/shared/components/default-component/default.component';
 
-import { SalesMainPageComponent } from '../../views/sales/sales-main-page.component';
+import { SalesMainPageComponent } from '@app/views/sales/sales-main-page.component';
 
-import { ShippingMainPageComponent } from './shipping-main-page/shipping-main-page.component';
+import {
+  ShippingMainPageComponent
+} from '@app/views/shipping-and-handling/shipping/shipping-main-page/shipping-main-page.component';
+
 
 
 const routes: Routes = [

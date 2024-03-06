@@ -5,9 +5,10 @@
 
   <mat-tab-group mat-stretch-tabs="false" >
 
-    <mat-tab label="Envío">
+    <mat-tab [label]="queryTypeName">
 
       <emp-trade-shipping-edition
+        [queryType]="queryType"
         [shippingUID]="shippingData.shippingUID"
         (shippingEditionEvent)="onShippingEditionEvent($event)">
 

@@ -16,7 +16,8 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { ShippingDataService } from '@app/data-services';
 
 import { Shipping, EmptyShipping, ShippingFieldsQuery, ShippingFields, ShippingDataFields,
-         ShippingPalletWithPackages, EmptyShippingPalletWithPackages, ShippingPalletFields } from '@app/models';
+         ShippingPalletWithPackages, EmptyShippingPalletWithPackages, ShippingPalletFields,
+         ShippingQueryType } from '@app/models';
 
 import { ShippingDataViewEventType } from '../shipping-edition/shipping-data-view.component';
 
@@ -46,6 +47,8 @@ export enum ShippingEditionEventType {
   templateUrl: './shipping-edition.component.html',
 })
 export class ShippingEditionComponent implements OnChanges, OnInit {
+
+  @Input() queryType: ShippingQueryType = ShippingQueryType.Shipping;
 
   @Input() shippingUID: string = null;
 
@@ -336,7 +339,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
   private getShipping() {
     this.isLoading = true;
 
-    this.shippingData.getShipping(this.shippingUID)
+    this.shippingData.getShipping(this.shippingUID, this.queryType)
       .firstValue()
       .then(x => this.setShipping(x))
       .catch(x => this.resolveShippingError())

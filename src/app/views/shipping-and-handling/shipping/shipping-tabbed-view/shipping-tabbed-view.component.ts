@@ -11,7 +11,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyShippingData, ShippingData } from '@app/models';
+import { EmptyShippingData, ShippingData, ShippingQueryType } from '@app/models';
 
 import { ShippingEditionEventType } from '../shipping-edition/shipping-edition.component';
 
@@ -27,17 +27,24 @@ export enum ShippingTabbedViewEventType {
 })
 export class ShippingTabbedViewComponent implements OnChanges {
 
+  @Input() queryType: ShippingQueryType = ShippingQueryType.Shipping;
+
   @Input() shippingData: ShippingData = EmptyShippingData;
 
   @Output() shippingTabbedViewEvent = new EventEmitter<EventInfo>();
 
-  titleText = 'Visor de envío por paquetería';
+  titleText = 'Visor de envío';
 
   hintText = 'Información del envío.';
 
 
   ngOnChanges() {
     this.setTexts();
+  }
+
+
+  get queryTypeName(): string {
+    return this.queryType === ShippingQueryType.Delivery ? 'embarque' : 'envío';
   }
 
 

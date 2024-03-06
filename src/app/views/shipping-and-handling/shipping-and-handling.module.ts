@@ -40,6 +40,8 @@ import { PackagesSelectorComponent } from './shipping/pallet-edition/packages-se
 import { PackagingResumeComponent } from './shipping/shipping-edition/packaging-resume.component';
 import { PalletHeaderComponent } from './shipping/pallet-edition/pallet-header.component';
 
+import { ShippingMainPageComponent } from './shipping/shipping-main-page/shipping-main-page.component';
+
 import { ShippingExplorerComponent } from './shipping/shipping-explorer/shipping-explorer.component';
 import { ShippingFilterComponent } from './shipping/shipping-explorer/shipping-filter.component';
 import { ShippingTableComponent } from './shipping/shipping-explorer/shipping-table.component';
@@ -84,6 +86,8 @@ import { ShippingTabbedViewComponent } from './shipping/shipping-tabbed-view/shi
     PackagingResumeComponent,
     PalletHeaderComponent,
 
+    ShippingMainPageComponent,
+
     ShippingExplorerComponent,
     ShippingFilterComponent,
     ShippingTableComponent,
@@ -94,8 +98,7 @@ import { ShippingTabbedViewComponent } from './shipping/shipping-tabbed-view/shi
     PackingViewComponent,
     OrderShippingViewerComponent,
     ShippingEditorModalComponent,
-    ShippingExplorerComponent,
-    ShippingTabbedViewComponent,
+    ShippingMainPageComponent,
   ],
 })
 export class ShippingAndHandlingModule { }

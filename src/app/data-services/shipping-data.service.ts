@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 import { Shipping, ShippingData, ShippingFields, ShippingFieldsQuery, ShippingPalletFields,
-         ShippingQuery } from '@app/models';
+         ShippingQuery, ShippingQueryType } from '@app/models';
 
 @Injectable()
 export class ShippingDataService {
@@ -35,8 +35,8 @@ export class ShippingDataService {
   }
 
 
-  getShipping(shippingUID: string): EmpObservable<Shipping> {
-    const path = `v4/trade/sales/shipping/${shippingUID}/shipping`;
+  getShipping(shippingUID: string, queryType: ShippingQueryType): EmpObservable<Shipping> {
+    const path = `v4/trade/sales/shipping/${shippingUID}/${queryType}`;
 
     return this.http.get<Shipping>(path);
   }

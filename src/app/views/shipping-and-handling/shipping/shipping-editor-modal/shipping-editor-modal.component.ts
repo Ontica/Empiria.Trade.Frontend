@@ -31,7 +31,7 @@ export class ShippingEditorModalComponent implements OnInit {
 
   @Output() shippingEditorModalEvent = new EventEmitter<EventInfo>();
 
-  titleText = 'Editor de envío por paquetería';
+  titleText = 'Editor de envío';
 
   hintText = 'Información del envío.';
 
@@ -77,9 +77,7 @@ export class ShippingEditorModalComponent implements OnInit {
 
 
   private setTexts() {
-    this.titleText = this.orders?.length > 0 ?
-      'Editor de envío por paquetería' :
-      'Agregar envío por paquetería';
+    this.titleText = this.orders?.length > 0 ? 'Editor de envío' : 'Agregar envío';
   }
 
 }

@@ -29,6 +29,12 @@ export interface ShippingQuery {
 }
 
 
+export enum ShippingQueryType {
+  Shipping = 'shipping',
+  Delivery = 'delivery'
+}
+
+
 export interface ShippingFieldsQuery {
   orders: string[];
 }

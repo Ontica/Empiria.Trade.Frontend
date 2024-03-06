@@ -8,6 +8,7 @@
     [class.std-hide]="displayShippingViewer">
 
     <emp-trade-shipping-explorer
+      [queryType]="queryType"
       [shippingList]="shippingList"
       [isLoading]="isLoading"
       [queryExecuted]="queryExecuted"
@@ -22,6 +23,7 @@
   <div class="secondary priority" *ngIf="displayShippingViewer">
 
     <emp-trade-shipping-tabbed-view
+      [queryType]="queryType"
       [shippingData]="shippingDataSelected"
       (shippingTabbedViewEvent)="onShippingTabbedViewEvent($event)">
 
