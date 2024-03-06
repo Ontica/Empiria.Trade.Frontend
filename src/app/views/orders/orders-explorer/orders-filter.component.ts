@@ -20,7 +20,8 @@ import { expandCollapse } from '@app/shared/animations/animations';
 
 import { ContactsDataService, SalesOrdersDataService } from '@app/data-services';
 
-import { Customer, DateRange, OrderQuery, OrderQueryType, ShippingMethodList } from '@app/models';
+import { Customer, DateRange, OrderQuery, OrderQueryType, OrderShippingStatusList,
+         ShippingMethodList } from '@app/models';
 
 
 export enum OrdersFilterEventType {
@@ -29,11 +30,12 @@ export enum OrdersFilterEventType {
 }
 
 interface OrdersFilterFormModel extends FormGroup<{
+  status: FormControl<string>
+  customer: FormControl<Customer>;
   keywords: FormControl<string>;
   period: FormControl<DateRange>;
-  status: FormControl<string>
   shippingMethod: FormControl<string>;
-  customer: FormControl<Customer>;
+  shippingStatus: FormControl<string>;
 }> { }
 
 @Component({
@@ -56,6 +58,8 @@ export class OrdersFilterComponent implements OnChanges, OnInit {
   statusList: Identifiable[] = [];
 
   shippingMethodList: Identifiable[] = ShippingMethodList;
+
+  shippingStatusList: Identifiable[] = OrderShippingStatusList;
 
   customersList$: Observable<Customer[]>;
 
@@ -81,11 +85,6 @@ export class OrdersFilterComponent implements OnChanges, OnInit {
     if (changes.queryExecuted) {
       this.resetShowFilter();
     }
-  }
-
-
-  get statusRequired(): boolean {
-    return this.orderType === OrderQueryType.SalesAuthorization;
   }
 
 
@@ -121,11 +120,12 @@ export class OrdersFilterComponent implements OnChanges, OnInit {
     const fb = new FormBuilder();
 
     this.form = fb.group({
-      keywords: [''],
-      period: [null],
       status: [null],
-      shippingMethod: [null],
       customer: [null],
+      keywords: [''],
+      shippingMethod: [null],
+      shippingStatus: [null],
+      period: [null],
     });
   }
 
@@ -152,6 +152,7 @@ export class OrdersFilterComponent implements OnChanges, OnInit {
       status: this.form.value.status ?? null,
       shippingMethod: this.form.value.shippingMethod ?? null,
       customerUID: this.form.value.customer?.uid ?? null,
+      shippingStatus: this.form.value.shippingStatus ?? null,
     };
 
     return query;

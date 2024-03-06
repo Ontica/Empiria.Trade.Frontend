@@ -4,21 +4,7 @@
 
     <div class="fx-row-container md-fx-column-container md-fx-gap-half">
 
-      <div class="fx-item-half fx-items-end md-fx-item">
-
-        <div class="input-search-container">
-
-          <input type="text" class="text-box" name="keywords"
-            placeholder="Buscar..."
-            formControlName="keywords"
-            (keyup.enter)="onSearchClicked()"
-            (keyup.escape)="form.controls.keywords.reset()">
-
-        </div>
-
-      </div>
-
-      <div class="fx-item md-fx-item">
+      <div class="fx-item-quarter md-fx-item">
 
         <label>Estatus:</label>
 
@@ -29,6 +15,36 @@
           [items]="statusList"
           [loading]="isLoading">
         </emp-ng-select>
+
+      </div>
+
+      <div class="fx-item-quarter md-fx-item">
+        <label>Cliente:</label>
+        <emp-ng-select #customer
+          formControlName="customer"
+          placeholder="Todos"
+          [config]="{ bindByValue: false,
+                      clearable: true,
+                      minTermLength: minTermLength,
+                      typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres',
+                      virtualScroll: true }"
+          [items]="customersList$ | async"
+          [typeahead]="customersInput$"
+          [loading]="isCustomersLoading">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item fx-items-end md-fx-item">
+
+        <div class="input-search-container">
+
+          <input type="text" class="text-box" name="keywords"
+            placeholder="Buscar..."
+            formControlName="keywords"
+            (keyup.enter)="onSearchClicked()"
+            (keyup.escape)="form.controls.keywords.reset()">
+
+        </div>
 
       </div>
 
@@ -76,20 +92,15 @@
         </div>
 
         <div class="fx-item-quarter md-fx-item">
-          <label>Cliente:</label>
-          <emp-ng-select #customer
-            formControlName="customer"
+          <label>Estatus de envío:</label>
+          <emp-ng-select
+            formControlName="shippingStatus"
             placeholder="Todos"
-            [config]="{ bindByValue: false,
-                        clearable: true,
-                        minTermLength: minTermLength,
-                        typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres',
-                        virtualScroll: true }"
-            [items]="customersList$ | async"
-            [typeahead]="customersInput$"
-            [loading]="isCustomersLoading">
+            [config]="{clearable: true}"
+            [items]="shippingStatusList">
           </emp-ng-select>
         </div>
+
 
         <div class="fx-item-none">
 

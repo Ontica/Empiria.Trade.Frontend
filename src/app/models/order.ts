@@ -49,6 +49,18 @@ export const ShippingMethodList: Identifiable[] = [
 ];
 
 
+export enum OrderShippingStatusTypes {
+  Asignado  = 'Asignado',
+  Pendiente = 'Pendiente',
+}
+
+
+export const OrderShippingStatusList: Identifiable[] = [
+  { uid: OrderShippingStatusTypes.Asignado,  name: OrderShippingStatusTypes.Asignado },
+  { uid: OrderShippingStatusTypes.Pendiente, name: OrderShippingStatusTypes.Pendiente },
+];
+
+
 export const PaymentConditionList: Identifiable[] = [
   { uid: 'Credito', name: 'Crédito' },
   { uid: 'Contado', name: 'Contado' },
@@ -71,6 +83,7 @@ export interface OrderQuery extends DataTableQuery {
   status: string;
   shippingMethod: string;
   customerUID: string;
+  shippingStatus: string;
 }
 
 
@@ -106,6 +119,7 @@ export const EmptyOrderQuery: OrderQuery = {
   status: null,
   shippingMethod: null,
   customerUID: null,
+  shippingStatus: null,
 };
 
 
