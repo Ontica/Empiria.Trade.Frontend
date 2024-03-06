@@ -35,10 +35,20 @@ export interface ShippingFieldsQuery {
 
 
 export interface Shipping {
-  canEdit: boolean;
   shippingData: ShippingData;
   ordersForShipping: OrderForShipping[];
   shippingPalletsWithPackages?: ShippingPalletWithPackages[];
+  actions: ShippingActions;
+}
+
+
+export interface ShippingActions {
+  canEdit: boolean;
+  canDelete: boolean;
+  canCloseEdit: boolean;
+  canPrintShippingLabel: boolean;
+  canPrintOrder: boolean;
+  canCloseShipping: boolean;
 }
 
 
@@ -150,9 +160,19 @@ export const EmptyShippingData: ShippingData = {
 };
 
 
-export const EmptyShipping: Shipping = {
+export const EmptyShippingActions: ShippingActions = {
   canEdit: false,
+  canDelete: false,
+  canCloseEdit: false,
+  canPrintShippingLabel: false,
+  canPrintOrder: false,
+  canCloseShipping: false,
+};
+
+
+export const EmptyShipping: Shipping = {
   shippingData: EmptyShippingData,
   ordersForShipping: [],
   shippingPalletsWithPackages: [],
-}
+  actions: EmptyShippingActions,
+};

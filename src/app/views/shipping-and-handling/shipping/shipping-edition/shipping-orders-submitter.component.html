@@ -7,15 +7,15 @@
 
     <div class="fx-item fx-start fx-items-center">
 
-      <ng-container *ngIf="isSaved && canEdit">
+      <ng-container *ngIf="isSaved">
 
-        <button *ngIf="editionMode"
+        <button *ngIf="editionMode && actions.canDelete"
           type="button" class="btn-warning"
           (click)="onDeleteShipping()">
           Cancelar
         </button>
 
-        <button *ngIf="!editionMode"
+        <button *ngIf="!editionMode && actions.canCloseEdit"
           type="button" class="btn"
           (click)="onSendShipping()">
           Enviar a embarque
@@ -30,7 +30,7 @@
 
         <mat-checkbox name="putOnPallets"
           [ngModel]="putOnPallets" [ngModelOptions]="{standalone: true}"
-          [disabled]="!canEdit || !isSaved"
+          [disabled]="!isSaved || !actions.canEdit"
           (ngModelChange)="putOnPalletsChange.emit($event)"
           (click)="$event.stopPropagation">
           Entarimar paquetes
@@ -50,7 +50,7 @@
 
       <div class="fx-row-container fx-gap-half" *ngIf="isSaved">
 
-        <button *ngIf="!editionMode && canEdit"
+        <button *ngIf="!editionMode && actions.canEdit"
           class="btn-action"
           (click)="onToggleEditionMode()">
           Editar

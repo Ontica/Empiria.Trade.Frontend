@@ -40,7 +40,7 @@
               [selection]="item.selection"
               [values]="item.packages"
               [indeterminated]="isOrderDisabled(item.packages)"
-              [disabled]="!shipping.canEdit || isOrderDisabled(item.packages)"
+              [disabled]="!shipping.actions.canEdit || isOrderDisabled(item.packages)"
               (selectionChange)="onSelectAllPackagesFromOrder(item, $event)">
 
             </emp-ng-check-box-all>
@@ -83,7 +83,7 @@
                 [value]="package.packingItemUID"
                 [checked]="item.selection.isSelected(package.packingItemUID)"
                 [indeterminate]="packagesDisabled.includes(package.packingItemUID)"
-                [disabled]="!shipping.canEdit || packagesDisabled.includes(package.packingItemUID)"
+                [disabled]="!shipping.actions.canEdit || packagesDisabled.includes(package.packingItemUID)"
                 (click)="$event.stopPropagation()"
                 (change)="onSelectPackageToOrder(item, package)">
 

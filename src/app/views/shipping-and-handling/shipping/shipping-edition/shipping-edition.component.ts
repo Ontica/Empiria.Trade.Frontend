@@ -116,7 +116,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
 
   get canEdit(): boolean {
-    return !this.isSaved || (this.isSaved && this.shipping.canEdit);
+    return !this.isSaved || (this.isSaved && this.shipping.actions.canEdit);
   }
 
 

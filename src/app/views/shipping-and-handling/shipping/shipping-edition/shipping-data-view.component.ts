@@ -38,8 +38,6 @@ export class ShippingDataViewComponent implements OnChanges, OnInit {
 
   @Input() shippingData: ShippingData = EmptyShippingData;
 
-  @Input() canEdit = false;
-
   @Input() editionMode = false;
 
   @Output() shippingDataViewEvent = new EventEmitter<EventInfo>();
@@ -49,6 +47,8 @@ export class ShippingDataViewComponent implements OnChanges, OnInit {
   formHelper = FormHelper;
 
   isLoading = false;
+
+  showAuthorizeButton = false;
 
   parcelSuppliersList: Identifiable[] = [];
 
@@ -97,6 +97,8 @@ export class ShippingDataViewComponent implements OnChanges, OnInit {
       customerAmount: [null as number, Validators.required],
     });
 
+    this.showAuthorizeButton = true;
+
     this.form.valueChanges.subscribe(v => this.emitFormChanges());
   }
 
@@ -121,6 +123,8 @@ export class ShippingDataViewComponent implements OnChanges, OnInit {
     });
 
     this.formHelper.setDisableForm(this.form, !this.editionMode);
+
+    this.showAuthorizeButton = this.editionMode;
   }
 
 

@@ -13,7 +13,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyShippingData, ShippingData } from '@app/models';
+import { EmptyShippingActions, EmptyShippingData, ShippingActions, ShippingData } from '@app/models';
 
 export enum ShippingOrdersSubmitterEventType {
   TOGGLE_EDITION_MODE_CLICKED = 'ShippingOrdersSubmitterComponent.Event.ToggleEditionModeClicked',
@@ -30,7 +30,7 @@ export class ShippingOrdersSubmitterComponent {
 
   @Input() shippingData: ShippingData = EmptyShippingData;
 
-  @Input() canEdit = false;
+  @Input() actions: ShippingActions = EmptyShippingActions;
 
   @Input() isReady = false;
 
