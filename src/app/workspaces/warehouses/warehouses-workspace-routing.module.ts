@@ -15,6 +15,10 @@ import { DefaultComponent } from '@app/shared/components/default-component/defau
 
 import { SalesMainPageComponent } from '@app/views/sales/sales-main-page.component';
 
+import {
+  ShippingMainPageComponent
+} from '@app/views/shipping-and-handling/shipping/shipping-main-page/shipping-main-page.component';
+
 
 const routes: Routes = [
   {
@@ -25,7 +29,7 @@ const routes: Routes = [
   {
     data: { permission: ROUTES.almacenes_embarques.permission },
     path: ROUTES.almacenes_embarques.path,
-    component: DefaultComponent,
+    component: ShippingMainPageComponent,
   },
   {
     data: { permission: ROUTES.almacenes_inventario.permission },
