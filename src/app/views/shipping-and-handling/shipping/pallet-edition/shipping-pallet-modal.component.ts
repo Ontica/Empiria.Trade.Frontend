@@ -42,8 +42,6 @@ export class ShippingPalletModalComponent implements OnInit {
 
   hintText = 'Información del contenido de la tarima.';
 
-  submitted = false;
-
   palletFields: ShippingPalletFields = { shippingPalletName: '', packages: [] }
 
 

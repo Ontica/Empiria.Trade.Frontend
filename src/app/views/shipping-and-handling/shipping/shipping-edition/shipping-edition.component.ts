@@ -157,6 +157,10 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
 
   onShippingOrdersSubmitterEvent(event: EventInfo) {
+    if (this.submitted) {
+      return;
+    }
+
     switch (event.type as ShippingOrdersSubmitterEventType) {
       case ShippingOrdersSubmitterEventType.TOGGLE_EDITION_MODE_CLICKED:
         this.toggleEditionMode();
@@ -194,6 +198,10 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
 
   onShippingOrdersTableEvent(event: EventInfo) {
+    if (this.submitted) {
+      return;
+    }
+
     switch (event.type as ShippingOrdersTableEventType) {
       case ShippingOrdersTableEventType.CHANGE_ORDERS:
         Assertion.assertValue(event.payload.orders, 'event.payload.orders');
@@ -220,6 +228,10 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
 
   onShippingOrdersModalEvent(event: EventInfo) {
+    if (this.submitted) {
+      return;
+    }
+
     switch (event.type as ShippingOrdersModalEventType) {
       case ShippingOrdersModalEventType.CLOSE_MODAL_CLICKED:
         this.displayShippingOrdersModal = false;
@@ -250,6 +262,10 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
 
   onShippingPalletsTableEvent(event: EventInfo) {
+    if (this.submitted) {
+      return;
+    }
+
     switch (event.type as ShippingPalletsTableEventType) {
       case ShippingPalletsTableEventType.CREATE_PALLET_CLICKED:
         this.setShippingPalletSelected(EmptyShippingPalletWithPackages, true);
@@ -273,6 +289,10 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
 
   onShippingPalletModalEvent(event: EventInfo) {
+    if (this.submitted) {
+      return;
+    }
+
     switch (event.type as ShippingPalletModalEventType) {
       case ShippingPalletModalEventType.CLOSE_MODAL_CLICKED:
         this.setShippingPalletSelected(EmptyShippingPalletWithPackages);
