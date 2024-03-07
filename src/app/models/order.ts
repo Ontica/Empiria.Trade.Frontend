@@ -49,6 +49,12 @@ export const ShippingMethodList: Identifiable[] = [
 ];
 
 
+export const DefaultShippingMethod: Identifiable = {
+  uid: ShippingMethodTypes.Paqueteria,
+  name: 'Paquetería',
+};
+
+
 export enum OrderShippingStatusTypes {
   Asignado  = 'Asignado',
   Pendiente = 'Pendiente',

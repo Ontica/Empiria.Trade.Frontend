@@ -2,6 +2,13 @@
 
   <table mat-table [dataSource]="dataSource">
 
+    <ng-container matColumnDef="shippingMethod">
+      <th mat-header-cell *matHeaderCellDef class="nowrap"> Forma de envío </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.shippingMethod?.name ?? 'N/D' }}
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="shippingDate">
       <th mat-header-cell *matHeaderCellDef> Fecha </th>
       <td mat-cell *matCellDef="let row">
@@ -9,20 +16,20 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="parcelSupplier">
-      <th mat-header-cell *matHeaderCellDef> Paquetería </th>
-      <td mat-cell *matCellDef="let row">
-        {{ row.parcelSupplier.name }}
+    <ng-container matColumnDef="shippingID">
+      <th mat-header-cell *matHeaderCellDef> {{ queryTypeName }} </th>
+      <td mat-cell *matCellDef="let row" class="nowrap">
+        <a class="item-link"
+          (click)="onShippingClicked(row)">
+          {{ row.shippingID }}
+        </a>
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="shippingGuide">
-      <th mat-header-cell *matHeaderCellDef class="nowrap"> Número de guía </th>
+    <ng-container matColumnDef="customer">
+      <th mat-header-cell *matHeaderCellDef class="nowrap"> Cliente </th>
       <td mat-cell *matCellDef="let row">
-        <a class="item-link"
-          (click)="onShippingClicked(row)">
-          {{ row.shippingGuide }}
-        </a>
+        {{row.customer?.name ?? 'N/D'}}
       </td>
     </ng-container>
 
@@ -30,13 +37,13 @@
       <th mat-header-cell *matHeaderCellDef> Estatus </th>
       <td mat-cell *matCellDef="let row">
         <span class="tag">
-          {{ row.status ? 'Abierto' : 'Cerrado' }}
+          {{ getShippingStatusName(row.status) }}
         </span>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="ordersCount">
-      <th mat-header-cell *matHeaderCellDef class="text-align-right"> No. pedidos </th>
+      <th mat-header-cell *matHeaderCellDef class="text-align-right nowrap"> No. pedidos </th>
       <td mat-cell *matCellDef="let row" class="text-align-right">
         {{ row.ordersCount ?? 0 }}
       </td>
@@ -46,20 +53,6 @@
       <th mat-header-cell *matHeaderCellDef class="text-align-right"> Paquetes </th>
       <td mat-cell *matCellDef="let row" class="text-align-right">
         {{ row.totalPackages ?? 0 }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="totalWeight">
-      <th mat-header-cell *matHeaderCellDef class="text-align-right nowrap"> Peso </th>
-      <td mat-cell *matCellDef="let row" class="text-align-right">
-        {{ row.totalWeight ?? 0 | empDecimal }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="totalVolume">
-      <th mat-header-cell *matHeaderCellDef class="text-align-right nowrap"> Volumen </th>
-      <td mat-cell *matCellDef="let row" class="text-align-right">
-        {{ row.totalVolume ?? 0 | empDecimal }}
       </td>
     </ng-container>
 

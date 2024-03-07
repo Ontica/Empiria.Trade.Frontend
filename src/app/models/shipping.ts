@@ -5,27 +5,40 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Empty, Identifiable } from '@app/core';
+import { DateString, Empty, Identifiable, isEmpty } from '@app/core';
 
 import { PackagingTotals } from './packing';
 
+import { ShippingMethodTypes } from './order';
+
+import { Customer, EmptyCustomer } from './contacts';
+
 
 export enum ShippingStatus {
-  Abierto = 'Abierto',
-  Cerrado = 'Cerrado',
+  EnCaptura = 'EnCaptura',
+  EnProceso = 'EnProceso',
+  Cerrado   = 'Cerrado',
 }
 
 
-export const ShippingStatusList: string[] = [
-  ShippingStatus.Abierto,
-  ShippingStatus.Cerrado,
+export const ShippingStatusList: Identifiable[] = [
+  { uid: ShippingStatus.EnCaptura, name: 'En captura' },
+  { uid: ShippingStatus.EnProceso, name: 'En proceso' },
+  { uid: ShippingStatus.Cerrado,   name: 'Cerrado' },
 ];
 
 
+export function getShippingStatusName(statusUID: ShippingStatus): string {
+  const status = ShippingStatusList.find(x => x.uid === statusUID);
+  return isEmpty(status) ? statusUID : status.name;
+}
+
+
 export interface ShippingQuery {
-  keywords: string;
+  shippingMethodUID: ShippingMethodTypes;
   parcelSupplierUID: string;
   status: string;
+  keywords: string;
 }
 
 
@@ -61,12 +74,16 @@ export interface ShippingActions {
 export interface ShippingData extends PackagingTotals {
   shippingUID: string;
 
+  shippingMethod: Identifiable;
+  shippingID: string;
+  customer: Customer; // Customer[];
   shippingDate: DateString;
+  status: ShippingStatus;
+
   parcelSupplier: Identifiable;
   shippingGuide: string;
   parcelAmount: number;
   customerAmount: number;
-  status: boolean;
 
   totalPackages: number;
   totalWeight: number;
@@ -150,12 +167,16 @@ export const EmptyShippingPalletWithPackages: ShippingPalletWithPackages = {
 export const EmptyShippingData: ShippingData = {
   shippingUID: '',
 
+  shippingMethod: Empty,
+  shippingID: '',
+  shippingDate: '',
+  customer: EmptyCustomer,
+  status: ShippingStatus.EnCaptura,
+
   parcelSupplier: Empty,
   shippingGuide: '',
   parcelAmount: null,
   customerAmount: null,
-  shippingDate: '',
-  status: false,
 
   ordersCount: 0,
   ordersTotal: 0,

@@ -65,8 +65,8 @@ export class ShippingOrdersSubmitterComponent {
   }
 
 
-  onSendShipping() {
-    this.confirmSendShipping();
+  onCloseEdition() {
+    this.confirmCloseEdition();
   }
 
 
@@ -75,7 +75,7 @@ export class ShippingOrdersSubmitterComponent {
   }
 
 
-  private confirmSendShipping() {
+  private confirmCloseEdition() {
     const message = `Esta operación pasará a embarque los pedidos seleccionados para su envío con la ` +
       `paquetería <strong> ${this.shippingData.parcelSupplier.name} </strong>. <br><br>¿Envío el pedido?`;
 

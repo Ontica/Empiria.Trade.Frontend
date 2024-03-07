@@ -4,7 +4,16 @@
 
     <div class="fx-row-container md-fx-column-container md-fx-gap-half">
 
-      <div class="fx-item-third">
+
+      <div class="fx-item-quarter md-fx-item">
+        <label>Forma de envío:</label>
+        <emp-ng-select
+          formControlName="shippingMethodUID"
+          [items]="shippingMethodList">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item-quarter">
         <label>Paquetería:</label>
         <emp-ng-select
           formControlName="parcelSupplierUID"
@@ -15,12 +24,11 @@
         </emp-ng-select>
       </div>
 
-      <div class="fx-item-third">
+      <div class="fx-item-quarter">
         <label>Estatus:</label>
         <emp-ng-select
           formControlName="status"
-          [config]="{bindByValue: false, clearable: true}"
-          [bindLabel]="null"
+          [config]="{clearable: true}"
           [items]="shippingStatusList"
           placeholder="Todos">
         </emp-ng-select>

@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { EventInfo, Identifiable } from '@app/core';
 
@@ -15,16 +15,17 @@ import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { ShippingDataService } from '@app/data-services';
 
-import { ShippingQuery, ShippingStatusList } from '@app/models';
+import { ShippingMethodList, ShippingMethodTypes, ShippingQuery, ShippingStatusList } from '@app/models';
 
 export enum ShippingFilterEventType {
   SEARCH_CLICKED = 'ShippingFilterComponent.Event.SearchClicked',
 }
 
 interface ShippingFilterFormModel extends FormGroup<{
-  keywords: FormControl<string>;
+  shippingMethodUID: FormControl<ShippingMethodTypes>;
   parcelSupplierUID: FormControl<string>;
   status: FormControl<string>;
+  keywords: FormControl<string>;
 }> { }
 
 @Component({
@@ -43,9 +44,11 @@ export class ShippingFilterComponent implements OnInit {
 
   isLoading = false;
 
+  shippingMethodList: Identifiable[] = ShippingMethodList;
+
   parcelSuppliersList: Identifiable[] = [];
 
-  shippingStatusList: string[] = ShippingStatusList;
+  shippingStatusList: Identifiable[] = ShippingStatusList;
 
 
   constructor(private shippingDataService: ShippingDataService) {
@@ -81,18 +84,22 @@ export class ShippingFilterComponent implements OnInit {
     const fb = new FormBuilder();
 
     this.form = fb.group({
+      shippingMethodUID: [ShippingMethodTypes.Paqueteria, Validators.required],
       keywords: [null],
       parcelSupplierUID: [null],
       status: [null],
     });
+
+    FormHelper.setDisableControl(this.form.controls.shippingMethodUID);
   }
 
 
   private getShippingQuery(): ShippingQuery {
     const query: ShippingQuery = {
-      keywords: this.form.value.keywords ?? null,
+      shippingMethodUID: this.form.value.shippingMethodUID ?? null,
       parcelSupplierUID: this.form.value.parcelSupplierUID ?? null,
       status: this.form.value.status ?? null,
+      keywords: this.form.value.keywords ?? null,
     };
 
     return query;

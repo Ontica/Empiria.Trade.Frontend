@@ -15,7 +15,8 @@ import { EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyShippingData, ShippingData } from '@app/models';
+import { EmptyShippingData, ShippingData, ShippingQueryType, ShippingStatus,
+         getShippingStatusName } from '@app/models';
 
 export enum ShippingTableEventType {
   ITEM_CLICKED = 'ShippingTableComponent.Event.ItemClicked',
@@ -29,6 +30,8 @@ export class ShippingTableComponent implements OnChanges {
 
   @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
+  @Input() queryType: ShippingQueryType = ShippingQueryType.Shipping;
+
   @Input() shippingList: ShippingData[] = [];
 
   @Input() queryExecuted = false;
@@ -39,8 +42,8 @@ export class ShippingTableComponent implements OnChanges {
 
   @Output() shippingTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumns = ['shippingDate', 'parcelSupplier', 'shippingGuide', 'status',
-                      'ordersCount','totalPackages', 'totalWeight', 'totalVolume'];
+  displayedColumns = ['shippingMethod', 'shippingDate', 'shippingID', 'customer', 'status',
+                      'ordersCount','totalPackages'];
 
   dataSource: TableVirtualScrollDataSource<ShippingData>;
 
@@ -50,6 +53,16 @@ export class ShippingTableComponent implements OnChanges {
       this.setDataTable();
       this.scrollToTop();
     }
+  }
+
+
+  get queryTypeName(): string {
+    return this.queryType === ShippingQueryType.Delivery ? 'Embarque' : 'Envío';
+  }
+
+
+  getShippingStatusName(status: ShippingStatus): string {
+    return getShippingStatusName(status);
   }
 
 

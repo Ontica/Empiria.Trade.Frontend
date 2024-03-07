@@ -11,7 +11,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyShippingData, ShippingData, ShippingQueryType } from '@app/models';
+import { EmptyShippingData, ShippingData, ShippingQueryType, getShippingStatusName } from '@app/models';
 
 import { ShippingEditionEventType } from '../shipping-edition/shipping-edition.component';
 
@@ -83,8 +83,8 @@ export class ShippingTabbedViewComponent implements OnChanges {
 
 
   private setTexts() {
-    this.titleText = `${this.shippingData.parcelSupplier.name} - ${this.shippingData.shippingGuide} ` +
-      `<span class="tag tag-small"> ${this.shippingData.status ? 'Abierto' : 'Cerrado'} </span>`;
+    this.titleText = `${this.shippingData.shippingID}` +
+      `<span class="tag tag-small"> ${getShippingStatusName(this.shippingData.status)} </span>`;
   }
 
 }

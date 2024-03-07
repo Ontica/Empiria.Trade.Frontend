@@ -19,7 +19,8 @@ import { ArrayLibrary } from '@app/shared/utils';
 
 import { ShippingDataService } from '@app/data-services';
 
-import { EmptyShippingData, ShippingData, ShippingQuery, ShippingQueryType } from '@app/models';
+import { DefaultShippingMethod, EmptyShippingData, ShippingData, ShippingQuery,
+         ShippingQueryType } from '@app/models';
 
 import {
   ShippingExplorerEventType
@@ -181,6 +182,12 @@ export class ShippingMainPageComponent implements OnInit, OnDestroy {
 
 
   private setShippingData(data: ShippingData[], queryExecuted: boolean = true) {
+    // TODO: remove this
+    data.forEach(x => {
+      x.shippingMethod = DefaultShippingMethod,
+      x.shippingID = x.parcelSupplier.name + ' - ' + x.shippingGuide;
+    });
+    // END TODO
     this.shippingList = data;
     this.queryExecuted = queryExecuted;
   }
