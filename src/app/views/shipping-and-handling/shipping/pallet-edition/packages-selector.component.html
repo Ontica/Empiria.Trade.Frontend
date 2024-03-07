@@ -6,10 +6,11 @@
     {{checkExpandAllOrders.checked ? 'Ocultar todos los paquetes' : 'Mostrar todos los paquetes'}}
   </mat-checkbox>
 
-  <mat-checkbox #checkSelectAllOrders class="fx-item-half"
+  <mat-checkbox #checkSelectAllOrders *ngIf="shipping.actions.canEdit"
+    class="fx-item-half"
     (click)="$event.stopPropagation"
     (change)="onToggleSelectAllOrders(checkSelectAllOrders.checked)">
-    Todos los paquetes
+    Seleccionar todos los paquetes
   </mat-checkbox>
 
 </div>
