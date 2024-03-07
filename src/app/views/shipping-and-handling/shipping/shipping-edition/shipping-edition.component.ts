@@ -353,7 +353,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
   private getShipping() {
     this.isLoading = true;
 
-    this.shippingData.getShipping(this.shippingUID, this.queryType)
+    this.shippingData.getShipping(this.queryType, this.shippingUID)
       .firstValue()
       .then(x => this.setShipping(x))
       .catch(x => this.resolveShippingError())

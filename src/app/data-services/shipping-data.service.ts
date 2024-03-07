@@ -35,8 +35,8 @@ export class ShippingDataService {
   }
 
 
-  getShipping(shippingUID: string, queryType: ShippingQueryType): EmpObservable<Shipping> {
-    const path = `v4/trade/sales/shipping/${shippingUID}/${queryType}`;
+  getShipping(queryType: ShippingQueryType, shippingUID: string): EmpObservable<Shipping> {
+    const path = `v4/trade/sales/shipping/${queryType}/${shippingUID}`;
 
     return this.http.get<Shipping>(path);
   }
