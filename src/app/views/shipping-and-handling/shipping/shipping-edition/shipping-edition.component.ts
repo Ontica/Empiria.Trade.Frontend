@@ -13,11 +13,12 @@ import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { ShippingDataService } from '@app/data-services';
+import { FileDownloadService, ShippingDataService } from '@app/data-services';
 
 import { Shipping, EmptyShipping, ShippingFieldsQuery, ShippingFields, ShippingDataFields,
          ShippingPalletWithPackages, EmptyShippingPalletWithPackages, ShippingPalletFields,
-         ShippingQueryType } from '@app/models';
+         ShippingQueryType, DefaultShippingMethod, SHIPPING_LABELS_FILE,
+         SHIPPING_ORDERS_FILE } from '@app/models';
 
 import { ShippingDataViewEventType } from '../shipping-edition/shipping-data-view.component';
 
@@ -37,7 +38,7 @@ import { ShippingPalletModalEventType } from '../pallet-edition/shipping-pallet-
 export enum ShippingEditionEventType {
   SHIPPING_UPDATED = 'ShippingEditionComponent.Event.ShippingUpdated',
   SHIPPING_DELETED = 'ShippingEditionComponent.Event.ShippingDeleted',
-  SHIPPING_SENT    = 'ShippingEditionComponent.Event.ShippingSent',
+  STATUS_UPDATED   = 'ShippingEditionComponent.Event.StatusUpdated',
   DATA_ERROR       = 'ShippingEditionComponent.Event.DataError',
   DATA_DESCRIPTION = 'ShippingEditionComponent.Event.DataDescription',
 }
@@ -82,6 +83,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
 
   constructor(private shippingData: ShippingDataService,
+              private fileDownload: FileDownloadService,
               private messageBox: MessageBoxService) { }
 
 
@@ -168,8 +170,20 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
         this.deleteShipping(this.shipping.shippingData.shippingUID);
         return;
 
-      case ShippingOrdersSubmitterEventType.SEND_SHIPPING_CLICKED:
-        this.sendShipment(this.shipping.shippingData.shippingUID);
+      case ShippingOrdersSubmitterEventType.CLOSE_EDITION_CLICKED:
+        this.closeShippingEdition(this.shipping.shippingData.shippingUID);
+        return;
+
+      case ShippingOrdersSubmitterEventType.CLOSE_SHIPPING_CLICKED:
+        this.closeShipping(this.shipping.shippingData.shippingUID);
+        return;
+
+      case ShippingOrdersSubmitterEventType.PRINT_SHIPPING_LABELS_CLICKED:
+        this.fileDownload.download(SHIPPING_LABELS_FILE);
+        return;
+
+      case ShippingOrdersSubmitterEventType.PRINT_ORDERS_CLICKED:
+        this.fileDownload.download(SHIPPING_ORDERS_FILE);
         return;
 
       default:
@@ -440,17 +454,33 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
   }
 
 
-  private sendShipment(shippingUID: string) {
+  private closeShippingEdition(shippingUID: string) {
     this.submitted = true;
 
-    this.shippingData.sendShipment(shippingUID)
+    this.shippingData.closeShippingEdition(shippingUID)
       .firstValue()
-      .then(x => this.resolveSendShipment(x))
+      .then(x => this.resolveCloseShippingEdition(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private closeShipping(shippingUID: string) {
+    this.submitted = true;
+
+    this.shippingData.closeShipping(shippingUID)
+      .firstValue()
+      .then(x => this.resolveCloseShipping(x))
       .finally(() => this.submitted = false);
   }
 
 
   private setShipping(shipping: Shipping) {
+    // TODO: remove this
+    shipping.shippingData.shippingMethod = DefaultShippingMethod;
+    shipping.shippingData.shippingID =
+      shipping.shippingData.parcelSupplier.name + ' - ' + shipping.shippingData.shippingGuide;
+    // END TODO
+
     this.shipping = shipping;
     this.initialLoadExecuted = true;
 
@@ -522,11 +552,19 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
   }
 
 
-  private resolveSendShipment(shipping: Shipping) {
+  private resolveCloseShippingEdition(shipping: Shipping) {
     this.setShipping(shipping);
-    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.SHIPPING_SENT,
+    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.STATUS_UPDATED,
       { shippingData: shipping.shippingData });
     this.messageBox.show('La infomación fue guardada correctamente.', 'Enviar a embarque');
+  }
+
+
+  private resolveCloseShipping(shipping: Shipping) {
+    this.setShipping(shipping);
+    sendEvent(this.shippingEditionEvent, ShippingEditionEventType.STATUS_UPDATED,
+      { shippingData: shipping.shippingData });
+    this.messageBox.show('La infomación fue guardada correctamente.', 'Cerrar embarque');
   }
 
 

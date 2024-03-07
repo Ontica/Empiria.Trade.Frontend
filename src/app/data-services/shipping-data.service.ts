@@ -135,10 +135,19 @@ export class ShippingDataService {
   }
 
 
-  sendShipment(shippingUID: string): EmpObservable<Shipping> {
+  closeShippingEdition(shippingUID: string): EmpObservable<Shipping> {
     Assertion.assertValue(shippingUID, 'shippingUID');
 
-    const path = `v4/trade/sales/shipping/${shippingUID}/send`;
+    const path = `v4/trade/sales/shipping/${shippingUID}/close-edition`;
+
+    return this.http.post<Shipping>(path);
+  }
+
+
+  closeShipping(shippingUID: string): EmpObservable<Shipping> {
+    Assertion.assertValue(shippingUID, 'shippingUID');
+
+    const path = `v4/trade/sales/shipping/${shippingUID}/close-shipping`;
 
     return this.http.post<Shipping>(path);
   }

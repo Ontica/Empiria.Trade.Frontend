@@ -21,6 +21,12 @@
           Enviar a embarque
         </button>
 
+        <button *ngIf="!editionMode && actions.canCloseShipping"
+          type="button" class="btn"
+          (click)="onCloseShipping()">
+          Cerrar embarque
+        </button>
+
       </ng-container>
 
     </div>
@@ -50,11 +56,27 @@
 
       <div class="fx-row-container fx-gap-half" *ngIf="isSaved">
 
-        <button *ngIf="!editionMode && actions.canEdit"
-          class="btn-action"
-          (click)="onToggleEditionMode()">
-          Editar
-        </button>
+        <ng-container *ngIf="!editionMode">
+
+          <button *ngIf="actions.canEdit"
+            class="btn-action"
+            (click)="onToggleEditionMode()">
+            Editar
+          </button>
+
+          <button *ngIf="actions.canPrintShippingLabel"
+            type="button" class="btn"
+            (click)="onPrintShippingLabels()">
+            Imprimir etiquetas
+          </button>
+
+          <button *ngIf="actions.canPrintOrder"
+            type="button" class="btn-action"
+            (click)="onPrintOrders()">
+            Imprimir facturas
+          </button>
+
+        </ng-container>
 
         <ng-container *ngIf="editionMode">
 

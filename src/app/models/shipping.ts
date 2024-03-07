@@ -14,6 +14,12 @@ import { ShippingMethodTypes } from './order';
 import { Customer, EmptyCustomer } from './contacts';
 
 
+export const SHIPPING_LABELS_FILE = 'http://apps.sujetsa.com.mx:8080/imagenes-productos/etiquetas.pdf';
+
+
+export const SHIPPING_ORDERS_FILE = 'http://apps.sujetsa.com.mx:8080/imagenes-productos/facturas.pdf';
+
+
 export enum ShippingStatus {
   EnCaptura = 'EnCaptura',
   EnProceso = 'EnProceso',
@@ -28,6 +34,12 @@ export const ShippingStatusList: Identifiable[] = [
 ];
 
 
+export const ShippingStatusForDeliveryList: Identifiable[] = [
+  { uid: ShippingStatus.EnProceso, name: 'En proceso' },
+  { uid: ShippingStatus.Cerrado, name: 'Cerrado' },
+];
+
+
 export function getShippingStatusName(statusUID: ShippingStatus): string {
   const status = ShippingStatusList.find(x => x.uid === statusUID);
   return isEmpty(status) ? statusUID : status.name;
@@ -35,6 +47,7 @@ export function getShippingStatusName(statusUID: ShippingStatus): string {
 
 
 export interface ShippingQuery {
+  queryType: ShippingQueryType;
   shippingMethodUID: ShippingMethodTypes;
   parcelSupplierUID: string;
   status: string;

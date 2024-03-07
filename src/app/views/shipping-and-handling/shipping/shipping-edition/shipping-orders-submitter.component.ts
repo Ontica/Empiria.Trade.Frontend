@@ -16,10 +16,13 @@ import { sendEvent } from '@app/shared/utils';
 import { EmptyShippingActions, EmptyShippingData, ShippingActions, ShippingData } from '@app/models';
 
 export enum ShippingOrdersSubmitterEventType {
-  TOGGLE_EDITION_MODE_CLICKED = 'ShippingOrdersSubmitterComponent.Event.ToggleEditionModeClicked',
-  SAVE_SHIPPING_CLICKED       = 'ShippingOrdersSubmitterComponent.Event.SaveShippingClicked',
-  SEND_SHIPPING_CLICKED       = 'ShippingOrdersSubmitterComponent.Event.SendShippingClicked',
-  DELETE_SHIPPING_CLICKED     = 'ShippingOrdersSubmitterComponent.Event.DeleteShippingClicked',
+  TOGGLE_EDITION_MODE_CLICKED   = 'ShippingOrdersSubmitterComponent.Event.ToggleEditionModeClicked',
+  SAVE_SHIPPING_CLICKED         = 'ShippingOrdersSubmitterComponent.Event.SaveShippingClicked',
+  CLOSE_EDITION_CLICKED         = 'ShippingOrdersSubmitterComponent.Event.CloseEditionClicked',
+  CLOSE_SHIPPING_CLICKED        = 'ShippingOrdersSubmitterComponent.Event.CloseShippingClicked',
+  DELETE_SHIPPING_CLICKED       = 'ShippingOrdersSubmitterComponent.Event.DeleteShippingClicked',
+  PRINT_SHIPPING_LABELS_CLICKED = 'ShippingOrdersSubmitterComponent.Event.PrintShippingLabelsClicked',
+  PRINT_ORDERS_CLICKED          = 'ShippingOrdersSubmitterComponent.Event.PrintOrdersClicked',
 }
 
 @Component({
@@ -70,8 +73,25 @@ export class ShippingOrdersSubmitterComponent {
   }
 
 
+  onCloseShipping() {
+    this.confirmCloseShipping();
+  }
+
+
   onDeleteShipping() {
     this.confirmDeleteShipping();
+  }
+
+
+  onPrintShippingLabels() {
+    sendEvent(this.shippingOrdersSubmitterEvent,
+      ShippingOrdersSubmitterEventType.PRINT_SHIPPING_LABELS_CLICKED);
+  }
+
+
+  onPrintOrders() {
+    sendEvent(this.shippingOrdersSubmitterEvent,
+      ShippingOrdersSubmitterEventType.PRINT_ORDERS_CLICKED);
   }
 
 
@@ -83,7 +103,21 @@ export class ShippingOrdersSubmitterComponent {
       .firstValue()
       .then(x => {
         if (x) {
-          sendEvent(this.shippingOrdersSubmitterEvent, ShippingOrdersSubmitterEventType.SEND_SHIPPING_CLICKED);
+          sendEvent(this.shippingOrdersSubmitterEvent, ShippingOrdersSubmitterEventType.CLOSE_EDITION_CLICKED);
+        }
+      });
+  }
+
+
+  private confirmCloseShipping() {
+    const message = `Esta operación cerrara el embarque <strong>${this.shippingData.shippingID}</strong> ` +
+      `y los pedidos contenidos en este embarque. <br><br>¿Cierro el embarque?`;
+
+    this.messageBox.confirm(message, 'Cerrar embarque')
+      .firstValue()
+      .then(x => {
+        if (x) {
+          sendEvent(this.shippingOrdersSubmitterEvent, ShippingOrdersSubmitterEventType.CLOSE_SHIPPING_CLICKED);
         }
       });
   }

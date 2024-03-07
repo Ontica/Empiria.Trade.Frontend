@@ -56,7 +56,7 @@ export class ShippingEditorModalComponent implements OnInit {
         sendEvent(this.shippingEditorModalEvent, ShippingEditorModalEventType.SHIPPING_DELETED);
         return;
 
-      case ShippingEditionEventType.SHIPPING_SENT:
+      case ShippingEditionEventType.STATUS_UPDATED:
         sendEvent(this.shippingEditorModalEvent, ShippingEditorModalEventType.SHIPPING_SENT, event.payload);
         return;
 

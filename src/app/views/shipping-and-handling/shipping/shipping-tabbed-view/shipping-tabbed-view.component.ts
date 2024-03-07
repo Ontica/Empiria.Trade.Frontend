@@ -56,7 +56,7 @@ export class ShippingTabbedViewComponent implements OnChanges {
   onShippingEditionEvent(event: EventInfo) {
     switch (event.type as ShippingEditionEventType) {
       case ShippingEditionEventType.SHIPPING_UPDATED:
-      case ShippingEditionEventType.SHIPPING_SENT:
+      case ShippingEditionEventType.STATUS_UPDATED:
         sendEvent(this.shippingTabbedViewEvent, ShippingTabbedViewEventType.SHIPPING_UPDATED, event.payload);
         return;
 

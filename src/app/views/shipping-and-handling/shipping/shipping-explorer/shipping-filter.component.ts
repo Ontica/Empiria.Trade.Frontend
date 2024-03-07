@@ -15,7 +15,8 @@ import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { ShippingDataService } from '@app/data-services';
 
-import { ShippingMethodList, ShippingMethodTypes, ShippingQuery, ShippingStatusList } from '@app/models';
+import { ShippingMethodList, ShippingMethodTypes, ShippingQuery, ShippingQueryType,
+         ShippingStatusForDeliveryList, ShippingStatusList } from '@app/models';
 
 export enum ShippingFilterEventType {
   SEARCH_CLICKED = 'ShippingFilterComponent.Event.SearchClicked',
@@ -33,6 +34,8 @@ interface ShippingFilterFormModel extends FormGroup<{
   templateUrl: './shipping-filter.component.html',
 })
 export class ShippingFilterComponent implements OnInit {
+
+  @Input() queryType: ShippingQueryType = ShippingQueryType.Shipping;
 
   @Input() queryExecuted: boolean = false;
 
@@ -72,6 +75,9 @@ export class ShippingFilterComponent implements OnInit {
   private loadDataList() {
     this.isLoading = true;
 
+    this.shippingStatusList = this.queryType === ShippingQueryType.Delivery ?
+      ShippingStatusForDeliveryList : ShippingStatusList;
+
     this.shippingDataService.getParcelSuppliers()
       .subscribe(x => {
         this.parcelSuppliersList = x;
@@ -96,6 +102,7 @@ export class ShippingFilterComponent implements OnInit {
 
   private getShippingQuery(): ShippingQuery {
     const query: ShippingQuery = {
+      queryType: this.queryType,
       shippingMethodUID: this.form.value.shippingMethodUID ?? null,
       parcelSupplierUID: this.form.value.parcelSupplierUID ?? null,
       status: this.form.value.status ?? null,
