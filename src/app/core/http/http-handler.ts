@@ -24,7 +24,7 @@ import { EmpObservable } from '../data-types';
 export class HttpHandler {
 
   constructor(private http: HttpClient,
-    private session: SessionService) { }
+              private session: SessionService) { }
 
   get<T>(path: string, options?: HttpClientOptions, service?: Service): EmpObservable<T> {
     return this.invokeHttpCall<T>(HttpMethod.GET, path, undefined, options, service);

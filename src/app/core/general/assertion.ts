@@ -44,7 +44,7 @@ export class Assertion {
   static assertValue(object: any, failMessage: string): void {
 
     if (this.isNullValue(object) || this.isUndefinedValue(object) || this.isNaNValue(object) ||
-      this.isEmptyString(object) || this.isEmptyObject(object)) {
+        this.isEmptyString(object) || this.isEmptyObject(object)) {
 
       throw new Exception(`Value of '${failMessage}' can not be null, undefined, NaN or an empty object.`);
 

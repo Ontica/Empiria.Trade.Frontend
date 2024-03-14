@@ -24,7 +24,7 @@ import { EmpObservable } from '../data-types';
 export class HttpService {
 
   constructor(private httpHandler: HttpHandler,
-    private directory: DirectoryService) { }
+              private directory: DirectoryService) { }
 
 
   get<T>(path: string, options?: HttpClientOptions): EmpObservable<T> {

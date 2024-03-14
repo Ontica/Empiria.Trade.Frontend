@@ -28,16 +28,36 @@ export interface PrincipalData {
 }
 
 
+export enum LoginErrorType {
+  InvalidUserCredentials = 'SecurityException.InvalidUserCredentials',
+  NotActiveUser          = 'SecurityException.NotActiveUser',
+  UserPasswordExpired    = 'SecurityException.UserPasswordExpired',
+  MustChangePassword     = 'SecurityException.MustChangePassword',
+};
+
+
+export enum LoginErrorActionType {
+  ChangePassword = 'ChangePassword',
+  None = 'None',
+}
+
+
+export interface LoginErrorAction {
+  actionType: LoginErrorActionType;
+  message: string;
+}
+
+
 export const FakeSessionToken: SessionToken = {
   accessToken: 'FakeAccessToken',
   expiresIn: 9999999,
   refreshToken: 'FakeRefreshToken',
   tokenType: 'FakeTokenType',
-}
+};
 
 
 export function getFakePrincipalData(user: string): PrincipalData {
-  const FakePrincipalData: PrincipalData = {
+  const fakePrincipalData: PrincipalData = {
     identity: {
       username: user,
       email: user,
@@ -45,7 +65,7 @@ export function getFakePrincipalData(user: string): PrincipalData {
       name: user,
     },
     permissions: [],
-  }
+  };
 
-  return FakePrincipalData;
+  return fakePrincipalData;
 }

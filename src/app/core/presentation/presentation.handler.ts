@@ -58,6 +58,7 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
 
   private stateItems = new Map<string, BehaviorSubject<any>>();
 
+
   constructor(config: StateHandlerConfig) {
     Assertion.assertValue(config, 'config');
     Assertion.assertValue(config.selectors, 'config.selectors');
@@ -89,13 +90,16 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
     throw this.unhandledCommandOrActionType(effectType);
   }
 
+
   dispatch(actionType: ActionType, payload?: any): void {
     throw this.unhandledCommandOrActionType(actionType);
   }
 
+
   execute<U>(command: Command): Promise<U> {
     throw this.unhandledCommand(command);
   }
+
 
   getValue<U>(selector: StateSelector): U {
     const stateItem = this.getStateMapItem(selector);
@@ -112,9 +116,9 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
 
 
   selectMemoized<U>(selector: StateSelector,
-    funct: () => EmpObservable<any>,
-    key: string,
-    defaultValue: any): EmpObservable<U> {
+                    funct: () => EmpObservable<any>,
+                    key: string,
+                    defaultValue: any): EmpObservable<U> {
     Assertion.assertValue(key, 'key');
 
     const cache = this.getMemoizedCache<U>(selector);
@@ -205,12 +209,10 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
 
   protected unhandledCommandOrActionType(commandOrActionType: StateEffect | ActionType): never {
     const msg = `${AbstractPresentationHandler.name} is not able to handle ` +
-      `action or command '${commandOrActionType}.'`;
+                `action or command '${commandOrActionType}.'`;
 
     throw Assertion.assertNoReachThisCode(msg);
   }
-
-
 
   // private methods
 

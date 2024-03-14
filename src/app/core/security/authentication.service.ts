@@ -7,23 +7,24 @@
 
 import { Injectable } from '@angular/core';
 
-import { APP_CONFIG, DEFAULT_ROUTE, DEFAULT_URL, getAllPermissions, ROUTES_LIST,
-         UNAUTHORIZED_ROUTE } from '@app/main-layout';
+import { APP_CONFIG, DEFAULT_ROUTE, DEFAULT_PATH, getAllPermissions, ROUTES_LIST,
+         UNAUTHORIZED_PATH } from '@app/main-layout';
 
-import { ACCESS_PROBLEM_MESSAGE, INVALID_CREDENTIALS_MESSAGE } from '../errors/error-messages';
+import { ACCESS_PROBLEM_MESSAGE, INVALID_CREDENTIALS_MESSAGE,
+         NOT_ACTIVE_CREDENTIALS_MESSAGE } from '../errors/error-messages';
 
 import { Assertion } from '../general/assertion';
 
 import { SessionService } from '../general/session.service';
 
+import { SecurityDataService } from './security-data.service';
+
 import { resolve } from '../data-types';
 
 import { Principal } from './principal';
 
-import { SecurityDataService } from './security-data.service';
-
-import { FakeSessionToken, getFakePrincipalData, PrincipalData, SessionToken } from './security-types';
-
+import { FakeSessionToken, LoginErrorAction, LoginErrorActionType, LoginErrorType, PrincipalData,
+         SessionToken, getFakePrincipalData } from './security-types';
 
 
 @Injectable()
@@ -33,16 +34,22 @@ export class AuthenticationService {
               private securityService: SecurityDataService) { }
 
 
+  clearSession() {
+    // TODO: clear presentation state
+    this.session.clearSession();
+  }
+
+
   async login(userID: string, userPassword: string): Promise<string> {
     Assertion.assertValue(userID, 'userID');
     Assertion.assertValue(userPassword, 'userPassword');
 
-    const sessionToken = await this.createSession(userID, userPassword)
+    const sessionToken = await this.createLoginSession(userID, userPassword)
       .then(x => {
         this.session.setSessionToken(x);
         return x;
       })
-      .catch((e) => this.handleAuthenticationError(e));;
+      .catch((e) => this.handleAuthenticationError(e));
 
     const principal = this.getPrincipal(userID);
 
@@ -55,10 +62,19 @@ export class AuthenticationService {
   }
 
 
-  logout(): Promise<boolean> {
-    const principal = this.session.getPrincipal();
+  async changePassword(userID: string,
+                       currentPassword: string,
+                       newPassword: string): Promise<void> {
+    Assertion.assertValue(userID, 'userID');
+    Assertion.assertValue(currentPassword, 'currentPassword');
+    Assertion.assertValue(newPassword, 'newPassword');
 
-    if (!principal.isAuthenticated) {
+    return this.createChangePasswordSession(userID, currentPassword, newPassword);
+  }
+
+
+  async logout(): Promise<boolean> {
+    if (!this.session.getPrincipal().isAuthenticated) {
       this.session.clearSession();
       return Promise.resolve(false);
     }
@@ -69,15 +85,52 @@ export class AuthenticationService {
   }
 
 
-  private createSession(userID: string, userPassword: string): Promise<SessionToken> {
+  private async createLoginSession(userID: string,
+                                   userPassword: string): Promise<SessionToken> {
     return APP_CONFIG.security.fakeLogin ? resolve(FakeSessionToken) :
-      this.securityService.createSession(userID, userPassword);
+      this.securityService.createLoginSession(userID, userPassword);
   }
 
 
-  private getPrincipal(userID: string): Promise<PrincipalData> {
+  private async getPrincipal(userID: string): Promise<PrincipalData> {
     return APP_CONFIG.security.fakeLogin ? resolve(getFakePrincipalData(userID)) :
-      this.securityService.getPrincipal();
+      this.securityService.getPrincipalData();
+  }
+
+
+  private async createChangePasswordSession(userID: string,
+                                            currentPassword: string,
+                                            newPassword: string): Promise<void> {
+    return APP_CONFIG.security.fakeLogin ? resolve(null) :
+      this.securityService.changePassword(userID, currentPassword, newPassword);
+  }
+
+
+  private async closeSession(): Promise<void> {
+    return APP_CONFIG.security.fakeLogin ? resolve(null) : this.securityService.closeSession();
+  }
+
+
+  private async handleAuthenticationError(error): Promise<any> {
+    if (error.status === 401) {
+
+      if ([LoginErrorType.MustChangePassword,
+           LoginErrorType.UserPasswordExpired].includes(error.error.code)) {
+
+        return Promise.reject(this.getLoginErrorAction(LoginErrorActionType.ChangePassword,
+          NOT_ACTIVE_CREDENTIALS_MESSAGE));
+
+      }
+
+      return Promise.reject(this.getLoginErrorAction(LoginErrorActionType.None,
+        INVALID_CREDENTIALS_MESSAGE));
+
+    } else {
+
+      return Promise.reject(this.getLoginErrorAction(LoginErrorActionType.None,
+        `${ACCESS_PROBLEM_MESSAGE}: ${error.status} ${error.statusText} ${error.message}`));
+
+    }
   }
 
 
@@ -86,7 +139,7 @@ export class AuthenticationService {
       principalData.permissions = getAllPermissions();
     }
 
-    const defaultRoute =  this.getDefaultRoute(principalData.permissions);
+    const defaultRoute = this.getDefaultRoute(principalData.permissions);
 
     const principal = new Principal(sessionToken,
                                     principalData.identity,
@@ -97,44 +150,41 @@ export class AuthenticationService {
   }
 
 
-  private handleAuthenticationError(error): Promise<never> {
-    if (error.status === 401) {
-      return Promise.reject(new Error(INVALID_CREDENTIALS_MESSAGE));
-    } else {
-      return Promise.reject(new Error(`${ACCESS_PROBLEM_MESSAGE}: ` +
-        `${error.status} ${error.statusText} ${error.message}`));
-    }
+  private getLoginErrorAction(actionType: LoginErrorActionType, message: string) {
+    const loginErrorAction: LoginErrorAction = {
+      actionType,
+      message
+    };
+
+    return loginErrorAction;
   }
 
 
   private getDefaultRoute(permissions: string[]): string {
     if (permissions.includes(DEFAULT_ROUTE.permission)) {
-      return DEFAULT_URL;
+      return DEFAULT_PATH;
     }
 
-    const routesValid = this.getValitRoutes(permissions);
+    const firstRouteValid = this.getFirstRouteValid(permissions);
 
-    if (routesValid.length === 0) {
-      return UNAUTHORIZED_ROUTE;
-    }
-
-    for (const route of ROUTES_LIST) {
-      if (route.permission === routesValid[0]) {
-        return route.parent + '/' + route.path;
+    if (!!firstRouteValid) {
+      for (const route of ROUTES_LIST) {
+        if (route.permission === firstRouteValid) {
+          return route.fullpath;
+        }
       }
     }
 
-    return UNAUTHORIZED_ROUTE;
+    return UNAUTHORIZED_PATH;
   }
 
 
-  private getValitRoutes(permissions): string[] {
-    return permissions ? permissions.filter(x => x.startsWith('route-')) : [];
-  }
+  private getFirstRouteValid(permissions: string[]): string {
+    if (!permissions) {
+      return null;
+    }
 
-
-  private closeSession(): Promise<void> {
-    return APP_CONFIG.security.fakeLogin ? resolve(null) : this.securityService.closeSession();
+    return permissions.find(x => x.startsWith('route-')) ?? null;
   }
 
 }

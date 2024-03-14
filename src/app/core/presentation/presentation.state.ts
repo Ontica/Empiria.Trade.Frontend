@@ -7,7 +7,8 @@
 
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 
-import { Assertion, Command, CommandResult, EmpObservable, createCommand as createCommandAlias } from '@app/core';
+import { Assertion, Command, CommandResult, EmpObservable,
+         createCommand as createCommandAlias } from '@app/core';
 
 import { PresentationHandler } from './presentation.handler';
 
@@ -16,8 +17,7 @@ import { CommandType, ActionType, StateEffect, StateSelector } from './presentat
 import { MainUIStateAction } from '@app/presentation/exported.presentation.types';
 
 
-export const STATE_HANDLERS =
-                new InjectionToken<PresentationHandler[]>('PresentationStateHandlers');
+export const STATE_HANDLERS = new InjectionToken<PresentationHandler[]>('PresentationStateHandlers');
 
 
 @Injectable()

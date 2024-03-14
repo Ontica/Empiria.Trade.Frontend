@@ -17,7 +17,7 @@ export function resolve<U>(value?: U): Promise<U> {
 }
 
 
-export function toObservable<U>(value: Observable<any>): Observable<U> {
+export function toObservable<U>(value: Observable<U>): Observable<U> {
   return value as Observable<U>;
 }
 
@@ -44,7 +44,7 @@ export class EmpObservable<T> extends Observable<T> {
   }
 
   firstValue<T>(this: Observable<T>): Promise<T> {
-    return firstValueFrom<T>(this);;
+    return firstValueFrom<T>(this);
   }
 
 }
