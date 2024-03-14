@@ -82,9 +82,3 @@ export const DefaultView: View = {
   title: 'Default view',
   url: '/',
 };
-
-
-export const DefaultViewAction: ViewAction = {
-  action: 'None',
-  name: 'None',
-};

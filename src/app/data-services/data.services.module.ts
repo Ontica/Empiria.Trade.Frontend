@@ -27,8 +27,8 @@ import { ShippingDataService } from './shipping-data.service';
 @NgModule({
 
   providers: [
-    FileDownloadService,
     AccessControlDataService,
+    FileDownloadService,
     ContactsDataService,
     PackingDataService,
     ProductsDataService,

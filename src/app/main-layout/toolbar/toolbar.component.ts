@@ -15,8 +15,6 @@ import { PresentationState } from '@app/core/presentation';
 
 import { MainUIStateAction, MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { PERMISSIONS, TOOL_TYPES, Tool } from '../config-data';
 
 
@@ -35,10 +33,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   private unsubscribe: Subject<void> = new Subject();
 
-  constructor(private store: PresentationState,
-              private messageBox: MessageBoxService) {}
 
-  ngOnInit(): void {
+  constructor(private store: PresentationState) { }
+
+
+  ngOnInit() {
     this.store.select<Tool>(MainUIStateSelector.TOOL_SELECTED)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(x => this.setToolSelected(x));
@@ -67,14 +66,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     }
 
   }
-
-
-  // onSearchClicked(keywords: string) {
-  //   if (keywords) {
-  //     this.messageBox.showInDevelopment(`Buscar: ${keywords}`);
-  //     // this.router.navigate(['/search-services/all', { keywords } ]);
-  //   }
-  // }
 
 
   private setToolSelected(tool: Tool) {

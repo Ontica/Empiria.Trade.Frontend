@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import {InjectionToken} from '@angular/core';
+import { InjectionToken } from '@angular/core';
 // import { saveAs } from 'file-saver';
 
 
