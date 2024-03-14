@@ -9,10 +9,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { AngularMaterialModule } from '../angular-material.module';
+
 import { QuillModule } from 'ngx-quill';
 import { NgSelectModule } from '@ng-select/ng-select';
-
-import { AngularMaterialModule } from '../angular-material.module';
 
 import { SharedDirectivesModule } from '../directives/shared-directives.module';
 import { SharedPipesModule } from '../pipes/shared-pipes.module';
@@ -40,11 +40,13 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
     FormsModule,
     ReactiveFormsModule,
     AngularMaterialModule,
+
+    QuillModule.forRoot(),
     NgSelectModule,
+
     SharedDirectivesModule,
     SharedPipesModule,
     SharedContainersModule,
-    QuillModule.forRoot(),
     IconSvgModule,
   ],
 

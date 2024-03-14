@@ -9,14 +9,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
 
 import { SharedContainersModule } from './containers/shared-containers.module';
+import { SharedComponentsModule } from './components/shared-components.module';
 import { SharedDirectivesModule } from './directives/shared-directives.module';
 import { SharedFormControlsModule } from './form-controls/shared-form-controls.module';
 import { SharedIndicatorsModule } from './indicators/shared-indicators.module';
 import { SharedPipesModule } from './pipes/shared-pipes.module';
 import { PrinterService } from './utils/printer.service';
-
-import { DefaultComponent } from './components/default-component/default.component';
-import { GalleryComponent } from './components/gallery/gallery.component';
 
 
 @NgModule({
@@ -25,26 +23,22 @@ import { GalleryComponent } from './components/gallery/gallery.component';
     CommonModule,
 
     SharedContainersModule,
+    SharedComponentsModule,
     SharedDirectivesModule,
     SharedFormControlsModule,
     SharedIndicatorsModule,
     SharedPipesModule,
   ],
 
-  declarations: [
-    DefaultComponent,
-    GalleryComponent,
-  ],
+  declarations: [],
 
   exports: [
     SharedContainersModule,
+    SharedComponentsModule,
     SharedDirectivesModule,
     SharedFormControlsModule,
     SharedIndicatorsModule,
     SharedPipesModule,
-
-    DefaultComponent,
-    GalleryComponent,
   ],
 
   providers: [

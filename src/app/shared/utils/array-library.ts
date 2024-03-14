@@ -41,7 +41,6 @@ export class ArrayLibrary {
   }
 
 
-
   static sortByArrayKeyLenght<T, K extends keyof T>(array: T[], key: K): T[] {
     return array.sort((a, b) => this.compareArrayValuesLenght(a[key], b[key]));
   }
