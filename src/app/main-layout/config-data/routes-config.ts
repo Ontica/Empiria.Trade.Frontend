@@ -49,14 +49,14 @@ export const ROUTES = {
 
   security: {
     parent: '',
-    path: 'security',
-    fullpath: '/security',
+    path: 'seguridad',
+    fullpath: '/seguridad',
   },
 
   unauthorized: {
     parent: '',
-    path: 'unauthorized',
-    fullpath: '/unauthorized',
+    path: 'no-autorizado',
+    fullpath: '/no-autorizado',
   },
 
   // #endregion
@@ -224,9 +224,9 @@ export const ROUTES = {
   // #region security-routing module
 
   security_login: {
-    parent: 'security',
+    parent: 'seguridad',
     path: 'login',
-    fullpath: '/security/login'
+    fullpath: '/seguridad/login'
   },
 
   // #endregion
@@ -237,10 +237,13 @@ export const ROUTES = {
 export const DEFAULT_ROUTE = ROUTES.administracion_panel_de_control;
 
 
-export const DEFAULT_URL = (DEFAULT_ROUTE.parent ? DEFAULT_ROUTE.parent + '/' : '') + DEFAULT_ROUTE.path;
+export const DEFAULT_PATH = DEFAULT_ROUTE.fullpath;
 
 
-export const UNAUTHORIZED_ROUTE = ROUTES.unauthorized.path;
+export const LOGIN_PATH = ROUTES.security_login.fullpath;
+
+
+export const UNAUTHORIZED_PATH = ROUTES.unauthorized.path;
 
 
 export const ROUTES_LIST = Object.keys(ROUTES)
