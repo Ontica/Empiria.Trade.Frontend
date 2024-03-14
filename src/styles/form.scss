@@ -44,11 +44,11 @@ form.submitted select.ng-invalid {
 
 form .inline-error {
   color: $warning-color;
+  border: 1px solid $warning-color;
+  padding: 8pt;
   font-size: 10pt;
   font-weight: 400;
-  padding: 8pt;
   margin: 0 8px 12px 0;
-  border: 1px solid $warning-color;
   border-radius: 1px;
 }
 
@@ -64,11 +64,11 @@ form .inline-warning {
 
 form .inline-info {
   color: $primary-color;
+  border: 1px solid $primary-color;
+  padding: 8pt;
   font-size: 10pt;
   font-weight: 400;
-  padding: 8pt;
   margin: 0 10px 12px 0;
-  border: 1px solid $primary-color;
   border-radius: 1px;
 }
 

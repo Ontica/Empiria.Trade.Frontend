@@ -5,9 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
- //
- // Color Palette
- //
+//
+// Color Palette
+//
 $white: hsl(0, 0%, 99%) !default;
 
 $primary-color: hsl(207, 91%, 30%) !default;
@@ -152,6 +152,7 @@ $checkbox-warning-background-color: $layout-secondary-color;
 $date-picker-width: 90px;
 $range-picker-width: 185px;
 
+$tag-background-color: hsl(167, 36%, 95%);
 $tag-default-background-color: hsl(207, 91%, 90%) !default;
 $tag-info-background-color: $primary-color-light !default;
 $tag-error-background-color: $warning-color-light !default;
@@ -174,11 +175,12 @@ $grid-header-height: 30px;
 $grid-row-height: 32px;
 $grid-entry-padding-vertical: 0.75rem;
 $grid-entry-padding-horizontal: 1.5rem;
+$grid-entry-padding-vertical-first: 10px;
+$grid-entry-padding-vertical-default: 8px;
 
 //
 // Designer
 //
-
 $designer-border-color: hsl(0, 0%, 82%) !default;
 $designer-bar-background: hsl(0, 0%, 94%) !default;
 $designer-bar-selected-border-color: hsl(207, 91%, 32%) !default;

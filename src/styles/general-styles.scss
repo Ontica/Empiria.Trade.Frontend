@@ -675,15 +675,7 @@ ul.default-list {
     &.limit-list {
       font-weight: 600;
       font-size: 8.5pt;
-      // margin-left: 1.25rem;
     }
-
-    // &:not(.limit-list)::before {
-    //   content: "-";
-    //   color: $primary-color;
-    //   font-weight: 600;
-    //   padding-right: 0.75rem;
-    // }
 
     &:not(:last-child) {
       padding-bottom: 0.5rem;
