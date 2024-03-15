@@ -5,19 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Empty, Identifiable, isEmpty } from '@app/core';
+import { DateString, Empty, EmptyMediaBase, Identifiable, MediaBase, isEmpty } from '@app/core';
 
 import { PackagingTotals } from './packing';
 
 import { ShippingMethodTypes } from './order';
 
 import { Customer, EmptyCustomer } from './contacts';
-
-
-export const SHIPPING_LABELS_FILE = 'http://apps.sujetsa.com.mx:8080/imagenes-productos/etiquetas.pdf';
-
-
-export const SHIPPING_ORDERS_FILE = 'http://apps.sujetsa.com.mx:8080/imagenes-productos/facturas.pdf';
 
 
 export enum ShippingStatus {
@@ -104,6 +98,9 @@ export interface ShippingData extends PackagingTotals {
 
   ordersCount: number;
   ordersTotal: number;
+
+  shippingLabelsMedia: MediaBase;
+  billingsMedia: MediaBase;
 }
 
 
@@ -119,6 +116,8 @@ export interface OrderForShipping extends PackagingTotals {
   totalPackages: number;
   totalWeight: number;
   totalVolume: number;
+
+  billingMedia: MediaBase;
 }
 
 
@@ -197,6 +196,9 @@ export const EmptyShippingData: ShippingData = {
   totalPackages: 0,
   totalWeight: 0,
   totalVolume: 0,
+
+  shippingLabelsMedia: EmptyMediaBase,
+  billingsMedia: EmptyMediaBase,
 };
 
 

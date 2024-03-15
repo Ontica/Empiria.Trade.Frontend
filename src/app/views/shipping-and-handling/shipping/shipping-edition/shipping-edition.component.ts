@@ -5,20 +5,23 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 
-import { Assertion, DateStringLibrary, EventInfo } from '@app/core';
+import { Assertion, DateStringLibrary, EventInfo, MediaBase } from '@app/core';
 
 import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { FileDownloadService, ShippingDataService } from '@app/data-services';
+import {
+  FilePrintPreviewComponent
+} from '@app/shared/form-controls/file-print-preview/file-print-preview.component';
+
+import { ShippingDataService } from '@app/data-services';
 
 import { Shipping, EmptyShipping, ShippingFieldsQuery, ShippingFields, ShippingDataFields,
          ShippingPalletWithPackages, EmptyShippingPalletWithPackages, ShippingPalletFields,
-         ShippingQueryType, DefaultShippingMethod, SHIPPING_LABELS_FILE,
-         SHIPPING_ORDERS_FILE } from '@app/models';
+         ShippingQueryType, DefaultShippingMethod } from '@app/models';
 
 import { ShippingDataViewEventType } from '../shipping-edition/shipping-data-view.component';
 
@@ -48,6 +51,8 @@ export enum ShippingEditionEventType {
   templateUrl: './shipping-edition.component.html',
 })
 export class ShippingEditionComponent implements OnChanges, OnInit {
+
+  @ViewChild('filePrintPreview', { static: true }) filePrintPreview: FilePrintPreviewComponent;
 
   @Input() queryType: ShippingQueryType = ShippingQueryType.Shipping;
 
@@ -83,7 +88,6 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
 
   constructor(private shippingData: ShippingDataService,
-              private fileDownload: FileDownloadService,
               private messageBox: MessageBoxService) { }
 
 
@@ -183,11 +187,11 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
         return;
 
       case ShippingOrdersSubmitterEventType.PRINT_SHIPPING_LABELS_CLICKED:
-        this.fileDownload.download(SHIPPING_LABELS_FILE);
+        this.openPrintViewer(this.shipping.shippingData.shippingLabelsMedia);
         return;
 
       case ShippingOrdersSubmitterEventType.PRINT_ORDERS_CLICKED:
-        this.fileDownload.download(SHIPPING_ORDERS_FILE);
+        this.openPrintViewer(this.shipping.shippingData.billingsMedia);
         return;
 
       default:
@@ -218,6 +222,11 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
         Assertion.assertValue(event.payload.shippingUID, 'event.payload.shippingUID');
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         this.removeOrderToShipping(event.payload.shippingUID, event.payload.orderUID);
+        return;
+
+      case ShippingOrdersTableEventType.PRINT_ORDER:
+        Assertion.assertValue(event.payload.media, 'event.payload.media');
+        this.openPrintViewer(event.payload.media);
         return;
 
       default:
@@ -252,6 +261,11 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
         Assertion.assertValue(event.payload.shippingUID, 'event.payload.shippingUID');
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         this.removeOrderToShipping(event.payload.shippingUID, event.payload.orderUID);
+        return;
+
+      case ShippingOrdersModalEventType.PRINT_ORDER:
+        Assertion.assertValue(event.payload.media, 'event.payload.media');
+        this.openPrintViewer(event.payload.media);
         return;
 
       default:
@@ -641,6 +655,11 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
     }
 
     return !dataDescription ? 'Información del envío.' : dataDescription;
+  }
+
+
+  private openPrintViewer(media: MediaBase) {
+    this.filePrintPreview.open(media.url, media.mediaType);
   }
 
 }

@@ -26,6 +26,7 @@ export enum ShippingOrdersTableEventType {
   CHANGE_ORDERS = 'ShippingOrdersTableComponent.Event.ChangeOrders',
   ADD_ORDER     = 'ShippingOrdersTableComponent.Event.AddOrder',
   REMOVE_ORDER  = 'ShippingOrdersTableComponent.Event.RemoveOrder',
+  PRINT_ORDER   = 'ShippingOrdersTableComponent.Event.PrintOrder',
 }
 
 @Component({
@@ -37,6 +38,8 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
   @Input() shipping: Shipping = EmptyShipping;
 
   @Input() canEdit = false;
+
+  @Input() canPrint = false;
 
   @Input() showTitle: boolean = true;
 
@@ -114,16 +117,28 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
   }
 
 
+  onPrintOrderClicked(order: OrderForShipping) {
+    sendEvent(this.shippingOrdersTableEvent, ShippingOrdersTableEventType.PRINT_ORDER,
+      { media: order.billingMedia });
+  }
+
+
   private setDataTable() {
     this.dataSource = new MatTableDataSource(this.ordersForShipping);
   }
 
 
   private resetColumns() {
-    this.displayedColumns = [...this.displayedColumnsDefault];
+    this.displayedColumns = [];
+
+    if (this.canPrint) {
+      this.displayedColumns.push('actionPrint');
+    }
+
+    this.displayedColumns = [...this.displayedColumns, ...this.displayedColumnsDefault];
 
     if (this.canEdit) {
-      this.displayedColumns.push('action');
+      this.displayedColumns.push('actionEdit');
     }
   }
 

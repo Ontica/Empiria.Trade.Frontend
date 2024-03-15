@@ -40,6 +40,7 @@
   <emp-trade-shipping-orders-table *ngIf="!putOnPallets"
     [shipping]="shipping"
     [canEdit]="canEdit"
+    [canPrint]="shipping.actions.canPrintOrder"
     (shippingOrdersTableEvent)="onShippingOrdersTableEvent($event)">
 
   </emp-trade-shipping-orders-table>
@@ -59,6 +60,7 @@
 <emp-trade-shipping-orders-modal *ngIf="displayShippingOrdersModal"
   [shipping]="shipping"
   [canEdit]="canEdit"
+  [canPrint]="shipping.actions.canPrintOrder"
   (shippingOrdersModalEvent)="onShippingOrdersModalEvent($event)">
 
 </emp-trade-shipping-orders-modal>
@@ -71,3 +73,10 @@
   (shippingPalletModalEvent)="onShippingPalletModalEvent($event)">
 
 </emp-trade-shipping-pallet-modal>
+
+
+<emp-ng-file-print-preview #filePrintPreview
+  [title]="'Impresión de envío ' + shipping.shippingData.shippingID "
+  hint="Datos de envío">
+
+</emp-ng-file-print-preview>

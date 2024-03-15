@@ -24,7 +24,7 @@
           <span class="item-highlight">{{item.orderNumber}}</span> <br>
           <span class="item-text-xs">{{item.customerName}}</span>
         </div>
-        
+
       </ng-template>
 
     </emp-ng-select>
@@ -39,6 +39,20 @@
   [style.margin-bottom.px]="0">
 
   <table mat-table [dataSource]="dataSource" class="data-centered">
+
+    <ng-container matColumnDef="actionPrint">
+      <th mat-header-cell *matHeaderCellDef class="column-action"></th>
+      <td mat-cell *matCellDef="let row" class="column-action">
+        <button title="Imprimir factura"
+          mat-icon-button
+          (click)="$event.stopPropagation(); onPrintOrderClicked(row)">
+          <mat-icon>
+            print
+          </mat-icon>
+        </button>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
 
     <ng-container matColumnDef="orderNumber">
       <th mat-header-cell *matHeaderCellDef class="nowrap"> No. Pedido </th>
@@ -80,7 +94,7 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="action">
+    <ng-container matColumnDef="actionEdit">
       <th mat-header-cell *matHeaderCellDef class="column-action"></th>
       <td mat-cell *matCellDef="let row" class="column-action">
         <button title="Remover perdido"

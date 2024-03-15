@@ -20,6 +20,7 @@ export enum ShippingOrdersModalEventType {
   CHANGE_ORDERS       = 'ShippingOrdersModalComponent.Event.ChangeOrders',
   ADD_ORDER           = 'ShippingOrdersModalComponent.Event.AddOrder',
   REMOVE_ORDER        = 'ShippingOrdersModalComponent.Event.RemoveOrder',
+  PRINT_ORDER         = 'ShippingOrdersModalComponent.Event.PrintOrder',
 }
 
 @Component({
@@ -31,6 +32,8 @@ export class ShippingOrdersModalComponent {
   @Input() shipping: Shipping = EmptyShipping;
 
   @Input() canEdit = false;
+
+  @Input() canPrint = false;
 
   @Output() shippingOrdersModalEvent = new EventEmitter<EventInfo>();
 
@@ -56,6 +59,11 @@ export class ShippingOrdersModalComponent {
       case ShippingOrdersTableEventType.REMOVE_ORDER:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         sendEvent(this.shippingOrdersModalEvent, ShippingOrdersModalEventType.REMOVE_ORDER, event.payload);
+        return;
+
+      case ShippingOrdersTableEventType.PRINT_ORDER:
+        Assertion.assertValue(event.payload.media, 'event.payload.media');
+        sendEvent(this.shippingOrdersModalEvent, ShippingOrdersModalEventType.PRINT_ORDER, event.payload);
         return;
 
       default:
