@@ -47,6 +47,8 @@ export class ShippingTableComponent implements OnChanges {
 
   dataSource: TableVirtualScrollDataSource<ShippingData>;
 
+  shippingStatus = ShippingStatus;
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.shippingList) {

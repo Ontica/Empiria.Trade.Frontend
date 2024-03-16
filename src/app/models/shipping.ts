@@ -18,6 +18,7 @@ export enum ShippingStatus {
   EnCaptura = 'EnCaptura',
   EnProceso = 'EnProceso',
   Cerrado   = 'Cerrado',
+  Rechazado = 'Rechazado',
 }
 
 

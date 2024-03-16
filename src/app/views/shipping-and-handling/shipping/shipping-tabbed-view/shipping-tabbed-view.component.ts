@@ -11,7 +11,8 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyShippingData, ShippingData, ShippingQueryType, getShippingStatusName } from '@app/models';
+import { EmptyShippingData, ShippingData, ShippingQueryType, ShippingStatus,
+         getShippingStatusName } from '@app/models';
 
 import { ShippingEditionEventType } from '../shipping-edition/shipping-edition.component';
 
@@ -84,7 +85,18 @@ export class ShippingTabbedViewComponent implements OnChanges {
 
   private setTexts() {
     this.titleText = `${this.shippingData.shippingID}` +
-      `<span class="tag tag-small"> ${getShippingStatusName(this.shippingData.status)} </span>`;
+      `<span class="${this.getShippingStatusClasses()}">` +
+      `${getShippingStatusName(this.shippingData.status)} </span>`;
+  }
+
+
+  private getShippingStatusClasses(){
+    switch (this.shippingData.status) {
+      case ShippingStatus.EnCaptura: return 'tag tag-small tag-base-info';
+      case ShippingStatus.EnProceso: return 'tag tag-small tag-base-warning';
+      case ShippingStatus.Cerrado: return 'tag tag-small tag-base-success';
+      case ShippingStatus.Rechazado: return 'tag tag-small tag-base-error';
+    }
   }
 
 }
