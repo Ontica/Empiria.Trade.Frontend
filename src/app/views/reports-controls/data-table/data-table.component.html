@@ -67,7 +67,11 @@
                 </a>
               </ng-container>
               <ng-container *ngSwitchCase="dataTableColumnType.text_tag">
-                <span class="tag">
+                <span class="tag"
+                  [ngClass]="{'tag-base-info':    column.applyTagType && row.tagType === dataTableTagType.info ,
+                              'tag-base-success': column.applyTagType && row.tagType === dataTableTagType.success ,
+                              'tag-base-warning': column.applyTagType && row.tagType === dataTableTagType.warning,
+                              'tag-base-error':   column.applyTagType && row.tagType === dataTableTagType.error}">
                   {{row[column.field]}}
                 </span>
               </ng-container>

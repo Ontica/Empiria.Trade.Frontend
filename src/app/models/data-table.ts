@@ -26,12 +26,14 @@ export interface DataTableColumn {
   fieldConditionStrikethrough?: string;
   functionToShowButton?: (entry: DataTableEntry) => any;
   buttonText?: string;
+  applyTagType?: boolean;
 }
 
 
 export interface DataTableEntry {
   uid?: string;
   itemType?: DataTableItemType;
+  tagType?: DataTableTagType;
   clickableEntry?: boolean;
 }
 
@@ -86,3 +88,12 @@ export const CheckBoxDataTableColumn: DataTableColumn = {
   title: '',
   type: DataTableColumnType.check_box,
 };
+
+
+export enum DataTableTagType {
+  none    ='none',
+  info    ='info' ,
+  success ='success' ,
+  warning ='warning' ,
+  error   ='error',
+}
