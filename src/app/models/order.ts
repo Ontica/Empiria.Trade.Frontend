@@ -19,7 +19,7 @@ import { EmptyPacking, Packing } from './packing';
 
 import { EmptyShippingData, ShippingData } from './shipping';
 
-import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery, DataTableTagType } from './data-table';
+import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './data-table';
 
 
 export interface OrderTypeConfig {
@@ -134,15 +134,6 @@ export const EmptyOrderDataTable: OrderDataTable = {
   columns: [],
   entries: [],
 };
-
-
-export function configOrderDataTags(data: OrderDataTable) {
-  data.columns.forEach(x => x.field === 'shippingStatus' ? x.applyTagType = true : null);
-  data.entries.forEach(x => {
-    x['shippingStatus'] === 'Asignado' ? x.tagType = DataTableTagType.success : null;
-    x['shippingStatus'] === 'Pendiente' ? x.tagType = DataTableTagType.warning : null;
-  });
-}
 
 
 export interface OrderGeneralData extends OrderAdditionalData {

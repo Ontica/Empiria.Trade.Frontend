@@ -22,7 +22,7 @@ import { ArrayLibrary, clone } from '@app/shared/utils';
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { EmptyOrder, EmptyOrderDataTable, EmptyOrderQuery, Order, OrderDataTable, OrderDescriptor,
-         OrderQuery, OrderQueryType, OrderTypeConfig, OrdersOperationType, configOrderDataTags,
+         OrderQuery, OrderQueryType, OrderTypeConfig, OrdersOperationType,
          mapOrderDescriptorFromOrder } from '@app/models';
 
 import { SalesOrdersDataService } from '@app/data-services';
@@ -251,10 +251,6 @@ export class SalesMainPageComponent implements OnInit, OnDestroy {
 
 
   private setOrderData(data: OrderDataTable, queryExecuted: boolean = true) {
-    // TMP: esto se debe configurar en el back
-    configOrderDataTags(data);
-    // END-TMP
-
     this.ordersData = data;
     this.queryExecuted = queryExecuted;
     this.clearOperationCommandSelected();
