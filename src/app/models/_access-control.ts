@@ -16,7 +16,7 @@ export enum AccessControlQueryType {
 
 
 export const AccessControlQueryTypeList: Identifiable[] = [
-  { uid: AccessControlQueryType.Subjects, name: 'Usuarios' },
+  { uid: AccessControlQueryType.Subjects, name: 'Cuentas de acceso' },
   // {uid: AccessControlQueryType.Roles,    name: 'Roles'},
   // {uid: AccessControlQueryType.Features, name: 'Permisos'},
 ];
@@ -83,18 +83,10 @@ export interface Subject {
   eMail: string;
   employeeNo: string;
   jobPosition: string;
-  workarea: string;
-  workareaUID: string;
+  workarea: Identifiable;
   credentialsLastUpdate: DateString;
   lastAccess: DateString;
-  status: string;
-}
-
-
-export interface UpdateCredentialsFields {
-  userID: string;
-  currentPassword: string;
-  newPassword: string;
+  status: Identifiable;
 }
 
 
@@ -125,11 +117,10 @@ export const EmptySubject: Subject = {
   eMail: '',
   employeeNo: '',
   jobPosition: '',
-  workarea: '',
-  workareaUID: '',
+  workarea: Empty,
   credentialsLastUpdate: '',
   lastAccess: '',
-  status: '',
+  status: Empty,
 };
 
 
