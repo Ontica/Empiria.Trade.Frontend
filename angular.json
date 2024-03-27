@@ -28,6 +28,7 @@
           "options": {
             "allowedCommonJsDependencies": [
               "quill",
+              "quill-delta",
               "crypto-js",
               "moment",
               "lodash/cloneDeep"
@@ -85,19 +86,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "empiria-trade-frontend:build",
-            "port": 2024
+            "port": 2024,
+            "buildTarget": "empiria-trade-frontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "empiria-trade-frontend:build:production"
+              "buildTarget": "empiria-trade-frontend:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "empiria-trade-frontend:build"
+            "buildTarget": "empiria-trade-frontend:build"
           }
         },
         "test": {
