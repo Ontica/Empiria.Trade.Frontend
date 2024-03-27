@@ -7,6 +7,8 @@
 
 import { Component } from '@angular/core';
 
+import { APP_CONFIG } from '../config-data';
+
 
 @Component({
   selector: 'emp-ng-nav-bar',
@@ -14,5 +16,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent {
-
+  appConfig = APP_CONFIG;
 }

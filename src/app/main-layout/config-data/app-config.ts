@@ -11,8 +11,10 @@ import { AppConfig } from '../common-models/common';
 export const APP_CONFIG: AppConfig = {
   data: {
     name: 'Sistema Comercial',
+    nameShort: 'Sistema Comercial',
     hint: '',
     organization: 'Grupo Sujetsa',
+    organizationShort: 'Grupo Sujetsa',
     description: '',
   },
   security: {
@@ -24,10 +26,10 @@ export const APP_CONFIG: AppConfig = {
   layout: {
     displayLogo: false,
     displayNavbarHeader: true,
+    displayNavbarHint: false,
     displayMenuUser: true,
     displayChangeLanguage: false,
     displayChangePassword: false,
-    displayAsideLeft: false,
     displaySubMenu: true,
     displayHeader: false,
     displayFooter: false,

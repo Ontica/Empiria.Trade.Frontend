@@ -18,7 +18,7 @@ import { OrdersFilterEventType } from './orders-filter.component';
 
 import { OrdersControlsEventType } from './orders-controls.component';
 
-import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
+import { DataTableEventType } from '@app/views/_reports-controls/data-table/data-table.component';
 
 export enum OrdersExplorerEventType {
   CREATE_ORDER      = 'OrdersExplorerComponent.Event.CreateOrder',

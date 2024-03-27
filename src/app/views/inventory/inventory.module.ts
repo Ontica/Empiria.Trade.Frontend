@@ -12,7 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
-import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
+import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
 import { ProductsModule } from '../products/products.module';
 import { ProductsFilterComponent } from './products-seeker/products-filter.component';
 import { ProductsSeekerComponent } from './products-seeker/products-seeker.component';

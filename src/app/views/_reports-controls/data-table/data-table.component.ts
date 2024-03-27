@@ -20,14 +20,14 @@ import { sendEvent } from '@app/shared/utils';
 
 import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry, DataTableColumnType, SummaryItemTypeList,
          GroupItemTypeList, TotalItemTypeList, EntryItemTypeList, ClickeableItemTypeList,
-         CheckBoxDataTableColumn, DataTableTagType } from '@app/models';
+         CheckBoxDataTableColumn } from '@app/models';
 
 import { DataTableControlsEventType } from './data-table-controls.component';
 
 export enum DataTableEventType {
-  COUNT_FILTERED_ENTRIES     = 'DataTableComponent.Event.CountFilteredEntries',
-  ENTRY_CLICKED              = 'DataTableComponent.Event.EntryClicked',
-  EXPORT_DATA                = 'DataTableComponent.Event.ExportData',
+  COUNT_FILTERED_ENTRIES = 'DataTableComponent.Event.CountFilteredEntries',
+  ENTRY_CLICKED = 'DataTableComponent.Event.EntryClicked',
+  EXPORT_DATA = 'DataTableComponent.Event.ExportData',
   CHECKBOX_SELECTION_CHANGED = 'DataTableComponent.Event.CheckboxSelectionChanged',
 }
 
@@ -87,8 +87,6 @@ export class DataTableComponent implements OnChanges {
   totalItemTypeList = TotalItemTypeList;
 
   entryItemTypeList = EntryItemTypeList;
-
-  dataTableTagType = DataTableTagType;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.dataTable) {

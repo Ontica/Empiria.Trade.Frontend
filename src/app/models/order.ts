@@ -19,7 +19,7 @@ import { EmptyPacking, Packing } from './packing';
 
 import { EmptyShippingData, ShippingData } from './shipping';
 
-import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './data-table';
+import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './_data-table';
 
 
 export interface OrderTypeConfig {

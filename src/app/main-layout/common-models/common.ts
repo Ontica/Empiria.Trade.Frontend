@@ -7,7 +7,9 @@
 
 export interface AppData {
   name: string;
+  nameShort: string;
   organization: string;
+  organizationShort: string;
   hint: string;
   description: string;
 }
@@ -16,10 +18,10 @@ export interface AppData {
 export interface AppLayout {
   displayLogo: boolean;
   displayNavbarHeader: boolean;
+  displayNavbarHint: boolean;
   displayMenuUser: boolean;
   displayChangeLanguage: boolean;
   displayChangePassword: boolean;
-  displayAsideLeft: boolean;
   displaySubMenu: boolean;
   displayHeader: boolean;
   displayFooter: boolean;

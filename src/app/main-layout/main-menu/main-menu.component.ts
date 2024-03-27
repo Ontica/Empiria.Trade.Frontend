@@ -24,12 +24,12 @@ export class MainMenuComponent {
 
   layouts: Layout[] = APP_LAYOUTS;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
 
   isLayoutSelected(layout: Layout) {
     return this.router.isActive(layout.url,
-      {paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored'});
+      { paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored' });
   }
 
 }

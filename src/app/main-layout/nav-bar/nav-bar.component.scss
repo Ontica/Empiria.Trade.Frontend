@@ -10,7 +10,8 @@
 $margin-size: 16px;
 $margin-size-border: 36px;
 $margin-size-small: 8px;
-$min-width-sides: 225px;
+$min-width-left: 200px;
+$min-width-right: 200px;
 
 .nav-bar {
   @include row;
@@ -26,7 +27,7 @@ $min-width-sides: 225px;
     @include row;
 
     width: auto;
-    min-width: $min-width-sides;
+    min-width: $min-width-left;
     align-items: center;
     white-space: nowrap;
     margin: 0 $margin-size 0 $margin-size-border;
@@ -37,7 +38,7 @@ $min-width-sides: 225px;
   }
 
   .right-section {
-    min-width: $min-width-sides;
+    min-width: $min-width-right;
     margin: 0 $margin-size-border 0 $margin-size;
   }
 

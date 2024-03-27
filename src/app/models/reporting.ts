@@ -7,7 +7,7 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './data-table';
+import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './_data-table';
 
 
 export const DefaultEndDate: DateString = '2049-12-31';
@@ -18,19 +18,19 @@ export enum ReportGroup {
 }
 
 
-export interface ReportType<T> extends Identifiable {
-  uid: string;
-  name: string;
-  group: string;
-  show?: T;
-  exportTo?: FileType[] | ExportationType[];
-  outputType?: Identifiable[];
-  payloadType?: ReportPayloadType;
+export enum ReportController {
+  Reporting = 'Reporting',
 }
 
 
-export enum ReportPayloadType {
-
+export interface ReportType<T> extends Identifiable {
+  uid: string;
+  name: string;
+  group: ReportGroup;
+  controller: ReportController;
+  show?: T;
+  outputType?: Identifiable[];
+  exportTo?: ExportationType[];
 }
 
 
@@ -80,7 +80,7 @@ export interface ReportData extends DataTable {
 
 
 export interface ReportEntry extends DataTableEntry {
-
+  uid: string;
 }
 
 
@@ -88,6 +88,12 @@ export interface DateRange {
   fromDate: DateString;
   toDate: DateString;
 }
+
+
+export const EmptyDateRange: DateRange = {
+  fromDate: '',
+  toDate: '',
+};
 
 
 export const DefaultExportationType: ExportationType = {
@@ -105,7 +111,8 @@ export const EmptyReportTypeFlags: ReportTypeFlags = {
 export const EmptyReportType: ReportType<ReportTypeFlags> = {
   uid: '',
   name: '',
-  group: '',
+  group: null,
+  controller: null,
 };
 
 

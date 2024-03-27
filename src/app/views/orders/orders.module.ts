@@ -14,7 +14,7 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { CustomersModule } from '../customers/customers.module';
 import { InventoryModule } from '../inventory/inventory.module';
-import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
+import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
 import { ShippingAndHandlingModule } from '../shipping-and-handling/shipping-and-handling.module';
 
 import { OrderEditionComponent } from './order-edition/order-edition.component';
