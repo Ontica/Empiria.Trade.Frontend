@@ -7,17 +7,23 @@
 
 import { NgModule } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
+
 import { RouterModule, Routes } from '@angular/router';
 
 import { ROUTES } from '@app/main-layout';
 
-import { UserLoginComponent } from './user-login/user-login.component';
+import { SecurityModule } from '@app/views/_security/security.module';
+
+import {
+  AuthenticationMainPageComponent
+} from './authentication-main-page/authentication-main-page.component';
 
 
 const routes: Routes = [
   {
     path: ROUTES.security_login.path,
-    component: UserLoginComponent,
+    component: AuthenticationMainPageComponent,
   },
   {
     path: '',
@@ -28,7 +34,16 @@ const routes: Routes = [
 
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+
+  imports: [
+    RouterModule.forChild(routes),
+    CommonModule,
+    SecurityModule,
+  ],
+
+  declarations: [
+    AuthenticationMainPageComponent,
+  ]
+
 })
-export class SecurityUIRoutingModule { }
+export class AuthenticationModule { }

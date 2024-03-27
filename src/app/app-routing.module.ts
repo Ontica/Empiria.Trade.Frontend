@@ -63,16 +63,15 @@ const routes: Routes = [
   },
   {
     path: ROUTES.unauthorized.path,
-    component: MainLayoutComponent,
     canActivate: [ParentRouteGuard],
-    canActivateChild: [ChildRouteGuard],
-    loadChildren: () => import('./views/_unauthorized/unauthorized.module')
-                              .then(m => m.UnauthorizedModule)
+    component: MainLayoutComponent,
+    loadChildren: () => import('./workspaces/system-security/unauthorized.module')
+      .then(m => m.UnauthorizedModule)
   },
   {
     path: ROUTES.security.path,
-    loadChildren: () => import('./views/_security/security-ui.module')
-                              .then(m => m.SecurityUIModule)
+    loadChildren: () => import('./workspaces/system-security/authentication.module')
+      .then(m => m.AuthenticationModule)
   },
   { path: '', redirectTo: DEFAULT_PATH, pathMatch: 'full' },
   { path: '**', component: NoContentComponent }
