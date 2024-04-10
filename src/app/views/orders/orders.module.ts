@@ -24,6 +24,7 @@ import { OrderSummaryComponent } from './order-edition/order-summary.component';
 import { OrderAdditionalDataComponent } from './order-edition/order-additional-data.component';
 import { OrderTotalsComponent } from './order-edition/order-totals.component';
 import { OrderSubmitterComponent } from './order-edition/order-submitter.component';
+import { OrderConfirmSubmitModalComponent } from './order-edition/order-confirm-submit-modal.component';
 
 import { OrdersExplorerComponent } from './orders-explorer/orders-explorer.component';
 import { OrdersFilterComponent } from './orders-explorer/orders-filter.component';
@@ -56,6 +57,7 @@ import { OrderEditorComponent } from './order-editor/order-editor.component';
     OrderAdditionalDataComponent,
     OrderTotalsComponent,
     OrderSubmitterComponent,
+    OrderConfirmSubmitModalComponent,
 
     OrdersExplorerComponent,
     OrdersFilterComponent,

@@ -1,0 +1,64 @@
+<emp-ng-modal-window
+  [config]="{width:'500px'}">
+
+  <emp-ng-card
+    [title]="titleText"
+    [showHint]="false"
+    [showCardHeaderFlat]="true"
+    [disableClose]="true">
+
+    <div class="card-body-padding" [style.line-height.px]="24">
+
+      Esta operación {{actionText}} el pedido <strong> {{order.orderData.orderNumber}} </strong>
+
+      del cliente <strong> {{order.orderData.customer.name}}</strong>
+
+      <ng-container *ngIf="showTotalDebt">
+
+        con adeudo de <strong class="warning-text">{{order.customerCredit.totalDebt | empDecimal}}</strong>
+
+      </ng-container>
+
+      <ng-container *ngIf="showApplyText">
+
+        a almacen para ser procesado.
+
+      </ng-container>
+
+
+      <ng-container *ngIf="notesRequired">
+
+        con motivo: <br><br>
+
+        <input type="text" class="text-box" *ngIf="notesRequired"
+          [(ngModel)]="notes"
+          placeholder="Motivo de desautorización"
+          [class.invalid-control]="!notes">
+
+      </ng-container>
+
+      <br><br>
+
+      ¿{{questionText}} el pedido?
+
+      <mat-divider [style.margin]="'20px -16px 8px -16px'"></mat-divider>
+
+      <div class="fx-row-container fx-end fx-items-center fx-gap-half">
+
+        <button
+          [disabled]="!isReady"
+          [class.btn]="!isReady"
+          [class.btn-warning]="showWarningColor && isReady"
+          [class.btn-action]="!showWarningColor && isReady"
+          (click)="onSubmitButtonClicked()">{{submitText}}</button>
+
+        <button class="btn"
+        (click)="onCloseButtonClicked()">Cancelar</button>
+
+      </div>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

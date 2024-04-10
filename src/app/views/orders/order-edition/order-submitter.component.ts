@@ -9,11 +9,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { ApplicationStatusService, EventInfo } from '@app/core';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { FormatLibrary, sendEvent } from '@app/shared/utils';
+import { sendEvent } from '@app/shared/utils';
 
 import { EmptyOrder, Order } from '@app/models';
+
+import { OrderConfirmSubmitModalEventType, OrderSubmitType } from './order-confirm-submit-modal.component';
 
 
 export enum OrderSubmitterEventType {
@@ -23,6 +23,7 @@ export enum OrderSubmitterEventType {
   CANCEL_BUTTON_CLICKED       = 'OrderSubmitterComponent.Event.CancelButtonClicked',
   APPLY_BUTTON_CLICKED        = 'OrderSubmitterComponent.Event.ApplyButtonClicked',
   AUTHORIZE_BUTTON_CLICKED    = 'OrderSubmitterComponent.Event.AuthorizeButtonClicked',
+  DEAUTHORIZE_BUTTON_CLICKED  = 'OrderSubmitterComponent.Event.DeauthorizeButtonClicked',
 }
 
 @Component({
@@ -48,9 +49,16 @@ export class OrderSubmitterComponent {
 
   @Output() orderSubmitterEvent = new EventEmitter<EventInfo>();
 
+  confirmModalMode: OrderSubmitType  = null;
 
-  constructor(private appStatus: ApplicationStatusService,
-              private messageBox: MessageBoxService) { }
+
+  constructor(private appStatus: ApplicationStatusService) { }
+
+
+  get hasActions(): boolean {
+    return this.order.actions.can.update || this.order.actions.can.apply ||
+           this.order.actions.can.authorize || this.order.actions.can.deauthorize;
+  }
 
 
   onCreateButtonClicked() {
@@ -72,61 +80,61 @@ export class OrderSubmitterComponent {
 
 
   onCancelButtonClicked() {
-    this.confirmCancel();
+    this.confirmModalMode = 'Cancel';
   }
 
 
-  onSendToButtonClicked() {
-    this.confirmSendTo();
+  onApplyButtonClicked() {
+    this.confirmModalMode = 'Apply';
   }
 
 
   onAuthorizeButtonClicked() {
-    this.confirmAuthorize();
+    this.confirmModalMode = 'Authorize';
   }
 
 
-  private confirmCancel() {
-    const message = `Esta operación eliminará el pedido <strong> ${this.order.orderData.orderNumber} </strong>
-                    <br><br>¿Elimino el pedido?`;
-    this.messageBox.confirm(message, 'Eliminar pedido', 'DeleteCancel')
-      .firstValue()
-      .then(x => {
-        if (x) {
-          sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.CANCEL_BUTTON_CLICKED);
-        }
-      });
+  onDeauthorizeButtonClicked() {
+    this.confirmModalMode = 'Desauthorize';
   }
 
 
-  private confirmSendTo() {
-    const message = `Esta operación enviará el pedido <strong> ${this.order.orderData.orderNumber} </strong> ` +
-                    `a almacen para ser procesado. <br><br>¿Aplico el pedido?`;
+  onOrderConfirmSubmitModalEvent(event: EventInfo){
+    switch (event.type as OrderConfirmSubmitModalEventType) {
+      case OrderConfirmSubmitModalEventType.CLOSE_BUTTON_CLICKED:
+        this.confirmModalMode = null;
+        return;
 
-    this.messageBox.confirm(message, 'Aplicar pedido')
-      .firstValue()
-      .then(x => {
-        if (x) {
-          sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.APPLY_BUTTON_CLICKED);
-        }
-      });
+      case OrderConfirmSubmitModalEventType.SUBMIT_BUTTON_CLICKED:
+        this.validateActionConfirmedToEmit(event.payload.notes ?? null);
+        this.confirmModalMode = null;
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
-  private confirmAuthorize() {
-    const message = `Esta operación autorizará el pedido <strong> ${this.order.orderData.orderNumber} </strong> ` +
-                    `del cliente <strong>${this.order.orderData.customer.name}</strong> con adeudo de ` +
-                    `<strong class="warning-text">` +
-                    FormatLibrary.numberWithCommas(this.order.customerCredit.totalDebt, '1.2-2') +
-                    `</strong><br><br>¿Autorizo el pedido?`;
-
-    this.messageBox.confirm(message, 'Autorizar pedido', 'DeleteCancel')
-      .firstValue()
-      .then(x => {
-        if (x) {
-          sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.AUTHORIZE_BUTTON_CLICKED);
-        }
-      });
+  private validateActionConfirmedToEmit(notes: string) {
+    switch (this.confirmModalMode) {
+      case 'Cancel':
+        sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.CANCEL_BUTTON_CLICKED);
+        return;
+      case 'Apply':
+        sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.APPLY_BUTTON_CLICKED);
+        return;
+      case 'Authorize':
+        sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.AUTHORIZE_BUTTON_CLICKED);
+        return;
+      case 'Desauthorize':
+        sendEvent(this.orderSubmitterEvent, OrderSubmitterEventType.DEAUTHORIZE_BUTTON_CLICKED, { notes });
+        return;
+      default:
+        console.log(`Unhandled user interface action ${this.confirmModalMode}`);
+        return;
+    }
   }
 
 }
