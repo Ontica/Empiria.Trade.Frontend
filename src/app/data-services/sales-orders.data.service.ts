@@ -115,6 +115,17 @@ export class SalesOrdersDataService {
   }
 
 
+
+  deauthorizeOrder(orderUID: string, notes: string): EmpObservable<Order> {
+    Assertion.assertValue(orderUID, 'orderUID');
+    Assertion.assertValue(notes, 'notes');
+
+    const path = `v4/trade/sales/orders/${orderUID}/deauthorize`;
+
+    return this.http.post<Order>(path, {notes});
+  }
+
+
   supplyOrder(orderUID: string): EmpObservable<Order> {
     Assertion.assertValue(orderUID, 'orderUID');
 

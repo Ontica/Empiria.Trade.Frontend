@@ -197,6 +197,7 @@ export interface OrderActions {
     cancel: boolean;
     apply: boolean;
     authorize: boolean;
+    deauthorize: boolean;
     editPacking: boolean;
     closePacking: boolean;
     editShipping: boolean;
@@ -218,6 +219,7 @@ export const EmptyOrderActions: OrderActions = {
     cancel: false,
     apply: false,
     authorize: false,
+    deauthorize: false,
     editPacking: false,
     closePacking: false,
     editShipping: false,

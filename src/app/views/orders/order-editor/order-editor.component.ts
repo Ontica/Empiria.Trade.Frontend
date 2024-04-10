@@ -18,10 +18,11 @@ import { EmptyOrder, Order, OrderFields, mapOrderFieldsFromOrder } from '@app/mo
 import { OrderEditionEventType } from '../order-edition/order-edition.component';
 
 export enum OrderEditorEventType {
-  ORDER_UPDATED    = 'OrderEditorComponent.Event.OrderUpdated',
-  ORDER_APPLIED    = 'OrderEditorComponent.Event.OrderApplied',
-  ORDER_AUTHORIZED = 'OrderEditorComponent.Event.OrderAuthorize',
-  ORDER_CANCELED   = 'OrderEditorComponent.Event.OrderCanceled',
+  ORDER_UPDATED      = 'OrderEditorComponent.Event.OrderUpdated',
+  ORDER_APPLIED      = 'OrderEditorComponent.Event.OrderApplied',
+  ORDER_AUTHORIZED   = 'OrderEditorComponent.Event.OrderAuthorize',
+  ORDER_DEAUTHORIZED = 'OrderEditorComponent.Event.OrderDeauthorize',
+  ORDER_CANCELED     = 'OrderEditorComponent.Event.OrderCanceled',
 }
 
 @Component({
@@ -62,6 +63,12 @@ export class OrderEditorComponent {
         this.authorizeOrder(event.payload.orderUID);
         return;
 
+      case OrderEditionEventType.DEAUTHORIZE_ORDER:
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        Assertion.assertValue(event.payload.notes, 'event.payload.notes');
+        this.deauthorizeOrder(event.payload.orderUID, event.payload.notes);
+        return;
+
       case OrderEditionEventType.CANCEL_ORDER:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         this.cancelOrder(event.payload.orderUID);
@@ -100,6 +107,16 @@ export class OrderEditorComponent {
     this.salesOrdersData.authorizeOrder(orderUID)
       .firstValue()
       .then(x => sendEvent(this.orderEditorEvent, OrderEditorEventType.ORDER_AUTHORIZED, { order: x }))
+      .finally(() => this.submitted = false);
+  }
+
+
+  deauthorizeOrder(orderUID: string, notes: string) {
+    this.submitted = true;
+
+    this.salesOrdersData.deauthorizeOrder(orderUID, notes)
+      .firstValue()
+      .then(x => sendEvent(this.orderEditorEvent, OrderEditorEventType.ORDER_DEAUTHORIZED, { order: x }))
       .finally(() => this.submitted = false);
   }
 

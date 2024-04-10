@@ -38,11 +38,12 @@ import { OrderSummaryComponent, OrderSummaryEventType } from './order-summary.co
 
 
 export enum OrderEditionEventType {
-  CREATE_ORDER    = 'OrderEditionComponent.Event.CreateOrder',
-  UPDATE_ORDER    = 'OrderEditionComponent.Event.UpdateOrder',
-  APPLY_ORDER     = 'OrderEditionComponent.Event.ApplyOrder',
-  AUTHORIZE_ORDER = 'OrderEditionComponent.Event.AuthorizeOrder',
-  CANCEL_ORDER    = 'OrderEditionComponent.Event.CancelOrder',
+  CREATE_ORDER      = 'OrderEditionComponent.Event.CreateOrder',
+  UPDATE_ORDER      = 'OrderEditionComponent.Event.UpdateOrder',
+  APPLY_ORDER       = 'OrderEditionComponent.Event.ApplyOrder',
+  AUTHORIZE_ORDER   = 'OrderEditionComponent.Event.AuthorizeOrder',
+  DEAUTHORIZE_ORDER = 'OrderEditionComponent.Event.DeauthorizeOrder',
+  CANCEL_ORDER      = 'OrderEditionComponent.Event.CancelOrder',
 }
 
 @Component({
@@ -195,7 +196,10 @@ export class OrderEditionComponent implements OnChanges, OnDestroy {
       case OrderSubmitterEventType.AUTHORIZE_BUTTON_CLICKED:
         this.emitEvent(OrderEditionEventType.AUTHORIZE_ORDER, this.orderForEdition.orderData.uid);
         return;
-
+      case OrderSubmitterEventType.DEAUTHORIZE_BUTTON_CLICKED:
+        sendEvent(this.orderEditionEvent, OrderEditionEventType.DEAUTHORIZE_ORDER,
+          { orderUID: this.orderForEdition.orderData.uid, notes: event.payload.notes });
+        return;
       case OrderSubmitterEventType.CANCEL_BUTTON_CLICKED:
         this.emitEvent(OrderEditionEventType.CANCEL_ORDER, this.orderForEdition.orderData.uid);
         return;
