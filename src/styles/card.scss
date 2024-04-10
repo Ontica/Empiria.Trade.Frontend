@@ -25,6 +25,10 @@
   min-height: 76px;
   padding: 16px;
 
+  &.no-hint {
+    min-height: 55px;
+  }
+
   .card-title {
     flex: 1 1 auto;
     color: $title-color;

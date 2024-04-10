@@ -19,6 +19,8 @@ export class CardComponent {
 
   @Input() hint = 'Card hint';
 
+  @Input() showHint = true;
+
   @Input() disableClose = false;
 
   @Input() showCardHeaderFlat = false;
