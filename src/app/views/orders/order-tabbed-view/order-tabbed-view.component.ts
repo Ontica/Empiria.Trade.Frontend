@@ -73,12 +73,13 @@ export class OrderTabbedViewComponent implements OnChanges {
   }
 
 
-  onOrderEditorEvent(event: EventInfo): void {
+  onOrderEditorEvent(event: EventInfo) {
     switch (event.type as OrderEditorEventType) {
 
       case OrderEditorEventType.ORDER_UPDATED:
       case OrderEditorEventType.ORDER_APPLIED:
       case OrderEditorEventType.ORDER_AUTHORIZED:
+      case OrderEditorEventType.ORDER_DEAUTHORIZED:
         sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_UPDATED, event.payload);
         return;
 
