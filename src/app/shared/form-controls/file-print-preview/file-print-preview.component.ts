@@ -36,13 +36,13 @@ export class FilePrintPreviewComponent implements OnChanges {
   }
 
 
-  open(url, type) {
+  open(url, type, width?: number, height?: number) {
     if (!this.validUrl(url)) {
       return;
     }
 
     if (type === MediaType.html || type === FileType.HTML) {
-      this.openWindowCenter(url);
+      this.openWindowCenter(url, width ?? 1100, height ?? 600);
       return;
     }
 

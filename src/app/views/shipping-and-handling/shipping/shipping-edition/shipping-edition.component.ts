@@ -187,11 +187,11 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
         return;
 
       case ShippingOrdersSubmitterEventType.PRINT_SHIPPING_LABELS_CLICKED:
-        this.openPrintViewer(this.shipping.shippingData.shippingLabelsMedia);
+        this.openPrintViewer(this.shipping.shippingData.shippingLabelsMedia, 'Label');
         return;
 
       case ShippingOrdersSubmitterEventType.PRINT_ORDERS_CLICKED:
-        this.openPrintViewer(this.shipping.shippingData.billingsMedia);
+        this.openPrintViewer(this.shipping.shippingData.billingsMedia, 'Order');
         return;
 
       default:
@@ -226,7 +226,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
       case ShippingOrdersTableEventType.PRINT_ORDER:
         Assertion.assertValue(event.payload.media, 'event.payload.media');
-        this.openPrintViewer(event.payload.media);
+        this.openPrintViewer(event.payload.media, 'Order');
         return;
 
       default:
@@ -265,7 +265,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
       case ShippingOrdersModalEventType.PRINT_ORDER:
         Assertion.assertValue(event.payload.media, 'event.payload.media');
-        this.openPrintViewer(event.payload.media);
+        this.openPrintViewer(event.payload.media, 'Order');
         return;
 
       default:
@@ -658,7 +658,12 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
   }
 
 
-  private openPrintViewer(media: MediaBase) {
+  private openPrintViewer(media: MediaBase, type: 'Label' | 'Order') {
+    if (type === 'Label') {
+      this.filePrintPreview.open(media.url, media.mediaType, 400, 600);
+      return;
+    }
+
     this.filePrintPreview.open(media.url, media.mediaType);
   }
 
