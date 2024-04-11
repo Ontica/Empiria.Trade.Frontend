@@ -660,7 +660,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
   private openPrintViewer(media: MediaBase, type: 'Label' | 'Order') {
     if (type === 'Label') {
-      this.filePrintPreview.open(media.url, media.mediaType, 400, 600);
+      this.filePrintPreview.open(media.url, media.mediaType, 700, 750);
       return;
     }
 
