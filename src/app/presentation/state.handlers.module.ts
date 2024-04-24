@@ -15,7 +15,7 @@ import { AppStatusPresentationHandler } from './app-data/app-status.presentation
 
 import { AccessControlPresentationHandler } from './security-management/access-control.presentation.handler';
 
-import { ProductsPresentationHandler } from './trade/products.presentation.handler';
+import { CataloguesPresentationHandler } from './trade/catalogues.presentation.handler';
 
 @NgModule({
 
@@ -23,12 +23,12 @@ import { ProductsPresentationHandler } from './trade/products.presentation.handl
     MainLayoutPresentationHandler,
     AppStatusPresentationHandler,
     AccessControlPresentationHandler,
-    ProductsPresentationHandler,
+    CataloguesPresentationHandler,
 
     { provide: STATE_HANDLERS, useExisting: MainLayoutPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AppStatusPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AccessControlPresentationHandler, multi: true },
-    { provide: STATE_HANDLERS, useExisting: ProductsPresentationHandler, multi: true },
+    { provide: STATE_HANDLERS, useExisting: CataloguesPresentationHandler, multi: true },
   ]
 
 })

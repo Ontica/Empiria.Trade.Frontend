@@ -32,6 +32,13 @@ export class ContactsDataService {
   }
 
 
+  getWarehousemen(): EmpObservable<Identifiable[]> {
+    const path = 'v4/trade/contacts/warehousemen';
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
   getCustomersWithContacts(keywords: string): EmpObservable<Customer[]> {
     Assertion.assertValue(keywords, 'keywords');
 

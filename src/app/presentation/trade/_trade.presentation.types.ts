@@ -23,7 +23,7 @@ export type TradeEffects = '';
 
 /* Selectors */
 
-import { SelectorType as ProductsStateSelector } from './products.presentation.handler';
-export { SelectorType as ProductsStateSelector } from './products.presentation.handler';
+import { SelectorType as CataloguesStateSelector } from './catalogues.presentation.handler';
+export { SelectorType as CataloguesStateSelector } from './catalogues.presentation.handler';
 
-export type TradeSelectors = ProductsStateSelector;
+export type TradeSelectors = CataloguesStateSelector;

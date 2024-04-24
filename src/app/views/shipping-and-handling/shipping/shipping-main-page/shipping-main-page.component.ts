@@ -182,7 +182,7 @@ export class ShippingMainPageComponent implements OnInit, OnDestroy {
 
 
   private setShippingData(data: ShippingData[], queryExecuted: boolean = true) {
-    // TODO: remove this
+    // TODO: remove this when ready in the backend
     data.forEach(x => {
       x.shippingMethod = DefaultShippingMethod,
       x.shippingID = x.parcelSupplier.name + ' - ' + x.shippingGuide;

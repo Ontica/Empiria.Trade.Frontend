@@ -11,21 +11,23 @@ import { EmpObservable } from '@app/core';
 
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
+import { InventoryOrdersDataService } from '@app/data-services';
+
 
 export enum SelectorType {
-  DEFAULT = 'Trade.Products.Selectors.Default',
+  INVENTORY_ORDER_TYPES = 'Trade.Products.Selectors.InventoryOrderTypes.List',
 }
 
 
 const initialState: StateValues = [
-
+  { key: SelectorType.INVENTORY_ORDER_TYPES, value: [] },
 ];
 
 
 @Injectable()
-export class ProductsPresentationHandler extends AbstractPresentationHandler {
+export class CataloguesPresentationHandler extends AbstractPresentationHandler {
 
-  constructor() {
+  constructor(private inventoryData: InventoryOrdersDataService) {
     super({
       initialState,
       selectors: SelectorType,
@@ -35,6 +37,12 @@ export class ProductsPresentationHandler extends AbstractPresentationHandler {
 
   select<U>(selectorType: SelectorType, params?: any): EmpObservable<U> {
     switch (selectorType) {
+
+      case SelectorType.INVENTORY_ORDER_TYPES: {
+        const provider = () => this.inventoryData.getInventoryOrderTypes();
+
+        return super.selectFirst<U>(selectorType, provider);
+      }
 
       default:
         return super.select<U>(selectorType, params);
