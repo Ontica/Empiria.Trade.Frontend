@@ -80,7 +80,7 @@
 }
 
 .mat-mdc-tab-body-content {
-  padding: 16px 24px;
+  padding: 16px 20px;
 }
 
 .mat-mdc-tab:not(.mat-mdc-tab-disabled) .mdc-tab-indicator__content--underline,
@@ -195,18 +195,18 @@ table.mat-mdc-table {
     }
 
     &:first-of-type {
-      padding-left: $grid-entry-padding-vertical;
+      padding-left: $grid-entry-padding-vertical-first;
     }
 
     &:last-of-type {
-      padding-right: $grid-entry-padding-vertical !important;
+      padding-right: $grid-entry-padding-vertical-first !important;
     }
 
     &.column-action {
       text-align: center;
       width: $grid-row-height !important;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
+      padding-top: 2px;
+      padding-bottom: 2px;
       padding-right: $grid-entry-padding-vertical;
     }
   }
@@ -219,20 +219,20 @@ table.mat-mdc-table {
     line-height: $font-size-grid;
 
     &:first-of-type {
-      padding-left: $grid-entry-padding-vertical;
+      padding-left: $grid-entry-padding-vertical-first;
     }
 
     &.mat-mdc-cell:last-of-type,
     &.mat-mdc-footer-cell:last-of-type {
-      padding-right: $grid-entry-padding-vertical;
+      padding-right: $grid-entry-padding-vertical-first;
       width: auto;
     }
 
     &.column-action {
       text-align: center;
       width: $grid-row-height !important;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
+      padding-top: 2px;
+      padding-bottom: 2px;
       padding-right: $grid-entry-padding-vertical;
       vertical-align: middle;
     }
@@ -289,7 +289,7 @@ table.mat-mdc-table {
       height: $grid-header-height !important;
 
       th {
-        color: $primary-color;
+        color: $grid-header-color;
         font-weight: 700;
       }
 
@@ -507,6 +507,10 @@ table.mat-mdc-table.emp-designer {
     margin: 0 0.75rem;
     height: $control-height;
   }
+
+  &.white {
+    border-top-color: rgba(255, 255, 255, 0.45);
+  }
 }
 
 //
@@ -515,7 +519,7 @@ table.mat-mdc-table.emp-designer {
 
 .mat-accordion .mat-expansion-panel:last-of-type,
 .mat-accordion .mat-expansion-panel:first-of-type {
-  border-radius: 0!important;
+  border-radius: 0 !important;
 }
 
 .mat-expansion-panel-header {
@@ -694,20 +698,21 @@ table.mat-mdc-table.emp-designer {
 }
 
 .mat-mdc-menu-content,
+.mat-mdc-menu-content .mat-mdc-menu-item .mdc-list-item__primary-text,
 .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
   font-size: 9pt !important;
 }
 
 .mat-mdc-menu-item.selected {
-  background: lighten($primary-color, 65%)!important;
-  color: $primary-color!important;
+  background: lighten($primary-color, 65%) !important;
+  color: $primary-color !important;
 
   .mat-mdc-menu-item-text {
-    font-weight: 600!important;
+    font-weight: 600 !important;
   }
 
   &:hover {
-    background: lighten($primary-color, 60%)!important;
+    background: lighten($primary-color, 60%) !important;
   }
 }
 
@@ -780,14 +785,14 @@ table.mat-mdc-table.emp-designer {
   }
 
   .mdc-form-field > label {
-    font-size: 8.5pt;
+    font-size: 8pt;
+    line-height: 9pt;
     margin-right: 8px;
-    line-height: 16px;
   }
 
   &.no-label .mdc-form-field > label {
-    margin-right: 0;
     display: none;
+    margin-right: 0;
   }
 
   &.mat-warn.text-light .mdc-form-field > label,
@@ -866,5 +871,5 @@ table.mat-mdc-table.emp-designer {
 //
 
 .mat-drawer-backdrop.mat-drawer-shown {
-  background-color: $backdrop-color!important;
+  background-color: $backdrop-color !important;
 }

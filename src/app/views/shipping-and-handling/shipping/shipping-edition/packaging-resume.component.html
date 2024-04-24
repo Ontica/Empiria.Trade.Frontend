@@ -1,7 +1,7 @@
 <div class="fx-row-container fx-space-between fx-items-center info-container"
   [style.margin-right.px]="8" [style.min-height.px]="46">
 
-  <div class="fx-row-container md-fx-column-container fx-item fx-space-between">
+  <div class="fx-row-container sm-fx-column-container fx-item fx-space-between">
     <div class="fx-item-none" *ngIf="showOrdersTotals"><strong>No. pedidos:</strong>&nbsp; {{ totals.ordersCount }} &nbsp; &nbsp;</div>
     <div class="fx-item-none" *ngIf="showOrdersTotals"><strong>Importe:</strong>&nbsp; {{ totals.ordersTotal | empDecimal}} &nbsp; &nbsp;</div>
     <div class="fx-item-none"><strong>Paquetes:</strong>&nbsp; {{ totals.totalPackages }} &nbsp; &nbsp;</div>
