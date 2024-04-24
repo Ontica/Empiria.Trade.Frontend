@@ -13,11 +13,7 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
-import { ProductsModule } from '../products/products.module';
-import { ProductsFilterComponent } from './products-seeker/products-filter.component';
-import { ProductsSeekerComponent } from './products-seeker/products-seeker.component';
-import { ProductsSelectorComponent } from './products-selector/products-selector.component';
-import { ProductsTableComponent } from './products-seeker/products-table.component';
+
 
 
 @NgModule({
@@ -30,17 +26,12 @@ import { ProductsTableComponent } from './products-seeker/products-table.compone
     SharedModule,
 
     ReportsControlsModule,
-    ProductsModule,
   ],
   declarations: [
-    ProductsFilterComponent,
-    ProductsSeekerComponent,
-    ProductsSelectorComponent,
-    ProductsTableComponent,
+
   ],
   exports: [
-    ProductsSeekerComponent,
-    ProductsSelectorComponent,
+
   ],
 })
 export class InventoryModule { }

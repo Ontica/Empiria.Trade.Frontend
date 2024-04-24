@@ -13,7 +13,7 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { CustomersModule } from '../customers/customers.module';
-import { InventoryModule } from '../inventory/inventory.module';
+import { ProductsModule } from '../products/products.module';
 import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
 import { ShippingAndHandlingModule } from '../shipping-and-handling/shipping-and-handling.module';
 
@@ -45,7 +45,7 @@ import { OrderEditorComponent } from './order-editor/order-editor.component';
     SharedModule,
 
     CustomersModule,
-    InventoryModule,
+    ProductsModule,
     ReportsControlsModule,
     ShippingAndHandlingModule,
   ],

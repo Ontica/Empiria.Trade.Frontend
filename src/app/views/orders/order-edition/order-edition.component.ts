@@ -24,9 +24,8 @@ import { SalesOrdersDataService } from '@app/data-services';
 import { DefaultOrderStatus, EmptyOrder, Order, OrderData, OrderItem,
          ProductSelection, mapOrderFieldsFromOrder, mapOrderItemFromProductSelection } from '@app/models';
 
-import {
-  ProductsSelectorEventType
-} from '@app/views/inventory/products-selector/products-selector.component';
+
+import { ProductsSelectorEventType } from '@app/views/products/products-selector/products-selector.component';
 
 import { OrderSubmitterEventType } from './order-submitter.component';
 
