@@ -11,6 +11,8 @@ export * from './_access-control.data.service';
 
 export * from './contacts.data.service';
 
+export * from './inventory-orders.data.service';
+
 export * from './packing.data.service';
 
 export * from './products.data.service';

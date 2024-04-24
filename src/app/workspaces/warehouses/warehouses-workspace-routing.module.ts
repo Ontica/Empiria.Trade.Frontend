@@ -13,6 +13,10 @@ import { ROUTES } from '@app/main-layout';
 
 import { DefaultComponent } from '@app/shared/components/default-component/default.component';
 
+import {
+  InventoryOrdersMainPageComponent
+} from './inventory-orders-main-page/inventory-orders-main-page.component';
+
 import { SalesMainPageComponent } from '@app/views/sales/sales-main-page.component';
 
 import {
@@ -34,7 +38,7 @@ const routes: Routes = [
   {
     data: { permission: ROUTES.almacenes_inventario.permission },
     path: ROUTES.almacenes_inventario.path,
-    component: DefaultComponent,
+    component: InventoryOrdersMainPageComponent,
   },
   {
     data: { permission: ROUTES.almacenes_almacenamiento.permission },

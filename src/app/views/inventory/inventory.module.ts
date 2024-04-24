@@ -14,7 +14,8 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
 
-
+import { InventoryOrdersExplorerComponent } from './inventory-orders-explorer/inventory-orders-explorer.component';
+import { InventoryOrdersFilterComponent } from './inventory-orders-explorer/inventory-orders-filter.component';
 
 @NgModule({
   imports: [
@@ -28,10 +29,11 @@ import { ReportsControlsModule } from '../_reports-controls/reports-controls.mod
     ReportsControlsModule,
   ],
   declarations: [
-
+    InventoryOrdersExplorerComponent,
+    InventoryOrdersFilterComponent,
   ],
   exports: [
-
+    InventoryOrdersExplorerComponent,
   ],
 })
 export class InventoryModule { }

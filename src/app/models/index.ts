@@ -32,6 +32,8 @@ export * from './edition-command';
 
 export * from './imported-data';
 
+export * from './inventory-order';
+
 export * from './order';
 
 export * from './packing';

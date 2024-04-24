@@ -7,17 +7,30 @@
 
 import { NgModule } from '@angular/core';
 
-import { SalesModule } from '@app/views/sales/sales.module';
-
 import { WarehousesWorkspaceRoutingModule } from './warehouses-workspace-routing.module';
+
+import { InventoryModule } from '@app/views/inventory/inventory.module';
+import { SalesModule } from '@app/views/sales/sales.module';
+import { ShippingAndHandlingModule } from '@app/views/shipping-and-handling/shipping-and-handling.module';
+
+import {
+  InventoryOrdersMainPageComponent
+} from './inventory-orders-main-page/inventory-orders-main-page.component';
 
 
 @NgModule({
 
   imports: [
-    SalesModule,
     WarehousesWorkspaceRoutingModule,
-  ]
+
+    InventoryModule,
+    SalesModule,
+    ShippingAndHandlingModule,
+  ],
+
+  declarations: [
+    InventoryOrdersMainPageComponent,
+  ],
 
 })
 export class WarehousesWorkspaceModule { }
