@@ -13,8 +13,8 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { InventoryOrdersDataService } from '@app/data-services';
 
-import { EmptyInventoryOrderDataTable, InventoryOrderDataTable, InventoryOrderDescriptor, InventoryOrderQuery,
-         mapToInventoryOrderDataTable } from '@app/models';
+import { EmptyInventoryOrderDataTable, InventoryOrderDataTable, InventoryOrderDescriptor,
+         InventoryOrderQuery } from '@app/models';
 
 import { InventoryOrdersFilterEventType } from './inventory-orders-filter.component';
 
@@ -56,6 +56,7 @@ export class InventoryOrdersExplorerComponent implements OnInit {
     switch (event.type as InventoryOrdersFilterEventType) {
       case InventoryOrdersFilterEventType.SEARCH_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
+        this.setInventoryOrdersData(EmptyInventoryOrderDataTable, false);
         this.searchInventoryOrders(event.payload.query as InventoryOrderQuery);
         return;
 
@@ -88,20 +89,21 @@ export class InventoryOrdersExplorerComponent implements OnInit {
 
     this.inventoryOrdersData.searchInventoryOrders(query)
       .firstValue()
-      .then(x => this.resolveSearchInventoryOrders(mapToInventoryOrderDataTable(query, x), true))
+      .then(x => this.resolveSearchInventoryOrders(x))
       .finally(() => this.isLoading = false);
   }
 
 
-  private resolveSearchInventoryOrders(data: InventoryOrderDataTable, queryExecuted: boolean) {
-    this.setInventoryOrdersData(data, queryExecuted);
-    this.setText();
+  private resolveSearchInventoryOrders(data: InventoryOrderDataTable) {
+    this.setInventoryOrdersData(data, true);
   }
 
 
   private setInventoryOrdersData(data: InventoryOrderDataTable, queryExecuted: boolean = true) {
     this.inventoryOrderData = data;
     this.queryExecuted = queryExecuted;
+
+    this.setText();
   }
 
 

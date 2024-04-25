@@ -7,8 +7,7 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableColumnType, DataTableEntry,
-         DataTableQuery } from './_data-table';
+import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './_data-table';
 
 
 export enum InventoryStatus {
@@ -31,41 +30,6 @@ export interface InventoryOrderQuery extends DataTableQuery {
   status: string;
   keywords: string;
 }
-
-
-
-export const InventoryOrderColumns: DataTableColumn[] = [
-  {
-    field: 'inventoryOrderTypeName',
-    title: 'Tipo',
-    type: DataTableColumnType.text,
-  },
-  {
-    field: 'inventoryOrderNo',
-    title: 'Número de orden',
-    type: DataTableColumnType.text_link,
-  },
-  {
-    field: 'responsibleName',
-    title: 'Responsable',
-    type: DataTableColumnType.text,
-  },
-  {
-    field: 'assignedToName',
-    title: 'Asignado a',
-    type: DataTableColumnType.text,
-  },
-  {
-    field: 'postingTime',
-    title: 'Fecha',
-    type: DataTableColumnType.date,
-  },
-  {
-    field: 'inventoryStatus',
-    title: 'Estatus',
-    type: DataTableColumnType.text_tag,
-  },
-];
 
 
 export interface InventoryOrderDescriptor extends DataTableEntry {
@@ -97,16 +61,6 @@ export const EmptyInventoryOrderQuery: InventoryOrderQuery = {
 
 export const EmptyInventoryOrderDataTable: InventoryOrderDataTable = {
   query: EmptyInventoryOrderQuery,
-  columns: InventoryOrderColumns,
+  columns: [],
   entries: [],
 };
-
-
-export function mapToInventoryOrderDataTable(query: InventoryOrderQuery,
-                                             entries: InventoryOrderDescriptor[]): InventoryOrderDataTable {
-  return {
-    query,
-    columns: InventoryOrderColumns,
-    entries,
-  };
-}

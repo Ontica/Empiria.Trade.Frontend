@@ -42,6 +42,7 @@
         [showControls]="false"
         [dataTable]="inventoryOrderData"
         [executed]="queryExecuted"
+        [notQueryExecutedText]="isLoading ? 'Cargando...' : 'No se ha invocado la consulta.'"
         (dataTableEvent)="onInventoryOrdersDataTableEvent($event)">
 
       </emp-ng-data-table>
