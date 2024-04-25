@@ -34,6 +34,8 @@ export * from './imported-data';
 
 export * from './inventory-order';
 
+export * from './money-accounts';
+
 export * from './order';
 
 export * from './packing';

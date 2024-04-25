@@ -124,6 +124,12 @@ export const AdministracionSistemaViews: View[] = [
     permission: ROUTES.administracion_panel_de_control.permission,
   },
   {
+    name: 'AdministracionSistemaViews.CuentasYCajas',
+    title: 'Cuentas y cajas',
+    url: ROUTES.administracion_cuentas_y_cajas.fullpath,
+    permission: ROUTES.administracion_cuentas_y_cajas.permission,
+  },
+  {
     name: 'AdministracionSistemaViews.CreditoClientes',
     title: 'Crédito a clientes',
     url: ROUTES.administracion_credito_a_clientes.fullpath,

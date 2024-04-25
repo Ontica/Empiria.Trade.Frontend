@@ -20,6 +20,8 @@ import { AccessControlMainPageComponent } from './access-control-main-page/acces
 
 import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-main-page.component';
 
+import { MoneyAccountsModule } from '@app/views/money-accounts/money-accounts.module';
+
 
 @NgModule({
 
@@ -32,6 +34,8 @@ import { ControlPanelMainPageComponent } from './control-panel-main-page/control
 
     SystemManagementWorkspaceRoutingModule,
     AccessControlModule,
+
+    MoneyAccountsModule,
   ],
 
   declarations: [

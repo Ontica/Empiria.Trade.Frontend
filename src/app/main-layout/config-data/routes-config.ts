@@ -191,6 +191,13 @@ export const ROUTES = {
     fullpath: '/administracion/panel-de-control',
   },
 
+  administracion_cuentas_y_cajas: {
+    permission: PERMISSIONS.NOT_REQUIRED,
+    parent: 'administracion',
+    path: 'cuentas-y-cajas',
+    fullpath: '/administracion/cuentas-y-cajas',
+  },
+
   administracion_credito_a_clientes: {
     permission: PERMISSIONS.BLOCKED,
     parent: 'administracion',

@@ -11,11 +11,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ROUTES } from '@app/main-layout';
 
-import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-main-page.component';
-
 import { DefaultComponent } from '@app/shared/components/default-component/default.component';
 
+import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-main-page.component';
+
 import { AccessControlMainPageComponent } from './access-control-main-page/access-control-main-page.component';
+
+import { MoneyAccountsMainPageComponent } from '@app/views/money-accounts/money-accounts-main-page/money-accounts-main-page.component';
 
 
 const routes: Routes = [
@@ -23,6 +25,11 @@ const routes: Routes = [
     data: { permission: ROUTES.administracion_panel_de_control.permission },
     path: ROUTES.administracion_panel_de_control.path,
     component: ControlPanelMainPageComponent,
+  },
+  {
+    data: { permission: ROUTES.administracion_cuentas_y_cajas.permission },
+    path: ROUTES.administracion_cuentas_y_cajas.path,
+    component: MoneyAccountsMainPageComponent,
   },
   {
     data: { permission: ROUTES.administracion_credito_a_clientes.permission },

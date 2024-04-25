@@ -17,6 +17,8 @@ import { ContactsDataService } from './contacts.data.service';
 
 import { InventoryOrdersDataService } from './inventory-orders.data.service';
 
+import { MoneyAccountsDataService } from './money-accounts.data.service';
+
 import { PackingDataService } from './packing.data.service';
 
 import { ProductsDataService } from './products.data.service';
@@ -33,6 +35,7 @@ import { ShippingDataService } from './shipping-data.service';
     FileDownloadService,
     ContactsDataService,
     InventoryOrdersDataService,
+    MoneyAccountsDataService,
     PackingDataService,
     ProductsDataService,
     SalesOrdersDataService,

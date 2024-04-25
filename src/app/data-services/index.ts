@@ -13,6 +13,8 @@ export * from './contacts.data.service';
 
 export * from './inventory-orders.data.service';
 
+export * from './money-accounts.data.service';
+
 export * from './packing.data.service';
 
 export * from './products.data.service';
