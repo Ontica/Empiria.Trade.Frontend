@@ -192,24 +192,24 @@ export const ROUTES = {
   },
 
   administracion_credito_a_clientes: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'administracion',
-    path: 'credito_a_clientes',
-    fullpath: '/administracion/credito_a_clientes',
+    path: 'credito-a-clientes',
+    fullpath: '/administracion/credito-a-clientes',
   },
 
   administracion_pago_a_proveedores: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'administracion',
-    path: 'pago_a_proveedores',
-    fullpath: '/administracion/pago_a_proveedores',
+    path: 'pago-a-proveedores',
+    fullpath: '/administracion/pago-a-proveedores',
   },
 
   administracion_conciliacion_bancaria: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'administracion',
-    path: 'conciliacion_bancaria',
-    fullpath: '/administracion/conciliacion_bancaria',
+    path: 'conciliacion-bancaria',
+    fullpath: '/administracion/conciliacion-bancaria',
   },
 
   administracion_control_de_accesos: {

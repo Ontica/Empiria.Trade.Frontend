@@ -14,6 +14,8 @@ export enum PERMISSIONS {
 
   NOT_REQUIRED = 'permission-not-required',
 
+  BLOCKED = 'permission-blocked',
+
   //
   // APP PERMISSIONS
   //
@@ -35,5 +37,6 @@ export const PERMISSION_NOT_REQUIRED = PERMISSIONS.NOT_REQUIRED;
 
 export function getAllPermissions() {
   return Object.keys(PERMISSIONS)
-               .map(key => PERMISSIONS[key]);
+               .map(key => PERMISSIONS[key])
+               .filter(permission => permission !== PERMISSIONS.BLOCKED);
 }
