@@ -7,6 +7,8 @@
 
 import { NgModule } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
+
 import { WarehousesWorkspaceRoutingModule } from './warehouses-workspace-routing.module';
 
 import { InventoryModule } from '@app/views/inventory/inventory.module';
@@ -21,6 +23,8 @@ import {
 @NgModule({
 
   imports: [
+    CommonModule,
+
     WarehousesWorkspaceRoutingModule,
 
     InventoryModule,

@@ -16,6 +16,13 @@ import { ReportsControlsModule } from '../_reports-controls/reports-controls.mod
 
 import { InventoryOrdersExplorerComponent } from './inventory-orders-explorer/inventory-orders-explorer.component';
 import { InventoryOrdersFilterComponent } from './inventory-orders-explorer/inventory-orders-filter.component';
+import { InventoryOrderCreatorComponent } from './inventory-order/inventory-order-creator.component';
+import { InventoryOrderEditorComponent } from './inventory-order/inventory-order-editor.component';
+import { InventoryOrderHeaderComponent } from './inventory-order/inventory-order-header.component';
+import { InventoryOrderTabbedViewComponent } from './inventory-order-tabbed-view/inventory-order-tabbed-view.component';
+import { InventoryOrderItemsEditionComponent } from './inventory-order-entries/inventory-order-items-edition.component';
+import { InventoryOrderItemsTableComponent } from './inventory-order-entries/inventory-order-items-table.component';
+
 
 @NgModule({
   imports: [
@@ -31,9 +38,17 @@ import { InventoryOrdersFilterComponent } from './inventory-orders-explorer/inve
   declarations: [
     InventoryOrdersExplorerComponent,
     InventoryOrdersFilterComponent,
+    InventoryOrderCreatorComponent,
+    InventoryOrderEditorComponent,
+    InventoryOrderHeaderComponent,
+    InventoryOrderTabbedViewComponent,
+    InventoryOrderItemsEditionComponent,
+    InventoryOrderItemsTableComponent,
   ],
   exports: [
     InventoryOrdersExplorerComponent,
+    InventoryOrderCreatorComponent,
+    InventoryOrderTabbedViewComponent,
   ],
 })
 export class InventoryModule { }

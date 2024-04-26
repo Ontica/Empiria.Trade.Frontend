@@ -5,59 +5,61 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { EventInfo } from '@app/core';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { sendEvent } from '@app/shared/utils';
 
-import { InventoryOrdersDataService } from '@app/data-services';
-
-import { EmptyInventoryOrderDataTable, InventoryOrderDataTable, InventoryOrderDescriptor,
-         InventoryOrderQuery } from '@app/models';
+import { EmptyInventoryOrder, EmptyInventoryOrderDataTable, InventoryOrder, InventoryOrderDataTable } from '@app/models';
 
 import { InventoryOrdersFilterEventType } from './inventory-orders-filter.component';
 
 import { DataTableEventType } from '@app/views/_reports-controls/data-table/data-table.component';
 
 
+export enum InventoryOrdersExplorerEventType {
+  CREATE_CLICKED = 'InventoryOrdersExplorerComponent.Event.CreateClicked',
+  SEARCH_CLICKED = 'InventoryOrdersExplorerComponent.Event.SearchClicked',
+  SELECT_CLICKED = 'InventoryOrdersExplorerComponent.Event.SelectClicked',
+}
+
 @Component({
   selector: 'emp-trade-inventory-orders-explorer',
   templateUrl: './inventory-orders-explorer.component.html',
 })
-export class InventoryOrdersExplorerComponent implements OnInit {
+export class InventoryOrdersExplorerComponent implements OnChanges {
 
-  inventoryOrderData: InventoryOrderDataTable = Object.assign({}, EmptyInventoryOrderDataTable);
+  @Input() inventoryOrdersData: InventoryOrderDataTable = Object.assign({}, EmptyInventoryOrderDataTable);
+
+  @Input() inventoryOrderSelected: InventoryOrder = EmptyInventoryOrder;
+
+  @Input() isLoading = false;
+
+  @Input() queryExecuted = false;
+
+  @Output() inventoryOrdersExplorerEvent = new EventEmitter<EventInfo>();
 
   cardHint = 'Seleccionar los filtros';
 
-  isLoading = false;
 
-  queryExecuted = false;
-
-
-  constructor(private inventoryOrdersData: InventoryOrdersDataService,
-              private messageBox: MessageBoxService) {
-
-  }
-
-
-  ngOnInit() {
-    this.setText();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.inventoryOrderData) {
+      this.setText();
+    }
   }
 
 
   onCreateOrderClicked() {
-    this.messageBox.showInDevelopment('Agregar orden de inventario');
+    sendEvent(this.inventoryOrdersExplorerEvent, InventoryOrdersExplorerEventType.CREATE_CLICKED);
   }
 
 
   onInventoryOrdersFilterEvent(event: EventInfo) {
     switch (event.type as InventoryOrdersFilterEventType) {
       case InventoryOrdersFilterEventType.SEARCH_CLICKED:
-        Assertion.assertValue(event.payload.query, 'event.payload.query');
-        this.setInventoryOrdersData(EmptyInventoryOrderDataTable, false);
-        this.searchInventoryOrders(event.payload.query as InventoryOrderQuery);
+        sendEvent(this.inventoryOrdersExplorerEvent, InventoryOrdersExplorerEventType.SEARCH_CLICKED,
+          event.payload);
         return;
 
       default:
@@ -70,11 +72,8 @@ export class InventoryOrdersExplorerComponent implements OnInit {
   onInventoryOrdersDataTableEvent(event: EventInfo) {
     switch (event.type as DataTableEventType) {
       case DataTableEventType.ENTRY_CLICKED:
-        Assertion.assertValue(event.payload.entry, 'event.payload.entry');
-
-        this.messageBox.showInDevelopment('Detalle de orden de inventario',
-          event.payload.entry as InventoryOrderDescriptor);
-
+        sendEvent(this.inventoryOrdersExplorerEvent, InventoryOrdersExplorerEventType.SELECT_CLICKED,
+          event.payload);
         return;
 
       default:
@@ -84,36 +83,13 @@ export class InventoryOrdersExplorerComponent implements OnInit {
   }
 
 
-  private searchInventoryOrders(query: InventoryOrderQuery) {
-    this.isLoading = true;
-
-    this.inventoryOrdersData.searchInventoryOrders(query)
-      .firstValue()
-      .then(x => this.resolveSearchInventoryOrders(x))
-      .finally(() => this.isLoading = false);
-  }
-
-
-  private resolveSearchInventoryOrders(data: InventoryOrderDataTable) {
-    this.setInventoryOrdersData(data, true);
-  }
-
-
-  private setInventoryOrdersData(data: InventoryOrderDataTable, queryExecuted: boolean = true) {
-    this.inventoryOrderData = data;
-    this.queryExecuted = queryExecuted;
-
-    this.setText();
-  }
-
-
   private setText() {
     if (!this.queryExecuted) {
       this.cardHint = 'Seleccionar los filtros';
       return;
     }
 
-    this.cardHint = `${this.inventoryOrderData.entries.length} registros encontrados`;
+    this.cardHint = `${this.inventoryOrdersData.entries.length} registros encontrados`;
   }
 
 }

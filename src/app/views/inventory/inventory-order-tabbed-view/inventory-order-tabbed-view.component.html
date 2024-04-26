@@ -1,0 +1,28 @@
+<emp-ng-card
+  [title]="title"
+  [hint]="hint"
+  (cardClose)="onClose()" >
+
+  <mat-tab-group mat-stretch-tabs="false" [(selectedIndex)]="selectedTabIndex" >
+
+    <mat-tab label="Información">
+
+      <emp-trade-inventory-order-editor
+        [inventoryOrder]="inventoryOrder">
+
+      </emp-trade-inventory-order-editor>
+
+    </mat-tab>
+
+    <mat-tab label="Movimientos">
+
+      <emp-trade-inventory-order-items-edition
+        [inventoryOrderItems]="inventoryOrder.items">
+
+      </emp-trade-inventory-order-items-edition>
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+</emp-ng-card>

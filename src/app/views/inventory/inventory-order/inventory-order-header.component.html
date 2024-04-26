@@ -1,0 +1,132 @@
+<form [formGroup]="form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+  autocomplete="off" class="form-section">
+
+  <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+  <div class="fx-column-container fx-gap-half">
+
+    <div class="fx-row-container">
+
+        <div class="fx-item-half">
+          <label>Tipo de inventario:</label>
+          <emp-ng-select
+            formControlName="inventoryOrderType"
+            [items]="inventoryTypesList"
+            [showError]="formHelper.isControlInvalid(form.controls.inventoryOrderType)">
+          </emp-ng-select>
+        </div>
+
+        <div class="fx-item-half">
+          <label>Número de orden:</label>
+          <input type="text" class="text-box"
+            formControlName="inventoryOrderNo"
+            [class.invalid-control]="formHelper.isControlInvalid(form.controls.inventoryOrderNo)">
+        </div>
+
+    </div>
+
+    <div class="fx-row-container">
+
+      <div class="fx-item-half">
+        <label>Responsable:</label>
+          <emp-ng-select
+            formControlName="responsible"
+            [items]="warehousemenList"
+            [showError]="formHelper.isControlInvalid(form.controls.responsible)">
+          </emp-ng-select>
+      </div>
+
+      <div class="fx-item-half">
+        <label>Asignado a:</label>
+          <emp-ng-select
+            formControlName="assignedTo"
+            [items]="warehousemenList"
+            [showError]="formHelper.isControlInvalid(form.controls.assignedTo)">
+          </emp-ng-select>
+      </div>
+
+    </div>
+
+    <div class="fx-row-container">
+
+      <div class="fx-item">
+        <label>Notas:</label>
+        <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
+          formControlName="notes"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.notes)">
+        </textarea>
+      </div>
+
+    </div>
+
+  </div>
+
+  <mat-divider class="horizontal">
+
+  </mat-divider>
+
+  <div #rowFooter class="fx-row-container">
+
+    <ng-container *ngIf="!isSaved">
+
+      <div class="fx-item fx-end fx-items-center">
+
+        <button
+          [class.btn]="!formHelper.isFormReady(form)"
+          [class.btn-action]="formHelper.isFormReady(form)"
+          (click)="onSubmitButtonClicked()">
+          Agregar
+        </button>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isSaved">
+
+      <div class="fx-item fx-items-center" *ngIf="editionMode">
+
+        <button
+          type="button" class="btn-warning"
+          (click)="onDeleteButtonClicked()">
+          Eliminar
+        </button>
+
+      </div>
+
+      <div class="fx-item fx-end fx-items-center">
+
+        <ng-container *ngIf="editionMode">
+
+          <button
+            [class.btn]="!formHelper.isFormReady(form)"
+            [class.btn-action]="formHelper.isFormReady(form)"
+            (click)="onSubmitButtonClicked()">
+            Guardar
+          </button>
+
+          <button
+            class="btn-base uppercase"
+            (click)="enableEditor(false)">
+            Descartar Cambios
+          </button>
+
+        </ng-container>
+
+        <ng-container *ngIf="!editionMode">
+
+          <button
+            class="btn-action"
+            (click)="enableEditor(true)">
+            Editar
+          </button>
+
+        </ng-container>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+
+</form>

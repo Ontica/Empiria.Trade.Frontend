@@ -2,7 +2,12 @@
 
   <div class="primary priority" [class.std-hide]="displayTabbedView">
 
-    <emp-trade-inventory-orders-explorer>
+    <emp-trade-inventory-orders-explorer
+      [inventoryOrdersData]="inventoryOrdersData"
+      [inventoryOrderSelected]="inventoryOrderSelected"
+      [isLoading]="isLoading"
+      [queryExecuted]="queryExecuted"
+      (inventoryOrdersExplorerEvent)=" onInventoryOrdersExplorerEvent($event)">
 
     </emp-trade-inventory-orders-explorer>
 
@@ -10,7 +15,18 @@
 
   <div class="secondary" *ngIf="displayTabbedView">
 
+    <emp-trade-inventory-order-tabbed-view
+      [inventoryOrder]="inventoryOrderSelected"
+      (inventoryOrderTabbedViewEvent)="onInventoryOrderTabbedViewEvent($event)">
+
+    </emp-trade-inventory-order-tabbed-view>
 
   </div>
 
 </div>
+
+
+<emp-trade-inventory-order-creator *ngIf="displayCreator"
+  (inventoryOrderCreatorEvent)="onInventoryOrderCreatorEvent($event)">
+
+</emp-trade-inventory-order-creator>

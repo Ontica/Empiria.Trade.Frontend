@@ -1,0 +1,15 @@
+<div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
+
+    <emp-ng-spinner #spinner [visible]="submitted">
+
+    </emp-ng-spinner>
+
+    <div class="section-title"> Información general del auxiliar </div>
+
+      <emp-trade-inventory-order-header
+        [inventoryOrder]="inventoryOrder"
+        (inventoryOrderHeaderEvent)="onInventoryOrderHeaderEvent($event)">
+
+      </emp-trade-inventory-order-header>
+
+</div>

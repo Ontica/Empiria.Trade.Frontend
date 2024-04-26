@@ -1,0 +1,29 @@
+<div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
+
+  <emp-ng-spinner #spinner [visible]="submitted">
+
+  </emp-ng-spinner>
+
+  <div class="fx-row-container fx-gap fx-end fx-items-center">
+
+    <div class="fx-item-none">
+
+      <button type="button"
+        class="btn-action"
+        (click)="onAddItemClicked()">
+        Agregar movimiento
+      </button>
+
+    </div>
+
+  </div>
+
+  <br>
+
+  <emp-trade-inventory-order-items-table  class="fx-item"
+    [inventoryOrderItems]="inventoryOrderItems"
+    (inventoryOrderItemsTableEvent)="onInventoryOrderItemsTableEvent($event)">
+
+  </emp-trade-inventory-order-items-table>
+
+</div>

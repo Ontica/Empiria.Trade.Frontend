@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Identifiable } from '@app/core';
+import { DateString, Empty, Identifiable } from '@app/core';
 
 import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './_data-table';
 
@@ -51,6 +51,43 @@ export interface InventoryOrderDataTable extends DataTable {
 }
 
 
+export interface InventoryOrder {
+  uid: string;
+  inventoryOrderType: Identifiable;
+  inventoryOrderNo: string;
+  responsible: Identifiable;
+  assignedTo: Identifiable;
+  notes: string;
+  closingTime: DateString;
+  postingTime: DateString;
+  postedBy: Identifiable;
+  status: InventoryStatus;
+  items: [];
+}
+
+
+export interface InventoryOrderFields {
+  inventoryOrderTypeUID: string;
+  inventoryOrderNo: string;
+  responsibleUID: string;
+  assignedToUID: string;
+  notes: string;
+}
+
+
+export interface InventoryOrderItem {
+  inventoryOrderUID: string;
+  uid: string;
+  notes: string;
+  vendorProduct: Identifiable;
+  warehouseBin: Identifiable;
+  quantity: number;
+  inputQuantity: number;
+  outputQuantity: number;
+  status: InventoryStatus;
+}
+
+
 export const EmptyInventoryOrderQuery: InventoryOrderQuery = {
   inventoryOrderTypeUID: '',
   assignedToUID: '',
@@ -63,4 +100,19 @@ export const EmptyInventoryOrderDataTable: InventoryOrderDataTable = {
   query: EmptyInventoryOrderQuery,
   columns: [],
   entries: [],
+};
+
+
+export const EmptyInventoryOrder: InventoryOrder = {
+  uid: '',
+  inventoryOrderType: Empty,
+  inventoryOrderNo: '',
+  responsible: Empty,
+  assignedTo: Empty,
+  notes: '',
+  closingTime: '',
+  postingTime: '',
+  postedBy: Empty,
+  status: null,
+  items: [],
 };

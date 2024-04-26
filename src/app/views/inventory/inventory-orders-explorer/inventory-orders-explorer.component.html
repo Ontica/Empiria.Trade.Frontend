@@ -40,7 +40,8 @@
 
       <emp-ng-data-table class="fx-item"
         [showControls]="false"
-        [dataTable]="inventoryOrderData"
+        [dataTable]="inventoryOrdersData"
+        [selectedUID]="inventoryOrderSelected.uid"
         [executed]="queryExecuted"
         [notQueryExecutedText]="isLoading ? 'Cargando...' : 'No se ha invocado la consulta.'"
         (dataTableEvent)="onInventoryOrdersDataTableEvent($event)">
