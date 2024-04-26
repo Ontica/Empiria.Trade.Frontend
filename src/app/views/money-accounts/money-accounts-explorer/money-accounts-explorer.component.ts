@@ -5,52 +5,56 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { EventInfo } from '@app/core';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { sendEvent } from '@app/shared/utils';
 
-import { MoneyAccountsDataService } from '@app/data-services';
-
-import { EmptyMoneyAccountDataTable, MoneyAccountDataTable, MoneyAccountQuery } from '@app/models';
+import { EmptyMoneyAccount, EmptyMoneyAccountDataTable, MoneyAccount,
+         MoneyAccountsDataTable } from '@app/models';
 
 import { DataTableEventType } from '@app/views/_reports-controls/data-table/data-table.component';
 
 import { MoneyAccountsFilterEventType } from './money-accounts-filter.component';
 
-
 enum MoneyAccountsQueryType {
   All = 'all',
 }
 
+export enum MoneyAccountsExplorerEventType {
+  CREATE_CLICKED = 'MoneyAccountsExplorerComponent.Event.CreateClicked',
+  SEARCH_CLICKED = 'MoneyAccountsExplorerComponent.Event.SearchClicked',
+  SELECT_CLICKED = 'MoneyAccountsExplorerComponent.Event.SelectClicked',
+}
 
 @Component({
   selector: 'emp-trade-money-accounts-explorer',
   templateUrl: './money-accounts-explorer.component.html',
 })
-export class MoneyAccountsExplorerComponent implements OnInit {
+export class MoneyAccountsExplorerComponent implements OnChanges {
 
-  queryType: MoneyAccountsQueryType = MoneyAccountsQueryType.All;
+  @Input() queryType: MoneyAccountsQueryType = MoneyAccountsQueryType.All;
+
+  @Input() data: MoneyAccountsDataTable = EmptyMoneyAccountDataTable;
+
+  @Input() moneyAccountSelected: MoneyAccount = EmptyMoneyAccount;
+
+  @Input() isLoading = false;
+
+  @Input() queryExecuted = false;
+
+  @Output() moneyAccountsExplorerEvent = new EventEmitter<EventInfo>();
 
   cardHint = 'Seleccionar los filtros';
 
-  data: MoneyAccountDataTable = Object.assign({}, EmptyMoneyAccountDataTable);
 
-  isLoading = false;
-
-  queryExecuted = false;
-
-
-  constructor(private moneyAccountsData: MoneyAccountsDataService,
-              private messageBox: MessageBoxService) {
-
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.data) {
+      this.setText();
+    }
   }
 
-
-  ngOnInit() {
-    this.setText();
-  }
 
   get titleText(): string {
     return 'cuentas y cajas';
@@ -63,16 +67,15 @@ export class MoneyAccountsExplorerComponent implements OnInit {
 
 
   onCreateOrderClicked() {
-    this.messageBox.showInDevelopment(`Agregar ${this.buttonText}`);
+    sendEvent(this.moneyAccountsExplorerEvent, MoneyAccountsExplorerEventType.CREATE_CLICKED);
   }
 
 
   onMoneyAccountsFilterEvent(event: EventInfo) {
     switch (event.type as MoneyAccountsFilterEventType) {
       case MoneyAccountsFilterEventType.SEARCH_CLICKED:
-        Assertion.assertValue(event.payload.query, 'event.payload.query');
-        this.setMoneyAccountsData(EmptyMoneyAccountDataTable, false);
-        this.searchMoneyAccounts(event.payload.query as MoneyAccountQuery);
+        sendEvent(this.moneyAccountsExplorerEvent, MoneyAccountsExplorerEventType.SEARCH_CLICKED,
+          event.payload);
         return;
 
       default:
@@ -85,39 +88,14 @@ export class MoneyAccountsExplorerComponent implements OnInit {
   onDataTableEvent(event: EventInfo) {
     switch (event.type as DataTableEventType) {
       case DataTableEventType.ENTRY_CLICKED:
-        Assertion.assertValue(event.payload.entry, 'event.payload.entry');
-
-        this.messageBox.showInDevelopment(`Detalle de ${this.buttonText}`, event.payload.entry);
-
+        sendEvent(this.moneyAccountsExplorerEvent, MoneyAccountsExplorerEventType.SELECT_CLICKED,
+          event.payload);
         return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
-  }
-
-
-  private searchMoneyAccounts(query: MoneyAccountQuery) {
-    this.isLoading = true;
-
-    this.moneyAccountsData.searchMoneyAccounts(query)
-      .firstValue()
-      .then(x => this.resolveSearchMoneyAccounts(x, true))
-      .finally(() => this.isLoading = false);
-  }
-
-
-  private resolveSearchMoneyAccounts(data: MoneyAccountDataTable, queryExecuted: boolean) {
-    this.setMoneyAccountsData(data, queryExecuted);
-  }
-
-
-  private setMoneyAccountsData(data: MoneyAccountDataTable, queryExecuted: boolean = true) {
-    this.data = data;
-    this.queryExecuted = queryExecuted;
-
-    this.setText();
   }
 
 

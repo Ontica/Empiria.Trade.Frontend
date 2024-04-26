@@ -35,7 +35,7 @@ export class InventoryOrdersDataService {
 
 
   getInventoryOrder(inventoryOrderUID: string): EmpObservable<InventoryOrder> {
-    Assertion.assertValue(inventoryOrderUID, 'orderUID');
+    Assertion.assertValue(inventoryOrderUID, 'inventoryOrderUID');
 
     const path = `v4/trade/inventory/orders/${inventoryOrderUID}`;
 

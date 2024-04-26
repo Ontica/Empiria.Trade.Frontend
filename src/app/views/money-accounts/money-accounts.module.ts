@@ -17,6 +17,12 @@ import { ReportsControlsModule } from '../_reports-controls/reports-controls.mod
 import { MoneyAccountsMainPageComponent } from './money-accounts-main-page/money-accounts-main-page.component';
 import { MoneyAccountsExplorerComponent } from './money-accounts-explorer/money-accounts-explorer.component';
 import { MoneyAccountsFilterComponent } from './money-accounts-explorer/money-accounts-filter.component';
+import { MoneyAccountTabbedViewComponent } from './money-account-tabbed-view/money-account-tabbed-view.component';
+import { MoneyAccountHeaderComponent } from './money-account/money-account-header.component';
+import { MoneyAccountCreatorComponent } from './money-account/money-account-creator.component';
+import { MoneyAccountEditorComponent } from './money-account/money-account-editor.component';
+import { MoneyAccountTransactionsEditionComponent } from './money-account-transactions/money-account-transactions-edition.component';
+import { MoneyAccountTransactionsTableComponent } from './money-account-transactions/money-account-transactions-table.component';
 
 @NgModule({
   imports: [
@@ -33,6 +39,12 @@ import { MoneyAccountsFilterComponent } from './money-accounts-explorer/money-ac
     MoneyAccountsMainPageComponent,
     MoneyAccountsExplorerComponent,
     MoneyAccountsFilterComponent,
+    MoneyAccountTabbedViewComponent,
+    MoneyAccountHeaderComponent,
+    MoneyAccountCreatorComponent,
+    MoneyAccountEditorComponent,
+    MoneyAccountTransactionsEditionComponent,
+    MoneyAccountTransactionsTableComponent,
   ],
   exports: [
     MoneyAccountsMainPageComponent,

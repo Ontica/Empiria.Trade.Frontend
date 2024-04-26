@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { MoneyAccountDataTable, MoneyAccountQuery } from '@app/models';
+import { MoneyAccount, MoneyAccountsDataTable, MoneyAccountQuery } from '@app/models';
 
 
 @Injectable()
@@ -32,12 +32,21 @@ export class MoneyAccountsDataService {
   }
 
 
-  searchMoneyAccounts(query: MoneyAccountQuery): EmpObservable<MoneyAccountDataTable> {
+  searchMoneyAccounts(query: MoneyAccountQuery): EmpObservable<MoneyAccountsDataTable> {
     Assertion.assertValue(query, 'query');
 
     const path = 'v4/trade/financial/money-accounts/search';
 
-    return this.http.post<MoneyAccountDataTable>(path, query);
+    return this.http.post<MoneyAccountsDataTable>(path, query);
+  }
+
+
+  getMoneyAccount(moneyAccountUID: string): EmpObservable<MoneyAccount> {
+    Assertion.assertValue(moneyAccountUID, 'moneyAccountUID');
+
+    const path = `v4/trade/financial/money-accounts/${moneyAccountUID}`;
+
+    return this.http.get<MoneyAccount>(path);
   }
 
 }

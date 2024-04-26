@@ -11,7 +11,8 @@ import { EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyInventoryOrder, EmptyInventoryOrderDataTable, InventoryOrder, InventoryOrderDataTable } from '@app/models';
+import { EmptyInventoryOrder, EmptyInventoryOrderDataTable, InventoryOrder,
+         InventoryOrderDataTable } from '@app/models';
 
 import { InventoryOrdersFilterEventType } from './inventory-orders-filter.component';
 
@@ -30,7 +31,7 @@ export enum InventoryOrdersExplorerEventType {
 })
 export class InventoryOrdersExplorerComponent implements OnChanges {
 
-  @Input() inventoryOrdersData: InventoryOrderDataTable = Object.assign({}, EmptyInventoryOrderDataTable);
+  @Input() inventoryOrdersData: InventoryOrderDataTable = EmptyInventoryOrderDataTable;
 
   @Input() inventoryOrderSelected: InventoryOrder = EmptyInventoryOrder;
 

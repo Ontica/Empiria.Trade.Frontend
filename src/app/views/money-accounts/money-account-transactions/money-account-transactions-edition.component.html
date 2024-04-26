@@ -1,0 +1,29 @@
+<div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
+
+  <emp-ng-spinner #spinner [visible]="submitted">
+
+  </emp-ng-spinner>
+
+  <div class="fx-row-container fx-gap fx-end fx-items-center">
+
+    <div class="fx-item-none">
+
+      <button type="button"
+        class="btn-action"
+        (click)="onAddTransactionClicked()">
+        Agregar transacción
+      </button>
+
+    </div>
+
+  </div>
+
+  <br>
+
+  <emp-trade-money-account-transactions-table  class="fx-item"
+    [moneyAccountTransactions]="moneyAccountTransactions"
+    (moneyAccountTransactionsEvent)="onMoneyAccountTransactionsEvent($event)">
+
+  </emp-trade-money-account-transactions-table>
+
+</div>

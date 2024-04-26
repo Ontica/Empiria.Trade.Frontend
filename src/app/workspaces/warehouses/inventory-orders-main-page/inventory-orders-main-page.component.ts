@@ -48,6 +48,7 @@ export class InventoryOrdersMainPageComponent {
 
   displayCreator = false;
 
+
   constructor(private inventoryData: InventoryOrdersDataService) { }
 
 

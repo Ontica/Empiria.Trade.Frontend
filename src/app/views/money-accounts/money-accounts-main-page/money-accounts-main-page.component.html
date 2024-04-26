@@ -1,8 +1,17 @@
+<emp-ng-spinner #spinner [visible]="isLoadingSelection">
+
+</emp-ng-spinner>
+
 <div class="explorer">
 
   <div class="primary priority" [class.std-hide]="displayTabbedView">
 
-    <emp-trade-money-accounts-explorer>
+    <emp-trade-money-accounts-explorer
+      [data]="data"
+      [moneyAccountSelected]="moneyAccountSelected"
+      [isLoading]="isLoading"
+      [queryExecuted]="queryExecuted"
+      (moneyAccountsExplorerEvent)=" onMoneyAccountsExplorerEvent($event)">
 
     </emp-trade-money-accounts-explorer>
 
@@ -10,7 +19,18 @@
 
   <div class="secondary" *ngIf="displayTabbedView">
 
+    <emp-trade-money-account-tabbed-view
+      [moneyAccount]="moneyAccountSelected"
+      (moneyAccountTabbedViewEvent)="onMoneyAccountTabbedViewEvent($event)">
+
+    </emp-trade-money-account-tabbed-view>
 
   </div>
 
 </div>
+
+
+<emp-trade-money-account-creator *ngIf="displayCreator"
+  (moneyAccountCreatorEvent)="onMoneyAccountCreatorEvent($event)">
+
+</emp-trade-money-account-creator>
