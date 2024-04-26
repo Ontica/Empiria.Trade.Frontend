@@ -9,8 +9,9 @@ import { NgModule } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
-import { WarehousesWorkspaceRoutingModule } from './warehouses-workspace-routing.module';
+import { SharedModule } from '@app/shared/shared.module';
 
+import { WarehousesWorkspaceRoutingModule } from './warehouses-workspace-routing.module';
 import { InventoryModule } from '@app/views/inventory/inventory.module';
 import { SalesModule } from '@app/views/sales/sales.module';
 import { ShippingAndHandlingModule } from '@app/views/shipping-and-handling/shipping-and-handling.module';
@@ -25,8 +26,9 @@ import {
   imports: [
     CommonModule,
 
-    WarehousesWorkspaceRoutingModule,
+    SharedModule,
 
+    WarehousesWorkspaceRoutingModule,
     InventoryModule,
     SalesModule,
     ShippingAndHandlingModule,
