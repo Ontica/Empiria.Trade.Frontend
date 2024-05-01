@@ -7,15 +7,19 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { DateStringLibrary, EventInfo } from '@app/core';
+import { Assertion, DateStringLibrary, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
 import { EmptyInventoryOrder, InventoryOrder } from '@app/models';
 
+import { InventoryOrderEditorEventType } from '../inventory-order/inventory-order-editor.component';
+
 
 export enum InventoryOrderTabbedViewEventType {
-  CLOSE_BUTTON_CLICKED = 'InventoryOrderTabbedViewComponent.Event.CloseButtonClicked',
+  CLOSE_BUTTON_CLICKED    = 'InventoryOrderTabbedViewComponent.Event.CloseButtonClicked',
+  INVENTORY_ORDER_UPDATED = 'InventoryOrderTabbedViewComponent.Event.InventoryOrderUpdated',
+  INVENTORY_ORDER_DELETED = 'InventoryOrderTabbedViewComponent.Event.InventoryOrderDeleted',
 }
 
 @Component({
@@ -42,6 +46,27 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
 
   onClose() {
     sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.CLOSE_BUTTON_CLICKED);
+  }
+
+
+  onInventoryOrderEditorEvent(event: EventInfo) {
+    switch (event.type as InventoryOrderEditorEventType) {
+      case InventoryOrderEditorEventType.ORDER_UPDATED:
+        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
+        sendEvent(this.inventoryOrderTabbedViewEvent,
+          InventoryOrderTabbedViewEventType.INVENTORY_ORDER_UPDATED, event.payload);
+        return;
+
+      case InventoryOrderEditorEventType.ORDER_DELETED:
+        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
+        sendEvent(this.inventoryOrderTabbedViewEvent,
+          InventoryOrderTabbedViewEventType.INVENTORY_ORDER_DELETED, event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 

@@ -63,6 +63,8 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"
       (click)="onUpdateItemClicked(row)"></tr>
+    <tr mat-footer-row *matFooterRowDef="['notFoundMessage']" class="text-not-found"
+      [hidden]="hasOrderItems"></tr>
 
   </table>
 

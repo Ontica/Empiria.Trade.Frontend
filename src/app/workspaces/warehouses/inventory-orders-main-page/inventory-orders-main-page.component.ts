@@ -58,6 +58,14 @@ export class InventoryOrdersMainPageComponent {
         this.displayCreator = false;
         return;
 
+      case InventoryOrderCreatorEventType.INVENTORY_ORDER_CREATED:
+        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
+        this.displayCreator = false;
+        this.setInventoryOrderSelected(event.payload.inventoryOrder as InventoryOrder);
+        this.validateQueryForRefreshInventoryOrders(this.inventoryOrderSelected.inventoryOrderType.uid,
+                                                    this.inventoryOrderSelected.inventoryOrderNo);
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -73,8 +81,9 @@ export class InventoryOrdersMainPageComponent {
 
       case InventoryOrdersExplorerEventType.SEARCH_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
-        this.query = event.payload.query as InventoryOrderQuery;
+        this.query = Object.assign({}, this.query, event.payload.query as InventoryOrderQuery);
         this.clearInventoryOrdersData();
+        this.clearInventoryOrderSelected();
         this.searchInventoryOrders(this.query);
         return;
 
@@ -97,10 +106,43 @@ export class InventoryOrdersMainPageComponent {
         this.clearInventoryOrderSelected();
         return;
 
+      case InventoryOrderTabbedViewEventType.INVENTORY_ORDER_UPDATED:
+        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
+        this.refreshInventoryOrders();
+        this.setInventoryOrderSelected(event.payload.inventoryOrder as InventoryOrder);
+        return;
+
+      case InventoryOrderTabbedViewEventType.INVENTORY_ORDER_DELETED:
+        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
+        this.refreshInventoryOrders();
+        this.clearInventoryOrderSelected();
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private validateQueryForRefreshInventoryOrders(inventoryOrderTypeUID: string, keywords: string) {
+    if (this.query.inventoryOrderTypeUID !== inventoryOrderTypeUID) {
+      const newQuery: InventoryOrderQuery = {
+        inventoryOrderTypeUID,
+        keywords,
+        assignedToUID: '',
+        status: ''
+      };
+
+      this.query = Object.assign({}, this.query, newQuery);
+    }
+
+    this.refreshInventoryOrders();
+  }
+
+
+  private refreshInventoryOrders() {
+    this.searchInventoryOrders(this.query);
   }
 
 
@@ -127,7 +169,6 @@ export class InventoryOrdersMainPageComponent {
 
   private resolveSearchInventoryOrders(data: InventoryOrderDataTable) {
     this.setInventoryOrdersData(data, true);
-    this.clearInventoryOrderSelected();
   }
 
 

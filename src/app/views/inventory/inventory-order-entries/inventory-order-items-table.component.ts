@@ -43,6 +43,11 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
   }
 
 
+  get hasOrderItems(): boolean {
+    return this.inventoryOrderItems.length > 0;
+  }
+
+
   ngOnChanges() {
     this.dataSource = new MatTableDataSource(this.inventoryOrderItems ?? []);
   }

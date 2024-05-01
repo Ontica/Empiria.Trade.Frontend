@@ -5,15 +5,23 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { sendEvent } from '@app/shared/utils';
 
-import { EmptyInventoryOrder, InventoryOrder } from '@app/models';
+import { InventoryOrdersDataService } from '@app/data-services';
+
+import { EmptyInventoryOrder, InventoryOrder, InventoryOrderFields } from '@app/models';
 
 import { InventoryOrderHeaderEventType } from './inventory-order-header.component';
+
+
+export enum InventoryOrderEditorEventType {
+  ORDER_UPDATED = 'InventoryOrderEditorComponent.Event.OrderUpdated',
+  ORDER_DELETED = 'InventoryOrderEditorComponent.Event.OrderDeleted',
+}
 
 @Component({
   selector: 'emp-trade-inventory-order-editor',
@@ -23,12 +31,12 @@ export class InventoryOrderEditorComponent {
 
   @Input() inventoryOrder: InventoryOrder = EmptyInventoryOrder;
 
+  @Output() inventoryOrderEditorEvent = new EventEmitter<EventInfo>();
+
   submitted = false;
 
 
-  constructor(private messageBox: MessageBoxService) {
-
-  }
+  constructor(private inventoryOrdersData: InventoryOrdersDataService) { }
 
 
   onInventoryOrderHeaderEvent(event: EventInfo) {
@@ -39,18 +47,50 @@ export class InventoryOrderEditorComponent {
     switch (event.type as InventoryOrderHeaderEventType) {
       case InventoryOrderHeaderEventType.UPDATE_INVENTORY_ORDER:
         Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
-        this.messageBox.showInDevelopment('Actualizar orden de inventario', event.payload.inventoryOrder);
+        this.updateInventoryOrder(event.payload.inventoryOrder as InventoryOrderFields);
         return;
 
       case InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER:
         Assertion.assertValue(event.payload.inventoryOrderUID, 'event.payload.inventoryOrderUID');
-        this.messageBox.showInDevelopment('Eliminar orden de inventario', event.payload.inventoryOrderUID);
+        this.deleteInventoryOrder();
         return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private updateInventoryOrder(inventoryOrderFields: InventoryOrderFields) {
+    this.submitted = true;
+
+    this.inventoryOrdersData.updateInventoryOrder(this.inventoryOrder.uid, inventoryOrderFields)
+      .firstValue()
+      .then(x => this.resolveUpdateInventoryOrder(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private deleteInventoryOrder() {
+    this.submitted = true;
+
+    this.inventoryOrdersData.deleteInventoryOrder(this.inventoryOrder.uid)
+      .firstValue()
+      .then(x => this.resolveDeleteInventoryOrder(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private resolveUpdateInventoryOrder(inventoryOrder: InventoryOrder) {
+    const payload = { inventoryOrder };
+    sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_UPDATED, payload);
+  }
+
+
+  private resolveDeleteInventoryOrder(inventoryOrder: InventoryOrder) {
+    const payload = { inventoryOrder };
+    sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_DELETED, payload);
   }
 
 }

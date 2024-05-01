@@ -68,7 +68,6 @@ export interface InventoryOrder {
 
 export interface InventoryOrderFields {
   inventoryOrderTypeUID: string;
-  inventoryOrderNo: string;
   responsibleUID: string;
   assignedToUID: string;
   notes: string;

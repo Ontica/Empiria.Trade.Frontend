@@ -118,6 +118,8 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit {
     }
 
     this.formHelper.setDisableForm(this.form, !this.editionMode);
+    FormHelper.setDisableControl(this.form.controls.inventoryOrderNo);
+    FormHelper.setDisableControl(this.form.controls.inventoryOrderType, this.isSaved);
   }
 
 
@@ -167,7 +169,6 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit {
 
     const data: InventoryOrderFields = {
       inventoryOrderTypeUID: formModel.inventoryOrderType ?? '',
-      inventoryOrderNo: formModel.inventoryOrderNo ?? '',
       responsibleUID: formModel.responsible ?? '',
       assignedToUID: formModel.assignedTo ?? '',
       notes: formModel.notes ?? '',

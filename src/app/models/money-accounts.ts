@@ -116,7 +116,7 @@ export const MoneyAccountTransactionColumns: DataTableColumn[] = [
   {
     field: 'creditAmount',
     title: 'Cargo',
-    type: DataTableColumnType.text,
+    type: DataTableColumnType.decimal,
   },
   {
     field: 'debitAmount',

@@ -34,6 +34,7 @@
       </emp-ng-spinner>
 
       <emp-trade-inventory-orders-filter class="fx-item-none"
+        [query]="query"
         (inventoryOrdersFilterEvent)="onInventoryOrdersFilterEvent($event)">
 
       </emp-trade-inventory-orders-filter>

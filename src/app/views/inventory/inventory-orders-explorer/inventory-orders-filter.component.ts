@@ -5,7 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
+         SimpleChanges } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -21,7 +22,7 @@ import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { ContactsDataService } from '@app/data-services';
 
-import { InventoryOrderQuery, InventoryStatusList } from '@app/models';
+import { EmptyInventoryOrderQuery, InventoryOrderQuery, InventoryStatusList } from '@app/models';
 
 
 export enum InventoryOrdersFilterEventType {
@@ -39,7 +40,9 @@ interface InventoryOrdersFilterFormModel extends FormGroup<{
   selector: 'emp-trade-inventory-orders-filter',
   templateUrl: './inventory-orders-filter.component.html',
 })
-export class InventoryOrdersFilterComponent implements OnInit, OnDestroy {
+export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDestroy {
+
+  @Input() query: InventoryOrderQuery = EmptyInventoryOrderQuery;
 
   @Input() queryExecuted: boolean = false;
 
@@ -67,6 +70,13 @@ export class InventoryOrdersFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.query) {
+      this.setFormData();
+    }
+  }
+
+
   ngOnInit() {
     this.loadDataLists();
   }
@@ -78,13 +88,15 @@ export class InventoryOrdersFilterComponent implements OnInit, OnDestroy {
 
 
   onSearchClicked() {
-    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+    if (this.form.valid) {
       const payload = {
         isFormValid: this.form.valid,
         query: this.getFormData(),
       };
 
       sendEvent(this.inventoryOrdersFilterEvent, InventoryOrdersFilterEventType.SEARCH_CLICKED, payload);
+    } else {
+      FormHelper.markFormControlsAsTouched(this.form);
     }
   }
 
@@ -101,7 +113,17 @@ export class InventoryOrdersFilterComponent implements OnInit, OnDestroy {
   }
 
 
-   private loadDataLists() {
+  private setFormData() {
+    this.form.reset({
+      inventoryOrderTypeUID: this.query.inventoryOrderTypeUID,
+      status: this.query.status,
+      assignedToUID: this.query.assignedToUID,
+      keywords: this.query.keywords,
+    });
+  }
+
+
+  private loadDataLists() {
     this.isLoading = true;
 
     combineLatest([

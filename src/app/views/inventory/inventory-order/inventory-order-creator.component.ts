@@ -11,12 +11,16 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { InventoryOrdersDataService } from '@app/data-services';
+
+import { InventoryOrder, InventoryOrderFields } from '@app/models';
 
 import { InventoryOrderHeaderEventType } from './inventory-order-header.component';
 
+
 export enum InventoryOrderCreatorEventType {
-  CLOSE_MODAL_CLICKED = 'InventoryOrderCreatorComponent.Event.CloseModalClicked',
+  CLOSE_MODAL_CLICKED     = 'InventoryOrderCreatorComponent.Event.CloseModalClicked',
+  INVENTORY_ORDER_CREATED = 'InventoryOrderEditorComponent.Event.InventoryOrderCreated',
 }
 
 @Component({
@@ -30,9 +34,7 @@ export class InventoryOrderCreatorComponent {
   submitted = false;
 
 
-  constructor(private messageBox: MessageBoxService) {
-
-  }
+  constructor(private inventoryOrdersData: InventoryOrdersDataService) { }
 
 
   onCloseModalClicked() {
@@ -48,13 +50,30 @@ export class InventoryOrderCreatorComponent {
     switch (event.type as InventoryOrderHeaderEventType) {
       case InventoryOrderHeaderEventType.CREATE_INVENTORY_ORDER:
         Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
-        this.messageBox.showInDevelopment('Agregar orden de inventario', event.payload.inventoryOrder);
+        this.createInventoryOrder(event.payload.inventoryOrder as InventoryOrderFields);
         return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private createInventoryOrder(inventoryOrderFields: InventoryOrderFields) {
+    this.submitted = true;
+
+    this.inventoryOrdersData.createInventoryOrder(inventoryOrderFields)
+      .firstValue()
+      .then(x => this.resolveCreateInventoryOrder(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private resolveCreateInventoryOrder(inventoryOrder: InventoryOrder) {
+    const payload = { inventoryOrder };
+    sendEvent(this.inventoryOrderCreatorEvent, InventoryOrderCreatorEventType.INVENTORY_ORDER_CREATED,
+      payload);
   }
 
 }

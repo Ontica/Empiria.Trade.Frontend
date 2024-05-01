@@ -9,7 +9,8 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { InventoryOrder, InventoryOrderDataTable, InventoryOrderQuery } from '@app/models';
+import { InventoryOrder, InventoryOrderDataTable, InventoryOrderFields,
+         InventoryOrderQuery } from '@app/models';
 
 
 @Injectable()
@@ -40,6 +41,35 @@ export class InventoryOrdersDataService {
     const path = `v4/trade/inventory/orders/${inventoryOrderUID}`;
 
     return this.http.get<InventoryOrder>(path);
+  }
+
+
+  createInventoryOrder(inventoryOrderFields: InventoryOrderFields): EmpObservable<InventoryOrder> {
+    Assertion.assertValue(inventoryOrderFields, 'inventoryOrderFields');
+
+    const path = 'v4/trade/inventory/orders/';
+
+    return this.http.post<InventoryOrder>(path, inventoryOrderFields);
+  }
+
+
+  updateInventoryOrder(inventoryOrderUID: string,
+                       inventoryOrderFields: InventoryOrderFields): EmpObservable<InventoryOrder> {
+    Assertion.assertValue(inventoryOrderUID, 'inventoryOrderUID');
+    Assertion.assertValue(inventoryOrderFields, 'inventoryOrderFields');
+
+    const path = `v4/trade/inventory/orders/${inventoryOrderUID}`;
+
+    return this.http.put<InventoryOrder>(path, inventoryOrderFields);
+  }
+
+
+  deleteInventoryOrder(inventoryOrderUID: string): EmpObservable<InventoryOrder> {
+    Assertion.assertValue(inventoryOrderUID, 'inventoryOrderUID');
+
+    const path = `v4/trade/inventory/orders/${inventoryOrderUID}`;
+
+    return this.http.delete<InventoryOrder>(path);
   }
 
 }
