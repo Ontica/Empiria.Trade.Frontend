@@ -18,7 +18,9 @@
     <mat-tab label="Movimientos">
 
       <emp-trade-inventory-order-items-edition
-        [inventoryOrderItems]="inventoryOrder.items">
+        [inventoryOrderUID]="inventoryOrder.uid"
+        [inventoryOrderItems]="inventoryOrder.items"
+        (inventoryOrderItemsEditionEvent)="onInventoryOrderItemsEditionEvent($event)">
 
       </emp-trade-inventory-order-items-edition>
 

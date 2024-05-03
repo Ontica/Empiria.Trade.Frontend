@@ -15,6 +15,10 @@ import { EmptyInventoryOrder, InventoryOrder } from '@app/models';
 
 import { InventoryOrderEditorEventType } from '../inventory-order/inventory-order-editor.component';
 
+import {
+  InventoryOrderItemsEditionEventType
+} from '../inventory-order-items/inventory-order-items-edition.component';
+
 
 export enum InventoryOrderTabbedViewEventType {
   CLOSE_BUTTON_CLICKED    = 'InventoryOrderTabbedViewComponent.Event.CloseButtonClicked',
@@ -61,6 +65,22 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
         Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
         sendEvent(this.inventoryOrderTabbedViewEvent,
           InventoryOrderTabbedViewEventType.INVENTORY_ORDER_DELETED, event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onInventoryOrderItemsEditionEvent(event: EventInfo) {
+    switch (event.type as InventoryOrderItemsEditionEventType) {
+      case InventoryOrderItemsEditionEventType.ITEM_CREATED:
+      case InventoryOrderItemsEditionEventType.ITEM_DELETED:
+        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
+        sendEvent(this.inventoryOrderTabbedViewEvent,
+          InventoryOrderTabbedViewEventType.INVENTORY_ORDER_UPDATED, event.payload);
         return;
 
       default:

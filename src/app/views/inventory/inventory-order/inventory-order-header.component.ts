@@ -5,7 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
+         SimpleChanges } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -45,7 +46,7 @@ interface InventoryOrderFormModel extends FormGroup<{
   selector: 'emp-trade-inventory-order-header',
   templateUrl: './inventory-order-header.component.html',
 })
-export class InventoryOrderHeaderComponent implements OnChanges, OnInit {
+export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() inventoryOrder: InventoryOrder = EmptyInventoryOrder;
 
@@ -84,6 +85,11 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit {
     if (changes.inventoryOrder && this.isSaved) {
       this.enableEditor(false);
     }
+  }
+
+
+  ngOnDestroy() {
+    this.helper.destroy();
   }
 
 

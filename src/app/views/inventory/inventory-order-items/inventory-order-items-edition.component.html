@@ -1,12 +1,12 @@
-<div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
+<div class="fx-column-container-fill fx-gap-half" [empNgSpinnerHost]="spinner">
 
   <emp-ng-spinner #spinner [visible]="submitted">
 
   </emp-ng-spinner>
 
-  <div class="fx-row-container fx-gap fx-end fx-items-center">
+  <div class="fx-item-none">
 
-    <div class="fx-item-none">
+    <div class="fx-row-container fx-end">
 
       <button type="button"
         class="btn-action"
@@ -18,8 +18,6 @@
 
   </div>
 
-  <br>
-
   <emp-trade-inventory-order-items-table  class="fx-item"
     [inventoryOrderItems]="inventoryOrderItems"
     (inventoryOrderItemsTableEvent)="onInventoryOrderItemsTableEvent($event)">
@@ -27,3 +25,9 @@
   </emp-trade-inventory-order-items-table>
 
 </div>
+
+
+<emp-trade-products-location-selector *ngIf="displayProductLocationSelector"
+  (productsLocationSelectorEvent)="onProductsLocationSelectorEvent($event)">
+
+</emp-trade-products-location-selector>

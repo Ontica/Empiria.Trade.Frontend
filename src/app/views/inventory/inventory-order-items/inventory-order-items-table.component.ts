@@ -18,7 +18,6 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { InventoryOrderItem } from '@app/models';
 
 export enum InventoryOrderItemsTableEventType {
-  UPDATE_ITEM_CLICKED = 'InventoryOrderItemsTableComponent.Event.UpdateItemClicked',
   REMOVE_ITEM_CLICKED = 'InventoryOrderItemsTableComponent.Event.RemoveItemClicked',
 }
 
@@ -32,8 +31,7 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
 
   @Output() inventoryOrderItemsTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumns: string[] = ['vendorProduct', 'warehouseBin', 'status', 'notes',
-    'quantity', 'inputQuantity', 'outputQuantity', 'actionDelete'];
+  displayedColumns: string[] = ['vendorProduct', 'warehouseBin', 'notes', 'quantity', 'actionDelete'];
 
   dataSource: MatTableDataSource<InventoryOrderItem>;
 
@@ -53,14 +51,6 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
   }
 
 
-  onUpdateItemClicked(item: InventoryOrderItem) {
-    if (window.getSelection().toString().length <= 0) {
-      sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.UPDATE_ITEM_CLICKED,
-        { item });
-    }
-  }
-
-
   onDeleteItemClicked(event, item: InventoryOrderItem) {
     event.stopPropagation();
 
@@ -71,7 +61,7 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
       .then(x => {
         if (x) {
           sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED,
-            { item });
+            { inventoryOrderItemUID: item.uid });
         }
       });
   }
@@ -81,11 +71,11 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
     return `
       <table class="confirm-data">
         <tr><td>Producto: </td><td><strong>
-          ${item.vendorProduct.name}
+          ${item.product?.productCode} - ${item.product?.presentation}
         </strong></td></tr>
 
         <tr><td>Almacen: </td><td><strong>
-          ${item.warehouseBin.name}
+          ${item.warehouseBin?.rackDescription} - ${item.warehouseBin?.position} - ${item.warehouseBin?.level}
         </strong></td></tr>
 
         <tr><td class='nowrap'>Cantidad: </td><td><strong>

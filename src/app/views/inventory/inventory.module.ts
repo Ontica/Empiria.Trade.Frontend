@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
+import { ProductsModule } from '../products/products.module';
 import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
 
 import { InventoryOrdersExplorerComponent } from './inventory-orders-explorer/inventory-orders-explorer.component';
@@ -20,8 +21,8 @@ import { InventoryOrderCreatorComponent } from './inventory-order/inventory-orde
 import { InventoryOrderEditorComponent } from './inventory-order/inventory-order-editor.component';
 import { InventoryOrderHeaderComponent } from './inventory-order/inventory-order-header.component';
 import { InventoryOrderTabbedViewComponent } from './inventory-order-tabbed-view/inventory-order-tabbed-view.component';
-import { InventoryOrderItemsEditionComponent } from './inventory-order-entries/inventory-order-items-edition.component';
-import { InventoryOrderItemsTableComponent } from './inventory-order-entries/inventory-order-items-table.component';
+import { InventoryOrderItemsEditionComponent } from './inventory-order-items/inventory-order-items-edition.component';
+import { InventoryOrderItemsTableComponent } from './inventory-order-items/inventory-order-items-table.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { InventoryOrderItemsTableComponent } from './inventory-order-entries/inv
     AngularMaterialModule,
     SharedModule,
 
+    ProductsModule,
     ReportsControlsModule,
   ],
   declarations: [
