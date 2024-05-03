@@ -2,16 +2,16 @@
 <emp-ng-modal-window [config]="{width: '960px'}">
 
   <emp-ng-card
-    title="Buscador de productos"
-    hint='Busque y seleccione los productos a agregar.'
+    title="Buscador de productos para inventario"
+    hint='Busque y seleccione el producto a agregar.'
     (cardClose)="onClose()">
 
     <div class="card-body-padding">
 
       <emp-trade-products-seeker
+        [warehouseBinsList]="warehouseBinsList"
         displayFlat="true"
-        productSeekerQueryType="ProductsForOrder"
-        [order]="orderForQuery"
+        productSeekerQueryType="ProductsForInventory"
         (productsSeekerEvent)="onProductsSeekerEvent($event)">
 
       </emp-trade-products-seeker>

@@ -24,15 +24,12 @@ export enum ProductsSelectorEventType {
 @Component({
   selector: 'emp-trade-products-selector',
   templateUrl: './products-selector.component.html',
-  styleUrls: ['./products-selector.component.scss'],
 })
 export class ProductsSelectorComponent implements OnChanges {
 
   @Input() order: Order = null;
 
   @Output() productsSelectorEvent = new EventEmitter<EventInfo>();
-
-  displaySeeker = true;
 
   orderForQuery: OrderFields = null;
 

@@ -35,4 +35,13 @@ export class ProductsDataService {
     return this.http.post<ProductDescriptor[]>(path, query);
   }
 
+
+  searchProductsForInventory(query: ProductQuery): EmpObservable<ProductDescriptor[]> {
+    Assertion.assertValue(query, 'query');
+
+    const path = 'v4/trade/products/search-products-for-inventory';
+
+    return this.http.post<ProductDescriptor[]>(path, query);
+  }
+
 }

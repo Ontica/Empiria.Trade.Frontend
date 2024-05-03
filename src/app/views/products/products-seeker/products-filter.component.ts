@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -34,6 +34,10 @@ interface ProductsFilterFormModel extends FormGroup<{
 export class ProductsFilterComponent implements AfterViewInit {
 
   @ViewChild("inputKeywords") inputKeywordsField: ElementRef;
+
+  @Input() displayOnStock = false;
+
+  @Input() resultText = '';
 
   @Output() productsFilterEvent = new EventEmitter<EventInfo>();
 

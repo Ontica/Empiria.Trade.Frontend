@@ -21,11 +21,15 @@ import { ProductAttributesComponent } from './product-data/product-attributes.co
 import { ProductDataComponent } from './product-data/product-data.component';
 import { ProductImageComponent } from './product-data/product-image.component';
 import { ProductPresentationsComponent } from './product-data/product-presentations.component';
+import { ProductLocationComponent } from './product-data/product-location.component';
 
-import { ProductsFilterComponent } from './products-seeker/products-filter.component';
 import { ProductsSeekerComponent } from './products-seeker/products-seeker.component';
-import { ProductsSelectorComponent } from './products-selector/products-selector.component';
+import { ProductsFilterComponent } from './products-seeker/products-filter.component';
 import { ProductsTableComponent } from './products-seeker/products-table.component';
+import { ProductsSelectorComponent } from './products-selector/products-selector.component';
+import {
+  ProductsLocationSelectorComponent
+} from './products-location-selector/products-location-selector.component';
 
 @NgModule({
   imports: [
@@ -43,18 +47,20 @@ import { ProductsTableComponent } from './products-seeker/products-table.compone
     ProductDataComponent,
     ProductImageComponent,
     ProductPresentationsComponent,
+    ProductLocationComponent,
 
-    ProductsFilterComponent,
     ProductsSeekerComponent,
-    ProductsSelectorComponent,
+    ProductsFilterComponent,
     ProductsTableComponent,
+    ProductsSelectorComponent,
+    ProductsLocationSelectorComponent,
   ],
   exports: [
     ProductAttributesComponent,
     ProductImageComponent,
-
     ProductsSeekerComponent,
     ProductsSelectorComponent,
+    ProductsLocationSelectorComponent,
   ]
 })
 export class ProductsModule { }

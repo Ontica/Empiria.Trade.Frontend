@@ -32,7 +32,7 @@
 
       </div>
 
-      <div class="fx-item-none">
+      <div class="fx-item-none" *ngIf="displayOnStock">
 
         <mat-checkbox
           formControlName="onStock"
@@ -40,6 +40,14 @@
           Con inventario
         </mat-checkbox>
 
+      </div>
+
+      <div class="fx-item">
+
+      </div>
+
+      <div class="fx-item-none fx-items-center">
+        {{resultText}}
       </div>
 
     </div>

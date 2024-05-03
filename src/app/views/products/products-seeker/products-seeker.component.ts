@@ -11,13 +11,15 @@ import { Assertion, EmpObservable, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { OrderFields, ProductDescriptor, ProductQuery } from '@app/models';
+import { OrderFields, ProductDescriptor, ProductQuery, WarehouseBinForInventory } from '@app/models';
 
 import { ProductsDataService } from '@app/data-services';
 
 import { ProductsFilterComponent, ProductsFilterEventType } from './products-filter.component';
 
 import { ProductsTableEventType } from './products-table.component';
+
+export type ProductSeekerQueryType = 'Products' | 'ProductsForOrder' | 'ProductsForInventory';
 
 export enum ProductsSeekerEventType {
   SELECT_PRODUCT = 'ProductsSeekerComponent.Event.SelectProduct',
@@ -32,7 +34,11 @@ export class ProductsSeekerComponent implements OnInit {
 
   @ViewChild('productsFilter') productsFilter: ProductsFilterComponent;
 
+  @Input() productSeekerQueryType: ProductSeekerQueryType = 'Products';
+
   @Input() order: OrderFields = null;
+
+  @Input() warehouseBinsList: WarehouseBinForInventory[] = [];
 
   @Input() displayFlat = null;
 
@@ -54,6 +60,16 @@ export class ProductsSeekerComponent implements OnInit {
   }
 
 
+  get displayOnStock(): boolean {
+    return ['Products', 'ProductsForOrder'].includes(this.productSeekerQueryType);
+  }
+
+
+  get displayLocationSelection(): boolean {
+    return ['ProductsForInventory'].includes(this.productSeekerQueryType);
+  }
+
+
   ngOnInit() {
     this.setResultText();
   }
@@ -61,7 +77,6 @@ export class ProductsSeekerComponent implements OnInit {
 
   onProductsFilterEvent(event: EventInfo) {
     switch (event.type as ProductsFilterEventType) {
-
       case ProductsFilterEventType.SEARCH_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
         this.searchData(event.payload.query as ProductQuery);
@@ -80,7 +95,6 @@ export class ProductsSeekerComponent implements OnInit {
 
   onProductsTableEvent(event: EventInfo) {
     switch (event.type as ProductsTableEventType) {
-
       case ProductsTableEventType.SELECT_PRODUCT_CLICKED:
         Assertion.assertValue(event.payload.product, 'event.payload.product');
         sendEvent(this.productsSeekerEvent, ProductsSeekerEventType.SELECT_PRODUCT, event.payload);
@@ -115,11 +129,26 @@ export class ProductsSeekerComponent implements OnInit {
 
 
   private searchData(query: ProductQuery) {
-    const queryValid = this.buildProductQuery(query)
+    const queryValid = this.buildProductQuery(query);
+    let observable = null;
 
-    const observable = this.order ?
-      this.productsData.searchProductsForOrder(queryValid) :
-      this.productsData.searchProducts(queryValid)
+    switch (this.productSeekerQueryType) {
+      case 'Products':
+        observable = this.productsData.searchProducts(queryValid);
+        break;
+
+      case 'ProductsForOrder':
+        observable = this.productsData.searchProductsForOrder(queryValid);
+        break;
+
+      case 'ProductsForInventory':
+        observable = this.productsData.searchProductsForInventory(queryValid);
+        break;
+
+      default:
+        console.log(`Unhandled product seeker query type ${this.productSeekerQueryType}`);
+        return;
+    }
 
     this.executeSearchProducts(observable);
   }

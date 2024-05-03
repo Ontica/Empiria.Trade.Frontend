@@ -13,7 +13,7 @@ import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { ProductDescriptor } from '@app/models';
+import { ProductDescriptor, WarehouseBinForInventory } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -22,6 +22,8 @@ import { GalleryImage } from '@app/shared/components/gallery/gallery.component';
 import { ProductDataEventType } from '../../products/product-data/product-data.component';
 
 import { ProductPresentationsEventType } from '@app/views/products/product-data/product-presentations.component';
+
+import { ProductLocationEventType } from '../product-data/product-location.component';
 
 export enum ProductsTableEventType {
   SELECT_PRODUCT_CLICKED = 'ProductsTableComponent.Event.SelectProductClicked',
@@ -38,7 +40,11 @@ export class ProductsTableComponent implements OnChanges {
 
   @Input() products: ProductDescriptor[] = [];
 
+  @Input() warehouseBinsList: WarehouseBinForInventory[] = [];
+
   @Input() selectable = false;
+
+  @Input() displayLocationSelection = false;
 
   @Input() queryExecuted = true;
 
@@ -84,6 +90,17 @@ export class ProductsTableComponent implements OnChanges {
   onProductPresentationEvent(event: EventInfo) {
     switch (event.type as ProductPresentationsEventType) {
       case ProductPresentationsEventType.ADD_PRODUCT_CLICKED:
+        sendEvent(this.productsTableEvent, ProductsTableEventType.ADD_PRODUCT_CLICKED, event.payload);
+        return;
+      default:
+        return;
+    }
+  }
+
+
+  onProductLocationEvent(event: EventInfo) {
+    switch (event.type as ProductLocationEventType) {
+      case ProductLocationEventType.ADD_PRODUCT_CLICKED:
         sendEvent(this.productsTableEvent, ProductsTableEventType.ADD_PRODUCT_CLICKED, event.payload);
         return;
       default:

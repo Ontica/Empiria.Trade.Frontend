@@ -1,0 +1,110 @@
+<div *ngIf="!product.presentations || product.presentations?.length === 0">
+  N/A
+</div>
+
+<div *ngIf="product.presentations?.length > 0" class="list-container">
+
+  <div class="fx-column-container">
+
+    <form autocomplete="off" empNgFormKeyDownEnter #productSelected>
+
+      <div class="fx-row-container" [style.margin-right.px]="-8">
+
+        <emp-ng-select #presentationSelected class="fx-item"
+          [(ngModel)]="presentation"
+          [title]="presentation?.description"
+          [name]="'selectPresentation'+ product.productUID"
+          [config]="{bindByValue: false}"
+          [items]="product.presentations"
+          [disabled]="product.presentations.length === 1"
+          bindValue="presentationUID"
+          bindLabel="description">
+
+        </emp-ng-select>
+
+      </div>
+
+      <mat-divider [style.margin]="'8px 0'">
+
+      </mat-divider>
+
+      <div class="fx-row-container" [style.margin-right.px]="-8">
+
+        <div class="fx-item-third">
+          <emp-ng-select
+            [name]="'warehouseBin'+ product.productUID"
+            [config]="{bindByValue: false}"
+            [(ngModel)]="warehouseBin"
+            [items]="warehouseBinsList"
+            [showError]="touched && !warehouseBin"
+            (changes)="onWarehouseBinChanges($event)">
+
+          </emp-ng-select>
+        </div>
+
+        <div class="fx-item-third">
+          <emp-ng-select
+            [name]="'position'+ product.productUID"
+            [config]="{bindByValue: false}"
+            [bindLabel]="null"
+            [(ngModel)]="position"
+            [items]="positionsList"
+            [showError]="touched && !position">
+
+          </emp-ng-select>
+        </div>
+
+        <div class="fx-item-third">
+          <emp-ng-select #levelSelect
+            [name]="'level'+ product.productUID"
+            [config]="{bindByValue: false}"
+            [bindLabel]="null"
+            [(ngModel)]="level"
+            [items]="levelsList"
+            [showError]="touched && !level">
+
+          </emp-ng-select>
+        </div>
+
+      </div>
+
+
+      <div class="fx-row-container" [style.margin-right.px]="-8">
+
+        <div class="fx-item">
+
+          <span class="text-label">Cantidad:</span>
+
+          <emp-ng-input-numeric
+            [id]="'quantity-' + product.productUID"
+            [minDecimals]="0"
+            [maxDecimals]="2"
+            [(ngModel)]="quantity"
+            [showError]="touched && isQuantityInvalid"
+            [ngModelOptions]="{standalone: true}"
+            (keyupEnter)="onQuantityEnter($event)"
+            (keyupEscape)="quantity = null">
+
+          </emp-ng-input-numeric>
+
+        </div>
+
+        <div class="fx-item-third fx-items-end"
+          [style.marginBottom.px]="2">
+
+          <button class="btn"
+            [style.width.%]="100"
+            [style.margin-right.px]="8"
+            (click)="onAddProductClicked()">
+            Agregar
+          </button>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

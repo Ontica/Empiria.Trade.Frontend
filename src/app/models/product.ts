@@ -7,6 +7,8 @@
 
 import { OrderFields } from './order';
 
+import { WarehouseBinForInventory } from './warehouse';
+
 
 export interface Product {
   productUID: string;
@@ -59,6 +61,18 @@ export interface ProductSelection {
   presentation: ProductPresentation;
   vendor: Vendor;
   quantity: number,
+}
+
+
+export interface InventoryProductSelection {
+  product: ProductDescriptor;
+  presentation: ProductPresentation;
+  vendor: Vendor;
+  warehouseBin: WarehouseBinForInventory;
+  position: number;
+  level: number;
+  quantity: number,
+  notes: string;
 }
 
 

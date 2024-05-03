@@ -50,10 +50,12 @@
 
 <ng-template #productSeeker>
 
-  <div class="fx-column-container-fill">
+  <div class="fx-column-container-fill" [style.height]="data.length <= 1 ? '257px' : '80vh'">
 
     <emp-trade-products-filter #productsFilter
       [style.marginLeft.px]="displayFlat ? -8 : 0"
+      [displayOnStock]="displayOnStock"
+      [resultText]="displayFlat && queryExecuted ? resultText : ''"
       (productsFilterEvent)="onProductsFilterEvent($event)">
 
     </emp-trade-products-filter>
@@ -62,7 +64,9 @@
       [isLoading]="isLoading"
       [queryExecuted]="queryExecuted"
       [products]="data"
+      [warehouseBinsList]="warehouseBinsList"
       [selectable]="displayFlat"
+      [displayLocationSelection]="displayLocationSelection"
       (productsTableEvent)="onProductsTableEvent($event)">
 
     </emp-trade-products-table>
