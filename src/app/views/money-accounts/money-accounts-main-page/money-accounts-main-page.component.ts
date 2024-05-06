@@ -14,13 +14,17 @@ import { MoneyAccountsDataService } from '@app/data-services';
 import { EmptyMoneyAccount, EmptyMoneyAccountDataTable, EmptyMoneyAccountQuery, MoneyAccount,
          MoneyAccountsDataTable, MoneyAccountQuery } from '@app/models';
 
-import { MoneyAccountsExplorerEventType } from '../money-accounts-explorer/money-accounts-explorer.component';
+import {
+  MoneyAccountsExplorerEventType
+} from '../money-accounts-explorer/money-accounts-explorer.component';
 
 import {
   MoneyAccountTabbedViewEventType
 } from '../money-account-tabbed-view/money-account-tabbed-view.component';
 
-import { MoneyAccountCreatorEventType } from '../money-account/money-account-creator.component';
+import {
+  MoneyAccountCreatorEventType
+} from '../money-account/money-account-creator.component';
 
 @Component({
   selector: 'emp-trade-money-accounts-main-page',
@@ -45,15 +49,21 @@ export class MoneyAccountsMainPageComponent {
   displayCreator = false;
 
 
-  constructor(private moneyAccountsData: MoneyAccountsDataService) {
-
-  }
+  constructor(private moneyAccountsData: MoneyAccountsDataService) { }
 
 
   onMoneyAccountCreatorEvent(event: EventInfo) {
     switch (event.type as MoneyAccountCreatorEventType) {
       case MoneyAccountCreatorEventType.CLOSE_MODAL_CLICKED:
         this.displayCreator = false;
+        return;
+
+      case MoneyAccountCreatorEventType.MONEY_ACCOUNT_CREATED:
+        Assertion.assertValue(event.payload.moneyAccount, 'event.payload.moneyAccount');
+        this.displayCreator = false;
+        this.setMoneyAccountSelected(event.payload.moneyAccount as MoneyAccount);
+        this.validateQueryForRefreshMoneyAccounts(this.moneyAccountSelected.moneyAccountType.uid,
+          this.moneyAccountSelected.moneyAccountNumber);
         return;
 
       default:
@@ -73,6 +83,7 @@ export class MoneyAccountsMainPageComponent {
         Assertion.assertValue(event.payload.query, 'event.payload.query');
         this.query = event.payload.query as MoneyAccountQuery;
         this.clearMoneyAccountsData();
+        this.clearMoneyAccountSelected();
         this.searchMoneyAccounts(this.query);
         return;
 
@@ -95,10 +106,42 @@ export class MoneyAccountsMainPageComponent {
         this.clearMoneyAccountSelected();
         return;
 
+      case MoneyAccountTabbedViewEventType.MONEY_ACCOUNT_UPDATED:
+        Assertion.assertValue(event.payload.moneyAccount, 'event.payload.moneyAccount');
+        this.refreshMoneyAccounts();
+        this.setMoneyAccountSelected(event.payload.moneyAccount as MoneyAccount);
+        return;
+
+      case MoneyAccountTabbedViewEventType.MONEY_ACCOUNT_DELETED:
+        Assertion.assertValue(event.payload.moneyAccount, 'event.payload.moneyAccount');
+        this.refreshMoneyAccounts();
+        this.clearMoneyAccountSelected();
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private validateQueryForRefreshMoneyAccounts(moneyAccountTypeUID: string, keywords: string) {
+    if (this.query.moneyAccountTypeUID !== moneyAccountTypeUID) {
+      const newQuery: MoneyAccountQuery = {
+        moneyAccountTypeUID,
+        keywords,
+        status: ''
+      };
+
+      this.query = Object.assign({}, this.query, newQuery);
+    }
+
+    this.refreshMoneyAccounts();
+  }
+
+
+  private refreshMoneyAccounts() {
+    this.searchMoneyAccounts(this.query);
   }
 
 
@@ -124,7 +167,6 @@ export class MoneyAccountsMainPageComponent {
 
   private resolveSearchMoneyAccounts(data: MoneyAccountsDataTable) {
     this.setMoneyAccountsData(data, true);
-    this.clearMoneyAccountSelected();
   }
 
 

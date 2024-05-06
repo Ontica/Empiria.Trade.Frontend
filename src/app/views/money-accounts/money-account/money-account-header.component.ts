@@ -9,15 +9,19 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { Observable, Subject, catchError, concat, debounceTime, delay, distinctUntilChanged, filter, of,
+         switchMap, tap } from 'rxjs';
+
 import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
-import { ArrayLibrary, FormHelper, FormatLibrary, sendEvent } from '@app/shared/utils';
+import { FormHelper, FormatLibrary, sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { MoneyAccountsDataService } from '@app/data-services';
+import { ContactsDataService, MoneyAccountsDataService } from '@app/data-services';
 
 import { EmptyMoneyAccount, MoneyAccount, MoneyAccountFields } from '@app/models';
+
 
 export enum MoneyAccountHeaderEventType {
   CREATE_MONEY_ACCOUNT = 'MoneyAccountHeaderComponent.Event.CreateMoneyAccount',
@@ -31,6 +35,8 @@ interface MoneyAccountFormModel extends FormGroup<{
   moneyAccountNumber: FormControl<string>;
   moneyAccountOwner: FormControl<string>;
   moneyAccountLimit: FormControl<string>;
+  limitDaysToPay: FormControl<string>;
+  notes: FormControl<string>;
 }> { }
 
 @Component({
@@ -53,13 +59,21 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
 
   moneyAccountTypesList: Identifiable[] = [];
 
-  partiesList: Identifiable[] = [];
+  accountHoldersList$: Observable<Identifiable[]>;
+
+  accountHoldersInput$ = new Subject<string>();
+
+  isAccountHoldersLoading = false;
+
+  minTermLength = 5;
 
 
   constructor(private moneyAccountsData: MoneyAccountsDataService,
+              private contactsData: ContactsDataService,
               private messageBox: MessageBoxService
   ) {
     this.initForm();
+    this.enableEditor(true);
   }
 
 
@@ -72,6 +86,7 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     this.loadDataLists();
+    this.subscribeAccountHoldersList();
   }
 
 
@@ -106,6 +121,8 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
     }
 
     this.formHelper.setDisableForm(this.form, !this.editionMode);
+    FormHelper.setDisableControl(this.form.controls.moneyAccountNumber);
+    FormHelper.setDisableControl(this.form.controls.moneyAccountType, this.isSaved);
   }
 
 
@@ -114,19 +131,28 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
 
     this.moneyAccountsData.getMoneyAccountTypes()
     .firstValue()
-    .then(x => {
-      this.moneyAccountTypesList = x;
-      this.validatePartyInList();
-    })
+    .then(x => this.moneyAccountTypesList = x)
     .finally(() => this.isLoading = false);
   }
 
 
-  private validatePartyInList() {
-    if (!isEmpty(this.moneyAccount.moneyAccountOwner)) {
-      this.partiesList =
-        ArrayLibrary.insertIfNotExist(this.partiesList ?? [], this.moneyAccount.moneyAccountOwner, 'uid');
-    }
+  private subscribeAccountHoldersList() {
+    this.accountHoldersList$ = concat(
+      of(isEmpty(this.moneyAccount.moneyAccountOwner) ? [] : [this.moneyAccount.moneyAccountOwner]),
+      this.accountHoldersInput$.pipe(
+        filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.isAccountHoldersLoading = true),
+        switchMap(keyword =>
+          this.contactsData.getAccountHolders(keyword)
+            .pipe(
+              delay(2000),
+              catchError(() => of([])),
+              tap(() => this.isAccountHoldersLoading = false)
+            ))
+      )
+    );
   }
 
 
@@ -138,6 +164,8 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
       moneyAccountNumber: ['', Validators.required],
       moneyAccountOwner: ['', Validators.required],
       moneyAccountLimit: ['', Validators.required],
+      limitDaysToPay: ['', Validators.required],
+      notes: ['', Validators.required],
     });
   }
 
@@ -148,9 +176,11 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
       moneyAccountNumber: this.moneyAccount.moneyAccountNumber,
       moneyAccountOwner: this.moneyAccount.moneyAccountOwner.uid,
       moneyAccountLimit: FormatLibrary.numberWithCommas(this.moneyAccount.moneyAccountLimit, '1.2-2'),
+      limitDaysToPay: FormatLibrary.numberWithCommas(this.moneyAccount.limitDaysToPay, '1.2-2'),
+      notes: this.moneyAccount.notes,
     });
 
-    this.validatePartyInList();
+    this.subscribeAccountHoldersList();
   }
 
 
@@ -160,10 +190,11 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
     const formModel = this.form.getRawValue();
 
     const data: MoneyAccountFields = {
-      moneyAccountTypeUID: formModel.moneyAccountType ?? '',
-      moneyAccountNumber: formModel.moneyAccountNumber ?? '',
-      moneyAccountOwnerUID: formModel.moneyAccountOwner ?? '',
+      typeUID: formModel.moneyAccountType ?? '',
+      ownerUID: formModel.moneyAccountOwner ?? '',
       moneyAccountLimit: FormatLibrary.stringToNumber(formModel.moneyAccountLimit),
+      limitDaysToPay: FormatLibrary.stringToNumber(formModel.limitDaysToPay),
+      notes: formModel.notes ?? '',
     };
 
     return data;

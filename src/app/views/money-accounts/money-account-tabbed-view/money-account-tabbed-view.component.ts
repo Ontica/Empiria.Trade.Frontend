@@ -7,14 +7,18 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
 import { EmptyMoneyAccount, MoneyAccount } from '@app/models';
 
+import { MoneyAccountEditorEventType } from '../money-account/money-account-editor.component';
+
 export enum MoneyAccountTabbedViewEventType {
-  CLOSE_BUTTON_CLICKED = 'MoneyAccountTabbedViewComponent.Event.CloseButtonClicked',
+  CLOSE_BUTTON_CLICKED  = 'MoneyAccountTabbedViewComponent.Event.CloseButtonClicked',
+  MONEY_ACCOUNT_UPDATED = 'MoneyAccountTabbedViewComponent.Event.MoneyAccountUpdated',
+  MONEY_ACCOUNT_DELETED = 'MoneyAccountTabbedViewComponent.Event.MoneyAccountDeleted',
 }
 
 @Component({
@@ -41,6 +45,27 @@ export class MoneyAccountTabbedViewComponent implements OnChanges {
 
   onClose() {
     sendEvent(this.moneyAccountTabbedViewEvent, MoneyAccountTabbedViewEventType.CLOSE_BUTTON_CLICKED);
+  }
+
+
+  onMoneyAccountEditorEvent(event: EventInfo) {
+    switch (event.type as MoneyAccountEditorEventType) {
+      case MoneyAccountEditorEventType.MONEY_ACCOUNT_UPDATED:
+        Assertion.assertValue(event.payload.moneyAccount, 'event.payload.moneyAccount');
+        sendEvent(this.moneyAccountTabbedViewEvent,
+          MoneyAccountTabbedViewEventType.MONEY_ACCOUNT_UPDATED, event.payload);
+        return;
+
+      case MoneyAccountEditorEventType.MONEY_ACCOUNT_DELETED:
+        Assertion.assertValue(event.payload.moneyAccount, 'event.payload.moneyAccount');
+        sendEvent(this.moneyAccountTabbedViewEvent,
+          MoneyAccountTabbedViewEventType.MONEY_ACCOUNT_DELETED, event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 

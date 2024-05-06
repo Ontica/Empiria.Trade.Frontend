@@ -29,18 +29,43 @@
         <label>Propietario:</label>
         <emp-ng-select
           formControlName="moneyAccountOwner"
-          [items]="partiesList"
-          [loading]="isLoading"
+          placeholder="Buscar propietario"
+          [config]="{ minTermLength: minTermLength,
+                      typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres',
+                      virtualScroll: true }"
+          [items]="accountHoldersList$ | async"
+          [typeahead]="accountHoldersInput$"
+          [loading]="isAccountHoldersLoading"
           [showError]="formHelper.isControlInvalid(form.controls.moneyAccountOwner)">
         </emp-ng-select>
       </div>
 
-      <div class="fx-item-half">
+      <div class="fx-item-quarter">
         <label>Límite:</label>
         <input type="text" empNgCurrency
           class="text-box text-align-right"
           formControlName="moneyAccountLimit"
           [class.invalid-control]="formHelper.isControlInvalid(form.controls.moneyAccountLimit)">
+      </div>
+
+      <div class="fx-item-quarter">
+        <label>Límite de días para pagar:</label>
+        <input type="text" empNgInteger
+          class="text-box text-align-right"
+          formControlName="limitDaysToPay"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.limitDaysToPay)">
+      </div>
+
+    </div>
+
+    <div class="fx-row-container">
+
+      <div class="fx-item">
+        <label>Notas:</label>
+        <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
+          formControlName="notes"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.notes)">
+        </textarea>
       </div>
 
     </div>

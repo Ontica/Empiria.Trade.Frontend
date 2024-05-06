@@ -11,12 +11,15 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MoneyAccountsDataService } from '@app/data-services';
+
+import { MoneyAccount, MoneyAccountFields } from '@app/models';
 
 import { MoneyAccountHeaderEventType } from './money-account-header.component';
 
 export enum MoneyAccountCreatorEventType {
-  CLOSE_MODAL_CLICKED = 'MoneyAccountCreatorComponent.Event.CloseModalClicked',
+  CLOSE_MODAL_CLICKED   = 'MoneyAccountCreatorComponent.Event.CloseModalClicked',
+  MONEY_ACCOUNT_CREATED = 'MoneyAccountCreatorComponent.Event.MoneyAccountCreated',
 }
 
 @Component({
@@ -30,9 +33,7 @@ export class MoneyAccountCreatorComponent {
   submitted = false;
 
 
-  constructor(private messageBox: MessageBoxService) {
-
-  }
+  constructor(private moneyAccountsData: MoneyAccountsDataService) { }
 
 
   onCloseModalClicked() {
@@ -48,13 +49,29 @@ export class MoneyAccountCreatorComponent {
     switch (event.type as MoneyAccountHeaderEventType) {
       case MoneyAccountHeaderEventType.CREATE_MONEY_ACCOUNT:
         Assertion.assertValue(event.payload.moneyAccount, 'event.payload.moneyAccount');
-        this.messageBox.showInDevelopment('Agregar cuenta', event.payload.moneyAccount);
+        this.createMoneyAccount(event.payload.moneyAccount as MoneyAccountFields)
         return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private createMoneyAccount(dataFields: MoneyAccountFields) {
+    this.submitted = true;
+
+    this.moneyAccountsData.createMoneyAccount(dataFields)
+      .firstValue()
+      .then(x => this.resolveCreateMoneyAccount(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private resolveCreateMoneyAccount(moneyAccount: MoneyAccount) {
+    sendEvent(this.moneyAccountCreatorEvent, MoneyAccountCreatorEventType.MONEY_ACCOUNT_CREATED,
+      { moneyAccount });
   }
 
 }

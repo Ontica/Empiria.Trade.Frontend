@@ -47,4 +47,13 @@ export class ContactsDataService {
     return this.http.get<Customer[]>(path);
   }
 
+
+  getAccountHolders(keywords: string): EmpObservable<Identifiable[]> {
+    Assertion.assertValue(keywords, 'keywords');
+
+    const path = `v4/trade/contacts/account-holders/?keywords=${keywords}`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
 }

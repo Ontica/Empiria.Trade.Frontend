@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { MoneyAccount, MoneyAccountsDataTable, MoneyAccountQuery } from '@app/models';
+import { MoneyAccount, MoneyAccountsDataTable, MoneyAccountQuery, MoneyAccountFields } from '@app/models';
 
 
 @Injectable()
@@ -47,6 +47,35 @@ export class MoneyAccountsDataService {
     const path = `v4/trade/financial/money-accounts/${moneyAccountUID}`;
 
     return this.http.get<MoneyAccount>(path);
+  }
+
+
+  createMoneyAccount(moneyAccountFields: MoneyAccountFields): EmpObservable<MoneyAccount> {
+    Assertion.assertValue(moneyAccountFields, 'moneyAccountFields');
+
+    const path = 'v4/trade/financial/money-accounts';
+
+    return this.http.post<MoneyAccount>(path, moneyAccountFields);
+  }
+
+
+  updateMoneyAccount(moneyAccountUID: string,
+                     moneyAccountFields: MoneyAccountFields): EmpObservable<MoneyAccount> {
+    Assertion.assertValue(moneyAccountUID, 'moneyAccountUID');
+    Assertion.assertValue(moneyAccountFields, 'moneyAccountFields');
+
+    const path = `v4/trade/financial/money-accounts/${moneyAccountUID}`;
+
+    return this.http.put<MoneyAccount>(path, moneyAccountFields);
+  }
+
+
+  deleteMoneyAccount(moneyAccountUID: string): EmpObservable<MoneyAccount> {
+    Assertion.assertValue(moneyAccountUID, 'moneyAccountUID');
+
+    const path = `v4/trade/financial/money-accounts/${moneyAccountUID}/cancel`;
+
+    return this.http.delete<MoneyAccount>(path);
   }
 
 }

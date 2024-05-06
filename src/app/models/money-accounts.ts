@@ -28,6 +28,8 @@ export interface MoneyAccount {
   moneyAccountNumber: string;
   moneyAccountOwner: Identifiable;
   moneyAccountLimit: number;
+  limitDaysToPay: number;
+  notes: string;
   balance: number;
   status: Identifiable;
   transactions: MoneyAccountTransaction[];
@@ -35,10 +37,11 @@ export interface MoneyAccount {
 
 
 export interface MoneyAccountFields {
-  moneyAccountTypeUID: string;
-  moneyAccountNumber: string;
-  moneyAccountOwnerUID: string;
+  typeUID: string;
+  ownerUID: string;
   moneyAccountLimit: number;
+  limitDaysToPay: number;
+  notes: string;
 }
 
 
@@ -86,6 +89,8 @@ export const EmptyMoneyAccount: MoneyAccount = {
   moneyAccountType: Empty,
   moneyAccountOwner: Empty,
   moneyAccountLimit: 0,
+  limitDaysToPay: 0,
+  notes: '',
   balance: 0,
   status: Empty,
   transactions: [],
