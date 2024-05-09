@@ -116,6 +116,11 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
   }
 
 
+  onApplyButtonClicked() {
+    this.messageBox.showInDevelopment('Aplicar orden de inventario', { inventoryOrder: this.inventoryOrder })
+  }
+
+
   enableEditor(enable: boolean) {
     this.editionMode = enable;
 

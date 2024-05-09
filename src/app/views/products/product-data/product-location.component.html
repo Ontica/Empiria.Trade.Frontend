@@ -37,6 +37,7 @@
             [(ngModel)]="warehouseBin"
             [items]="warehouseBinsList"
             [showError]="touched && !warehouseBin"
+            placeholder="Rack"
             (changes)="onWarehouseBinChanges($event)">
 
           </emp-ng-select>
@@ -49,7 +50,8 @@
             [bindLabel]="null"
             [(ngModel)]="position"
             [items]="positionsList"
-            [showError]="touched && !position">
+            [showError]="touched && !position"
+            placeholder="Posición">
 
           </emp-ng-select>
         </div>
@@ -61,7 +63,8 @@
             [bindLabel]="null"
             [(ngModel)]="level"
             [items]="levelsList"
-            [showError]="touched && !level">
+            [showError]="touched && !level"
+            placeholder="Nivel">
 
           </emp-ng-select>
         </div>

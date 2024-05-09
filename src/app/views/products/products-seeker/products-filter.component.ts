@@ -91,7 +91,7 @@ export class ProductsFilterComponent implements AfterViewInit {
   private getProductQuery(): ProductQuery {
     const query: ProductQuery = {
       keywords: this.form.value.keywords,
-      onStock: this.form.value.onStock,
+      onStock: this.displayOnStock ? this.form.value.onStock : false,
     };
 
     return query;

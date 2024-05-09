@@ -84,12 +84,18 @@
 
     <ng-container *ngIf="isSaved">
 
-      <div class="fx-item fx-items-center" *ngIf="editionMode">
+      <div class="fx-item fx-items-center">
 
-        <button
+        <button *ngIf="editionMode"
           type="button" class="btn-warning"
           (click)="onDeleteButtonClicked()">
           Eliminar
+        </button>
+
+        <button *ngIf="!editionMode"
+          type="button" class="btn"
+          (click)="onApplyButtonClicked()">
+          Aplicar
         </button>
 
       </div>
