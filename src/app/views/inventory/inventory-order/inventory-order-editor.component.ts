@@ -55,6 +55,11 @@ export class InventoryOrderEditorComponent {
         this.deleteInventoryOrder(event.payload.inventoryOrderUID);
         return;
 
+      case InventoryOrderHeaderEventType.CLOSE_INVENTORY_ORDER:
+        Assertion.assertValue(event.payload.inventoryOrderUID, 'event.payload.inventoryOrderUID');
+        this.closeInventoryOrder(event.payload.inventoryOrderUID);
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -78,6 +83,16 @@ export class InventoryOrderEditorComponent {
     this.inventoryOrdersData.deleteInventoryOrder(inventoryOrderUID)
       .firstValue()
       .then(x => this.resolveDeleteInventoryOrder(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private closeInventoryOrder(inventoryOrderUID: string) {
+    this.submitted = true;
+
+    this.inventoryOrdersData.closeInventoryOrder(inventoryOrderUID)
+      .firstValue()
+      .then(x => this.resolveUpdateInventoryOrder(x))
       .finally(() => this.submitted = false);
   }
 

@@ -73,6 +73,15 @@ export class InventoryOrdersDataService {
   }
 
 
+  closeInventoryOrder(inventoryOrderUID: string): EmpObservable<InventoryOrder> {
+    Assertion.assertValue(inventoryOrderUID, 'inventoryOrderUID');
+
+    const path = `v4/trade/inventory/orders/${inventoryOrderUID}/close`;
+
+    return this.http.post<InventoryOrder>(path);
+  }
+
+
   createInventoryOrderItem(inventoryOrderUID: string,
                            itemFields: InventoryOrderItemFields): EmpObservable<InventoryOrder> {
     Assertion.assertValue(inventoryOrderUID, 'inventoryOrderUID');

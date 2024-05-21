@@ -122,8 +122,8 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
   }
 
 
-  onApplyButtonClicked() {
-    this.messageBox.showInDevelopment('Aplicar orden de inventario', { inventoryOrder: this.inventoryOrder })
+  onCloseButtonClicked() {
+    this.showConfirmMessage(InventoryOrderHeaderEventType.CLOSE_INVENTORY_ORDER);
   }
 
 
@@ -214,6 +214,7 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
   private getConfirmTitle(eventType: InventoryOrderHeaderEventType): string {
     switch (eventType) {
       case InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER: return 'Eliminar orden de inventario';
+      case InventoryOrderHeaderEventType.CLOSE_INVENTORY_ORDER: return 'Aplicar orden de inventario';
       default: return '';
     }
   }
@@ -226,6 +227,13 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
                 <strong> ${this.inventoryOrder.inventoryOrderType.name}:
                 ${this.inventoryOrder.inventoryOrderNo}</strong>.
                 <br><br>¿Elimino la orden de inventario?`;
+
+      case InventoryOrderHeaderEventType.CLOSE_INVENTORY_ORDER:
+        return `Esta operación aplicará la orden de inventario
+                <strong> ${this.inventoryOrder.inventoryOrderType.name}:
+                ${this.inventoryOrder.inventoryOrderNo}</strong>.
+                <br><br>¿Aplico la orden de inventario?`;
+
       default: return '';
     }
   }
