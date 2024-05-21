@@ -52,7 +52,7 @@ export class InventoryOrderEditorComponent {
 
       case InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER:
         Assertion.assertValue(event.payload.inventoryOrderUID, 'event.payload.inventoryOrderUID');
-        this.deleteInventoryOrder();
+        this.deleteInventoryOrder(event.payload.inventoryOrderUID);
         return;
 
       default:
@@ -72,10 +72,10 @@ export class InventoryOrderEditorComponent {
   }
 
 
-  private deleteInventoryOrder() {
+  private deleteInventoryOrder(inventoryOrderUID: string) {
     this.submitted = true;
 
-    this.inventoryOrdersData.deleteInventoryOrder(this.inventoryOrder.uid)
+    this.inventoryOrdersData.deleteInventoryOrder(inventoryOrderUID)
       .firstValue()
       .then(x => this.resolveDeleteInventoryOrder(x))
       .finally(() => this.submitted = false);

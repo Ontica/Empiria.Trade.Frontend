@@ -65,6 +65,16 @@ export interface InventoryOrder {
   postedBy: Identifiable;
   status: InventoryStatus;
   items: InventoryOrderItem[];
+  actions: InventoryOrderActions;
+}
+
+
+export interface InventoryOrderActions {
+  canEdit: boolean;
+  canEditItems: boolean;
+  canDelete: boolean;
+  canClose: boolean;
+  canOpen: boolean;
 }
 
 
@@ -125,6 +135,15 @@ export const EmptyInventoryOrderDataTable: InventoryOrderDataTable = {
 };
 
 
+export const EmptyInventoryOrderActions: InventoryOrderActions = {
+  canEdit: false,
+  canEditItems: false,
+  canDelete: false,
+  canClose: false,
+  canOpen: false,
+};
+
+
 export const EmptyInventoryOrder: InventoryOrder = {
   uid: '',
   inventoryOrderType: Empty,
@@ -137,6 +156,7 @@ export const EmptyInventoryOrder: InventoryOrder = {
   postedBy: Empty,
   status: null,
   items: [],
+  actions: EmptyInventoryOrderActions,
 };
 
 

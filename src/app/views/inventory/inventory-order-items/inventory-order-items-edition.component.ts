@@ -40,6 +40,8 @@ export class InventoryOrderItemsEditionComponent {
 
   @Input() inventoryOrderItems: InventoryOrderItem[] = [];
 
+  @Input() canEdit = false;
+
   @Output() inventoryOrderItemsEditionEvent = new EventEmitter<EventInfo>();
 
   submitted = false;

@@ -19,6 +19,7 @@
 
       <emp-trade-inventory-order-items-edition
         [inventoryOrderUID]="inventoryOrder.uid"
+        [canEdit]="inventoryOrder.actions.canEditItems"
         [inventoryOrderItems]="inventoryOrder.items"
         (inventoryOrderItemsEditionEvent)="onInventoryOrderItemsEditionEvent($event)">
 

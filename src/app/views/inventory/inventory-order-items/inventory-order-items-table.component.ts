@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -29,9 +29,13 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
 
   @Input() inventoryOrderItems: InventoryOrderItem[] = [];
 
+  @Input() canEdit = false;
+
   @Output() inventoryOrderItemsTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumns: string[] = ['vendorProduct', 'warehouseBin', 'notes', 'quantity', 'actionDelete'];
+  displayedColumnsDefault: string[] = ['vendorProduct', 'warehouseBin', 'notes', 'quantity'];
+
+  displayedColumns = [...this.displayedColumnsDefault];
 
   dataSource: MatTableDataSource<InventoryOrderItem>;
 
@@ -46,8 +50,10 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
   }
 
 
-  ngOnChanges() {
-    this.dataSource = new MatTableDataSource(this.inventoryOrderItems ?? []);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.inventoryOrderItems) {
+      this.setDataTable();
+    }
   }
 
 
@@ -64,6 +70,21 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
             { inventoryOrderItemUID: item.uid });
         }
       });
+  }
+
+
+  private setDataTable() {
+    this.dataSource = new MatTableDataSource(this.inventoryOrderItems ?? []);
+    this.resetColumns();
+  }
+
+
+  private resetColumns() {
+    this.displayedColumns = [...this.displayedColumnsDefault];
+
+    if (this.canEdit) {
+      this.displayedColumns.push('actionDelete');
+    }
   }
 
 

@@ -31,6 +31,7 @@ export enum InventoryOrderHeaderEventType {
   CREATE_INVENTORY_ORDER = 'InventoryOrderHeaderComponent.Event.CreateInventoryOrder',
   UPDATE_INVENTORY_ORDER = 'InventoryOrderHeaderComponent.Event.UpdateInventoryOrder',
   DELETE_INVENTORY_ORDER = 'InventoryOrderHeaderComponent.Event.DeleteInventoryOrder',
+  CLOSE_INVENTORY_ORDER  = 'InventoryOrderHeaderComponent.Event.CloseInventoryOrder',
 }
 
 
@@ -98,6 +99,11 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
   }
 
 
+  get hasActions(): boolean {
+    return this.inventoryOrder.actions.canEdit || this.inventoryOrder.actions.canClose;
+  }
+
+
   onSubmitButtonClicked() {
     if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
       let eventType = InventoryOrderHeaderEventType.CREATE_INVENTORY_ORDER;
@@ -112,7 +118,7 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
 
   onDeleteButtonClicked() {
-    this.showConfirmDeleteMessage();
+    this.showConfirmMessage(InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER);
   }
 
 
@@ -189,20 +195,39 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
   }
 
 
-  private showConfirmDeleteMessage() {
-    let message = `Esta operación eliminará la orden de inventario
-                   <strong> ${this.inventoryOrder.inventoryOrderType.name}:
-                   ${this.inventoryOrder.inventoryOrderNo}</strong>.
-                   <br><br>¿Elimino la orden de inventario?`;
+  private showConfirmMessage(eventType: InventoryOrderHeaderEventType) {
+    const confirmType: 'AcceptCancel' | 'DeleteCancel' =
+      eventType === InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER ? 'DeleteCancel' : 'AcceptCancel';
+    const title = this.getConfirmTitle(eventType);
+    const message = this.getConfirmMessage(eventType);
 
-    this.messageBox.confirm(message, 'Eliminar orden de inventario', 'DeleteCancel')
+    this.messageBox.confirm(message, title, confirmType)
       .firstValue()
       .then(x => {
         if (x) {
-          sendEvent(this.inventoryOrderHeaderEvent, InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER,
-            { inventoryOrderUID: this.inventoryOrder.uid });
+          sendEvent(this.inventoryOrderHeaderEvent, eventType, { inventoryOrderUID: this.inventoryOrder.uid });
         }
       });
+  }
+
+
+  private getConfirmTitle(eventType: InventoryOrderHeaderEventType): string {
+    switch (eventType) {
+      case InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER: return 'Eliminar orden de inventario';
+      default: return '';
+    }
+  }
+
+
+  private getConfirmMessage(eventType: InventoryOrderHeaderEventType): string {
+    switch (eventType) {
+      case InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER:
+        return `Esta operación eliminará la orden de inventario
+                <strong> ${this.inventoryOrder.inventoryOrderType.name}:
+                ${this.inventoryOrder.inventoryOrderNo}</strong>.
+                <br><br>¿Elimino la orden de inventario?`;
+      default: return '';
+    }
   }
 
 }

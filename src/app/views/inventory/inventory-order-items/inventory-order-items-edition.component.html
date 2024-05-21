@@ -4,7 +4,7 @@
 
   </emp-ng-spinner>
 
-  <div class="fx-item-none">
+  <div class="fx-item-none" *ngIf="canEdit">
 
     <div class="fx-row-container fx-end">
 
@@ -20,6 +20,7 @@
 
   <emp-trade-inventory-order-items-table  class="fx-item"
     [inventoryOrderItems]="inventoryOrderItems"
+    [canEdit]="canEdit"
     (inventoryOrderItemsTableEvent)="onInventoryOrderItemsTableEvent($event)">
 
   </emp-trade-inventory-order-items-table>
