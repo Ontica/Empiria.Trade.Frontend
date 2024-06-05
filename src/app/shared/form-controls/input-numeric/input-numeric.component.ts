@@ -40,6 +40,8 @@ export class InputNumericComponent implements ControlValueAccessor {
 
   @Input() format: 'decimal' | 'percent' = 'decimal';
 
+  @Input() placeholder = '';
+
   @Output() valueChange = new EventEmitter<number>();
 
   @Output() keyupEnter = new EventEmitter<number>();

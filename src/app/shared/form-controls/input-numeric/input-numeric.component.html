@@ -7,6 +7,7 @@
   [name]="'input-' + id"
   [ngModel]="formattedValue"
   [disabled]="disabled"
+  [placeholder]="placeholder"
   [class.invalid-control]="showError"
   (blur)="onBlur()"
   (change)="onInputChange(input.value)"
