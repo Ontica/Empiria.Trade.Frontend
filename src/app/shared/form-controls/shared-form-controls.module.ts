@@ -32,6 +32,7 @@ import { MonthPickerComponent } from './date-range-picker/month-picker/month-pic
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { SelectBoxComponent } from './select-box/select-box.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
+import { SelectBoxTypeaheadComponent } from './select-box-typeahead/select-box-typeahead.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
     MonthPickerComponent,
     SearchBoxComponent,
     SelectBoxComponent,
+    SelectBoxTypeaheadComponent,
     TextEditorComponent,
   ],
 
@@ -79,6 +81,7 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
     MenuComponent,
     SearchBoxComponent,
     SelectBoxComponent,
+    SelectBoxTypeaheadComponent,
     TextEditorComponent,
   ]
 

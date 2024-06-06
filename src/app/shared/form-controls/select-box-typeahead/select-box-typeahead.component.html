@@ -1,0 +1,23 @@
+<emp-ng-select #SelectTypeahead
+  [config]="{ bindByValue: config.bindByValue,
+              virtualScroll: config.virtualScroll,
+              clearable: config.clearable,
+              minTermLength: config.minTermLength,
+              typeToSearchText: 'Ingresar ' + config.minTermLength +' o más caracteres'}"
+  [formControl]="formControl"
+  [items]="searcherList$ | async"
+  [typeahead]="searcherTerm$"
+  [loading]="isLoading"
+  [placeholder]="placeholder"
+  [showError]="showError"
+  (changes)="onChangedEvent($event)"
+  (focus)="onTouched($event)"
+  (clear)="onClear()"
+  (unfocus)="onUnfocus($event)"
+  (search)="onSearch($event)">
+
+  <ng-content>
+
+  </ng-content>
+
+</emp-ng-select>

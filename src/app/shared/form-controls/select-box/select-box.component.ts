@@ -171,10 +171,6 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
     this.clear.emit(true);
   }
 
-  clearModel() {
-    this.select.clearModel();
-  }
-
   onSearch(event) {
     this.search.emit(event);
   }
@@ -185,6 +181,10 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
 
   customSearchFn(term: string, item: any) {
     return item?.search_field?.toLowerCase().includes(term.toLowerCase());
+  }
+
+  clearModel() {
+    this.select.clearModel();
   }
 
   private selectItemIfUnique() {

@@ -13,6 +13,8 @@ import { getSaver, SAVER } from './file-services/saver.provider';
 
 import { AccessControlDataService } from './_access-control.data.service';
 
+import { SearcherDataService } from './_searcher.data.service';
+
 import { ContactsDataService } from './contacts.data.service';
 
 import { InventoryOrdersDataService } from './inventory-orders.data.service';
@@ -35,6 +37,7 @@ import { WarehouseDataService } from './warehouse.data.service';
   providers: [
     AccessControlDataService,
     FileDownloadService,
+    SearcherDataService,
     ContactsDataService,
     InventoryOrdersDataService,
     MoneyAccountsDataService,
