@@ -71,8 +71,6 @@ export class InventoryOrderItemsEditionComponent {
         Assertion.assert(event.payload.selection, 'event.payload.selection');
         Assertion.assert(event.payload.selection.vendor, 'event.payload.selection.vendor');
         Assertion.assert(event.payload.selection.warehouseBin, 'event.payload.selection.warehouseBin');
-        Assertion.assert(event.payload.selection.position, 'event.payload.selection.position');
-        Assertion.assert(event.payload.selection.level, 'event.payload.selection.level');
         Assertion.assert(event.payload.selection.quantity, 'event.payload.selection.quantity');
 
         const inventoryOrderItem = mapInventoryOrderItemFieldsFromSelection(

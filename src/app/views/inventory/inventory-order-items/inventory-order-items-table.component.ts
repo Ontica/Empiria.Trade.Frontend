@@ -95,8 +95,8 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
           ${item.product?.productCode} - ${item.product?.presentation}
         </strong></td></tr>
 
-        <tr><td>Almacen: </td><td><strong>
-          ${item.warehouseBin?.rackDescription} - ${item.warehouseBin?.position} - ${item.warehouseBin?.level}
+        <tr><td>Localización: </td><td><strong>
+          ${item.warehouseBin?.rackDescription}
         </strong></td></tr>
 
         <tr><td class='nowrap'>Cantidad: </td><td><strong>

@@ -47,5 +47,3 @@ export * from './shipping';
 export * from './product';
 
 export * from './reporting';
-
-export * from './warehouse';

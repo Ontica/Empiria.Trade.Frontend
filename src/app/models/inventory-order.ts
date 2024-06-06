@@ -105,18 +105,14 @@ export interface InventoryProduct {
 export interface InventoryWarehouseBin {
   rack: string;
   rackDescription: string;
-  position: string;
-  level: string;
 }
 
 
 export interface InventoryOrderItemFields {
-  notes: string;
   vendorProductUID: string;
   warehouseBinUID: string;
   quantity: number;
-  position: number;
-  level: number;
+  notes: string;
 }
 
 
@@ -165,8 +161,6 @@ export function mapInventoryOrderItemFieldsFromSelection(
   const itemFields: InventoryOrderItemFields = {
     vendorProductUID: item.vendor.vendorProductUID ?? null,
     warehouseBinUID: item.warehouseBin.uid ?? null,
-    position: item.position ?? null,
-    level: item.level ?? null,
     quantity: item.quantity ?? null,
     notes: item.notes ?? null,
   };

@@ -8,12 +8,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output,
          SimpleChanges } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
-import { InventoryProductSelection, ProductDescriptor, ProductPresentation, Vendor,
-         WarehouseBinForInventory } from '@app/models';
+import { SearcherAPIS } from '@app/data-services';
+
+import { InventoryProductSelection, ProductDescriptor, ProductPresentation, Vendor } from '@app/models';
 
 
 export enum ProductLocationEventType {
@@ -29,25 +30,19 @@ export class ProductLocationComponent implements OnChanges {
 
   @Input() product: ProductDescriptor;
 
-  @Input() warehouseBinsList: WarehouseBinForInventory[] = [];
-
   @Output() productLocationEvent = new EventEmitter<EventInfo>();
 
-  positionsList: number[] = [];
-
-  levelsList: number[] = [];
+  warehouseBinAPI = SearcherAPIS.warehouseBin;
 
   presentation: ProductPresentation = null;
 
   vendor: Vendor = null;
 
-  warehouseBin: WarehouseBinForInventory = null;
-
-  position = null;
-
-  level = null;
+  warehouseBin: Identifiable = null;
 
   quantity: number = null;
+
+  notes: string = null;
 
   showAllVendors: boolean = false;
 
@@ -67,38 +62,29 @@ export class ProductLocationComponent implements OnChanges {
   }
 
 
-  get isProductValid(): boolean {
-    return this.warehouseBin && this.position && this.level && !this.isQuantityInvalid;
+  get isWarehouseBinInvalid(): boolean {
+    return isEmpty(this.warehouseBin);
   }
 
 
-  onWarehouseBinChanges(warehouseBin: WarehouseBinForInventory) {
-    this.positionsList = warehouseBin.positions;
-    this.levelsList = warehouseBin.levels;
-
-    this.position = null;
-    this.level = null;
+  get isReady(): boolean {
+    return !this.isWarehouseBinInvalid && !this.isQuantityInvalid;
   }
 
 
-  onAddProductClicked() {
-    if (this.isProductValid) {
+  onSubmitButtonClicked() {
+    if (this.isReady) {
 
       const selection: InventoryProductSelection = {
         product: this.product,
         presentation: this.presentation,
         vendor: this.vendor,
         warehouseBin: this.warehouseBin,
-        position: this.position,
-        level: this.level,
         quantity: this.quantity,
-        notes: '',
+        notes: this.notes ?? '',
       };
 
-      sendEvent(this.productLocationEvent,
-        ProductLocationEventType.ADD_PRODUCT_CLICKED, { selection });
-
-      this.quantity = null;
+      sendEvent(this.productLocationEvent, ProductLocationEventType.ADD_PRODUCT_CLICKED, { selection });
     }
 
     this.touched = true;
@@ -107,7 +93,7 @@ export class ProductLocationComponent implements OnChanges {
 
   onQuantityEnter(quantity: number) {
     this.quantity = quantity;
-    setTimeout(() => this.onAddProductClicked());
+    setTimeout(() => this.onSubmitButtonClicked());
   }
 
 }

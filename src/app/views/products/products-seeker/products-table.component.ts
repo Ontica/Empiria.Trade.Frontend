@@ -13,7 +13,7 @@ import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { ProductDescriptor, WarehouseBinForInventory } from '@app/models';
+import { ProductDescriptor } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -39,8 +39,6 @@ export class ProductsTableComponent implements OnChanges {
   @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
   @Input() products: ProductDescriptor[] = [];
-
-  @Input() warehouseBinsList: WarehouseBinForInventory[] = [];
 
   @Input() selectable = false;
 

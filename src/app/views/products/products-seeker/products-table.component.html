@@ -2,7 +2,7 @@
 
   <div #tableContainer class="fx-item">
 
-    <cdk-virtual-scroll-viewport [tvsItemSize]="selectable ? 168 : 123" headerHeight="39" [bufferMultiplier]="0">
+    <cdk-virtual-scroll-viewport [tvsItemSize]="selectable ? 168 : 115" headerHeight="39" [bufferMultiplier]="0">
 
       <table mat-table [dataSource]="dataSource">
 
@@ -12,7 +12,7 @@
 
             <emp-trade-product-image
               [imageUrl]="row.productImageUrl"
-              [imageSize]="selectable ? 144 : 99"
+              [imageSize]="selectable ? 143 : 91"
               [code]="row.productCode"
               (imageClicked)="onProductImageClicked($event)">
 
@@ -61,7 +61,6 @@
 
             <emp-trade-product-location *ngIf="displayLocationSelection"
               [product]="row"
-              [warehouseBinsList]="warehouseBinsList"
               (productLocationEvent)="onProductLocationEvent($event)">
 
             </emp-trade-product-location>

@@ -5,9 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { OrderFields } from './order';
+import { Identifiable } from '@app/core';
 
-import { WarehouseBinForInventory } from './warehouse';
+import { OrderFields } from './order';
 
 
 export interface Product {
@@ -68,9 +68,7 @@ export interface InventoryProductSelection {
   product: ProductDescriptor;
   presentation: ProductPresentation;
   vendor: Vendor;
-  warehouseBin: WarehouseBinForInventory;
-  position: number;
-  level: number;
+  warehouseBin: Identifiable;
   quantity: number,
   notes: string;
 }

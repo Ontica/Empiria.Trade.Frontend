@@ -5,17 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
-
-import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
-
 import { sendEvent } from '@app/shared/utils';
-
-import { WarehouseBinForInventory } from '@app/models';
 
 import { ProductsSeekerEventType } from '../products-seeker/products-seeker.component';
 
@@ -29,30 +23,9 @@ export enum ProductsLocationSelectorEventType {
   selector: 'emp-trade-products-location-selector',
   templateUrl: './products-location-selector.component.html',
 })
-export class ProductsLocationSelectorComponent implements OnInit, OnDestroy {
+export class ProductsLocationSelectorComponent {
 
   @Output() productsLocationSelectorEvent = new EventEmitter<EventInfo>();
-
-  warehouseBinsList: WarehouseBinForInventory[] = [];
-
-  helper: SubscriptionHelper;
-
-  isLoading = false;
-
-
-  constructor(private uiLayer: PresentationLayer,) {
-    this.helper = uiLayer.createSubscriptionHelper();
-  }
-
-
-  ngOnInit() {
-    this.loadDataLists();
-  }
-
-
-  ngOnDestroy() {
-    this.helper.destroy();
-  }
 
 
   onClose() {
@@ -74,17 +47,6 @@ export class ProductsLocationSelectorComponent implements OnInit, OnDestroy {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
-  }
-
-
-  private loadDataLists() {
-    this.isLoading = true;
-
-    this.helper.select<WarehouseBinForInventory[]>(CataloguesStateSelector.WAREHOUSE_BINS)
-      .subscribe(x => {
-        this.warehouseBinsList = x;
-        this.isLoading = false;
-      });
   }
 
 }

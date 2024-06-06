@@ -44,8 +44,6 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
 
   @Input() query: InventoryOrderQuery = EmptyInventoryOrderQuery;
 
-  @Input() queryExecuted: boolean = false;
-
   @Output() inventoryOrdersFilterEvent = new EventEmitter<EventInfo>();
 
   form: InventoryOrdersFilterFormModel;

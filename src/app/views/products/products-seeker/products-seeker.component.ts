@@ -11,7 +11,7 @@ import { Assertion, EmpObservable, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { OrderFields, ProductDescriptor, ProductQuery, WarehouseBinForInventory } from '@app/models';
+import { OrderFields, ProductDescriptor, ProductQuery } from '@app/models';
 
 import { ProductsDataService } from '@app/data-services';
 
@@ -37,8 +37,6 @@ export class ProductsSeekerComponent implements OnInit {
   @Input() productSeekerQueryType: ProductSeekerQueryType = 'Products';
 
   @Input() order: OrderFields = null;
-
-  @Input() warehouseBinsList: WarehouseBinForInventory[] = [];
 
   @Input() displayFlat = null;
 

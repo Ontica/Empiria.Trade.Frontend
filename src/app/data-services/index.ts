@@ -24,5 +24,3 @@ export * from './products.data.service';
 export * from './sales-orders.data.service';
 
 export * from './shipping-data.service';
-
-export * from './warehouse.data.service';
