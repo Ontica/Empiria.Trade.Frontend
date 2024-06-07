@@ -9,12 +9,11 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Observable, Subject, catchError, combineLatest, concat, debounceTime, delay, distinctUntilChanged,
-         filter, of, switchMap, tap } from 'rxjs';
+import { combineLatest } from 'rxjs';
 
 import { DateString, DateStringLibrary, EventInfo, Identifiable, isEmpty } from '@app/core';
 
-import { ContactsDataService, SalesOrdersDataService } from '@app/data-services';
+import { ContactsDataService, SalesOrdersDataService, SearcherAPIS } from '@app/data-services';
 
 import { Address, Contact, Customer, DefaultOrderStatus, EmptyOrderGeneralData, OrderGeneralData, Party,
          PaymentConditionList, ShippingMethodList, ShippingMethodTypes } from '@app/models';
@@ -76,13 +75,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
 
   customerAddressesList: Address[] = [];
 
-  customersList$: Observable<Customer[]>;
-
-  customersInput$ = new Subject<string>();
-
-  isCustomersLoading = false;
-
-  minTermLength = 5;
+  customersWithContactsAPI = SearcherAPIS.customersWithContacts;
 
 
   constructor(private contactsData: ContactsDataService,
@@ -94,7 +87,6 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     this.loadDataList();
-    this.subscribeCustomersList();
   }
 
 
@@ -305,27 +297,6 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
       ArrayLibrary.insertIfNotExist(this.customerContactsList ?? [], this.orderData.customerContact , 'uid');
     this.customerAddressesList = isEmpty(this.orderData.customerAddress) ? this.customerAddressesList :
       ArrayLibrary.insertIfNotExist(this.customerAddressesList ?? [], this.orderData.customerAddress, 'uid');
-    this.subscribeCustomersList();
-  }
-
-
-  private subscribeCustomersList() {
-    this.customersList$ = concat(
-      of(isEmpty(this.orderData.customer) ? [] : [this.orderData.customer]),
-      this.customersInput$.pipe(
-        filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.isCustomersLoading = true),
-        switchMap(keyword =>
-          this.contactsData.getCustomersWithContacts(keyword)
-            .pipe(
-              delay(2000),
-              catchError(() => of([])),
-              tap(() => this.isCustomersLoading = false)
-            ))
-      )
-    );
   }
 
 }

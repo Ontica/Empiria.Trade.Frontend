@@ -5,12 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 
 import { MatTableDataSource } from '@angular/material/table';
-
-import { Observable, Subject, catchError, concat, debounceTime, delay, distinctUntilChanged, filter, of,
-         switchMap, tap } from 'rxjs';
 
 import { EventInfo } from '@app/core';
 
@@ -18,9 +15,13 @@ import { sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { SalesOrdersDataService } from '@app/data-services';
+import { SearcherAPIS } from '@app/data-services';
 
 import { EmptyShipping, OrderDescriptor, OrderForShipping, Shipping } from '@app/models';
+
+import {
+  SelectBoxTypeaheadComponent
+} from '@app/shared/form-controls/select-box-typeahead/select-box-typeahead.component';
 
 export enum ShippingOrdersTableEventType {
   CHANGE_ORDERS = 'ShippingOrdersTableComponent.Event.ChangeOrders',
@@ -33,13 +34,17 @@ export enum ShippingOrdersTableEventType {
   selector: 'emp-trade-shipping-orders-table',
   templateUrl: './shipping-orders-table.component.html',
 })
-export class ShippingOrdersTableComponent implements OnChanges, OnInit {
+export class ShippingOrdersTableComponent implements OnChanges {
+
+  @ViewChild('orderSearcher') orderSearcher: SelectBoxTypeaheadComponent;
 
   @Input() shipping: Shipping = EmptyShipping;
 
   @Input() canEdit = false;
 
   @Input() canPrint = false;
+
+  @Input() resetSearcher = false;
 
   @Input() showTitle: boolean = true;
 
@@ -52,34 +57,18 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
 
   dataSource: MatTableDataSource<OrderForShipping>;
 
-  orderFromSearcher: OrderDescriptor = null;
-
-  ordersList$: Observable<OrderDescriptor[]>;
-
-  ordersInput$ = new Subject<string>();
-
-  isOrdersLoading = false;
-
-  minTermLength = 5;
+  ordersForShippingAPI = SearcherAPIS.ordersForShipping;
 
   ordersForShipping: OrderForShipping[] = [];
 
 
-  constructor(private orderData: SalesOrdersDataService,
-              private messageBox: MessageBoxService) {
-
-  }
+  constructor(private messageBox: MessageBoxService) { }
 
 
   ngOnChanges() {
     this.ordersForShipping = [...this.shipping.ordersForShipping];
     this.setDataTable();
     this.resetColumns();
-  }
-
-
-  ngOnInit() {
-    this.subscribeSearchOrders();
   }
 
 
@@ -93,15 +82,15 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
   }
 
 
-  onOrderSearcherChanges() {
+  onOrderSearcherChanges(order: OrderDescriptor) {
     setTimeout(() => {
-      if (!this.isOrderInShipping(this.orderFromSearcher.uid)) {
-        this.addOrderToShipping(this.orderFromSearcher.uid);
+      if (!this.isOrderInShipping(order.uid)) {
+        this.addOrderToShipping(order.uid);
       } else {
         this.messageBox.showError('El pedido ya se encuentra en el envío.');
       }
 
-      this.resetSearchOrders();
+      this.resetOrderSearcher();
     });
   }
 
@@ -112,7 +101,7 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
         this.removeOrderToShipping(order.orderUID);
       }
 
-      this.resetSearchOrders();
+      this.resetOrderSearcher();
     });
   }
 
@@ -175,29 +164,12 @@ export class ShippingOrdersTableComponent implements OnChanges, OnInit {
   }
 
 
-  private resetSearchOrders() {
-    this.orderFromSearcher = null;
-    this.subscribeSearchOrders();
-  }
-
-
-  private subscribeSearchOrders() {
-    this.ordersList$ = concat(
-      of([]),
-      this.ordersInput$.pipe(
-        filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.isOrdersLoading = true),
-        switchMap(keyword =>
-          this.orderData.searchOrdersForShipping(keyword.trim())
-            .pipe(
-              delay(2000),
-              catchError(() => of([])),
-              tap(() => this.isOrdersLoading = false)
-            )
-        ))
-    );
+  private resetOrderSearcher() {
+    if (this.resetSearcher) {
+      this.orderSearcher.resetSearcherData();
+    } else {
+      this.orderSearcher.resetValue();
+    }
   }
 
 }

@@ -27,17 +27,15 @@
 
       <div class="fx-item-half">
         <label>Propietario:</label>
-        <emp-ng-select
+        <emp-ng-select-typeahead
           formControlName="moneyAccountOwner"
-          placeholder="Buscar propietario"
-          [config]="{ minTermLength: minTermLength,
-                      typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres',
-                      virtualScroll: true }"
-          [items]="accountHoldersList$ | async"
-          [typeahead]="accountHoldersInput$"
-          [loading]="isAccountHoldersLoading"
-          [showError]="formHelper.isControlInvalid(form.controls.moneyAccountOwner)">
-        </emp-ng-select>
+          [config]="{ minTermLength: 5, virtualScroll: true }"
+          [searcherAPI]="accountHoldersAPI"
+          [initialValue]="moneyAccount.moneyAccountOwner"
+          [showError]="formHelper.isControlInvalid(form.controls.moneyAccountOwner)"
+          placeholder="Buscar propietario">
+
+        </emp-ng-select-typeahead>
       </div>
 
       <div class="fx-item-quarter">

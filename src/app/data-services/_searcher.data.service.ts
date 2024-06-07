@@ -11,7 +11,10 @@ import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 
 export enum SearcherAPIS {
-  warehouseBin = 'v4/trade/warehouse-bin/search/',
+  accountHolders        = 'v4/trade/contacts/account-holders/',
+  customersWithContacts = 'v4/trade/contacts/customers-with-contacts/',
+  warehouseBins         = 'v4/trade/warehouse-bin/search/',
+  ordersForShipping     = 'v4/trade/sales/orders/search-for-shipping/'
 }
 
 @Injectable()

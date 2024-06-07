@@ -85,19 +85,17 @@
 
       <div class="fx-item-third">
         <label>Cliente:</label>
-        <emp-ng-select #customer
+
+        <emp-ng-select-typeahead #customer
           formControlName="customer"
-          placeholder="Buscar cliente"
-          [config]="{ bindByValue: false,
-                      minTermLength: minTermLength,
-                      typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres',
-                      virtualScroll: true }"
-          [items]="customersList$ | async"
-          [typeahead]="customersInput$"
-          [loading]="isCustomersLoading"
+          [config]="{ bindByValue: false, clearable: true, minTermLength: 5, virtualScroll: true }"
+          [searcherAPI]="customersWithContactsAPI"
+          [initialValue]="orderData.customer"
           [showError]="formHelper.isControlInvalid(form.controls.customer)"
-          (changes)="onCustomertChange()">
-        </emp-ng-select>
+          (changes)="onCustomertChange()"
+          placeholder="Buscar cliente">
+
+        </emp-ng-select-typeahead>
       </div>
 
       <div class="fx-item-third">
@@ -147,6 +145,5 @@
     </div>
 
   </div>
-
 
 </form>

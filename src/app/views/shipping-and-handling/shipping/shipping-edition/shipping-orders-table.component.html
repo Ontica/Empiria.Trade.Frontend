@@ -6,19 +6,15 @@
 
   <div class="fx-item-third sm-fx-item">
 
-    <emp-ng-select #orderSearcher
-      [(ngModel)]="orderFromSearcher"
+    <emp-ng-select-typeahead #orderSearcher
       placeholder="Buscar pedido a agregar"
       bindLabel="orderNumber"
       bindValue="orderUID"
-      [config]="{ bindByValue: false,
-                  virtualScroll: true }"
-      [items]="ordersList$ | async"
-      [typeahead]="ordersInput$"
-      [loading]="isOrdersLoading"
-      (changes)="onOrderSearcherChanges()">
+      [config]="{ bindByValue: false, minTermLength: 5, virtualScroll: true }"
+      [searcherAPI]="ordersForShippingAPI"
+      (changes)="onOrderSearcherChanges($event)">
 
-      <ng-template #optionTemplate let-item="item">
+      <ng-template #tOptionTemplate let-item="item">
 
         <div class="wrap" [style.padding]="'0.25rem 0'">
           <span class="item-highlight">{{item.orderNumber}}</span> <br>
@@ -27,7 +23,7 @@
 
       </ng-template>
 
-    </emp-ng-select>
+    </emp-ng-select-typeahead>
 
   </div>
 

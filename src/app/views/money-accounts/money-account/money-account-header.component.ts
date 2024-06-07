@@ -9,16 +9,13 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Observable, Subject, catchError, concat, debounceTime, delay, distinctUntilChanged, filter, of,
-         switchMap, tap } from 'rxjs';
-
 import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { FormHelper, FormatLibrary, sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { ContactsDataService, MoneyAccountsDataService } from '@app/data-services';
+import { MoneyAccountsDataService, SearcherAPIS } from '@app/data-services';
 
 import { EmptyMoneyAccount, MoneyAccount, MoneyAccountFields } from '@app/models';
 
@@ -59,19 +56,11 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
 
   moneyAccountTypesList: Identifiable[] = [];
 
-  accountHoldersList$: Observable<Identifiable[]>;
-
-  accountHoldersInput$ = new Subject<string>();
-
-  isAccountHoldersLoading = false;
-
-  minTermLength = 5;
+  accountHoldersAPI = SearcherAPIS.accountHolders;
 
 
   constructor(private moneyAccountsData: MoneyAccountsDataService,
-              private contactsData: ContactsDataService,
-              private messageBox: MessageBoxService
-  ) {
+              private messageBox: MessageBoxService) {
     this.initForm();
     this.enableEditor(true);
   }
@@ -86,7 +75,6 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     this.loadDataLists();
-    this.subscribeAccountHoldersList();
   }
 
 
@@ -136,26 +124,6 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
   }
 
 
-  private subscribeAccountHoldersList() {
-    this.accountHoldersList$ = concat(
-      of(isEmpty(this.moneyAccount.moneyAccountOwner) ? [] : [this.moneyAccount.moneyAccountOwner]),
-      this.accountHoldersInput$.pipe(
-        filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.isAccountHoldersLoading = true),
-        switchMap(keyword =>
-          this.contactsData.getAccountHolders(keyword)
-            .pipe(
-              delay(2000),
-              catchError(() => of([])),
-              tap(() => this.isAccountHoldersLoading = false)
-            ))
-      )
-    );
-  }
-
-
   private initForm() {
     const fb = new FormBuilder();
 
@@ -179,8 +147,6 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
       limitDaysToPay: FormatLibrary.numberWithCommas(this.moneyAccount.limitDaysToPay, '1.2-2'),
       notes: this.moneyAccount.notes,
     });
-
-    this.subscribeAccountHoldersList();
   }
 
 

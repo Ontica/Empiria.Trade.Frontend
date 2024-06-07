@@ -9,16 +9,13 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { Observable, Subject, catchError, concat, debounceTime, delay, distinctUntilChanged, filter, of,
-         switchMap, tap } from 'rxjs';
-
-import { ApplicationStatusService, EmpObservable, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { ApplicationStatusService, EmpObservable, EventInfo, Identifiable } from '@app/core';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
-import { ContactsDataService, SalesOrdersDataService } from '@app/data-services';
+import { SalesOrdersDataService, SearcherAPIS } from '@app/data-services';
 
 import { Customer, DateRange, OrderQuery, OrderQueryType, OrderShippingStatusList,
          ShippingMethodList } from '@app/models';
@@ -61,13 +58,7 @@ export class OrdersFilterComponent implements OnChanges, OnInit {
 
   shippingStatusList: Identifiable[] = OrderShippingStatusList;
 
-  customersList$: Observable<Customer[]>;
-
-  customersInput$ = new Subject<string>();
-
-  isCustomersLoading = false;
-
-  minTermLength = 5;
+  customersWithContactsAPI = SearcherAPIS.customersWithContacts;
 
   isLoading = false;
 
@@ -75,8 +66,7 @@ export class OrdersFilterComponent implements OnChanges, OnInit {
 
 
   constructor(private appStatus: ApplicationStatusService,
-              private salesOrdersData: SalesOrdersDataService,
-              private contactsData: ContactsDataService) {
+              private salesOrdersData: SalesOrdersDataService) {
     this.initForm();
   }
 
@@ -90,7 +80,6 @@ export class OrdersFilterComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     this.getStatusByOrderType();
-    this.subscribeCustomersList();
   }
 
 
@@ -103,14 +92,11 @@ export class OrdersFilterComponent implements OnChanges, OnInit {
 
   onShowFiltersClicked() {
     this.showFilters = !this.showFilters;
-    this.subscribeCustomersList();
   }
 
 
   onClearFilters() {
     this.form.reset();
-    this.subscribeCustomersList();
-
     const payload = { query: this.getOrdersQuery() };
     sendEvent(this.ordersFilterEvent, OrdersFilterEventType.CLEAR_CLICKED, payload);
   }
@@ -184,26 +170,6 @@ export class OrdersFilterComponent implements OnChanges, OnInit {
       .firstValue()
       .then(x => this.statusList = x)
       .finally(() => this.isLoading = false);
-  }
-
-
-  private subscribeCustomersList() {
-    this.customersList$ = concat(
-      of(isEmpty(this.form.value.customer) ? [] : [this.form.value.customer]),
-      this.customersInput$.pipe(
-        filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.isCustomersLoading = true),
-        switchMap(keyword =>
-          this.contactsData.getCustomersWithContacts(keyword)
-            .pipe(
-              delay(2000),
-              catchError(() => of([])),
-              tap(() => this.isCustomersLoading = false)
-            ))
-      )
-    );
   }
 
 }

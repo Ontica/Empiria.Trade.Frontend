@@ -32,7 +32,7 @@ export class ProductLocationComponent implements OnChanges {
 
   @Output() productLocationEvent = new EventEmitter<EventInfo>();
 
-  warehouseBinAPI = SearcherAPIS.warehouseBin;
+  warehouseBinAPI = SearcherAPIS.warehouseBins;
 
   presentation: ProductPresentation = null;
 

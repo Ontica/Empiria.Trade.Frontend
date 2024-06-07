@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
-
-import { Customer } from '@app/models';
+import { EmpObservable, HttpService, Identifiable } from '@app/core';
 
 
 @Injectable()
@@ -34,24 +32,6 @@ export class ContactsDataService {
 
   getWarehousemen(): EmpObservable<Identifiable[]> {
     const path = 'v4/trade/contacts/warehousemen';
-
-    return this.http.get<Identifiable[]>(path);
-  }
-
-
-  getCustomersWithContacts(keywords: string): EmpObservable<Customer[]> {
-    Assertion.assertValue(keywords, 'keywords');
-
-    const path = `v4/trade/contacts/customers-with-contacts/?keywords=${keywords}`;
-
-    return this.http.get<Customer[]>(path);
-  }
-
-
-  getAccountHolders(keywords: string): EmpObservable<Identifiable[]> {
-    Assertion.assertValue(keywords, 'keywords');
-
-    const path = `v4/trade/contacts/account-holders/?keywords=${keywords}`;
 
     return this.http.get<Identifiable[]>(path);
   }
