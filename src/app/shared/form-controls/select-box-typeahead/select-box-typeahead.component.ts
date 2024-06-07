@@ -5,14 +5,15 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, forwardRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ContentChild, EventEmitter, Input, OnChanges, OnInit, Output,
+         SimpleChanges, TemplateRef, forwardRef } from '@angular/core';
 
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Observable, Subject, catchError, concat, debounceTime, delay, distinctUntilChanged, filter, map, of,
          switchMap, tap } from 'rxjs';
 
-import { Identifiable, isEmpty } from '@app/core';
+import { isEmpty } from '@app/core';
 
 import { SearcherAPIS, SearcherDataService } from '@app/data-services/_searcher.data.service';
 
@@ -44,7 +45,11 @@ const DefaultSelectBoxTypeaheadConfig: SelectBoxTypeaheadConfig = {
   ]
 })
 
-export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit {
+export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit, OnChanges {
+
+  @ContentChild('tLabelTemplate', { read: TemplateRef }) tLabelTemplate: TemplateRef<any>;
+
+  @ContentChild('tOptionTemplate', { read: TemplateRef }) tOptionTemplate: TemplateRef<any>;
 
   @Input() searcherAPI: SearcherAPIS = null;
 
@@ -54,7 +59,11 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
 
   @Input() showError = false;
 
-  @Input() initialValue: Identifiable = null;
+  @Input() initialValue: any = null;
+
+  @Input() bindLabel = 'name';
+
+  @Input() bindValue = 'uid';
 
   @Input()
   get config() {
@@ -76,7 +85,7 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
 
   formControl: FormControl;
 
-  searcherList$: Observable<Identifiable[]>;
+  searcherList$: Observable<any[]>;
 
   searcherTerm$ = new Subject<string>();
 
@@ -91,6 +100,13 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
               private cdr: ChangeDetectorRef) { }
 
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.initialValue) {
+      this.subscribeSearcherList();
+    }
+  }
+
+
   ngOnInit() {
     this.initFormControl();
     this.subscribeSearcherList();
@@ -98,9 +114,8 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
 
 
   writeValue(value: any) {
-    if (value) {
-      this.formControl.setValue(value, { emitEvent: false });
-    }
+    this.formControl.setValue(value ? value : null, { emitEvent: false });
+    this.subscribeSearcherList();
   }
 
 
@@ -137,8 +152,19 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
   }
 
 
+  resetSearcherData() {
+    this.subscribeSearcherList();
+    this.formControl.reset(null);
+  }
+
+
+  resetValue() {
+    this.formControl.reset(null);
+  }
+
+
   private initFormControl() {
-    this.formControl = new FormControl('');
+    this.formControl = new FormControl(null);
 
     this.formControl.valueChanges.subscribe(value => {
       this.onChange(value);
@@ -148,8 +174,10 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
 
 
   private subscribeSearcherList() {
+    let initialList$: Observable<any[]> = of(isEmpty(this.initialValue) ? [] : [this.initialValue]);
+
     this.searcherList$ = concat(
-      of(isEmpty(this.initialValue) ? [] : [this.initialValue]),
+      initialList$,
       this.searcherTerm$.pipe(
         filter(keyword => keyword !== null && keyword.trim().length >= this.config.minTermLength),
         map(keyword => keyword.trim()),

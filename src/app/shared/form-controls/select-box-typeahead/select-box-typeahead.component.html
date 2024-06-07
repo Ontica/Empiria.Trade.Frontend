@@ -1,10 +1,12 @@
-<emp-ng-select #SelectTypeahead
+<emp-ng-select #selectTypeahead
   [config]="{ bindByValue: config.bindByValue,
               virtualScroll: config.virtualScroll,
               clearable: config.clearable,
               minTermLength: config.minTermLength,
               typeToSearchText: 'Ingresar ' + config.minTermLength +' o más caracteres'}"
   [formControl]="formControl"
+  [bindLabel]="bindLabel"
+  [bindValue]="bindValue"
   [items]="searcherList$ | async"
   [typeahead]="searcherTerm$"
   [loading]="isLoading"
@@ -16,8 +18,17 @@
   (unfocus)="onUnfocus($event)"
   (search)="onSearch($event)">
 
-  <ng-content>
+  <ng-template #labelTemplate let-item="item" *ngIf="tLabelTemplate">
+    <ng-container *ngTemplateOutlet="tLabelTemplate; context: {item}"></ng-container>
+  </ng-template>
 
-  </ng-content>
+  <ng-template #optionTemplate let-item="item">
+    <ng-container *ngIf="tOptionTemplate">
+      <ng-container *ngTemplateOutlet="tOptionTemplate; context: {item}"></ng-container>
+    </ng-container>
+    <ng-container *ngIf="!tOptionTemplate">
+     {{bindLabel ? item[bindLabel] : item}}
+    </ng-container>
+  </ng-template>
 
 </emp-ng-select>
