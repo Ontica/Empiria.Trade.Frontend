@@ -30,13 +30,13 @@ export class ErrorMessageService {
 
 
   handleClientSideError(error) {
-    this.displayConsoleMessage('CLIENT SIDE ERROR', error.message);
+    this.displayConsoleMessage('CLIENT SIDE ERROR', error.message, error);
     this.showErrorMessage(CLIENT_SIDE_ERROR_MESSAGE);
   }
 
 
   handleServerSideError(error, request?) {
-    this.displayConsoleMessage('SERVER SIDE ERROR', `Status: ${error.status}.`, error.message);
+    this.displayConsoleMessage('SERVER SIDE ERROR', `Status: ${error.status}.`, error);
 
     switch (error.status) {
       case 401:
