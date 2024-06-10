@@ -19,6 +19,8 @@ import {
 
 import { OrderEditorEventType } from '../order-editor/order-editor.component';
 
+import { PickingEditorEventType } from '@app/views/shipping-and-handling/picking/picking-editor.component';
+
 export enum OrderTabbedViewEventType {
   CLOSE_BUTTON_CLICKED   = 'OrderTabbedViewComponent.Event.CloseButtonClicked',
   ORDER_UPDATED          = 'OrderTabbedViewComponent.Event.OrderUpdated',
@@ -94,10 +96,24 @@ export class OrderTabbedViewComponent implements OnChanges {
   }
 
 
+  onPickingEditorEvent(event: EventInfo) {
+    switch (event.type as PickingEditorEventType) {
+
+      case PickingEditorEventType.PICKING_UPDATED:
+        sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_UPDATED, event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
   onPackingViewEvent(event: EventInfo) {
     switch (event.type as PackingViewEventType) {
 
-      case PackingViewEventType.ORDER_PACKING_UPDATED:
+      case PackingViewEventType.PACKING_UPDATED:
       case PackingViewEventType.ORDER_SUPPLIED:
         sendEvent(this.orderTabbedViewEvent, OrderTabbedViewEventType.ORDER_UPDATED, event.payload);
         return;

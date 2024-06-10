@@ -51,6 +51,7 @@ import { InventoryOrderItemsTableComponent } from './inventory-order-items/inven
     InventoryOrdersExplorerComponent,
     InventoryOrderCreatorComponent,
     InventoryOrderTabbedViewComponent,
+    InventoryOrderHeaderComponent,
   ],
 })
 export class InventoryModule { }

@@ -18,13 +18,13 @@ import { CataloguesStateSelector } from '@app/presentation/exported.presentation
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { FormHelper, sendEvent } from '@app/shared/utils';
+import { ArrayLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { ContactsDataService } from '@app/data-services';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { EmptyInventoryOrder, InventoryOrder, InventoryOrderFields } from '@app/models';
+import { EmptyInventoryPicking, InventoryOrderFields, InventoryPicking } from '@app/models';
 
 
 export enum InventoryOrderHeaderEventType {
@@ -38,8 +38,8 @@ export enum InventoryOrderHeaderEventType {
 interface InventoryOrderFormModel extends FormGroup<{
   inventoryOrderType: FormControl<string>;
   inventoryOrderNo: FormControl<string>;
-  responsible: FormControl<string>;
-  assignedTo: FormControl<string>;
+  responsibleUID: FormControl<string>;
+  assignedToUID: FormControl<string>;
   notes: FormControl<string>;
 }> { }
 
@@ -49,7 +49,15 @@ interface InventoryOrderFormModel extends FormGroup<{
 })
 export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestroy {
 
-  @Input() inventoryOrder: InventoryOrder = EmptyInventoryOrder;
+  @Input() isSaved = false;
+
+  @Input() canEdit = false;
+
+  @Input() canClose = false;
+
+  @Input() canDelete = false;
+
+  @Input() inventoryOrder: InventoryPicking = EmptyInventoryPicking;
 
   @Output() inventoryOrderHeaderEvent = new EventEmitter<EventInfo>();
 
@@ -62,6 +70,8 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
   isLoading = false;
 
   inventoryTypesList: Identifiable[] = [];
+
+  responsableList: Identifiable[] = [];
 
   warehousemenList: Identifiable[] = [];
 
@@ -94,13 +104,8 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
   }
 
 
-  get isSaved(): boolean {
-    return !isEmpty(this.inventoryOrder);
-  }
-
-
   get hasActions(): boolean {
-    return this.inventoryOrder.actions.canEdit || this.inventoryOrder.actions.canClose;
+    return this.canEdit || this.canClose;
   }
 
 
@@ -112,7 +117,7 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
         eventType = InventoryOrderHeaderEventType.UPDATE_INVENTORY_ORDER;
       }
 
-      sendEvent(this.inventoryOrderHeaderEvent, eventType, { inventoryOrder: this.getFormData() });
+      sendEvent(this.inventoryOrderHeaderEvent, eventType, { dataFields: this.getFormData() });
     }
   }
 
@@ -135,8 +140,10 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
     }
 
     this.formHelper.setDisableForm(this.form, !this.editionMode);
+
     FormHelper.setDisableControl(this.form.controls.inventoryOrderNo);
     FormHelper.setDisableControl(this.form.controls.inventoryOrderType, this.isSaved);
+    FormHelper.setDisableControl(this.form.controls.responsibleUID, this.responsableList.length === 1);
   }
 
 
@@ -145,13 +152,48 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
     combineLatest([
       this.helper.select<Identifiable[]>(CataloguesStateSelector.INVENTORY_ORDER_TYPES),
-      this.contactsData.getWarehousemen()
+      this.contactsData.getWarehousemen(),
+      this.contactsData.getSupervisors()
     ])
-    .subscribe(([x, y]) => {
+    .subscribe(([x, y, z]) => {
       this.inventoryTypesList = x;
       this.warehousemenList = y;
+      this.setResponsableData(z);
       this.isLoading = false;
     });
+  }
+
+
+  private setResponsableData(data: Identifiable[]) {
+    this.responsableList = data;
+    this.validateResponsableInList();
+    this.validateResponsableDefault();
+    this.validateResponsableDisabled();
+  }
+
+
+  private validateResponsableInList() {
+    this.responsableList = isEmpty(this.inventoryOrder.responsible) ? this.responsableList :
+      ArrayLibrary.insertIfNotExist(this.responsableList ?? [], this.inventoryOrder.responsible, 'uid');
+  }
+
+
+  private validateResponsableDefault() {
+    const responsableDefault = ArrayLibrary.getFirstItem(this.responsableList);
+
+    const responsable = isEmpty(this.inventoryOrder.responsible) ?
+      responsableDefault : this.inventoryOrder.responsible;
+
+    this.form.controls.responsibleUID.reset(responsable?.uid ?? null);
+  }
+
+
+  private validateResponsableDisabled() {
+    const inEdition = !this.isSaved || (this.isSaved && this.editionMode)
+    const hasOptions = this.responsableList.length > 1;
+    const enable = inEdition && hasOptions;
+
+    FormHelper.setDisableControl(this.form.controls.responsibleUID, !enable);
   }
 
 
@@ -161,8 +203,8 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
     this.form = fb.group({
       inventoryOrderType: ['', Validators.required],
       inventoryOrderNo: ['', Validators.required],
-      responsible: ['', Validators.required],
-      assignedTo: ['', Validators.required],
+      responsibleUID: ['', Validators.required],
+      assignedToUID: ['', Validators.required],
       notes: ['', Validators.required],
     });
   }
@@ -170,12 +212,15 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
   private setFormData() {
     this.form.reset({
-      inventoryOrderType: this.inventoryOrder.inventoryOrderType.uid,
-      inventoryOrderNo: this.inventoryOrder.inventoryOrderNo,
-      responsible: this.inventoryOrder.responsible.uid,
-      assignedTo: this.inventoryOrder.assignedTo.uid,
+      inventoryOrderType: isEmpty(this.inventoryOrder.inventoryOrderType) ? null : this.inventoryOrder.inventoryOrderType.uid,
+      inventoryOrderNo: this.inventoryOrder.inventoryOrderNo ?? null,
+      responsibleUID: isEmpty(this.inventoryOrder.responsible) ? null : this.inventoryOrder.responsible.uid,
+      assignedToUID: isEmpty(this.inventoryOrder.assignedTo) ? null : this.inventoryOrder.assignedTo.uid,
       notes: this.inventoryOrder.notes,
     });
+
+    this.validateResponsableInList();
+    this.validateResponsableDefault();
   }
 
 
@@ -186,8 +231,8 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
     const data: InventoryOrderFields = {
       inventoryOrderTypeUID: formModel.inventoryOrderType ?? '',
-      responsibleUID: formModel.responsible ?? '',
-      assignedToUID: formModel.assignedTo ?? '',
+      responsibleUID: formModel.responsibleUID ?? '',
+      assignedToUID: formModel.assignedToUID ?? '',
       notes: formModel.notes ?? '',
     };
 
@@ -205,7 +250,7 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
       .firstValue()
       .then(x => {
         if (x) {
-          sendEvent(this.inventoryOrderHeaderEvent, eventType, { inventoryOrderUID: this.inventoryOrder.uid });
+          sendEvent(this.inventoryOrderHeaderEvent, eventType);
         }
       });
   }

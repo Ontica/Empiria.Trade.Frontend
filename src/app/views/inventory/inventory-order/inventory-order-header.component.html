@@ -4,22 +4,22 @@
 
     <div class="fx-row-container">
 
-        <div class="fx-item-half">
-          <label>Tipo de inventario:</label>
-          <emp-ng-select
-            formControlName="inventoryOrderType"
-            [items]="inventoryTypesList"
-            [loading]="isLoading"
-            [showError]="formHelper.isControlInvalid(form.controls.inventoryOrderType)">
-          </emp-ng-select>
-        </div>
+      <div class="fx-item-half">
+        <label>Número de orden de inventario:</label>
+        <input type="text" class="text-box"
+          formControlName="inventoryOrderNo"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.inventoryOrderNo)">
+      </div>
 
-        <div class="fx-item-half">
-          <label>Número de orden:</label>
-          <input type="text" class="text-box"
-            formControlName="inventoryOrderNo"
-            [class.invalid-control]="formHelper.isControlInvalid(form.controls.inventoryOrderNo)">
-        </div>
+      <div class="fx-item-half">
+        <label>Tipo de inventario:</label>
+        <emp-ng-select
+          formControlName="inventoryOrderType"
+          [items]="inventoryTypesList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.inventoryOrderType)">
+        </emp-ng-select>
+      </div>
 
     </div>
 
@@ -27,21 +27,21 @@
 
       <div class="fx-item-half">
         <label>Responsable:</label>
-          <emp-ng-select
-            formControlName="responsible"
-            [items]="warehousemenList"
-            [loading]="isLoading"
-            [showError]="formHelper.isControlInvalid(form.controls.responsible)">
-          </emp-ng-select>
+        <emp-ng-select
+          formControlName="responsibleUID"
+          [items]="responsableList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.responsibleUID)">
+        </emp-ng-select>
       </div>
 
       <div class="fx-item-half">
         <label>Asignado a:</label>
           <emp-ng-select
-            formControlName="assignedTo"
+            formControlName="assignedToUID"
             [items]="warehousemenList"
             [loading]="isLoading"
-            [showError]="formHelper.isControlInvalid(form.controls.assignedTo)">
+            [showError]="formHelper.isControlInvalid(form.controls.assignedToUID)">
           </emp-ng-select>
       </div>
 
@@ -86,13 +86,13 @@
 
       <div class="fx-item fx-items-center">
 
-        <button *ngIf="editionMode && inventoryOrder.actions.canDelete"
+        <button *ngIf="editionMode && canDelete"
           type="button" class="btn-warning"
           (click)="onDeleteButtonClicked()">
           Eliminar
         </button>
 
-        <button *ngIf="!editionMode && inventoryOrder.actions.canClose"
+        <button *ngIf="!editionMode && canClose"
           type="button" class="btn"
           (click)="onCloseButtonClicked()">
           Aplicar
@@ -102,7 +102,7 @@
 
       <div class="fx-item fx-end fx-items-center">
 
-        <button *ngIf="!editionMode && inventoryOrder.actions.canEdit"
+        <button *ngIf="!editionMode && canEdit"
           class="btn-action"
           (click)="enableEditor(true)">
           Editar

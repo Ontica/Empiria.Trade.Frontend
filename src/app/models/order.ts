@@ -198,6 +198,7 @@ export interface OrderActions {
     apply: boolean;
     authorize: boolean;
     deauthorize: boolean;
+    editPicking: boolean; // agregar este campo nuevo
     editPacking: boolean;
     closePacking: boolean;
     editShipping: boolean;
@@ -206,9 +207,9 @@ export interface OrderActions {
   show: {
     orderData: boolean;
     creditData: boolean;
+    pickingData: boolean; // agregar este campo nuevo
     packingData: boolean;
     shippingData: boolean;
-    sendShippingData: boolean;
   };
 }
 
@@ -220,6 +221,7 @@ export const EmptyOrderActions: OrderActions = {
     apply: false,
     authorize: false,
     deauthorize: false,
+    editPicking: false,
     editPacking: false,
     closePacking: false,
     editShipping: false,
@@ -228,25 +230,35 @@ export const EmptyOrderActions: OrderActions = {
   show: {
     orderData: false,
     creditData: false,
+    pickingData: false,
     packingData: false,
     shippingData: false,
-    sendShippingData: false,
   },
 };
 
 
-export interface OrderItem {
+export interface OrderItem extends OrderItemData {
   orderItemUID: string;
   product: Product;
   presentation: Presentation;
   vendor: Vendor;
   quantity: number;
+
   unitPrice: number;
   salesPrice: number;
   discountPolicy: string;
   discount1: number;
   discount2: number;
   subtotal: number;
+}
+
+
+export interface OrderItemData {
+  orderItemUID: string;
+  product: Product;
+  presentation: Presentation;
+  vendor: Vendor;
+  quantity: number;
 }
 
 

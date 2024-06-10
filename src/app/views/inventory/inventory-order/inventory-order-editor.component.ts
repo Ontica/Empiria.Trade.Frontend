@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -39,6 +39,11 @@ export class InventoryOrderEditorComponent {
   constructor(private inventoryOrdersData: InventoryOrdersDataService) { }
 
 
+  get isSaved(): boolean {
+    return !isEmpty(this.inventoryOrder);
+  }
+
+
   onInventoryOrderHeaderEvent(event: EventInfo) {
     if (this.submitted) {
       return;
@@ -46,18 +51,16 @@ export class InventoryOrderEditorComponent {
 
     switch (event.type as InventoryOrderHeaderEventType) {
       case InventoryOrderHeaderEventType.UPDATE_INVENTORY_ORDER:
-        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
-        this.updateInventoryOrder(event.payload.inventoryOrder as InventoryOrderFields);
+        Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
+        this.updateInventoryOrder(event.payload.dataFields as InventoryOrderFields);
         return;
 
       case InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER:
-        Assertion.assertValue(event.payload.inventoryOrderUID, 'event.payload.inventoryOrderUID');
-        this.deleteInventoryOrder(event.payload.inventoryOrderUID);
+        this.deleteInventoryOrder();
         return;
 
       case InventoryOrderHeaderEventType.CLOSE_INVENTORY_ORDER:
-        Assertion.assertValue(event.payload.inventoryOrderUID, 'event.payload.inventoryOrderUID');
-        this.closeInventoryOrder(event.payload.inventoryOrderUID);
+        this.closeInventoryOrder();
         return;
 
       default:
@@ -77,20 +80,20 @@ export class InventoryOrderEditorComponent {
   }
 
 
-  private deleteInventoryOrder(inventoryOrderUID: string) {
+  private deleteInventoryOrder() {
     this.submitted = true;
 
-    this.inventoryOrdersData.deleteInventoryOrder(inventoryOrderUID)
+    this.inventoryOrdersData.deleteInventoryOrder(this.inventoryOrder.uid)
       .firstValue()
       .then(x => this.resolveDeleteInventoryOrder(x))
       .finally(() => this.submitted = false);
   }
 
 
-  private closeInventoryOrder(inventoryOrderUID: string) {
+  private closeInventoryOrder() {
     this.submitted = true;
 
-    this.inventoryOrdersData.closeInventoryOrder(inventoryOrderUID)
+    this.inventoryOrdersData.closeInventoryOrder(this.inventoryOrder.uid)
       .firstValue()
       .then(x => this.resolveUpdateInventoryOrder(x))
       .finally(() => this.submitted = false);

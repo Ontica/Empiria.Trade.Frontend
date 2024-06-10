@@ -12,8 +12,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
+import { InventoryModule } from '../inventory/inventory.module';
 import { ProductsModule } from '../products/products.module';
 
+import { PickingEditorComponent } from './picking/picking-editor.component';
 import { PackingViewComponent } from './packing/packing-view/packing-view.component';
 import { PackingStatusComponent } from './packing/packing-view/packing-status.component';
 import { PackingItemsTableComponent } from './packing/packing-view/packing-items-table.component';
@@ -58,9 +60,11 @@ import { ShippingTabbedViewComponent } from './shipping/shipping-tabbed-view/shi
     AngularMaterialModule,
     SharedModule,
 
+    InventoryModule,
     ProductsModule,
   ],
   declarations: [
+    PickingEditorComponent,
     PackingViewComponent,
     PackingStatusComponent,
     PackingItemsTableComponent,
@@ -95,6 +99,7 @@ import { ShippingTabbedViewComponent } from './shipping/shipping-tabbed-view/shi
     ShippingTabbedViewComponent,
   ],
   exports: [
+    PickingEditorComponent,
     PackingViewComponent,
     OrderShippingViewerComponent,
     ShippingEditorModalComponent,

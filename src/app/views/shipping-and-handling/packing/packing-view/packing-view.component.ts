@@ -28,8 +28,8 @@ import {
 
 
 export enum PackingViewEventType {
-  ORDER_PACKING_UPDATED = 'PackingViewComponent.Event.OrderPackingUpdated',
-  ORDER_SUPPLIED        = 'PackingViewComponent.Event.OrderSupplied',
+  PACKING_UPDATED = 'PackingViewComponent.Event.PackingUpdated',
+  ORDER_SUPPLIED  = 'PackingViewComponent.Event.OrderSupplied',
 }
 
 @Component({
@@ -264,7 +264,7 @@ export class PackingViewComponent {
 
 
   private emitPackingUpdated(order: Order) {
-    sendEvent(this.packingViewEvent, PackingViewEventType.ORDER_PACKING_UPDATED, { order });
+    sendEvent(this.packingViewEvent, PackingViewEventType.PACKING_UPDATED, { order });
   }
 
 

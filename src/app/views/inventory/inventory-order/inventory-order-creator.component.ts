@@ -49,8 +49,8 @@ export class InventoryOrderCreatorComponent {
 
     switch (event.type as InventoryOrderHeaderEventType) {
       case InventoryOrderHeaderEventType.CREATE_INVENTORY_ORDER:
-        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
-        this.createInventoryOrder(event.payload.inventoryOrder as InventoryOrderFields);
+        Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
+        this.createInventoryOrder(event.payload.dataFields as InventoryOrderFields);
         return;
 
       default:

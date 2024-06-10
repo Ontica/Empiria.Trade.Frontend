@@ -14,6 +14,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { sendEvent } from '@app/shared/utils';
 
 export enum PackingStatusEventType {
+  VIEW_ITEMS_CLICKED   = 'PackingStatusComponent.Event.ViewItemsClicked',
   VIEW_STATUS_CLICKED  = 'PackingStatusComponent.Event.ViewStatusClicked',
   SEND_PACKING_CLICKED = 'PackingStatusComponent.Event.SendPackingClicked',
 }
@@ -28,6 +29,8 @@ export class PackingStatusComponent {
 
   @Input() packingItemsCount: number = 0;
 
+  @Input() totalItemsCount: number = 0;
+
   @Input() canEdit = false;
 
   @Input() canClose = false;
@@ -41,6 +44,11 @@ export class PackingStatusComponent {
 
   constructor(private messageBox: MessageBoxService) {
 
+  }
+
+
+  onViewItemsClicked() {
+    sendEvent(this.packingStatusEvent, PackingStatusEventType.VIEW_ITEMS_CLICKED);
   }
 
 

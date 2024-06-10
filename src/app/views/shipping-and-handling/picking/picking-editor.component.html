@@ -1,0 +1,23 @@
+ <div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
+
+  <emp-ng-spinner #spinner [visible]="submitted">
+
+  </emp-ng-spinner>
+
+  <emp-trade-packing-status class="fx-item-none"
+    [totalItemsCount]="items.length"
+    (packingStatusEvent)="onPackingStatusEvent($event)">
+
+  </emp-trade-packing-status>
+
+  <div class="section-title"> Información general del Picking </div>
+
+  <emp-trade-inventory-order-header
+    [inventoryOrder]="packing.picking"
+    [isSaved]="true"
+    [canEdit]="canEdit"
+    (inventoryOrderHeaderEvent)="onInventoryOrderHeaderEvent($event)">
+
+  </emp-trade-inventory-order-header>
+
+ </div>

@@ -53,7 +53,7 @@ export interface InventoryOrderDataTable extends DataTable {
 }
 
 
-export interface InventoryOrder {
+export interface InventoryOrder extends InventoryPicking {
   uid: string;
   inventoryOrderType: Identifiable;
   inventoryOrderNo: string;
@@ -66,6 +66,15 @@ export interface InventoryOrder {
   status: InventoryStatus;
   items: InventoryOrderItem[];
   actions: InventoryOrderActions;
+}
+
+
+export interface InventoryPicking {
+  inventoryOrderType: Identifiable;
+  inventoryOrderNo: string;
+  responsible: Identifiable;
+  assignedTo: Identifiable;
+  notes: string;
 }
 
 
@@ -154,6 +163,15 @@ export const EmptyInventoryOrder: InventoryOrder = {
   items: [],
   actions: EmptyInventoryOrderActions,
 };
+
+
+export const EmptyInventoryPicking: InventoryPicking = {
+  inventoryOrderType: Empty,
+  inventoryOrderNo: '',
+  responsible: Empty,
+  assignedTo: Empty,
+  notes: '',
+}
 
 
 export function mapInventoryOrderItemFieldsFromSelection(

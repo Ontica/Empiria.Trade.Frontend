@@ -20,9 +20,10 @@
   <ng-container *ngIf="!isLoading">
 
     <div *ngIf="missingItemsCount > 0"
-      class="fx-row-container fx-space-between fx-items-center warning-container" >
+      class="fx-row-container fx-space-between fx-items-center warning-container"
+      [style.min-height.px]="46">
 
-      Faltan {{missingItemsCount}} produtos por surtir.
+      Faltan {{missingItemsCount}} productos por surtir.
 
       <button class="btn"
         (click)="onViewStatusClicked()">
@@ -31,8 +32,22 @@
 
     </div>
 
-    <div *ngIf="missingItemsCount === 0"
-      class="fx-row-container fx-space-between fx-items-center info-container">
+    <div *ngIf="totalItemsCount > 0"
+      class="fx-row-container fx-space-between fx-items-center warning-container"
+      [style.min-height.px]="46">
+
+      El pedido contiene {{totalItemsCount}} productos.
+
+      <button class="btn"
+        (click)="onViewItemsClicked()">
+        Ver Productos
+      </button>
+
+    </div>
+
+    <div *ngIf="missingItemsCount === 0 && totalItemsCount === 0"
+      class="fx-row-container fx-space-between fx-items-center info-container"
+      [style.min-height.px]="46">
 
       {{packingItemsCount > 0 ? 'Se han surtido todos los productos.' : 'El pedido no tiene productos asignados.'}}
 

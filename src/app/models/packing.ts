@@ -5,10 +5,15 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Presentation, Product, Vendor } from "./product";
+import { Presentation, Product, Vendor } from './product';
+
+import { EmptyInventoryPicking, InventoryPicking } from './inventory-order';
+
+import { OrderItemData } from './order';
 
 
 export interface Packing {
+  picking: InventoryPicking;
   data: PackingData;
   packagedItems: PackingItem[];
   missingItems: MissingItem[];
@@ -69,14 +74,14 @@ export interface PackingOrderItem {
 }
 
 
-export interface MissingItem {
+export interface MissingItem extends OrderItemData {
   orderItemUID: string;
   product: Product;
   presentation: Presentation;
   vendor: Vendor;
+  quantity: number;
   warehouses: Warehouse[];
   warehouseBins: WarehouseBin[];
-  quantity: number;
 }
 
 
@@ -120,6 +125,7 @@ export const EmptyPackingData: PackingData = {
 
 
 export const EmptyPacking: Packing = {
+  picking: EmptyInventoryPicking,
   data: EmptyPackingData,
   packagedItems: [],
   missingItems: [],

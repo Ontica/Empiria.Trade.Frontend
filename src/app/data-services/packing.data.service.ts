@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { PackingOrderItemField, Packing, PackingItemFields, Order } from '@app/models';
+import { PackingOrderItemField, Packing, PackingItemFields, Order, InventoryOrderFields } from '@app/models';
 
 
 @Injectable()
@@ -34,28 +34,40 @@ export class PackingDataService {
   }
 
 
-  createPackingItem(orderUID: string,
-                    packingItemFields: PackingItemFields): EmpObservable<Order> {
+  updateOrderPicking(orderUID: string,
+                dataFields: InventoryOrderFields): EmpObservable<Order> {
     Assertion.assertValue(orderUID, 'orderUID');
-    Assertion.assertValue(packingItemFields, 'packingItemFields');
+    Assertion.assertValue(dataFields, 'dataFields');
+
+
+    const path = `v4/trade/sales/packing/${orderUID}/picking"`;
+
+    return this.http.put<Order>(path, dataFields);
+  }
+
+
+  createPackingItem(orderUID: string,
+                    dataFields: PackingItemFields): EmpObservable<Order> {
+    Assertion.assertValue(orderUID, 'orderUID');
+    Assertion.assertValue(dataFields, 'dataFields');
 
     const path = `v4/trade/sales/packing/${orderUID}/packing-item`;
 
-    return this.http.post<Order>(path, packingItemFields);
+    return this.http.post<Order>(path, dataFields);
   }
 
 
   updatePackingItem(orderUID: string,
                     packingItemUID: string,
-                    packingItemFields: PackingItemFields): EmpObservable<Order> {
+                    dataFields: PackingItemFields): EmpObservable<Order> {
     Assertion.assertValue(orderUID, 'orderUID');
     Assertion.assertValue(packingItemUID, 'packingItemUID');
-    Assertion.assertValue(packingItemFields, 'packingItemFields');
+    Assertion.assertValue(dataFields, 'dataFields');
 
 
     const path = `v4/trade/sales/packing/${orderUID}/packing-item/${packingItemUID}`;
 
-    return this.http.put<Order>(path, packingItemFields);
+    return this.http.put<Order>(path, dataFields);
   }
 
 
