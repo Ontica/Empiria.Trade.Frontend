@@ -12,7 +12,7 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 import { MoneyAccountsDataService } from '@app/data-services';
 
 import { EmptyMoneyAccount, EmptyMoneyAccountDataTable, EmptyMoneyAccountQuery, MoneyAccount,
-         MoneyAccountsDataTable, MoneyAccountQuery } from '@app/models';
+         MoneyAccountsDataTable, MoneyAccountQuery, buildMoneyAccountActions } from '@app/models';
 
 import {
   MoneyAccountsExplorerEventType
@@ -182,6 +182,10 @@ export class MoneyAccountsMainPageComponent {
 
 
   private setMoneyAccountSelected(data: MoneyAccount) {
+    // START-TMP
+    buildMoneyAccountActions(data);
+    // END-TMP
+
     this.moneyAccountSelected = data;
     this.displayTabbedView = !isEmpty(this.moneyAccountSelected);
   }

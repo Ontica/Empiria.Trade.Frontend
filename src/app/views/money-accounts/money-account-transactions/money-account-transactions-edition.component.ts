@@ -23,6 +23,8 @@ export class MoneyAccountTransactionsEditionComponent {
 
   @Input() moneyAccountTransactions: MoneyAccountTransaction[] = [];
 
+  @Input() canEdit = false;
+
   submitted = false;
 
 

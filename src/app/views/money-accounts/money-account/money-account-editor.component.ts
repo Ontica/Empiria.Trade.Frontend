@@ -55,6 +55,21 @@ export class MoneyAccountEditorComponent {
         this.deleteMoneyAccount();
         return;
 
+      case MoneyAccountHeaderEventType.SUSPEND_MONEY_ACCOUNT:
+        Assertion.assertValue(event.payload.moneyAccountUID, 'event.payload.moneyAccountUID');
+        this.suspendMoneyAccount();
+        return;
+
+      case MoneyAccountHeaderEventType.ACTIVATE_MONEY_ACCOUNT:
+        Assertion.assertValue(event.payload.moneyAccountUID, 'event.payload.moneyAccountUID');
+        this.activateMoneyAccount();
+        return;
+
+      case MoneyAccountHeaderEventType.PENDING_MONEY_ACCOUNT:
+        Assertion.assertValue(event.payload.moneyAccountUID, 'event.payload.moneyAccountUID');
+        this.pendingMoneyAccount();
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -78,6 +93,36 @@ export class MoneyAccountEditorComponent {
     this.moneyAccountsData.deleteMoneyAccount(this.moneyAccount.uid)
       .firstValue()
       .then(x => this.resolveDeleteMoneyAccount(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private suspendMoneyAccount() {
+    this.submitted = true;
+
+    this.moneyAccountsData.suspendMoneyAccount(this.moneyAccount.uid)
+      .firstValue()
+      .then(x => this.resolveUpdateMoneyAccount(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private activateMoneyAccount() {
+    this.submitted = true;
+
+    this.moneyAccountsData.activateMoneyAccount(this.moneyAccount.uid)
+      .firstValue()
+      .then(x => this.resolveUpdateMoneyAccount(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private pendingMoneyAccount() {
+    this.submitted = true;
+
+    this.moneyAccountsData.pendingMoneyAccount(this.moneyAccount.uid)
+      .firstValue()
+      .then(x => this.resolveUpdateMoneyAccount(x))
       .finally(() => this.submitted = false);
   }
 

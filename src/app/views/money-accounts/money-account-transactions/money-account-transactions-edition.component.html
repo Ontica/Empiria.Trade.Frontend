@@ -8,7 +8,7 @@
 
     <div class="fx-item-none">
 
-      <button type="button"
+      <button type="button" *ngIf="canEdit"
         class="btn-action"
         (click)="onAddTransactionClicked()">
         Agregar transacción
@@ -21,6 +21,7 @@
   <br>
 
   <emp-trade-money-account-transactions-table  class="fx-item"
+    [canEdit]="canEdit"
     [moneyAccountTransactions]="moneyAccountTransactions"
     (moneyAccountTransactionsEvent)="onMoneyAccountTransactionsEvent($event)">
 

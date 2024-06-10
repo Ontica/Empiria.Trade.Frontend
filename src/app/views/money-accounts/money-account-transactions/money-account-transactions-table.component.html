@@ -3,7 +3,7 @@
   <emp-ng-data-table *ngIf="moneyAccountTransactionsData.entries.length > 0"
     [dataTable]="moneyAccountTransactionsData"
     [showControls]="false"
-    [showDeleteButton]="true"
+    [showDeleteButton]="canEdit"
     deleteButtonText="Eliminar transacción"
     (dataTableEvent)="onDataTableEvent($event)">
 

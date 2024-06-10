@@ -78,4 +78,31 @@ export class MoneyAccountsDataService {
     return this.http.delete<MoneyAccount>(path);
   }
 
+
+  suspendMoneyAccount(moneyAccountUID: string): EmpObservable<MoneyAccount> {
+    Assertion.assertValue(moneyAccountUID, 'moneyAccountUID');
+
+    const path = `v4/trade/financial/money-accounts/${moneyAccountUID}/suspend`;
+
+    return this.http.post<MoneyAccount>(path);
+  }
+
+
+  activateMoneyAccount(moneyAccountUID: string): EmpObservable<MoneyAccount> {
+    Assertion.assertValue(moneyAccountUID, 'moneyAccountUID');
+
+    const path = `v4/trade/financial/money-accounts/${moneyAccountUID}/active`;
+
+    return this.http.post<MoneyAccount>(path);
+  }
+
+
+  pendingMoneyAccount(moneyAccountUID: string): EmpObservable<MoneyAccount> {
+    Assertion.assertValue(moneyAccountUID, 'moneyAccountUID');
+
+    const path = `v4/trade/financial/money-accounts/${moneyAccountUID}/pending`;
+
+    return this.http.post<MoneyAccount>(path);
+  }
+
 }

@@ -70,7 +70,7 @@
 
   </div>
 
-  <mat-divider class="horizontal">
+  <mat-divider class="horizontal" *ngIf="hasActions">
 
   </mat-divider>
 
@@ -93,13 +93,39 @@
 
     <ng-container *ngIf="isSaved">
 
-      <div class="fx-item fx-items-center" *ngIf="editionMode">
+      <div class="fx-item fx-items-center">
 
-        <button
-          type="button" class="btn-warning"
-          (click)="onDeleteButtonClicked()">
-          Eliminar
-        </button>
+        <ng-container *ngIf="editionMode">
+
+          <button *ngIf="moneyAccount.actions.canDelete"
+            type="button" class="btn-warning"
+            (click)="onDeleteButtonClicked()">
+            Eliminar
+          </button>
+
+        </ng-container>
+
+        <ng-container *ngIf="!editionMode">
+
+          <button *ngIf="moneyAccount.actions.canSuspend"
+            type="button" class="btn"
+            (click)="onSuspendButtonClicked()">
+            Suspender
+          </button>
+
+          <button *ngIf="moneyAccount.actions.canSetPending"
+            type="button" class="btn"
+            (click)="onPendingButtonClicked()">
+            Bloquear
+          </button>
+
+          <button *ngIf="moneyAccount.actions.canActivate"
+            type="button" class="btn"
+            (click)="onActivateButtonClicked()">
+            Activar
+          </button>
+
+        </ng-container>
 
       </div>
 
@@ -122,7 +148,7 @@
 
         </ng-container>
 
-        <ng-container *ngIf="!editionMode">
+        <ng-container *ngIf="!editionMode && moneyAccount.actions.canEdit">
 
           <button
             class="btn-action"

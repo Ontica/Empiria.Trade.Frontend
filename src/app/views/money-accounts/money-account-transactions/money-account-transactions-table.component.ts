@@ -31,6 +31,8 @@ export class MoneyAccountTransactionsTableComponent implements OnChanges {
 
   @Input() moneyAccountTransactions: MoneyAccountTransaction[] = [];
 
+  @Input() canEdit = false;
+
   @Output() moneyAccountTransactionsEvent = new EventEmitter<EventInfo>();
 
   moneyAccountTransactionsData: MoneyAccountTransactionsDataTable = EmptyMoneyAccountTransactionsDataTable;

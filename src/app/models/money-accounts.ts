@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Empty, Identifiable } from '@app/core';
+import { DateString, Empty, Identifiable, isEmpty } from '@app/core';
 
 import { DataTable, DataTableColumn, DataTableColumnType, DataTableEntry, DataTableQuery } from './_data-table';
 
@@ -33,6 +33,17 @@ export interface MoneyAccount {
   balance: number;
   status: Identifiable;
   transactions: MoneyAccountTransaction[];
+  actions: MoneyAccountActions;
+}
+
+
+export interface MoneyAccountActions {
+  canEdit: boolean;
+  canDelete: boolean;
+  canSuspend: boolean;
+  canActivate: boolean;
+  canSetPending: boolean;
+  canEditTransactions: boolean;
 }
 
 
@@ -50,8 +61,7 @@ export interface MoneyAccountTransaction {
   operationNumber: string;
   operationType: string;
   transactionDate: DateString;
-  creditAmount: number;
-  debitAmount: number;
+  transactionAmount: number;
   dueDate: DateString;
 }
 
@@ -83,6 +93,16 @@ export const EmptyMoneyAccountDataTable: MoneyAccountsDataTable = {
 };
 
 
+export const EmptyMoneyAccountActions: MoneyAccountActions = {
+  canEdit: false,
+  canDelete: false,
+  canActivate: false,
+  canSuspend: false,
+  canSetPending: false,
+  canEditTransactions: false,
+};
+
+
 export const EmptyMoneyAccount: MoneyAccount = {
   uid: '',
   moneyAccountNumber: '',
@@ -94,6 +114,7 @@ export const EmptyMoneyAccount: MoneyAccount = {
   balance: 0,
   status: Empty,
   transactions: [],
+  actions: EmptyMoneyAccountActions,
 };
 
 
@@ -119,13 +140,8 @@ export const MoneyAccountTransactionColumns: DataTableColumn[] = [
     type: DataTableColumnType.date,
   },
   {
-    field: 'creditAmount',
-    title: 'Cargo',
-    type: DataTableColumnType.decimal,
-  },
-  {
-    field: 'debitAmount',
-    title: 'Abono',
+    field: 'transactionAmount',
+    title: 'Importe',
     type: DataTableColumnType.decimal,
   },
 ];
@@ -135,3 +151,24 @@ export const EmptyMoneyAccountTransactionsDataTable: MoneyAccountTransactionsDat
   columns: MoneyAccountTransactionColumns,
   entries: [],
 };
+
+
+export function buildMoneyAccountActions(data: MoneyAccount) {
+
+  if (isEmpty(data)) {
+    data.actions = { ...{}, ...EmptyMoneyAccountActions };
+  } else {
+
+    const actions = {
+      canEdit:     data.status.uid === 'Active',
+      canDelete:   data.status.uid === 'Active',
+      canActivate: data.status.uid === 'Suspended',
+      canSuspend:  data.status.uid === 'Active',
+      canSetPending:  data.status.uid === 'Active',
+      canEditTransactions: data.status.uid === 'Active',
+    };
+
+    data.actions = { ...{}, ...actions };
+  }
+
+}

@@ -20,6 +20,7 @@
       <ng-template matTabContent>
 
         <emp-trade-money-account-transactions-edition
+          [canEdit]="moneyAccount.actions.canEditTransactions"
           [moneyAccountTransactions]="moneyAccount.transactions">
 
         </emp-trade-money-account-transactions-edition>

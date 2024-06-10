@@ -21,9 +21,12 @@ import { EmptyMoneyAccount, MoneyAccount, MoneyAccountFields } from '@app/models
 
 
 export enum MoneyAccountHeaderEventType {
-  CREATE_MONEY_ACCOUNT = 'MoneyAccountHeaderComponent.Event.CreateMoneyAccount',
-  UPDATE_MONEY_ACCOUNT = 'MoneyAccountHeaderComponent.Event.UpdateMoneyAccount',
-  DELETE_MONEY_ACCOUNT = 'MoneyAccountHeaderComponent.Event.DeleteMoneyAccount',
+  CREATE_MONEY_ACCOUNT   = 'MoneyAccountHeaderComponent.Event.CreateMoneyAccount',
+  UPDATE_MONEY_ACCOUNT   = 'MoneyAccountHeaderComponent.Event.UpdateMoneyAccount',
+  DELETE_MONEY_ACCOUNT   = 'MoneyAccountHeaderComponent.Event.DeleteMoneyAccount',
+  ACTIVATE_MONEY_ACCOUNT = 'MoneyAccountHeaderComponent.Event.ActivateMoneyAccount',
+  SUSPEND_MONEY_ACCOUNT  = 'MoneyAccountHeaderComponent.Event.SuspendMoneyAccount',
+  PENDING_MONEY_ACCOUNT  = 'MoneyAccountHeaderComponent.Event.PendingMoneyAccount',
 }
 
 
@@ -83,6 +86,13 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
   }
 
 
+  get hasActions(): boolean {
+    return this.moneyAccount.actions.canEdit || this.moneyAccount.actions.canDelete ||
+           this.moneyAccount.actions.canSuspend || this.moneyAccount.actions.canActivate ||
+           this.moneyAccount.actions.canSetPending;
+  }
+
+
   onSubmitButtonClicked() {
     if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
       let eventType = MoneyAccountHeaderEventType.CREATE_MONEY_ACCOUNT;
@@ -97,7 +107,22 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
 
 
   onDeleteButtonClicked() {
-    this.showConfirmDeleteMessage();
+    this.showConfirmMessage(MoneyAccountHeaderEventType.DELETE_MONEY_ACCOUNT);
+  }
+
+
+  onSuspendButtonClicked() {
+    this.showConfirmMessage(MoneyAccountHeaderEventType.SUSPEND_MONEY_ACCOUNT);
+  }
+
+
+  onActivateButtonClicked() {
+    this.showConfirmMessage(MoneyAccountHeaderEventType.ACTIVATE_MONEY_ACCOUNT);
+  }
+
+
+  onPendingButtonClicked() {
+    this.showConfirmMessage(MoneyAccountHeaderEventType.PENDING_MONEY_ACCOUNT);
   }
 
 
@@ -167,13 +192,12 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
   }
 
 
-  private showConfirmDeleteMessage() {
-    let message = `Esta operación eliminará la cuenta
-                   <strong> ${this.moneyAccount.moneyAccountType.name}:
-                   ${this.moneyAccount.moneyAccountNumber}</strong>.
-                   <br><br>¿Elimino la cuenta?`;
+  private showConfirmMessage(eventType: MoneyAccountHeaderEventType) {
+    const confirmType = this.getConfirmType(eventType);
+    const title = this.getConfirmTitle(eventType);
+    const message = this.getConfirmMessage(eventType);
 
-    this.messageBox.confirm(message, 'Eliminar cuenta', 'DeleteCancel')
+    this.messageBox.confirm(message, title, confirmType)
       .firstValue()
       .then(x => {
         if (x) {
@@ -181,6 +205,62 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
             { moneyAccountUID: this.moneyAccount.uid });
         }
       });
+  }
+
+
+  private getConfirmType(eventType: MoneyAccountHeaderEventType): 'AcceptCancel' | 'DeleteCancel' {
+    switch (eventType) {
+      case MoneyAccountHeaderEventType.DELETE_MONEY_ACCOUNT:
+      case MoneyAccountHeaderEventType.SUSPEND_MONEY_ACCOUNT:
+      case MoneyAccountHeaderEventType.PENDING_MONEY_ACCOUNT:
+        return 'DeleteCancel';
+
+      case MoneyAccountHeaderEventType.ACTIVATE_MONEY_ACCOUNT:
+      default:
+        return 'AcceptCancel';
+    }
+  }
+
+
+  private getConfirmTitle(eventType: MoneyAccountHeaderEventType): string {
+    switch (eventType) {
+      case MoneyAccountHeaderEventType.DELETE_MONEY_ACCOUNT: return 'Eliminar cuenta';
+      case MoneyAccountHeaderEventType.SUSPEND_MONEY_ACCOUNT: return 'Suspender cuenta';
+      case MoneyAccountHeaderEventType.ACTIVATE_MONEY_ACCOUNT: return 'Activar cuenta';
+      case MoneyAccountHeaderEventType.PENDING_MONEY_ACCOUNT: return 'Bloquear cuenta';
+      default: return '';
+    }
+  }
+
+
+  private getConfirmMessage(eventType: MoneyAccountHeaderEventType): string {
+    switch (eventType) {
+      case MoneyAccountHeaderEventType.DELETE_MONEY_ACCOUNT:
+        return `Esta operación eliminará la cuenta
+                <strong> ${this.moneyAccount.moneyAccountType.name}:
+                ${this.moneyAccount.moneyAccountNumber}</strong>.
+                <br><br>¿Elimino la cuenta?`;
+
+      case MoneyAccountHeaderEventType.SUSPEND_MONEY_ACCOUNT:
+        return `Esta operación suspenderá la cuenta
+                <strong> ${this.moneyAccount.moneyAccountType.name}:
+                ${this.moneyAccount.moneyAccountNumber}</strong>.
+                <br><br>¿Suspendo la cuenta?`;
+
+      case MoneyAccountHeaderEventType.ACTIVATE_MONEY_ACCOUNT:
+        return `Esta operación reactivará la cuenta
+                <strong> ${this.moneyAccount.moneyAccountType.name}:
+                ${this.moneyAccount.moneyAccountNumber}</strong>.
+                <br><br>¿Activo la cuenta?`;
+
+      case MoneyAccountHeaderEventType.PENDING_MONEY_ACCOUNT:
+        return `Esta operación bloqueará la cuenta
+                <strong> ${this.moneyAccount.moneyAccountType.name}:
+                ${this.moneyAccount.moneyAccountNumber}</strong>.
+                <br><br>¿Bloqueo la cuenta?`;
+
+      default: return '';
+    }
   }
 
 }
