@@ -5,17 +5,22 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
+         SimpleChanges } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
+
 import { FormHelper, FormatLibrary, sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { MoneyAccountsDataService, SearcherAPIS } from '@app/data-services';
+import { SearcherAPIS } from '@app/data-services';
 
 import { EmptyMoneyAccount, MoneyAccount, MoneyAccountFields } from '@app/models';
 
@@ -43,7 +48,7 @@ interface MoneyAccountFormModel extends FormGroup<{
   selector: 'emp-trade-money-account-header',
   templateUrl: './money-account-header.component.html',
 })
-export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
+export class MoneyAccountHeaderComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() moneyAccount: MoneyAccount = EmptyMoneyAccount;
 
@@ -61,9 +66,12 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
 
   accountHoldersAPI = SearcherAPIS.accountHolders;
 
+  helper: SubscriptionHelper;
 
-  constructor(private moneyAccountsData: MoneyAccountsDataService,
+
+  constructor(private uiLayer: PresentationLayer,
               private messageBox: MessageBoxService) {
+    this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
     this.enableEditor(true);
   }
@@ -78,6 +86,11 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     this.loadDataLists();
+  }
+
+
+  ngOnDestroy() {
+    this.helper.destroy();
   }
 
 
@@ -142,10 +155,11 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit {
   private loadDataLists() {
     this.isLoading = true;
 
-    this.moneyAccountsData.getMoneyAccountTypes()
-    .firstValue()
-    .then(x => this.moneyAccountTypesList = x)
-    .finally(() => this.isLoading = false);
+    this.helper.select<Identifiable[]>(CataloguesStateSelector.MONEY_ACCOUNT_TYPES)
+      .subscribe(x => {
+        this.moneyAccountTypesList = x;
+        this.isLoading = false;
+      });
   }
 
 

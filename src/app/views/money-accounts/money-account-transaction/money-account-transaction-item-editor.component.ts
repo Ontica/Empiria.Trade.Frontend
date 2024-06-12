@@ -5,7 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
+         SimpleChanges } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -13,9 +14,11 @@ import { combineLatest } from 'rxjs';
 
 import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
 
-import { FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { MoneyAccountsDataService } from '@app/data-services';
+import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
+
+import { FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { MoneyAccountTransactionItem, MoneyAccountTransactionItemFields } from '@app/models';
 
@@ -39,7 +42,7 @@ interface MoneyAccountTransactionItemFormModel extends FormGroup<{
   selector: 'emp-trade-money-account-transaction-item-editor',
   templateUrl: './money-account-transaction-item-editor.component.html',
 })
-export class MoneyAccountTransactionItemEditorComponent implements OnChanges, OnInit {
+export class MoneyAccountTransactionItemEditorComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() transactionUID = '';
 
@@ -59,8 +62,11 @@ export class MoneyAccountTransactionItemEditorComponent implements OnChanges, On
 
   transactionItemTypes: Identifiable[] = [];
 
+  helper: SubscriptionHelper;
 
-  constructor(private moneyAccountsData: MoneyAccountsDataService) {
+
+  constructor(private uiLayer: PresentationLayer) {
+    this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
   }
 
@@ -78,6 +84,11 @@ export class MoneyAccountTransactionItemEditorComponent implements OnChanges, On
     if (changes.transactionItem) {
       this.setFormData();
     }
+  }
+
+
+  ngOnDestroy() {
+    this.helper.destroy();
   }
 
 
@@ -125,8 +136,8 @@ export class MoneyAccountTransactionItemEditorComponent implements OnChanges, On
     this.isLoading = true;
 
     combineLatest([
-      this.moneyAccountsData.getMoneyAccountPaymentTypes(),
-      this.moneyAccountsData.getMoneyAccountTransactionItemTypes(),
+      this.helper.select<Identifiable[]>(CataloguesStateSelector.MONEY_ACCOUNT_PAYMENT_TYPES),
+      this.helper.select<Identifiable[]>(CataloguesStateSelector.MONEY_ACCOUNT_TRANSACTION_ITEM_TYPES),
     ])
     .subscribe(([x, y]) => {
       this.paymentTypes = x;

@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -13,9 +13,11 @@ import { combineLatest } from 'rxjs';
 
 import { EventInfo, Identifiable } from '@app/core';
 
-import { FormHelper, sendEvent } from '@app/shared/utils';
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { MoneyAccountsDataService } from '@app/data-services';
+import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
+
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { MoneyAccountQuery } from '@app/models';
 
@@ -33,7 +35,7 @@ interface MoneyAccountsFilterFormModel extends FormGroup<{
   selector: 'emp-trade-money-accounts-filter',
   templateUrl: './money-accounts-filter.component.html',
 })
-export class MoneyAccountsFilterComponent implements OnInit {
+export class MoneyAccountsFilterComponent implements OnInit, OnDestroy {
 
   @Input() queryExecuted: boolean = false;
 
@@ -49,14 +51,22 @@ export class MoneyAccountsFilterComponent implements OnInit {
 
   isLoading = false;
 
+  helper: SubscriptionHelper;
 
-  constructor(private moneyAccountsData: MoneyAccountsDataService) {
+
+  constructor(private uiLayer: PresentationLayer) {
+    this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
   }
 
 
   ngOnInit() {
     this.loadDataLists();
+  }
+
+
+  ngOnDestroy() {
+    this.helper.destroy();
   }
 
 
@@ -87,8 +97,8 @@ export class MoneyAccountsFilterComponent implements OnInit {
     this.isLoading = true;
 
     combineLatest([
-      this.moneyAccountsData.getMoneyAccountTypes(),
-      this.moneyAccountsData.getMoneyAccountStatus()
+      this.helper.select<Identifiable[]>(CataloguesStateSelector.MONEY_ACCOUNT_TYPES),
+      this.helper.select<Identifiable[]>(CataloguesStateSelector.MONEY_ACCOUNT_STATUS),
     ])
     .subscribe(([x, y]) => {
       this.moneyAccountTypesList = x;

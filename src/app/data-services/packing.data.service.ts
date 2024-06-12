@@ -35,12 +35,11 @@ export class PackingDataService {
 
 
   updateOrderPicking(orderUID: string,
-                dataFields: InventoryOrderFields): EmpObservable<Order> {
+                     dataFields: InventoryOrderFields): EmpObservable<Order> {
     Assertion.assertValue(orderUID, 'orderUID');
     Assertion.assertValue(dataFields, 'dataFields');
 
-
-    const path = `v4/trade/sales/packing/${orderUID}/picking"`;
+    const path = `v4/trade/sales/packing/${orderUID}/picking`;
 
     return this.http.put<Order>(path, dataFields);
   }
