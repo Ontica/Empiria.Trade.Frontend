@@ -1,0 +1,143 @@
+<emp-ng-modal-window [config]="{width:'1085px'}">
+
+  <emp-ng-card
+    [title]="isSaved ? 'Editar transacción' : 'Agregar transacción'"
+    hint='Información de la transacción.'
+    (cardClose)="onCloseButtonClicked()">
+
+    <div class="card-body-padding">
+
+      <form [formGroup]="form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+        autocomplete="off" class="form-section">
+
+        <emp-ng-spinner #spinner [visible]="isLoading">
+
+        </emp-ng-spinner>
+
+        <div class="fx-column-container fx-gap-half">
+
+          <div class="fx-row-container">
+
+            <div class="fx-item-half">
+              <label>Tipo de transacción:</label>
+              <emp-ng-select
+                formControlName="transactionTypeUID"
+                [items]="transactionTypes"
+                [showError]="formHelper.isControlInvalid(form.controls.transactionTypeUID)">
+              </emp-ng-select>
+            </div>
+
+            <div class="fx-item-half">
+              <label>Número de transacción:</label>
+              <input type="text" class="text-box"
+                formControlName="transactionNumber"
+                [class.invalid-control]="formHelper.isControlInvalid(form.controls.transactionNumber)">
+            </div>
+
+          </div>
+
+          <div class="fx-row-container">
+
+            <div class="fx-item-half">
+              <label>Referencia:</label>
+              <input type="text" class="text-box"
+                formControlName="reference"
+                [class.invalid-control]="formHelper.isControlInvalid(form.controls.reference)">
+            </div>
+
+            <div class="fx-item">
+              <label>Importe total:</label>
+              <input type="text" empNgCurrency
+                class="text-box text-align-right"
+                formControlName="transactionAmount"
+                [class.invalid-control]="formHelper.isControlInvalid(form.controls.transactionAmount)">
+            </div>
+
+            <div class="fx-item-none">
+              <label>Fecha:</label>
+              <emp-ng-datepicker
+                formControlName="transactionTime"
+                [showError]="formHelper.isControlInvalid(form.controls.transactionTime)">
+              </emp-ng-datepicker>
+            </div>
+
+          </div>
+
+          <div class="fx-row-container">
+
+            <div class="fx-item">
+              <label>Notas:</label>
+              <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
+                formControlName="notes"
+                [class.invalid-control]="formHelper.isControlInvalid(form.controls.notes)">
+              </textarea>
+            </div>
+
+          </div>
+
+
+          <mat-divider class="horizontal-slim">
+
+          </mat-divider>
+
+          <div class="fx-row-container">
+
+            <div class="fx-item fx-end fx-items-center">
+
+              <button *ngIf="!editionMode && canEdit"
+                class="btn-action"
+                (click)="enableEditor(true)">
+                Editar
+              </button>
+
+              <ng-container *ngIf="editionMode">
+
+                <button
+                  [class.btn]="!formHelper.isFormReady(form)"
+                  [class.btn-action]="formHelper.isFormReady(form)"
+                  (click)="onSubmitButtonClicked()">
+                  Guardar
+                </button>
+
+                <button *ngIf="isSaved"
+                  class="btn-base uppercase"
+                  (click)="enableEditor(false)">
+                  Descartar Cambios
+                </button>
+
+              </ng-container>
+
+            </div>
+
+          </div>
+
+          <ng-container *ngIf="isSaved">
+
+            <div class="section-title"> Movimientos </div>
+
+            <emp-trade-money-account-transaction-item-editor
+              [transactionUID]="transaction.uid"
+              [canEdit]="!editionMode && canEdit"
+              (transactionItemEditorEvent)="onTransactionItemEditorEvent($event)">
+
+            </emp-trade-money-account-transaction-item-editor>
+
+            <emp-trade-money-account-transaction-items-table
+              [transactionUID]="transaction.uid"
+              [transactionItems]="transaction.items"
+              [canEdit]="!editionMode && canEdit"
+              (moneyAccountTransactionItemsEvent)="onMoneyAccountTransactionItemsEvent($event)">
+
+            </emp-trade-money-account-transaction-items-table>
+
+          </ng-container>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

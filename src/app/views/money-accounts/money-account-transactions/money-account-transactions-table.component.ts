@@ -13,13 +13,13 @@ import { sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { EmptyMoneyAccountTransactionsDataTable, MoneyAccountTransaction,
+import { EmptyMoneyAccountTransactionsDataTable, MoneyAccountTransactionDescriptor,
          MoneyAccountTransactionsDataTable } from '@app/models';
 
 import { DataTableEventType } from '@app/views/_reports-controls/data-table/data-table.component';
 
 export enum MoneyAccountTransactionsEventType {
-  UPDATE_ITEM_CLICKED = 'MoneyAccountTransactionsTableComponent.Event.UpdateItemClicked',
+  SELECT_ITEM_CLICKED = 'MoneyAccountTransactionsTableComponent.Event.SelectItemClicked',
   REMOVE_ITEM_CLICKED = 'MoneyAccountTransactionsTableComponent.Event.RemoveItemClicked',
 }
 
@@ -29,7 +29,7 @@ export enum MoneyAccountTransactionsEventType {
 })
 export class MoneyAccountTransactionsTableComponent implements OnChanges {
 
-  @Input() moneyAccountTransactions: MoneyAccountTransaction[] = [];
+  @Input() transactions: MoneyAccountTransactionDescriptor[] = [];
 
   @Input() canEdit = false;
 
@@ -46,9 +46,9 @@ export class MoneyAccountTransactionsTableComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.moneyAccountTransactions) {
+    if (changes.transactions) {
       this.moneyAccountTransactionsData =
-        Object.assign({}, EmptyMoneyAccountTransactionsDataTable, { entries: this.moneyAccountTransactions });
+        Object.assign({}, EmptyMoneyAccountTransactionsDataTable, { entries: this.transactions });
     }
   }
 
@@ -57,7 +57,7 @@ export class MoneyAccountTransactionsTableComponent implements OnChanges {
     switch (event.type as DataTableEventType) {
 
       case DataTableEventType.ENTRY_CLICKED:
-        sendEvent(this.moneyAccountTransactionsEvent, MoneyAccountTransactionsEventType.UPDATE_ITEM_CLICKED,
+        sendEvent(this.moneyAccountTransactionsEvent, MoneyAccountTransactionsEventType.SELECT_ITEM_CLICKED,
           { transaction: event.payload.entry });
         return;
 
@@ -73,7 +73,7 @@ export class MoneyAccountTransactionsTableComponent implements OnChanges {
   }
 
 
-  private confirmDeleteTransaction(transaction: MoneyAccountTransaction) {
+  private confirmDeleteTransaction(transaction: MoneyAccountTransactionDescriptor) {
     const message = this.getConfirmDeleteMessage(transaction);
 
     this.messageBox.confirm(message, 'Eliminar movimiento', 'DeleteCancel')
@@ -81,23 +81,23 @@ export class MoneyAccountTransactionsTableComponent implements OnChanges {
       .then(x => {
         if (x) {
           sendEvent(this.moneyAccountTransactionsEvent, MoneyAccountTransactionsEventType.REMOVE_ITEM_CLICKED,
-            { transaction });
+            { transactionUID: transaction.uid });
         }
       });
   }
 
 
-  private getConfirmDeleteMessage(transaction: MoneyAccountTransaction): string {
+  private getConfirmDeleteMessage(transaction: MoneyAccountTransactionDescriptor): string {
     const transactionDate = DateStringLibrary.format(transaction.transactionDate);
 
     return `
       <table class="confirm-data">
         <tr><td class="nowrap">Tipo de operación: </td><td><strong>
-          ${transaction.operationType}
+          ${transaction.transactionTypeName}
         </strong></td></tr>
 
         <tr><td>Número: </td><td><strong>
-          ${transaction.operationNumber}
+          ${transaction.transactionNumber}
         </strong></td></tr>
 
         <tr><td class='nowrap'>Fecha: </td><td><strong>

@@ -1,0 +1,106 @@
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section"
+  [style.paddingBottom.px]="isSaved ? 0 : 4">
+
+  <div class="fx-row-container fx-end fx-items-center" [style.marginRight.px]="isSaved ? 0 : 8">
+
+    <div class="fx-item-size" style="--size: 220px">
+
+      <emp-ng-select
+        formControlName="itemTypeUID"
+        placeholder="Tipo de operación"
+        [items]="transactionItemTypes"
+        [showError]="formHelper.isControlInvalid(form.controls.itemTypeUID)">
+      </emp-ng-select>
+
+    </div>
+
+    <div class="fx-item-size" style="--size: 200px">
+
+      <emp-ng-select
+        formControlName="paymentTypeUID"
+        placeholder="Forma de pago"
+        [items]="paymentTypes"
+        [showError]="formHelper.isControlInvalid(form.controls.paymentTypeUID)">
+      </emp-ng-select>
+
+    </div>
+
+    <div class="fx-item-size" style="--size: 120px">
+
+      <input type="text" class="text-box"
+        placeholder="Referencia"
+        formControlName="reference"
+        [class.invalid-control]="formHelper.isControlInvalid(form.controls.reference)">
+
+    </div>
+
+    <div class="fx-item">
+
+      <input type="text" class="text-box"
+        placeholder="Notas"
+        formControlName="notes"
+        [class.invalid-control]="formHelper.isControlInvalid(form.controls.notes)">
+
+    </div>
+
+    <div class="fx-item-none">
+
+      <emp-ng-datepicker
+        formControlName="postedTime"
+        [showError]="formHelper.isControlInvalid(form.controls.postedTime)">
+
+      </emp-ng-datepicker>
+
+    </div>
+
+    <div class="fx-item-size" style="--size: 100px">
+
+      <input type="text" class="text-box" empNgCurrency
+        placeholder="Cargo"
+        formControlName="deposit"
+        [class.invalid-control]="formHelper.isControlInvalid(form.controls.deposit)">
+
+    </div>
+
+    <div class="fx-item-size" style="--size: 100px">
+
+      <input type="text" class="text-box" empNgCurrency
+        placeholder="Abono"
+        formControlName="withdrawal"
+        [class.invalid-control]="formHelper.isControlInvalid(form.controls.withdrawal)">
+
+    </div>
+
+
+    <button *ngIf="!isSaved" title="Agregar"
+      [class.btn-icon-action]="canEdit && formHelper.isFormReady(form)"
+      [class.btn-icon]="!canEdit || !formHelper.isFormReady(form)"
+      (click)="onAddTransactionItemClicked()">
+
+      <mat-icon> add </mat-icon>
+
+    </button>
+
+
+    <button *ngIf="isSaved" mat-icon-button
+      title="Cancelar"
+      (click)="onCancelEditionClicked()">
+
+      <mat-icon> close </mat-icon>
+
+    </button>
+
+
+    <button *ngIf="isSaved"  mat-icon-button
+      title="Guardar"
+      [color]="formHelper.isFormReady(form) ? 'primary' : null"
+      [style.marginRight]="0"
+      (click)="onUpdateTransactionItemClicked()">
+
+      <mat-icon [color]="formHelper.isFormReady(form) ? 'primary' : null"> done </mat-icon>
+
+    </button>
+
+  </div>
+
+</form>

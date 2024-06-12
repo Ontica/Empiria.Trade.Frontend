@@ -22,7 +22,10 @@ import { MoneyAccountHeaderComponent } from './money-account/money-account-heade
 import { MoneyAccountCreatorComponent } from './money-account/money-account-creator.component';
 import { MoneyAccountEditorComponent } from './money-account/money-account-editor.component';
 import { MoneyAccountTransactionsEditionComponent } from './money-account-transactions/money-account-transactions-edition.component';
-import { MoneyAccountTransactionsTableComponent } from './money-account-transactions/money-account-transactions-table.component';
+import { MoneyAccountTransactionsTableComponent } from './money-account-transactions/money-account-transactions-table.component'
+import { MoneyAccountTransactionEditorComponent } from './money-account-transaction/money-account-transaction-editor.component';
+import { MoneyAccountTransactionItemsTableComponent } from './money-account-transaction/money-account-transaction-items-table.component';
+import { MoneyAccountTransactionItemEditorComponent } from './money-account-transaction/money-account-transaction-item-editor.component';
 
 @NgModule({
   imports: [
@@ -45,6 +48,9 @@ import { MoneyAccountTransactionsTableComponent } from './money-account-transact
     MoneyAccountEditorComponent,
     MoneyAccountTransactionsEditionComponent,
     MoneyAccountTransactionsTableComponent,
+    MoneyAccountTransactionEditorComponent,
+    MoneyAccountTransactionItemsTableComponent,
+    MoneyAccountTransactionItemEditorComponent,
   ],
   exports: [
     MoneyAccountsMainPageComponent,

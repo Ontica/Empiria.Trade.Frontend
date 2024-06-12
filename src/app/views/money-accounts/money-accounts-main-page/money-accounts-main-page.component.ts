@@ -12,7 +12,7 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 import { MoneyAccountsDataService } from '@app/data-services';
 
 import { EmptyMoneyAccount, EmptyMoneyAccountDataTable, EmptyMoneyAccountQuery, MoneyAccount,
-         MoneyAccountsDataTable, MoneyAccountQuery, buildMoneyAccountActions } from '@app/models';
+         MoneyAccountsDataTable, MoneyAccountQuery } from '@app/models';
 
 import {
   MoneyAccountsExplorerEventType
@@ -118,6 +118,12 @@ export class MoneyAccountsMainPageComponent {
         this.clearMoneyAccountSelected();
         return;
 
+      case MoneyAccountTabbedViewEventType.TRANSACTIONS_UPDATED:
+        Assertion.assertValue(event.payload.moneyAccountUID, 'event.payload.moneyAccountUID');
+        this.refreshMoneyAccounts();
+        this.getMoneyAccount(event.payload.moneyAccountUID);
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -182,10 +188,6 @@ export class MoneyAccountsMainPageComponent {
 
 
   private setMoneyAccountSelected(data: MoneyAccount) {
-    // START-TMP
-    buildMoneyAccountActions(data);
-    // END-TMP
-
     this.moneyAccountSelected = data;
     this.displayTabbedView = !isEmpty(this.moneyAccountSelected);
   }

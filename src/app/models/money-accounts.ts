@@ -5,9 +5,12 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Empty, Identifiable, isEmpty } from '@app/core';
+import { Empty, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableColumnType, DataTableEntry, DataTableQuery } from './_data-table';
+import { DataTable, DataTableColumn, DataTableColumnType, DataTableEntry,
+         DataTableQuery } from './_data-table';
+
+import { MoneyAccountTransactionDescriptor } from './money-account-transactions';
 
 
 export interface MoneyAccountQuery extends DataTableQuery {
@@ -22,6 +25,19 @@ export interface MoneyAccountDescriptor extends DataTableEntry {
 }
 
 
+export interface MoneyAccountsDataTable extends DataTable {
+  query: MoneyAccountQuery;
+  columns: DataTableColumn[];
+  entries: MoneyAccountDescriptor[];
+}
+
+
+export interface MoneyAccountTransactionsDataTable extends DataTable {
+  columns: DataTableColumn[];
+  entries: MoneyAccountTransactionDescriptor[];
+}
+
+
 export interface MoneyAccount {
   uid: string;
   moneyAccountType: Identifiable;
@@ -32,7 +48,7 @@ export interface MoneyAccount {
   notes: string;
   balance: number;
   status: Identifiable;
-  transactions: MoneyAccountTransaction[];
+  transactions: MoneyAccountTransactionDescriptor[];
   actions: MoneyAccountActions;
 }
 
@@ -53,29 +69,6 @@ export interface MoneyAccountFields {
   moneyAccountLimit: number;
   limitDaysToPay: number;
   notes: string;
-}
-
-
-export interface MoneyAccountTransaction {
-  uid: string;
-  operationNumber: string;
-  operationType: string;
-  transactionDate: DateString;
-  transactionAmount: number;
-  dueDate: DateString;
-}
-
-
-export interface MoneyAccountsDataTable extends DataTable {
-  query: MoneyAccountQuery;
-  columns: DataTableColumn[];
-  entries: MoneyAccountDescriptor[];
-}
-
-
-export interface MoneyAccountTransactionsDataTable extends DataTable {
-  columns: DataTableColumn[];
-  entries: MoneyAccountTransaction[];
 }
 
 
@@ -120,13 +113,14 @@ export const EmptyMoneyAccount: MoneyAccount = {
 
 export const MoneyAccountTransactionColumns: DataTableColumn[] = [
   {
-    field: 'operationType',
-    title: 'Tipo de operacion',
+    field: 'transactionTypeName',
+    title: 'Tipo de transacción',
     type: DataTableColumnType.text,
+
   },
   {
-    field: 'operationNumber',
-    title: 'Número',
+    field: 'transactionNumber',
+    title: 'Número de transacción',
     type: DataTableColumnType.text_link,
   },
   {
@@ -151,24 +145,3 @@ export const EmptyMoneyAccountTransactionsDataTable: MoneyAccountTransactionsDat
   columns: MoneyAccountTransactionColumns,
   entries: [],
 };
-
-
-export function buildMoneyAccountActions(data: MoneyAccount) {
-
-  if (isEmpty(data)) {
-    data.actions = { ...{}, ...EmptyMoneyAccountActions };
-  } else {
-
-    const actions = {
-      canEdit:     data.status.uid === 'Active',
-      canDelete:   data.status.uid === 'Active',
-      canActivate: data.status.uid === 'Suspended',
-      canSuspend:  data.status.uid === 'Active',
-      canSetPending:  data.status.uid === 'Active',
-      canEditTransactions: data.status.uid === 'Active',
-    };
-
-    data.actions = { ...{}, ...actions };
-  }
-
-}

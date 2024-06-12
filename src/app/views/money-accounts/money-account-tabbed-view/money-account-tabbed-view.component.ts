@@ -15,10 +15,15 @@ import { EmptyMoneyAccount, MoneyAccount } from '@app/models';
 
 import { MoneyAccountEditorEventType } from '../money-account/money-account-editor.component';
 
+import {
+  MoneyAccountTransactionsEditionEventType
+} from '../money-account-transactions/money-account-transactions-edition.component';
+
 export enum MoneyAccountTabbedViewEventType {
   CLOSE_BUTTON_CLICKED  = 'MoneyAccountTabbedViewComponent.Event.CloseButtonClicked',
   MONEY_ACCOUNT_UPDATED = 'MoneyAccountTabbedViewComponent.Event.MoneyAccountUpdated',
   MONEY_ACCOUNT_DELETED = 'MoneyAccountTabbedViewComponent.Event.MoneyAccountDeleted',
+  TRANSACTIONS_UPDATED  = 'MoneyAccountTabbedViewComponent.Event.TransactionsUpdated',
 }
 
 @Component({
@@ -60,6 +65,21 @@ export class MoneyAccountTabbedViewComponent implements OnChanges {
         Assertion.assertValue(event.payload.moneyAccount, 'event.payload.moneyAccount');
         sendEvent(this.moneyAccountTabbedViewEvent,
           MoneyAccountTabbedViewEventType.MONEY_ACCOUNT_DELETED, event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onMoneyAccountTransactionsEditionEvent(event: EventInfo) {
+    switch (event.type as MoneyAccountTransactionsEditionEventType) {
+      case MoneyAccountTransactionsEditionEventType.TRANSACTIONS_UPDATED:
+        Assertion.assertValue(event.payload.moneyAccountUID, 'event.payload.moneyAccountUID');
+        sendEvent(this.moneyAccountTabbedViewEvent,
+          MoneyAccountTabbedViewEventType.TRANSACTIONS_UPDATED, event.payload);
         return;
 
       default:

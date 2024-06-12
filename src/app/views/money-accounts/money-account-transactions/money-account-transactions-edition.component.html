@@ -1,6 +1,6 @@
 <div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
 
-  <emp-ng-spinner #spinner [visible]="submitted">
+  <emp-ng-spinner #spinner [visible]="submitted && isLoading">
 
   </emp-ng-spinner>
 
@@ -22,9 +22,17 @@
 
   <emp-trade-money-account-transactions-table  class="fx-item"
     [canEdit]="canEdit"
-    [moneyAccountTransactions]="moneyAccountTransactions"
+    [transactions]="transactions"
     (moneyAccountTransactionsEvent)="onMoneyAccountTransactionsEvent($event)">
 
   </emp-trade-money-account-transactions-table>
 
 </div>
+
+
+<emp-trade-money-account-transaction-editor *ngIf="displayTransaction"
+  [transaction]="selectedTransaction"
+  [canEdit]="canEdit"
+  (moneyAccountTransactionEditorEvent)="onMoneyAccountTransactionEditorEvent($event)">
+
+</emp-trade-money-account-transaction-editor>

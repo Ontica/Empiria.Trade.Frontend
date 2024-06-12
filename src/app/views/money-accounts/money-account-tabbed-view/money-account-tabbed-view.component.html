@@ -20,8 +20,10 @@
       <ng-template matTabContent>
 
         <emp-trade-money-account-transactions-edition
+          [moneyAccountUID]="moneyAccount.uid"
+          [transactions]="moneyAccount.transactions"
           [canEdit]="moneyAccount.actions.canEditTransactions"
-          [moneyAccountTransactions]="moneyAccount.transactions">
+          (moneyAccountTransactionsEditionEvent)="onMoneyAccountTransactionsEditionEvent($event)">
 
         </emp-trade-money-account-transactions-edition>
 
