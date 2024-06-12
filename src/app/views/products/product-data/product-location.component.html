@@ -18,7 +18,8 @@
           [items]="product.presentations"
           [disabled]="product.presentations.length === 1"
           bindValue="presentationUID"
-          bindLabel="description">
+          bindLabel="description"
+          (changes)="onPresentationChanged($event)">
 
         </emp-ng-select>
 

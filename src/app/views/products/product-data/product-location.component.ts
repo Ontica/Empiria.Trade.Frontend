@@ -52,7 +52,7 @@ export class ProductLocationComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.product) {
       this.presentation = ArrayLibrary.getFirstItem(this.product.presentations) ?? null;
-      this.vendor = ArrayLibrary.getFirstItem(this.presentation?.vendors ?? []) ?? null;
+      this.setDefaultVendor(this.presentation);
     }
   }
 
@@ -69,6 +69,11 @@ export class ProductLocationComponent implements OnChanges {
 
   get isReady(): boolean {
     return !this.isWarehouseBinInvalid && !this.isQuantityInvalid;
+  }
+
+
+  onPresentationChanged(presentation: ProductPresentation) {
+    this.setDefaultVendor(presentation);
   }
 
 
@@ -94,6 +99,11 @@ export class ProductLocationComponent implements OnChanges {
   onQuantityEnter(quantity: number) {
     this.quantity = quantity;
     setTimeout(() => this.onSubmitButtonClicked());
+  }
+
+
+  private setDefaultVendor(presentation: ProductPresentation) {
+    this.vendor = ArrayLibrary.getFirstItem(presentation?.vendors ?? []) ?? null;
   }
 
 }
