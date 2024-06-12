@@ -5,9 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Identifiable } from "@app/core";
+import { DateString, Identifiable } from '@app/core';
 
-import { MoneyAccountTransactionItem } from "./money-account-transaction-items";
+import { MoneyAccountTransactionItem } from './money-account-transaction-items';
 
 
 export interface MoneyAccountTransactionDescriptor {

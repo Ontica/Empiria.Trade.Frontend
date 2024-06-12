@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Identifiable } from "@app/core";
+import { DateString, Identifiable } from '@app/core';
 
 
 export interface MoneyAccountTransactionItem {
