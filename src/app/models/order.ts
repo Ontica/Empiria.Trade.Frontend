@@ -9,11 +9,12 @@ import { DateString, Empty, Identifiable } from '@app/core';
 
 import { clone } from '@app/shared/utils';
 
-import { Contact, Customer, Party, EmptyCustomer, EmptyContact, Address, EmptyAddress } from './contacts';
+import { Contact, Party, Address } from './contacts';
 
 import { Presentation, Product, ProductSelection, Vendor } from './product';
 
-import { CustomerCredit, EmptyCustomerCredit } from './customer';
+import { Customer, CustomerCredit, EmptyAddress, EmptyContact, EmptyCustomer,
+         EmptyCustomerCredit } from './customer';
 
 import { EmptyPacking, Packing } from './packing';
 

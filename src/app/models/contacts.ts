@@ -23,33 +23,3 @@ export interface Address {
   name: string;
   description: string;
 }
-
-
-export interface Customer extends Party {
-  uid: string;
-  name: string;
-  contacts: Contact[];
-  addresses: Address[];
-}
-
-
-export const EmptyCustomer: Customer = {
-  uid: '',
-  name: '',
-  contacts: [],
-  addresses: [],
-};
-
-
-export const EmptyContact: Contact = {
-  uid: '',
-  name: '',
-  phone: '',
-};
-
-
-export const EmptyAddress: Address = {
-  uid: '',
-  name: '',
-  description: '',
-};

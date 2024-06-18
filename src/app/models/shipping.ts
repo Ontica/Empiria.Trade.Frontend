@@ -11,7 +11,7 @@ import { PackagingTotals } from './packing';
 
 import { ShippingMethodTypes } from './order';
 
-import { Customer, EmptyCustomer } from './contacts';
+import { Customer, EmptyCustomer } from './customer';
 
 
 export enum ShippingStatus {
