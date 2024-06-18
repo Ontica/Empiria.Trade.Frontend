@@ -29,7 +29,7 @@ import { SalesOrdersDataService } from '@app/data-services';
 
 import { OrdersExplorerEventType } from '@app/views/orders/orders-explorer/orders-explorer.component';
 
-import { OrderCreatorEventType } from '@app/views/orders/order-creator/order-creator.component';
+import { OrderCreatorEventType } from '@app/views/orders/order/order-creator.component';
 
 import { OrderTabbedViewEventType } from '@app/views/orders/order-tabbed-view/order-tabbed-view.component';
 

@@ -17,7 +17,7 @@ import {
   PackingViewEventType
 } from '@app/views/shipping-and-handling/packing/packing-view/packing-view.component';
 
-import { OrderEditorEventType } from '../order-editor/order-editor.component';
+import { OrderEditorEventType } from '../order/order-editor.component';
 
 import { PickingEditorEventType } from '@app/views/shipping-and-handling/picking/picking-editor.component';
 
