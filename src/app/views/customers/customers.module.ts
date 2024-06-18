@@ -15,6 +15,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { CustomerCreditViewComponent } from './customer-credit-view/customer-credit-view.component';
 import { CustomerCreditTableComponent } from './customer-credit-view/customer-credit-table.component';
 import { CustomerViewComponent } from './customer-credit-view/customer-view.component';
+import { CustomerSelectorComponent } from './customer-selector/customer-selector.component';
 
 @NgModule({
   imports: [
@@ -28,9 +29,11 @@ import { CustomerViewComponent } from './customer-credit-view/customer-view.comp
     CustomerCreditViewComponent,
     CustomerViewComponent,
     CustomerCreditTableComponent,
+    CustomerSelectorComponent,
   ],
   exports: [
     CustomerCreditViewComponent,
+    CustomerSelectorComponent,
   ],
 })
 export class CustomersModule { }

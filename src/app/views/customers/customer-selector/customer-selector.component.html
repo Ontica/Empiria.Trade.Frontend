@@ -1,0 +1,67 @@
+<div class="fx-row-container">
+
+  <div class="fx-item-third">
+    <label>Cliente:</label>
+
+    <emp-ng-select-typeahead #customer
+      [(ngModel)]="customerSelected"
+      [config]="{ bindByValue: false, clearable: true, minTermLength: 5, virtualScroll: true }"
+      [searcherAPI]="customersWithContactsAPI"
+      [initialValue]="initialValue"
+      [disabled]="disabled"
+      [showError]="showError && errors?.customerError"
+      (changes)="onCustomerChanged($event)"
+      placeholder="Buscar cliente">
+
+    </emp-ng-select-typeahead>
+  </div>
+
+  <div class="fx-item-third">
+    <label>Contacto:</label>
+
+    <emp-ng-select
+      [(ngModel)]="contactSelected"
+      [config]="{bindByValue: false, clearable: true}"
+      [items]="customerContactsList"
+      [placeholder]="contactsPlaceholder"
+      [disabled]="disabled"
+      [showError]="showError && errors?.contactError"
+      (changes)="onCustomerDataChanged()">
+
+        <ng-template #labelTemplate let-item="item">
+          {{item.name}} {{item.phone ? '(' + item.phone + ')' : ''}}
+        </ng-template>
+
+        <ng-template #optionTemplate let-item="item">
+          {{item.name}} {{item.phone ? '(' + item.phone + ')' : ''}}
+        </ng-template>
+
+    </emp-ng-select>
+  </div>
+
+  <div class="fx-item-third">
+    <label>Dirección:</label>
+
+    <emp-ng-select
+      [(ngModel)]="AddressSelected"
+      [config]="{bindByValue: false, clearable: true}"
+      [items]="customerAddressesList"
+      [placeholder]="addressesPlaceholder"
+      [disabled]="disabled"
+      [showError]="showError && errors?.addressError"
+      (changes)="onCustomerDataChanged()">
+
+      <ng-template #labelTemplate let-item="item">
+        {{item.name}} - {{item.description}}
+      </ng-template>
+
+      <ng-template #optionTemplate let-item="item">
+        <div class="wrap" [style.padding]="'0.25rem 0'">
+          <span class="item-highlight">{{item.name}}</span> <br>
+          <span class="item-text-xs">{{item.description}}</span>
+        </div>
+      </ng-template>
+    </emp-ng-select>
+  </div>
+
+</div>

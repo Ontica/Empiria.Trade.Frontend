@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString } from '@app/core';
+import { DateString, isEmpty } from '@app/core';
 
 import { Address, Contact, Party } from '@app/models';
 
@@ -38,6 +38,33 @@ export const EmptyAddress: Address = {
   name: '',
   description: '',
 };
+
+
+export interface CustomerSelection {
+  customer: Customer;
+  contact: Contact;
+  address: Address;
+}
+
+
+export const EmptyCustomerSelection: CustomerSelection = {
+  customer: null,
+  contact: null,
+  address: null,
+};
+
+
+export function buildCustomerSelection(customer: Customer,
+                                       contact: Contact,
+                                       address: Address): CustomerSelection {
+  const data: CustomerSelection = {
+    customer: isEmpty(customer) ? null : customer,
+    contact: isEmpty(contact) ? null : contact,
+    address: isEmpty(address) ? null : address,
+  };
+
+  return data;
+}
 
 
 export interface CustomerCredit {
