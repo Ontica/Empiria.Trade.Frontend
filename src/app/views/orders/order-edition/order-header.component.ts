@@ -11,12 +11,13 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { combineLatest } from 'rxjs';
 
-import { DateString, DateStringLibrary, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { DateString, DateStringLibrary, EventInfo, Identifiable, Validate, isEmpty } from '@app/core';
 
-import { ContactsDataService, SalesOrdersDataService, SearcherAPIS } from '@app/data-services';
+import { ContactsDataService, SalesOrdersDataService } from '@app/data-services';
 
-import { Address, Contact, Customer, DefaultOrderStatus, EmptyOrderGeneralData, OrderGeneralData, Party,
-         PaymentConditionList, ShippingMethodList, ShippingMethodTypes } from '@app/models';
+import { DefaultOrderStatus, EmptyOrderGeneralData, OrderGeneralData, Party, PaymentConditionList,
+         ShippingMethodList, ShippingMethodTypes, CustomerSelection, EmptyCustomerSelection,
+         buildCustomerSelection } from '@app/models';
 
 import { ArrayLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
@@ -34,9 +35,7 @@ interface OrderFormModel extends FormGroup<{
   salesAgent: FormControl<Party>;
   paymentCondition: FormControl<string>;
   shippingMethod: FormControl<string>;
-  customer: FormControl<Customer>;
-  customerContact: FormControl<Contact>;
-  customerAddress: FormControl<Address>;
+  customer: FormControl<CustomerSelection>;
 }> { }
 
 @Component({
@@ -71,12 +70,6 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
 
   suppliersList: Party[] = [];
 
-  customerContactsList: Contact[] = [];
-
-  customerAddressesList: Address[] = [];
-
-  customersWithContactsAPI = SearcherAPIS.customersWithContacts;
-
 
   constructor(private contactsData: ContactsDataService,
               private ordersData: SalesOrdersDataService) {
@@ -109,44 +102,8 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
   }
 
 
-  get contactsPlaceholder(): string {
-    if (!this.editionMode) {
-      return 'No definido';
-    }
-
-    if (this.form.controls.customer.invalid) {
-      return 'Seleccione al cliente';
-    }
-
-    return this.form.value.customer.contacts?.length === 0 ?
-      'El cliente no tiene contactos' :
-      'Seleccione el contacto';
-  }
-
-
-  get addressesPlaceholder(): string {
-    if (!this.editionMode) {
-      return 'No definido';
-    }
-
-    if (this.form.controls.customer.invalid) {
-      return 'Seleccione al cliente';
-    }
-
-    return this.form.value.customer.addresses?.length === 0 ?
-      'El cliente no tiene direcciones' :
-      'Seleccione la dirección';
-  }
-
-
-  onShippingMethodChange() {
-    this.validateCustomerAddressRequired();
-    this.emitFormChanges();
-  }
-
-
-  onCustomertChange() {
-    this.resetCustomerData();
+  get isFormValid(): boolean {
+    return this.form.valid;
   }
 
 
@@ -167,9 +124,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
       salesAgent: [null as Party, Validators.required],
       paymentCondition: ['', Validators.required],
       shippingMethod: ['', Validators.required],
-      customer: [null as Customer, Validators.required],
-      customerContact: [null],
-      customerAddress: [null as Address, Validators.required],
+      customer: [EmptyCustomerSelection, Validate.objectFieldsRequired('customer', 'address')],
     });
 
     this.form.valueChanges.subscribe(v => this.emitFormChanges());
@@ -182,7 +137,7 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
     } else {
 
       const payload = {
-        isFormValid: this.form.valid,
+        isFormValid: this.isFormValid,
         isFormDirty: this.form.dirty,
         data: this.getFormData(),
       };
@@ -196,6 +151,10 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
 
   private setFormData() {
     if (this.isSaved) {
+      const customerData = buildCustomerSelection(
+        this.orderData.customer, this.orderData.customerContact, this.orderData.customerAddress
+      );
+
       this.form.reset({
         orderNumber: this.orderData.orderNumber,
         orderTime: this.orderData.orderTime,
@@ -205,13 +164,8 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
         salesAgent: this.orderData.salesAgent,
         paymentCondition: this.orderData.paymentCondition,
         shippingMethod: this.orderData.shippingMethod,
-        customer: isEmpty(this.orderData.customer) ? null : this.orderData.customer,
-        customerContact: isEmpty(this.orderData.customerContact) ? null : this.orderData.customerContact,
-        customerAddress: isEmpty(this.orderData.customerAddress) ? null : this.orderData.customerAddress,
+        customer: customerData,
       });
-
-      // FIX: this breaks the app
-      // this.validateCustomerAddressRequired();
 
       this.initLists();
     } else {
@@ -231,24 +185,6 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
     FormHelper.setDisableControl(this.form.controls.priceList);
   }
 
-
-  private validateCustomerAddressRequired() {
-    FormHelper.clearControlValidators(this.form.controls.customerAddress);
-
-    if (this.shippingRequired) {
-      FormHelper.setControlValidators(this.form.controls.customerAddress, [Validators.required]);
-    }
-  }
-
-
-  private resetCustomerData() {
-    this.customerContactsList = this.form.value.customer.contacts ?? [];
-    this.customerAddressesList = this.form.value.customer.addresses ?? [];
-    this.form.controls.customerContact.reset();
-    this.form.controls.customerAddress.reset();
-  }
-
-
   private getFormData(): OrderGeneralData {
     const formModel = this.form.getRawValue();
 
@@ -262,9 +198,9 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
       salesAgent: formModel.salesAgent ?? null,
       paymentCondition: formModel.paymentCondition ?? '',
       shippingMethod: formModel.shippingMethod ?? '',
-      customer: formModel.customer ?? null,
-      customerContact: formModel.customerContact ?? null,
-      customerAddress: formModel.customerAddress ?? null,
+      customer: formModel.customer?.customer ?? null,
+      customerContact: formModel.customer?.contact ?? null,
+      customerAddress: formModel.customer?.address ?? null,
     };
 
     return data;
@@ -291,12 +227,8 @@ export class OrderHeaderComponent implements OnChanges, OnInit {
   private initLists() {
     this.suppliersList = isEmpty(this.orderData.supplier) ? this.suppliersList :
       ArrayLibrary.insertIfNotExist(this.suppliersList ?? [], this.orderData.supplier, 'uid');
-    this.salesAgentsList = isEmpty(this.orderData.salesAgent) ? this.customerContactsList :
+    this.salesAgentsList = isEmpty(this.orderData.salesAgent) ? this.salesAgentsList :
       ArrayLibrary.insertIfNotExist(this.salesAgentsList ?? [], this.orderData.salesAgent, 'uid');
-    this.customerContactsList = isEmpty(this.orderData.customerContact) ? this.customerContactsList :
-      ArrayLibrary.insertIfNotExist(this.customerContactsList ?? [], this.orderData.customerContact , 'uid');
-    this.customerAddressesList = isEmpty(this.orderData.customerAddress) ? this.customerAddressesList :
-      ArrayLibrary.insertIfNotExist(this.customerAddressesList ?? [], this.orderData.customerAddress, 'uid');
   }
 
 }

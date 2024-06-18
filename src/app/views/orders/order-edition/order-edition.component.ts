@@ -282,21 +282,40 @@ export class OrderEditionComponent implements OnChanges, OnDestroy {
 
 
   private fieldHasChanges(newItem: Identifiable, oldItem: Identifiable): boolean {
-    return !isEmpty(newItem) && !isEmpty(oldItem) && newItem.uid !== oldItem.uid;
+    return !isEmpty(newItem) && newItem?.uid !== oldItem?.uid;
   }
 
 
   private validateOrderHeaderChanges(data: OrderData) {
-    const recalculateItems = this.orderForEdition.items.length > 0 &&
-      (this.fieldHasChanges(data.customer, this.orderForEdition.orderData.customer) ||
-       this.fieldHasChanges(data.supplier, this.orderForEdition.orderData.supplier));
+    const recalculateItems = this.needRecalculateItems(data, this.orderForEdition.orderData);
 
     const orderDataUpdated = { ...this.orderForEdition.orderData, ...data };
 
     this.setOrderForEdition({ ...this.orderForEdition, ...{ orderData: orderDataUpdated } });
 
     if (recalculateItems) {
+      this.validateCalculateOrder();
+    }
+  }
+
+
+  private needRecalculateItems(newData: OrderData, oldData: OrderData) {
+    const hasItems = this.orderForEdition.items.length > 0;
+
+    const hasChanges = this.fieldHasChanges(newData.customer, oldData.customer) ||
+                       this.fieldHasChanges(newData.customerAddress, oldData.customerAddress) ||
+                       this.fieldHasChanges(newData.customerContact, oldData.customerContact) ||
+                       this.fieldHasChanges(newData.supplier, oldData.supplier);
+
+    return hasItems && hasChanges;
+  }
+
+
+  private validateCalculateOrder() {
+    if (this.isOrderDataValid) {
       this.calculateOrder(this.orderForEdition);
+    } else {
+      setTimeout(() => this.invalidateForms());
     }
   }
 
@@ -379,7 +398,9 @@ export class OrderEditionComponent implements OnChanges, OnDestroy {
 
 
   private setDirtyOrder(dirty: boolean) {
-    if (dirty) {
+    const canMarkDirty = !this.isSaved || (this.isSaved && this.editionMode);
+
+    if (canMarkDirty && dirty) {
       this.setIsUserWorkingStatus(dirty);
     }
   }

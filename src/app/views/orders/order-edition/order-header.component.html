@@ -65,8 +65,7 @@
         <emp-ng-select
           formControlName="shippingMethod"
           [items]="shippingMethodList"
-          [showError]="formHelper.isControlInvalid(form.controls.shippingMethod)"
-          (changes)="onShippingMethodChange()">
+          [showError]="formHelper.isControlInvalid(form.controls.shippingMethod)">
         </emp-ng-select>
       </div>
 
@@ -81,68 +80,14 @@
 
     </div>
 
-    <div class="fx-row-container">
+    <emp-trade-customer-selector
+      formControlName="customer"
+      [initialValue]="orderData.customer"
+      [editionMode]="editionMode"
+      [errors]="form.controls.customer.errors"
+      [showError]="formHelper.isControlInvalid(form.controls.customer)">
 
-      <div class="fx-item-third">
-        <label>Cliente:</label>
-
-        <emp-ng-select-typeahead #customer
-          formControlName="customer"
-          [config]="{ bindByValue: false, clearable: true, minTermLength: 5, virtualScroll: true }"
-          [searcherAPI]="customersWithContactsAPI"
-          [initialValue]="orderData.customer"
-          [showError]="formHelper.isControlInvalid(form.controls.customer)"
-          (changes)="onCustomertChange()"
-          placeholder="Buscar cliente">
-
-        </emp-ng-select-typeahead>
-      </div>
-
-      <div class="fx-item-third">
-        <label>Contacto:</label>
-
-        <emp-ng-select
-          formControlName="customerContact"
-          [config]="{bindByValue: false, clearable: true}"
-          [items]="customerContactsList"
-          [placeholder]="contactsPlaceholder"
-          [showError]="formHelper.isControlInvalid(form.controls.customerContact)">
-
-           <ng-template #labelTemplate let-item="item">
-              {{item.name}} {{item.phone ? '(' + item.phone + ')' : ''}}
-            </ng-template>
-
-            <ng-template #optionTemplate let-item="item">
-              {{item.name}} {{item.phone ? '(' + item.phone + ')' : ''}}
-            </ng-template>
-
-        </emp-ng-select>
-      </div>
-
-      <div class="fx-item-third">
-        <label>Dirección:</label>
-
-        <emp-ng-select
-          formControlName="customerAddress"
-          [config]="{bindByValue: false, clearable: !shippingRequired}"
-          [items]="customerAddressesList"
-          [placeholder]="addressesPlaceholder"
-          [showError]="formHelper.isControlInvalid(form.controls.customerAddress)">
-
-          <ng-template #labelTemplate let-item="item">
-            {{item.name}} - {{item.description}}
-          </ng-template>
-
-          <ng-template #optionTemplate let-item="item">
-            <div class="wrap" [style.padding]="'0.25rem 0'">
-              <span class="item-highlight">{{item.name}}</span> <br>
-              <span class="item-text-xs">{{item.description}}</span>
-            </div>
-          </ng-template>
-        </emp-ng-select>
-      </div>
-
-    </div>
+    </emp-trade-customer-selector>
 
   </div>
 
