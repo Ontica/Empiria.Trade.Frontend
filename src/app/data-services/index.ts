@@ -5,8 +5,6 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-export * from './file-services/file-download.service';
-
 export * from './_access-control.data.service';
 
 export * from './_searcher.data.service';

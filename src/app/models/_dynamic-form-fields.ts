@@ -5,7 +5,16 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Identifiable } from '@app/core';
+import { Identifiable } from "@app/core";
+
+
+export enum FormFieldDataType {
+  select    = 'listValue',
+  input     = 'inputValue',
+  text_area = 'textAreaValue',
+  date      = 'dateValue',
+}
+
 
 export interface FormFieldData {
   label: string;
@@ -19,11 +28,17 @@ export interface FormFieldData {
 }
 
 
-export enum FormFieldDataType {
-  select        = 'listValue',
-  input         = 'inputValue',
-  text_area     = 'textAreaValue',
-  date          = 'dateValue',
+export interface InputData {
+  label: string;
+  field: string;
+  dataType: FormFieldDataType;
+  values: Identifiable[];
+};
+
+
+export interface DataField {
+  field: string;
+  value: string;
 }
 
 

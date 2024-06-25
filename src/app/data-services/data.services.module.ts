@@ -7,10 +7,6 @@
 
 import { NgModule } from '@angular/core';
 
-import { FileDownloadService } from './file-services/file-download.service';
-
-import { getSaver, SAVER } from './file-services/saver.provider';
-
 import { AccessControlDataService } from './_access-control.data.service';
 
 import { SearcherDataService } from './_searcher.data.service';
@@ -34,7 +30,6 @@ import { ShippingDataService } from './shipping-data.service';
 
   providers: [
     AccessControlDataService,
-    FileDownloadService,
     SearcherDataService,
     ContactsDataService,
     InventoryOrdersDataService,
@@ -43,8 +38,6 @@ import { ShippingDataService } from './shipping-data.service';
     ProductsDataService,
     SalesOrdersDataService,
     ShippingDataService,
-
-    { provide: SAVER, useFactory: getSaver }
   ]
 
 })
