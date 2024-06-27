@@ -15,7 +15,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { PackingDataService } from '@app/data-services';
 
-import { EmptyPacking, InventoryOrderFields, Order, OrderItem, Packing } from '@app/models';
+import { EmptyPacking, InventoryOrderFields, SaleOrder, SaleOrderItem, Packing } from '@app/models';
 
 import { PackingStatusEventType } from '../packing/packing-view/packing-status.component';
 
@@ -38,7 +38,7 @@ export class PickingEditorComponent {
 
   @Input() packing: Packing = EmptyPacking;
 
-  @Input() items: OrderItem[] = [];
+  @Input() items: SaleOrderItem[] = [];
 
   @Input() canEdit: boolean = false;
 
@@ -95,7 +95,7 @@ export class PickingEditorComponent {
   }
 
 
-  private resolveUpdateOrderPicking(order: Order) {
+  private resolveUpdateOrderPicking(order: SaleOrder) {
     const payload = { order };
     sendEvent(this.pickingEditorEvent, PickingEditorEventType.PICKING_UPDATED, payload);
   }

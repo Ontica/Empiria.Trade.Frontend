@@ -1,0 +1,25 @@
+<div class="fx-row-container fx-space-between" [style.marginRight.px]="8">
+
+  <div class="fx-item-third">
+
+    <emp-trade-sale-order-additional-data #additionalData
+      [orderData]="orderData"
+      [isSaved]="isSaved"
+      [editionMode]="editionMode"
+      (saleOrderAdditionalDataEvent)="onSaleOrderAdditionalDataEvent($event)">
+
+    </emp-trade-sale-order-additional-data>
+
+  </div>
+
+
+  <div class="fx-item-none" [style.minWidth.px]="150" [style.minHeight.px]="100">
+
+    <emp-trade-sale-order-totals
+      [orderTotals]="orderData">
+
+    </emp-trade-sale-order-totals>
+
+  </div>
+
+</div>

@@ -9,8 +9,6 @@ import { DateString, Empty, EmptyMediaBase, Identifiable, MediaBase, isEmpty } f
 
 import { PackagingTotals } from './packing';
 
-import { ShippingMethodTypes } from './order';
-
 import { Customer, EmptyCustomer } from './customer';
 
 
@@ -39,6 +37,40 @@ export function getShippingStatusName(statusUID: ShippingStatus): string {
   const status = ShippingStatusList.find(x => x.uid === statusUID);
   return isEmpty(status) ? statusUID : status.name;
 }
+
+
+export enum ShippingMethodTypes {
+  RutaLocal   = 'RutaLocal',
+  RutaForanea = 'RutaForanea',
+  Ocurre      = 'Ocurre',
+  Paqueteria  = 'Paqueteria',
+}
+
+
+export const ShippingMethodList: Identifiable[] = [
+  { uid: ShippingMethodTypes.RutaLocal,   name: 'Ruta local' },
+  { uid: ShippingMethodTypes.RutaForanea, name: 'Ruta foránea' },
+  { uid: ShippingMethodTypes.Ocurre,      name: 'Ocurre' },
+  { uid: ShippingMethodTypes.Paqueteria,  name: 'Paquetería' },
+];
+
+
+export const DefaultShippingMethod: Identifiable = {
+  uid: ShippingMethodTypes.Paqueteria,
+  name: 'Paquetería',
+};
+
+
+export enum OrderShippingStatusTypes {
+  Asignado  = 'Asignado',
+  Pendiente = 'Pendiente',
+}
+
+
+export const OrderShippingStatusList: Identifiable[] = [
+  { uid: OrderShippingStatusTypes.Asignado,  name: OrderShippingStatusTypes.Asignado },
+  { uid: OrderShippingStatusTypes.Pendiente, name: OrderShippingStatusTypes.Pendiente },
+];
 
 
 export interface ShippingQuery {

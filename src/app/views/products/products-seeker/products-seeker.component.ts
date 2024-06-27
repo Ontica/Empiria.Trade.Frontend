@@ -11,7 +11,7 @@ import { Assertion, EmpObservable, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { OrderFields, ProductDescriptor, ProductQuery } from '@app/models';
+import { SaleOrderFields, ProductDescriptor, ProductQuery } from '@app/models';
 
 import { ProductsDataService } from '@app/data-services';
 
@@ -36,7 +36,7 @@ export class ProductsSeekerComponent implements OnInit {
 
   @Input() productSeekerQueryType: ProductSeekerQueryType = 'Products';
 
-  @Input() order: OrderFields = null;
+  @Input() order: SaleOrderFields = null;
 
   @Input() displayFlat = null;
 

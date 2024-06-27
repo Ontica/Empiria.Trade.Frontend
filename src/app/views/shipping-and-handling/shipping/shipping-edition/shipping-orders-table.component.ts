@@ -17,7 +17,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { SearcherAPIS } from '@app/data-services';
 
-import { EmptyShipping, OrderDescriptor, OrderForShipping, Shipping } from '@app/models';
+import { EmptyShipping, SaleOrderDescriptor, OrderForShipping, Shipping } from '@app/models';
 
 import {
   SelectBoxTypeaheadComponent
@@ -82,7 +82,7 @@ export class ShippingOrdersTableComponent implements OnChanges {
   }
 
 
-  onOrderSearcherChanges(order: OrderDescriptor) {
+  onOrderSearcherChanges(order: SaleOrderDescriptor) {
     setTimeout(() => {
       if (!this.isOrderInShipping(order.uid)) {
         this.addOrderToShipping(order.uid);

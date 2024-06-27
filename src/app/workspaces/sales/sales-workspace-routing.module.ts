@@ -13,7 +13,9 @@ import { ROUTES } from '@app/main-layout';
 
 import { DefaultComponent } from '@app/shared/components/default-component/default.component';
 
-import { SalesMainPageComponent } from '@app/views/sales/sales-main-page.component';
+import {
+  SalesOrdersMainPageComponent
+} from '@app/views/sales/sales-orders-main-page/sales-orders-main-page.component';
 
 import {
   ShippingMainPageComponent
@@ -25,12 +27,12 @@ const routes: Routes = [
   {
     data: { permission: ROUTES.ventas_pedidos.permission },
     path: ROUTES.ventas_pedidos.path,
-    component: SalesMainPageComponent,
+    component: SalesOrdersMainPageComponent,
   },
   {
     data: { permission: ROUTES.ventas_autorizaciones.permission },
     path: ROUTES.ventas_autorizaciones.path,
-    component: SalesMainPageComponent,
+    component: SalesOrdersMainPageComponent,
   },
   {
     data: { permission: ROUTES.ventas_envios.permission },

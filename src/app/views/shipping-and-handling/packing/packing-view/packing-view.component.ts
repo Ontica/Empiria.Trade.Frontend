@@ -12,9 +12,9 @@ import { Assertion, EventInfo } from '@app/core';
 import { sendEvent } from '@app/shared/utils';
 
 import { EmptyPacking, PackingOrderItemField, Packing, PackingItem, PackingItemFields,
-         Order } from '@app/models';
+         SaleOrder } from '@app/models';
 
-import { PackingDataService, SalesOrdersDataService } from '@app/data-services';
+import { PackingDataService, SalesDataService } from '@app/data-services';
 
 import { PackingStatusEventType } from './packing-status.component';
 
@@ -62,7 +62,7 @@ export class PackingViewComponent {
 
 
   constructor(private packingData: PackingDataService,
-              private ordersData: SalesOrdersDataService) { }
+              private salesData: SalesDataService) { }
 
 
   get packingValid(): Packing {
@@ -244,26 +244,26 @@ export class PackingViewComponent {
   private supplyOrder(orderUID: string) {
     this.submitted = true;
 
-    this.ordersData.supplyOrder(orderUID)
+    this.salesData.supplyOrder(orderUID)
       .firstValue()
       .then(x => sendEvent(this.packingViewEvent, PackingViewEventType.ORDER_SUPPLIED, { order: x }))
       .finally(() => this.submitted = false);
   }
 
 
-  private resolvePackingItemUpdated(order: Order) {
+  private resolvePackingItemUpdated(order: SaleOrder) {
     this.resolvePackingItemEntryUpdated(order);
     this.closeEditors();
   }
 
 
-  private resolvePackingItemEntryUpdated(order: Order) {
+  private resolvePackingItemEntryUpdated(order: SaleOrder) {
     this.refreshPackingItemEntriesEditor(order.packing.packagedItems);
     this.emitPackingUpdated(order);
   }
 
 
-  private emitPackingUpdated(order: Order) {
+  private emitPackingUpdated(order: SaleOrder) {
     sendEvent(this.packingViewEvent, PackingViewEventType.PACKING_UPDATED, { order });
   }
 

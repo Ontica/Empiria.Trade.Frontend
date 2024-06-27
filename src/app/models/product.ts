@@ -7,7 +7,7 @@
 
 import { Identifiable } from '@app/core';
 
-import { OrderFields } from './order';
+import { SaleOrderFields } from './sales-orders';
 
 
 export interface Product {
@@ -52,7 +52,7 @@ export interface Vendor {
 export interface ProductQuery {
   keywords: string;
   onStock: boolean;
-  order?: OrderFields;
+  order?: SaleOrderFields;
 }
 
 

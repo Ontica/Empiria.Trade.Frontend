@@ -11,7 +11,7 @@ import { ApplicationStatusService, EventInfo, isEmpty } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { OrdersOperation, OrdersOperationList } from '@app/models';
+import { DefaultOrdersTypeConfig, OrdersTypeConfig, OrdersOperation } from '@app/models';
 
 
 export enum OrdersControlsEventType {
@@ -24,13 +24,15 @@ export enum OrdersControlsEventType {
 })
 export class OrdersControlsComponent {
 
+  @Input() config: OrdersTypeConfig = DefaultOrdersTypeConfig;
+
+  @Input() operationsList: OrdersOperation[] = [];
+
   @Input() ordersSelected: string[] = [];
 
   @Output() ordersControlsEvent = new EventEmitter<EventInfo>();
 
   operationSelected: OrdersOperation = null;
-
-  operationsList: OrdersOperation[] = OrdersOperationList;
 
 
   constructor(private appStatus: ApplicationStatusService) { }

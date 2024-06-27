@@ -11,7 +11,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { Order, OrderFields, mapOrderFieldsFromOrder } from '@app/models';
+import { SaleOrder, SaleOrderFields, mapSaleOrderFieldsFromSaleOrder } from '@app/models';
 
 import { ProductsSeekerEventType } from '../products-seeker/products-seeker.component';
 
@@ -27,15 +27,15 @@ export enum ProductsSelectorEventType {
 })
 export class ProductsSelectorComponent implements OnChanges {
 
-  @Input() order: Order = null;
+  @Input() order: SaleOrder = null;
 
   @Output() productsSelectorEvent = new EventEmitter<EventInfo>();
 
-  orderForQuery: OrderFields = null;
+  orderForQuery: SaleOrderFields = null;
 
 
   ngOnChanges() {
-    this.orderForQuery = mapOrderFieldsFromOrder(this.order);
+    this.orderForQuery = mapSaleOrderFieldsFromSaleOrder(this.order);
   }
 
 

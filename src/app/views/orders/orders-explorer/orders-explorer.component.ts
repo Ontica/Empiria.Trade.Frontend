@@ -11,10 +11,8 @@ import { ApplicationStatusService, Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyOrder, EmptyOrderDataTable, Order, OrderDataTable, OrderQueryType,
-         OrderTypeConfig } from '@app/models';
-
-import { OrdersFilterEventType } from './orders-filter.component';
+import { DefaultOrdersTypeConfig, EmptyOrdersDataTable, OrdersDataTable, OrdersTypeConfig,
+         OrdersOperation} from '@app/models';
 
 import { OrdersControlsEventType } from './orders-controls.component';
 
@@ -22,8 +20,6 @@ import { DataTableEventType } from '@app/views/_reports-controls/data-table/data
 
 export enum OrdersExplorerEventType {
   CREATE_ORDER      = 'OrdersExplorerComponent.Event.CreateOrder',
-  SEARCH_ORDERS     = 'OrdersExplorerComponent.Event.SearchOrders',
-  CLEAR_ORDERS      = 'OrdersExplorerComponent.Event.ClearOrders',
   SELECT_ORDER      = 'OrdersExplorerComponent.Event.SelectOrder',
   EXECUTE_OPERATION = 'OrdersExplorerComponent.Event.ExecuteOperation',
 }
@@ -34,20 +30,19 @@ export enum OrdersExplorerEventType {
 })
 export class OrdersExplorerComponent implements OnChanges {
 
-  @Input() config: OrderTypeConfig = {
-    type: OrderQueryType.Sales,
-    titleText: 'Pedidos',
-    itemText: 'pedido',
-    canAdd: false,
-  };
+  @Input() config: OrdersTypeConfig = DefaultOrdersTypeConfig;
 
-  @Input() ordersData: OrderDataTable = Object.assign({}, EmptyOrderDataTable);
+  @Input() ordersData: OrdersDataTable = Object.assign({}, EmptyOrdersDataTable);
 
-  @Input() orderSelected: Order = EmptyOrder();
+  @Input() selectedOrderUID = null;
+
+  @Input() operationsList: OrdersOperation[] = [];
 
   @Input() isLoading = false;
 
   @Input() queryExecuted = false;
+
+  @Input() canSelectOrders = false;
 
   @Output() ordersExplorerEvent = new EventEmitter<EventInfo>();
 
@@ -67,35 +62,11 @@ export class OrdersExplorerComponent implements OnChanges {
   }
 
 
-  get canSelectOrders(): boolean {
-    return this.config.type === OrderQueryType.Sales;
-  }
-
-
   onCreateOrderClicked() {
     this.appStatus.canUserContinue()
       .subscribe(x =>
         x ? sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.CREATE_ORDER) : null
       );
-  }
-
-
-  onOrdersFilterEvent(event: EventInfo) {
-    switch (event.type as OrdersFilterEventType) {
-      case OrdersFilterEventType.SEARCH_CLICKED:
-        Assertion.assertValue(event.payload.query, 'event.payload.query');
-        sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.SEARCH_ORDERS, event.payload);
-        return;
-
-      case OrdersFilterEventType.CLEAR_CLICKED:
-        Assertion.assertValue(event.payload.query, 'event.payload.query');
-        sendEvent(this.ordersExplorerEvent, OrdersExplorerEventType.CLEAR_ORDERS, event.payload);
-        return;
-
-      default:
-        console.log(`Unhandled user interface event ${event.type}`);
-        return;
-    }
   }
 
 

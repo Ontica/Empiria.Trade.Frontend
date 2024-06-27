@@ -1,0 +1,67 @@
+<emp-ng-card
+  [title]="title"
+  [hint]="hint"
+  (cardClose)="onClose()" >
+
+  <mat-tab-group mat-stretch-tabs="false" [(selectedIndex)]="selectedTabIndex" >
+
+    <mat-tab label="Pedido" *ngIf="order.actions.show.orderData">
+
+      <emp-trade-sale-order-editor
+        [order]="order"
+        (saleOrderEditorEvent)="onSaleOrderEditorEvent($event)">
+
+      </emp-trade-sale-order-editor>
+
+    </mat-tab>
+
+    <mat-tab label="Crédito" *ngIf="order.actions.show.creditData">
+
+      <emp-trade-customer-credit-view
+        [customer]="order.orderData.customer"
+        [customerCredit]="order.customerCredit">
+
+      </emp-trade-customer-credit-view>
+
+    </mat-tab>
+
+    <mat-tab label="Picking" *ngIf="order.actions.show.pickingData">
+
+      <emp-trade-picking-editor
+        [orderUID]="order.orderData.uid"
+        [packing]="order.packing"
+        [items]="order.items"
+        [canEdit]="order.actions.can.editPicking"
+        (pickingEditorEvent)="onPickingEditorEvent($event)">
+
+      </emp-trade-picking-editor>
+
+
+    </mat-tab>
+
+    <mat-tab label="Packing" *ngIf="order.actions.show.packingData">
+
+      <emp-trade-packing-view
+        [orderUID]="order.orderData.uid"
+        [packing]="order.packing"
+        [canEdit]="order.actions.can.editPacking"
+        [canClose]="order.actions.can.closePacking"
+        (packingViewEvent)="onPackingViewEvent($event)">
+
+      </emp-trade-packing-view>
+
+    </mat-tab>
+
+    <mat-tab label="Envío" *ngIf="showShippingTab" [disabled]="!order.actions.show.shippingData">
+
+      <emp-trade-order-shipping-viewer *ngIf="order.actions.show.shippingData"
+        [shippingData]="order.shipping"
+        [packingData]="order.packing.data">
+
+      </emp-trade-order-shipping-viewer>
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+</emp-ng-card>

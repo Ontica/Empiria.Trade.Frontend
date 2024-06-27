@@ -7,9 +7,9 @@
 
 import { Presentation, Product, Vendor } from './product';
 
-import { EmptyInventoryPicking, InventoryPicking } from './inventory-order';
+import { EmptyInventoryPicking, InventoryPicking } from './inventory-orders';
 
-import { OrderItemData } from './order';
+import { SaleOrderItemData } from './sales-orders';
 
 
 export interface Packing {
@@ -74,7 +74,7 @@ export interface PackingOrderItem {
 }
 
 
-export interface MissingItem extends OrderItemData {
+export interface MissingItem extends SaleOrderItemData {
   orderItemUID: string;
   product: Product;
   presentation: Presentation;

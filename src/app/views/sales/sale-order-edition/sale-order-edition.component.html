@@ -1,0 +1,53 @@
+<emp-ng-spinner #spinner [visible]="isLoading">
+
+</emp-ng-spinner>
+
+<div class="fx-column-container-fill">
+
+  <emp-trade-sale-order-header #saleOrderHeader
+    class="fx-item-none"
+    [orderData]="orderForEdition.orderData"
+    [isSaved]="isSaved"
+    [editionMode]="editionMode"
+    (saleOrderHeaderEvent)="onSaleOrderHeaderEvent($event)">
+
+  </emp-trade-sale-order-header>
+
+  <emp-trade-sale-order-items
+    class="fx-item"
+    [orderItems]="orderForEdition.items"
+    [editionMode]="editionMode"
+    [canEdit]="isOrderDataValid"
+    [style.min-height.px]="145"
+    (saleOrderItemsEvent)="onSaleOrderItemsEvent($event)">
+
+  </emp-trade-sale-order-items>
+
+  <emp-trade-sale-order-summary #saleOrderSummary
+    class="fx-item-none"
+    [orderData]="orderForEdition.orderData"
+    [isSaved]="isSaved"
+    [editionMode]="editionMode"
+    (saleOrderSummaryEvent)="onSaleOrderSummaryEvent($event)">
+
+  </emp-trade-sale-order-summary>
+
+  <emp-trade-sale-order-submitter
+    class="fx-item-none"
+    [order]="orderForEdition"
+    [isSaved]="isSaved"
+    [editionMode]="editionMode"
+    [canEdit]="canEdit"
+    [isReady]="isReady"
+    (saleOrderSubmitterEvent)="onSaleOrderSubmitterEvent($event)">
+
+  </emp-trade-sale-order-submitter>
+
+</div>
+
+
+<emp-trade-products-selector *ngIf="displayProductsSelector"
+  [order]="orderForEdition"
+  (productsSelectorEvent)="onProductsSelectorEvent($event)">
+
+</emp-trade-products-selector>

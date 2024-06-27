@@ -33,14 +33,13 @@
 
       </emp-ng-spinner>
 
-      <emp-trade-orders-filter class="fx-item-none"
-        [orderType]="config.type"
-        [queryExecuted]="queryExecuted"
-        (ordersFilterEvent)="onOrdersFilterEvent($event)">
+      <ng-content>
 
-      </emp-trade-orders-filter>
+      </ng-content>
 
       <emp-trade-orders-controls class="fx-item-none" *ngIf="ordersSelected.length > 0"
+        [config]="config"
+        [operationsList]="operationsList"
         [ordersSelected]="ordersSelected"
         (ordersControlsEvent)="onOrdersControlsEvent($event)">
 
@@ -49,7 +48,7 @@
       <emp-ng-data-table class="fx-item"
         [dataTable]="ordersData"
         [executed]="queryExecuted"
-        [selectedUID]="orderSelected.orderData.uid"
+        [selectedUID]="selectedOrderUID"
         [notQueryExecutedText]="isLoading ? 'Cargando...' : 'No se ha invocado la consulta.'"
         [showControls]="false"
         [showCheckboxSelection]="canSelectOrders"

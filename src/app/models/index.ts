@@ -36,18 +36,20 @@ export * from './imported-data';
 
 export * from './inventory-order';
 
-export * from './money-accounts';
+export * from './money-account-transaction-items';
 
 export * from './money-account-transactions';
 
-export * from './money-account-transaction-items';
+export * from './money-accounts';
 
-export * from './order';
+export * from './orders';
 
 export * from './packing';
-
-export * from './shipping';
 
 export * from './product';
 
 export * from './reporting';
+
+export * from './sales-orders';
+
+export * from './shipping';

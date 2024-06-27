@@ -5,9 +5,15 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, isEmpty } from '@app/core';
+import { DateString, Identifiable, isEmpty } from '@app/core';
 
 import { Address, Contact, Party } from '@app/models';
+
+
+export const PaymentConditionList: Identifiable[] = [
+  { uid: 'Credito', name: 'Crédito' },
+  { uid: 'Contado', name: 'Contado' },
+];
 
 
 export interface Customer extends Party {
