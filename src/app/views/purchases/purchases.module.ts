@@ -10,15 +10,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
-
 import { SharedModule } from '@app/shared/shared.module';
 
-import { PurchasesWorkspaceRoutingModule } from './purchases-workspace-routing.module';
-import { PurchasesModule } from '@app/views/purchases/purchases.module';
+import { OrdersModule } from '../orders/orders.module';
+
+import { PurchaseOrdersMainPageComponent } from './purchase-orders-main-page/purchase-orders-main-page.component';
+import { PurchaseOrdersFilterComponent } from './purchase-orders-filter/purchase-orders-filter.component';
 
 
 @NgModule({
-
   imports: [
     CommonModule,
     FormsModule,
@@ -26,9 +26,14 @@ import { PurchasesModule } from '@app/views/purchases/purchases.module';
     AngularMaterialModule,
     SharedModule,
 
-    PurchasesWorkspaceRoutingModule,
-    PurchasesModule,
+    OrdersModule,
   ],
-
+  declarations: [
+    PurchaseOrdersMainPageComponent,
+    PurchaseOrdersFilterComponent,
+  ],
+  exports: [
+    PurchaseOrdersMainPageComponent,
+  ]
 })
-export class PurchasesWorkspaceModule { }
+export class PurchasesModule { }

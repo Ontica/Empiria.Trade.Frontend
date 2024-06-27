@@ -21,6 +21,8 @@ import { PackingDataService } from './packing.data.service';
 
 import { ProductsDataService } from './products.data.service';
 
+import { PurchasesDataService } from './purchases.data.service';
+
 import { SalesDataService } from './sales.data.service';
 
 import { ShippingDataService } from './shipping-data.service';
@@ -36,6 +38,7 @@ import { ShippingDataService } from './shipping-data.service';
     MoneyAccountsDataService,
     PackingDataService,
     ProductsDataService,
+    PurchasesDataService,
     SalesDataService,
     ShippingDataService,
   ]

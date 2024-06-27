@@ -13,12 +13,16 @@ import { ROUTES } from '@app/main-layout';
 
 import { DefaultComponent } from '@app/shared/components/default-component/default.component';
 
+import {
+  PurchaseOrdersMainPageComponent
+} from '@app/views/purchases/purchase-orders-main-page/purchase-orders-main-page.component';
+
 
 const routes: Routes = [
   {
     data: { permission: ROUTES.compras_ordenes_de_compra.permission },
     path: ROUTES.compras_ordenes_de_compra.path,
-    component: DefaultComponent,
+    component: PurchaseOrdersMainPageComponent,
   },
   {
     data: { permission: ROUTES.compras_cuentas_x_pagar.permission },

@@ -48,6 +48,8 @@ export * from './packing';
 
 export * from './product';
 
+export * from './purchase-orders';
+
 export * from './reporting';
 
 export * from './sales-orders';

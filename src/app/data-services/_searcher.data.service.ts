@@ -14,7 +14,8 @@ export enum SearcherAPIS {
   accountHolders        = 'v4/trade/contacts/account-holders/',
   customersWithContacts = 'v4/trade/contacts/customers-with-contacts/',
   warehouseBins         = 'v4/trade/warehouse-bin/search/',
-  ordersForShipping     = 'v4/trade/sales/orders/search-for-shipping/'
+  ordersForShipping     = 'v4/trade/sales/orders/search-for-shipping/',
+  suppliers             = 'v4/trade/contacts/suppliers/search/',
 }
 
 @Injectable()

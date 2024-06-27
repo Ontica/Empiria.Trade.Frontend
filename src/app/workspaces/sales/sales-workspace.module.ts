@@ -29,9 +29,5 @@ import { ShippingAndHandlingModule } from '@app/views/shipping-and-handling/ship
     ShippingAndHandlingModule,
   ],
 
-  declarations: [
-
-  ]
-
 })
 export class SalesWorkspaceModule { }
