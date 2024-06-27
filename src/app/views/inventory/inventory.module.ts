@@ -12,11 +12,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
+import { OrdersModule } from '../orders/orders.module';
 import { ProductsModule } from '../products/products.module';
 import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
 
-import { InventoryOrdersExplorerComponent } from './inventory-orders-explorer/inventory-orders-explorer.component';
-import { InventoryOrdersFilterComponent } from './inventory-orders-explorer/inventory-orders-filter.component';
+import { InventoryOrdersMainPageComponent } from './inventory-orders-main-page/inventory-orders-main-page.component';
+import { InventoryOrdersFilterComponent } from './inventory-orders-filter/inventory-orders-filter.component';
 import { InventoryOrderCreatorComponent } from './inventory-order/inventory-order-creator.component';
 import { InventoryOrderEditorComponent } from './inventory-order/inventory-order-editor.component';
 import { InventoryOrderHeaderComponent } from './inventory-order/inventory-order-header.component';
@@ -34,11 +35,12 @@ import { InventoryOrderItemsTableComponent } from './inventory-order-items/inven
     AngularMaterialModule,
     SharedModule,
 
+    OrdersModule,
     ProductsModule,
     ReportsControlsModule,
   ],
   declarations: [
-    InventoryOrdersExplorerComponent,
+    InventoryOrdersMainPageComponent,
     InventoryOrdersFilterComponent,
     InventoryOrderCreatorComponent,
     InventoryOrderEditorComponent,
@@ -48,9 +50,7 @@ import { InventoryOrderItemsTableComponent } from './inventory-order-items/inven
     InventoryOrderItemsTableComponent,
   ],
   exports: [
-    InventoryOrdersExplorerComponent,
-    InventoryOrderCreatorComponent,
-    InventoryOrderTabbedViewComponent,
+    InventoryOrdersMainPageComponent,
     InventoryOrderHeaderComponent,
   ],
 })

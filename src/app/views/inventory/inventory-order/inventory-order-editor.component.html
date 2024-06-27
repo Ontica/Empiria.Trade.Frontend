@@ -8,10 +8,10 @@
 
   <emp-trade-inventory-order-header
     [isSaved]="isSaved"
-    [canEdit]="inventoryOrder.actions.canEdit"
-    [canClose]="inventoryOrder.actions.canClose"
-    [canDelete]="inventoryOrder.actions.canDelete"
-    [inventoryOrder]="inventoryOrder"
+    [canEdit]="order.actions.canEdit"
+    [canClose]="order.actions.canClose"
+    [canDelete]="order.actions.canDelete"
+    [order]="order"
     (inventoryOrderHeaderEvent)="onInventoryOrderHeaderEvent($event)">
 
   </emp-trade-inventory-order-header>

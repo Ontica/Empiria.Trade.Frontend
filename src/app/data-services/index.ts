@@ -11,7 +11,7 @@ export * from './_searcher.data.service';
 
 export * from './contacts.data.service';
 
-export * from './inventory-orders.data.service';
+export * from './inventory.data.service';
 
 export * from './money-accounts.data.service';
 

@@ -22,7 +22,7 @@ import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { ContactsDataService } from '@app/data-services';
 
-import { EmptyInventoryOrderQuery, InventoryOrderQuery, InventoryStatusList } from '@app/models';
+import { EmptyInventoryOrdersQuery, InventoryOrdersQuery, InventoryStatusList } from '@app/models';
 
 
 export enum InventoryOrdersFilterEventType {
@@ -42,7 +42,7 @@ interface InventoryOrdersFilterFormModel extends FormGroup<{
 })
 export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDestroy {
 
-  @Input() query: InventoryOrderQuery = EmptyInventoryOrderQuery;
+  @Input() query: InventoryOrdersQuery = EmptyInventoryOrdersQuery;
 
   @Output() inventoryOrdersFilterEvent = new EventEmitter<EventInfo>();
 
@@ -136,8 +136,9 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
   }
 
 
-  private getFormData(): InventoryOrderQuery {
-    const query: InventoryOrderQuery = {
+  private getFormData(): InventoryOrdersQuery {
+    const query: InventoryOrdersQuery = {
+      queryType: '',
       inventoryOrderTypeUID: this.form.value.inventoryOrderTypeUID ?? '',
       status: this.form.value.status ?? '',
       assignedToUID: this.form.value.assignedToUID ?? '',

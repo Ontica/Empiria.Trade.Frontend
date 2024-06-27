@@ -21,9 +21,9 @@ import {
 
 
 export enum InventoryOrderTabbedViewEventType {
-  CLOSE_BUTTON_CLICKED    = 'InventoryOrderTabbedViewComponent.Event.CloseButtonClicked',
-  INVENTORY_ORDER_UPDATED = 'InventoryOrderTabbedViewComponent.Event.InventoryOrderUpdated',
-  INVENTORY_ORDER_DELETED = 'InventoryOrderTabbedViewComponent.Event.InventoryOrderDeleted',
+  CLOSE_BUTTON_CLICKED = 'InventoryOrderTabbedViewComponent.Event.CloseButtonClicked',
+  ORDER_UPDATED        = 'InventoryOrderTabbedViewComponent.Event.OrderUpdated',
+  ORDER_DELETED        = 'InventoryOrderTabbedViewComponent.Event.OrderDeleted',
 }
 
 @Component({
@@ -32,7 +32,7 @@ export enum InventoryOrderTabbedViewEventType {
 })
 export class InventoryOrderTabbedViewComponent implements OnChanges {
 
-  @Input() inventoryOrder: InventoryOrder = EmptyInventoryOrder;
+  @Input() order: InventoryOrder = EmptyInventoryOrder;
 
   @Output() inventoryOrderTabbedViewEvent = new EventEmitter<EventInfo>();
 
@@ -56,15 +56,15 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
   onInventoryOrderEditorEvent(event: EventInfo) {
     switch (event.type as InventoryOrderEditorEventType) {
       case InventoryOrderEditorEventType.ORDER_UPDATED:
-        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
-        sendEvent(this.inventoryOrderTabbedViewEvent,
-          InventoryOrderTabbedViewEventType.INVENTORY_ORDER_UPDATED, event.payload);
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ORDER_UPDATED,
+          event.payload);
         return;
 
       case InventoryOrderEditorEventType.ORDER_DELETED:
-        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
-        sendEvent(this.inventoryOrderTabbedViewEvent,
-          InventoryOrderTabbedViewEventType.INVENTORY_ORDER_DELETED, event.payload);
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ORDER_DELETED,
+          event.payload);
         return;
 
       default:
@@ -78,9 +78,9 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
     switch (event.type as InventoryOrderItemsEditionEventType) {
       case InventoryOrderItemsEditionEventType.ITEM_CREATED:
       case InventoryOrderItemsEditionEventType.ITEM_DELETED:
-        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
-        sendEvent(this.inventoryOrderTabbedViewEvent,
-          InventoryOrderTabbedViewEventType.INVENTORY_ORDER_UPDATED, event.payload);
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ORDER_UPDATED,
+          event.payload);
         return;
 
       default:
@@ -91,12 +91,12 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
 
 
   private setTitle() {
-    const postingTime = DateStringLibrary.format(this.inventoryOrder.postingTime);
+    const postingTime = DateStringLibrary.format(this.order.postingTime);
 
-    this.title = `${this.inventoryOrder.inventoryOrderNo}` +
-      `<span class="tag tag-small">${this.inventoryOrder.status}</span>`;
+    this.title = `${this.order.inventoryOrderNo}` +
+      `<span class="tag tag-small">${this.order.status}</span>`;
 
-    this.hint = `<strong>${this.inventoryOrder.inventoryOrderType.name} </strong>` +
+    this.hint = `<strong>${this.order.inventoryOrderType.name} </strong>` +
       ` &nbsp; &nbsp; | &nbsp; &nbsp; ${postingTime}`;
   }
 

@@ -28,10 +28,10 @@ import { EmptyInventoryPicking, InventoryOrderFields, InventoryPicking } from '@
 
 
 export enum InventoryOrderHeaderEventType {
-  CREATE_INVENTORY_ORDER = 'InventoryOrderHeaderComponent.Event.CreateInventoryOrder',
-  UPDATE_INVENTORY_ORDER = 'InventoryOrderHeaderComponent.Event.UpdateInventoryOrder',
-  DELETE_INVENTORY_ORDER = 'InventoryOrderHeaderComponent.Event.DeleteInventoryOrder',
-  CLOSE_INVENTORY_ORDER  = 'InventoryOrderHeaderComponent.Event.CloseInventoryOrder',
+  CREATE_ORDER = 'InventoryOrderHeaderComponent.Event.CreateOrder',
+  UPDATE_ORDER = 'InventoryOrderHeaderComponent.Event.UpdateOrder',
+  DELETE_ORDER = 'InventoryOrderHeaderComponent.Event.DeleteOrder',
+  CLOSE_ORDER  = 'InventoryOrderHeaderComponent.Event.CloseOrder',
 }
 
 
@@ -57,7 +57,7 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
   @Input() canDelete = false;
 
-  @Input() inventoryOrder: InventoryPicking = EmptyInventoryPicking;
+  @Input() order: InventoryPicking = EmptyInventoryPicking;
 
   @Output() inventoryOrderHeaderEvent = new EventEmitter<EventInfo>();
 
@@ -93,7 +93,7 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.inventoryOrder && this.isSaved) {
+    if (changes.order && this.isSaved) {
       this.enableEditor(false);
     }
   }
@@ -111,10 +111,10 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
   onSubmitButtonClicked() {
     if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
-      let eventType = InventoryOrderHeaderEventType.CREATE_INVENTORY_ORDER;
+      let eventType = InventoryOrderHeaderEventType.CREATE_ORDER;
 
       if (this.isSaved) {
-        eventType = InventoryOrderHeaderEventType.UPDATE_INVENTORY_ORDER;
+        eventType = InventoryOrderHeaderEventType.UPDATE_ORDER;
       }
 
       sendEvent(this.inventoryOrderHeaderEvent, eventType, { dataFields: this.getFormData() });
@@ -123,12 +123,12 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
 
   onDeleteButtonClicked() {
-    this.showConfirmMessage(InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER);
+    this.showConfirmMessage(InventoryOrderHeaderEventType.DELETE_ORDER);
   }
 
 
   onCloseButtonClicked() {
-    this.showConfirmMessage(InventoryOrderHeaderEventType.CLOSE_INVENTORY_ORDER);
+    this.showConfirmMessage(InventoryOrderHeaderEventType.CLOSE_ORDER);
   }
 
 
@@ -140,7 +140,6 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
     }
 
     this.formHelper.setDisableForm(this.form, !this.editionMode);
-
     FormHelper.setDisableControl(this.form.controls.inventoryOrderNo);
     FormHelper.setDisableControl(this.form.controls.inventoryOrderType, this.isSaved);
     FormHelper.setDisableControl(this.form.controls.responsibleUID, this.responsableList.length === 1);
@@ -173,17 +172,14 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
 
   private validateResponsableInList() {
-    this.responsableList = isEmpty(this.inventoryOrder.responsible) ? this.responsableList :
-      ArrayLibrary.insertIfNotExist(this.responsableList ?? [], this.inventoryOrder.responsible, 'uid');
+    this.responsableList = isEmpty(this.order.responsible) ? this.responsableList :
+      ArrayLibrary.insertIfNotExist(this.responsableList ?? [], this.order.responsible, 'uid');
   }
 
 
   private validateResponsableDefault() {
     const responsableDefault = ArrayLibrary.getFirstItem(this.responsableList);
-
-    const responsable = isEmpty(this.inventoryOrder.responsible) ?
-      responsableDefault : this.inventoryOrder.responsible;
-
+    const responsable = isEmpty(this.order.responsible) ? responsableDefault : this.order.responsible;
     this.form.controls.responsibleUID.reset(responsable?.uid ?? null);
   }
 
@@ -192,7 +188,6 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
     const inEdition = !this.isSaved || (this.isSaved && this.editionMode)
     const hasOptions = this.responsableList.length > 1;
     const enable = inEdition && hasOptions;
-
     FormHelper.setDisableControl(this.form.controls.responsibleUID, !enable);
   }
 
@@ -212,11 +207,11 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
   private setFormData() {
     this.form.reset({
-      inventoryOrderType: isEmpty(this.inventoryOrder.inventoryOrderType) ? null : this.inventoryOrder.inventoryOrderType.uid,
-      inventoryOrderNo: this.inventoryOrder.inventoryOrderNo ?? null,
-      responsibleUID: isEmpty(this.inventoryOrder.responsible) ? null : this.inventoryOrder.responsible.uid,
-      assignedToUID: isEmpty(this.inventoryOrder.assignedTo) ? null : this.inventoryOrder.assignedTo.uid,
-      notes: this.inventoryOrder.notes,
+      inventoryOrderType: isEmpty(this.order.inventoryOrderType) ? null : this.order.inventoryOrderType.uid,
+      inventoryOrderNo: this.order.inventoryOrderNo ?? null,
+      responsibleUID: isEmpty(this.order.responsible) ? null : this.order.responsible.uid,
+      assignedToUID: isEmpty(this.order.assignedTo) ? null : this.order.assignedTo.uid,
+      notes: this.order.notes,
     });
 
     this.validateResponsableInList();
@@ -241,8 +236,7 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
 
   private showConfirmMessage(eventType: InventoryOrderHeaderEventType) {
-    const confirmType: 'AcceptCancel' | 'DeleteCancel' =
-      eventType === InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER ? 'DeleteCancel' : 'AcceptCancel';
+    const confirmType = this.getConfirmType(eventType);
     const title = this.getConfirmTitle(eventType);
     const message = this.getConfirmMessage(eventType);
 
@@ -256,10 +250,19 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
   }
 
 
+  private getConfirmType(eventType: InventoryOrderHeaderEventType): 'AcceptCancel' | 'DeleteCancel' {
+    switch (eventType) {
+      case InventoryOrderHeaderEventType.DELETE_ORDER: return 'DeleteCancel';
+      case InventoryOrderHeaderEventType.CLOSE_ORDER:  return 'AcceptCancel';
+      default: return 'AcceptCancel';
+    }
+  }
+
+
   private getConfirmTitle(eventType: InventoryOrderHeaderEventType): string {
     switch (eventType) {
-      case InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER: return 'Eliminar orden de inventario';
-      case InventoryOrderHeaderEventType.CLOSE_INVENTORY_ORDER: return 'Aplicar orden de inventario';
+      case InventoryOrderHeaderEventType.DELETE_ORDER: return 'Eliminar orden de inventario';
+      case InventoryOrderHeaderEventType.CLOSE_ORDER:  return 'Aplicar orden de inventario';
       default: return '';
     }
   }
@@ -267,16 +270,16 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
   private getConfirmMessage(eventType: InventoryOrderHeaderEventType): string {
     switch (eventType) {
-      case InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER:
+      case InventoryOrderHeaderEventType.DELETE_ORDER:
         return `Esta operación eliminará la orden de inventario
-                <strong> ${this.inventoryOrder.inventoryOrderType.name}:
-                ${this.inventoryOrder.inventoryOrderNo}</strong>.
+                <strong> ${this.order.inventoryOrderType.name}:
+                ${this.order.inventoryOrderNo}</strong>.
                 <br><br>¿Elimino la orden de inventario?`;
 
-      case InventoryOrderHeaderEventType.CLOSE_INVENTORY_ORDER:
+      case InventoryOrderHeaderEventType.CLOSE_ORDER:
         return `Esta operación aplicará la orden de inventario
-                <strong> ${this.inventoryOrder.inventoryOrderType.name}:
-                ${this.inventoryOrder.inventoryOrderNo}</strong>.
+                <strong> ${this.order.inventoryOrderType.name}:
+                ${this.order.inventoryOrderNo}</strong>.
                 <br><br>¿Aplico la orden de inventario?`;
 
       default: return '';

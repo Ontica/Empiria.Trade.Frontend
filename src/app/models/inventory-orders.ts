@@ -7,9 +7,16 @@
 
 import { DateString, Empty, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './_data-table';
+import { DataTableEntry } from './_data-table';
 
 import { InventoryProductSelection } from './product';
+
+import { OrdersQuery } from './orders';
+
+
+export enum InventoryQueryType {
+  Inventory = 'Inventory',
+}
 
 
 export enum InventoryStatus {
@@ -26,7 +33,7 @@ export const InventoryStatusList: Identifiable[] = [
 ];
 
 
-export interface InventoryOrderQuery extends DataTableQuery {
+export interface InventoryOrdersQuery extends OrdersQuery {
   inventoryOrderTypeUID: string;
   assignedToUID: string;
   status: string;
@@ -43,13 +50,6 @@ export interface InventoryOrderDescriptor extends DataTableEntry {
   postingTime: DateString;
   notes: string;
   inventoryStatus: InventoryStatus;
-}
-
-
-export interface InventoryOrderDataTable extends DataTable {
-  query: InventoryOrderQuery;
-  columns: DataTableColumn[];
-  entries: InventoryOrderDescriptor[];
 }
 
 
@@ -125,18 +125,12 @@ export interface InventoryOrderItemFields {
 }
 
 
-export const EmptyInventoryOrderQuery: InventoryOrderQuery = {
+export const EmptyInventoryOrdersQuery: InventoryOrdersQuery = {
+  queryType: '',
   inventoryOrderTypeUID: '',
   assignedToUID: '',
   status: '',
   keywords: '',
-};
-
-
-export const EmptyInventoryOrderDataTable: InventoryOrderDataTable = {
-  query: EmptyInventoryOrderQuery,
-  columns: [],
-  entries: [],
 };
 
 

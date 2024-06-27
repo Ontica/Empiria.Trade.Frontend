@@ -9,22 +9,25 @@ import { Component } from '@angular/core';
 
 import { Assertion, EventInfo, isEmpty } from '@app/core';
 
-import { InventoryOrdersDataService } from '@app/data-services';
+import { InventoryDataService } from '@app/data-services';
 
-import { EmptyInventoryOrder, EmptyInventoryOrderDataTable, EmptyInventoryOrderQuery, InventoryOrder,
-         InventoryOrderDataTable, InventoryOrderQuery } from '@app/models';
+import { EmptyInventoryOrder, EmptyOrdersDataTable, EmptyInventoryOrdersQuery, InventoryOrder,
+         OrdersDataTable, InventoryOrdersQuery, InventoryQueryType,
+         OrdersTypeConfig } from '@app/models';
+
+import { OrdersExplorerEventType } from '@app/views/orders/orders-explorer/orders-explorer.component';
 
 import {
-  InventoryOrdersExplorerEventType
-} from '@app/views/inventory/inventory-orders-explorer/inventory-orders-explorer.component';
-
-import {
-  InventoryOrderTabbedViewEventType
-} from '@app/views/inventory/inventory-order-tabbed-view/inventory-order-tabbed-view.component';
+  InventoryOrdersFilterEventType
+} from '../inventory-orders-filter/inventory-orders-filter.component';
 
 import {
   InventoryOrderCreatorEventType
 } from '@app/views/inventory/inventory-order/inventory-order-creator.component';
+
+import {
+  InventoryOrderTabbedViewEventType
+} from '@app/views/inventory/inventory-order-tabbed-view/inventory-order-tabbed-view.component';
 
 @Component({
   selector: 'emp-trade-inventory-orders-main-page',
@@ -32,15 +35,22 @@ import {
 })
 export class InventoryOrdersMainPageComponent {
 
+  salesConfig: OrdersTypeConfig = {
+    type: InventoryQueryType.Inventory,
+    titleText: 'Ordenes de inventario',
+    itemText: 'orden',
+    canAdd: true,
+  };
+
   isLoading = false;
 
   isLoadingSelection = false;
 
   queryExecuted = false;
 
-  query: InventoryOrderQuery = EmptyInventoryOrderQuery;
+  query: InventoryOrdersQuery = EmptyInventoryOrdersQuery;
 
-  inventoryOrdersData: InventoryOrderDataTable = Object.assign({}, EmptyInventoryOrderDataTable);
+  inventoryOrdersData: OrdersDataTable = Object.assign({}, EmptyOrdersDataTable);
 
   inventoryOrderSelected: InventoryOrder = EmptyInventoryOrder;
 
@@ -49,7 +59,7 @@ export class InventoryOrdersMainPageComponent {
   displayCreator = false;
 
 
-  constructor(private inventoryData: InventoryOrdersDataService) { }
+  constructor(private inventoryData: InventoryDataService) { }
 
 
   onInventoryOrderCreatorEvent(event: EventInfo) {
@@ -58,10 +68,10 @@ export class InventoryOrdersMainPageComponent {
         this.displayCreator = false;
         return;
 
-      case InventoryOrderCreatorEventType.INVENTORY_ORDER_CREATED:
-        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
+      case InventoryOrderCreatorEventType.ORDER_CREATED:
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
         this.displayCreator = false;
-        this.setInventoryOrderSelected(event.payload.inventoryOrder as InventoryOrder);
+        this.setInventoryOrderSelected(event.payload.order as InventoryOrder);
         this.validateQueryForRefreshInventoryOrders(this.inventoryOrderSelected.inventoryOrderType.uid,
                                                     this.inventoryOrderSelected.inventoryOrderNo);
         return;
@@ -73,21 +83,30 @@ export class InventoryOrdersMainPageComponent {
   }
 
 
-  onInventoryOrdersExplorerEvent(event: EventInfo) {
-    switch (event.type as InventoryOrdersExplorerEventType) {
-      case InventoryOrdersExplorerEventType.CREATE_CLICKED:
-        this.displayCreator = true;
-        return;
-
-      case InventoryOrdersExplorerEventType.SEARCH_CLICKED:
+  onInventoryOrdersFilterEvent(event: EventInfo) {
+    switch (event.type as InventoryOrdersFilterEventType) {
+      case InventoryOrdersFilterEventType.SEARCH_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
-        this.query = Object.assign({}, this.query, event.payload.query as InventoryOrderQuery);
+        this.query = Object.assign({}, this.query, event.payload.query as InventoryOrdersQuery);
         this.clearInventoryOrdersData();
         this.clearInventoryOrderSelected();
         this.searchInventoryOrders(this.query);
         return;
 
-      case InventoryOrdersExplorerEventType.SELECT_CLICKED:
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onOrdersExplorerEvent(event: EventInfo) {
+    switch (event.type as OrdersExplorerEventType) {
+      case OrdersExplorerEventType.CREATE_ORDER:
+        this.displayCreator = true;
+        return;
+
+      case OrdersExplorerEventType.SELECT_ORDER:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
         Assertion.assertValue(event.payload.entry.uid, 'event.payload.entry.uid');
         this.getInventoryOrder(event.payload.entry.uid);
@@ -106,14 +125,14 @@ export class InventoryOrdersMainPageComponent {
         this.clearInventoryOrderSelected();
         return;
 
-      case InventoryOrderTabbedViewEventType.INVENTORY_ORDER_UPDATED:
-        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
+      case InventoryOrderTabbedViewEventType.ORDER_UPDATED:
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
         this.refreshInventoryOrders();
-        this.setInventoryOrderSelected(event.payload.inventoryOrder as InventoryOrder);
+        this.setInventoryOrderSelected(event.payload.order as InventoryOrder);
         return;
 
-      case InventoryOrderTabbedViewEventType.INVENTORY_ORDER_DELETED:
-        Assertion.assertValue(event.payload.inventoryOrder, 'event.payload.inventoryOrder');
+      case InventoryOrderTabbedViewEventType.ORDER_DELETED:
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
         this.refreshInventoryOrders();
         this.clearInventoryOrderSelected();
         return;
@@ -125,10 +144,11 @@ export class InventoryOrdersMainPageComponent {
   }
 
 
-  private validateQueryForRefreshInventoryOrders(inventoryOrderTypeUID: string, keywords: string) {
-    if (this.query.inventoryOrderTypeUID !== inventoryOrderTypeUID) {
-      const newQuery: InventoryOrderQuery = {
-        inventoryOrderTypeUID,
+  private validateQueryForRefreshInventoryOrders(orderTypeUID: string, keywords: string) {
+    if (this.query.inventoryOrderTypeUID !== orderTypeUID) {
+      const newQuery: InventoryOrdersQuery = {
+        queryType: '',
+        inventoryOrderTypeUID: orderTypeUID,
         keywords,
         assignedToUID: '',
         status: ''
@@ -146,10 +166,10 @@ export class InventoryOrdersMainPageComponent {
   }
 
 
-  private searchInventoryOrders(query: InventoryOrderQuery) {
+  private searchInventoryOrders(query: InventoryOrdersQuery) {
     this.isLoading = true;
 
-    this.inventoryData.searchInventoryOrders(query)
+    this.inventoryData.searchOrders(query)
       .firstValue()
       .then(x => this.resolveSearchInventoryOrders(x))
       .finally(() => this.isLoading = false);
@@ -157,29 +177,29 @@ export class InventoryOrdersMainPageComponent {
 
 
 
-  private getInventoryOrder(inventoryOrderUID: string) {
+  private getInventoryOrder(orderUID: string) {
     this.isLoadingSelection = true;
 
-    this.inventoryData.getInventoryOrder(inventoryOrderUID)
+    this.inventoryData.getOrder(orderUID)
       .firstValue()
       .then(x => this.setInventoryOrderSelected(x))
       .finally(() => this.isLoadingSelection = false);
   }
 
 
-  private resolveSearchInventoryOrders(data: InventoryOrderDataTable) {
+  private resolveSearchInventoryOrders(data: OrdersDataTable) {
     this.setInventoryOrdersData(data, true);
   }
 
 
-  private setInventoryOrdersData(data: InventoryOrderDataTable, queryExecuted: boolean = true) {
+  private setInventoryOrdersData(data: OrdersDataTable, queryExecuted: boolean = true) {
     this.inventoryOrdersData = data;
     this.queryExecuted = queryExecuted;
   }
 
 
   private clearInventoryOrdersData() {
-    this.setInventoryOrdersData(EmptyInventoryOrderDataTable, false);
+    this.setInventoryOrdersData(EmptyOrdersDataTable, false);
   }
 
 

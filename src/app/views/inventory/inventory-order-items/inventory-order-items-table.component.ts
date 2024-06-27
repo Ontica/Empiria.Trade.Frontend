@@ -27,7 +27,7 @@ export enum InventoryOrderItemsTableEventType {
 })
 export class InventoryOrderItemsTableComponent implements OnChanges {
 
-  @Input() inventoryOrderItems: InventoryOrderItem[] = [];
+  @Input() orderItems: InventoryOrderItem[] = [];
 
   @Input() canEdit = false;
 
@@ -46,12 +46,12 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
 
 
   get hasOrderItems(): boolean {
-    return this.inventoryOrderItems.length > 0;
+    return this.orderItems.length > 0;
   }
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.inventoryOrderItems) {
+    if (changes.orderItems) {
       this.setDataTable();
     }
   }
@@ -67,14 +67,14 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
       .then(x => {
         if (x) {
           sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED,
-            { inventoryOrderItemUID: item.uid });
+            { orderItemUID: item.uid });
         }
       });
   }
 
 
   private setDataTable() {
-    this.dataSource = new MatTableDataSource(this.inventoryOrderItems ?? []);
+    this.dataSource = new MatTableDataSource(this.orderItems ?? []);
     this.resetColumns();
   }
 

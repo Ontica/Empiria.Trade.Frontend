@@ -15,9 +15,11 @@ import { DefaultComponent } from '@app/shared/components/default-component/defau
 
 import {
   InventoryOrdersMainPageComponent
-} from './inventory-orders-main-page/inventory-orders-main-page.component';
+} from '@app/views/inventory/inventory-orders-main-page/inventory-orders-main-page.component';
 
-import { SalesMainPageComponent } from '@app/views/sales/sales-main-page.component';
+import {
+  SalesOrdersMainPageComponent
+} from '@app/views/sales/sales-orders-main-page/sales-orders-main-page.component';
 
 import {
   ShippingMainPageComponent
@@ -28,7 +30,7 @@ const routes: Routes = [
   {
     data: { permission: ROUTES.almacenes_surtidos.permission },
     path: ROUTES.almacenes_surtidos.path,
-    component: SalesMainPageComponent,
+    component: SalesOrdersMainPageComponent,
   },
   {
     data: { permission: ROUTES.almacenes_embarques.permission },

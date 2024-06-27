@@ -11,16 +11,16 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { InventoryOrdersDataService } from '@app/data-services';
+import { InventoryDataService } from '@app/data-services';
 
-import { InventoryOrder, InventoryOrderFields } from '@app/models';
+import { InventoryOrderFields } from '@app/models';
 
 import { InventoryOrderHeaderEventType } from './inventory-order-header.component';
 
 
 export enum InventoryOrderCreatorEventType {
-  CLOSE_MODAL_CLICKED     = 'InventoryOrderCreatorComponent.Event.CloseModalClicked',
-  INVENTORY_ORDER_CREATED = 'InventoryOrderEditorComponent.Event.InventoryOrderCreated',
+  CLOSE_MODAL_CLICKED = 'InventoryOrderCreatorComponent.Event.CloseModalClicked',
+  ORDER_CREATED       = 'InventoryOrderCreatorComponent.Event.OrderCreated',
 }
 
 @Component({
@@ -34,7 +34,7 @@ export class InventoryOrderCreatorComponent {
   submitted = false;
 
 
-  constructor(private inventoryOrdersData: InventoryOrdersDataService) { }
+  constructor(private inventoryData: InventoryDataService) { }
 
 
   onCloseModalClicked() {
@@ -48,9 +48,9 @@ export class InventoryOrderCreatorComponent {
     }
 
     switch (event.type as InventoryOrderHeaderEventType) {
-      case InventoryOrderHeaderEventType.CREATE_INVENTORY_ORDER:
+      case InventoryOrderHeaderEventType.CREATE_ORDER:
         Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
-        this.createInventoryOrder(event.payload.dataFields as InventoryOrderFields);
+        this.createOrder(event.payload.dataFields as InventoryOrderFields);
         return;
 
       default:
@@ -60,20 +60,15 @@ export class InventoryOrderCreatorComponent {
   }
 
 
-  private createInventoryOrder(inventoryOrderFields: InventoryOrderFields) {
+  private createOrder(orderFields: InventoryOrderFields) {
     this.submitted = true;
 
-    this.inventoryOrdersData.createInventoryOrder(inventoryOrderFields)
+    this.inventoryData.createOrder(orderFields)
       .firstValue()
-      .then(x => this.resolveCreateInventoryOrder(x))
+      .then(x =>
+        sendEvent(this.inventoryOrderCreatorEvent, InventoryOrderCreatorEventType.ORDER_CREATED, { order: x })
+      )
       .finally(() => this.submitted = false);
-  }
-
-
-  private resolveCreateInventoryOrder(inventoryOrder: InventoryOrder) {
-    const payload = { inventoryOrder };
-    sendEvent(this.inventoryOrderCreatorEvent, InventoryOrderCreatorEventType.INVENTORY_ORDER_CREATED,
-      payload);
   }
 
 }

@@ -34,7 +34,7 @@ export * from './edition-command';
 
 export * from './imported-data';
 
-export * from './inventory-order';
+export * from './inventory-orders';
 
 export * from './money-account-transaction-items';
 

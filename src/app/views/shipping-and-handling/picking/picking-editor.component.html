@@ -13,7 +13,7 @@
   <div class="section-title"> Información general del Picking </div>
 
   <emp-trade-inventory-order-header
-    [inventoryOrder]="packing.picking"
+    [order]="packing.picking"
     [isSaved]="true"
     [canEdit]="canEdit"
     (inventoryOrderHeaderEvent)="onInventoryOrderHeaderEvent($event)">

@@ -11,7 +11,7 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { InventoryOrdersDataService } from '@app/data-services';
+import { InventoryDataService } from '@app/data-services';
 
 import { EmptyInventoryOrder, InventoryOrder, InventoryOrderFields } from '@app/models';
 
@@ -29,18 +29,18 @@ export enum InventoryOrderEditorEventType {
 })
 export class InventoryOrderEditorComponent {
 
-  @Input() inventoryOrder: InventoryOrder = EmptyInventoryOrder;
+  @Input() order: InventoryOrder = EmptyInventoryOrder;
 
   @Output() inventoryOrderEditorEvent = new EventEmitter<EventInfo>();
 
   submitted = false;
 
 
-  constructor(private inventoryOrdersData: InventoryOrdersDataService) { }
+  constructor(private inventoryData: InventoryDataService) { }
 
 
   get isSaved(): boolean {
-    return !isEmpty(this.inventoryOrder);
+    return !isEmpty(this.order);
   }
 
 
@@ -50,17 +50,17 @@ export class InventoryOrderEditorComponent {
     }
 
     switch (event.type as InventoryOrderHeaderEventType) {
-      case InventoryOrderHeaderEventType.UPDATE_INVENTORY_ORDER:
+      case InventoryOrderHeaderEventType.UPDATE_ORDER:
         Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
-        this.updateInventoryOrder(event.payload.dataFields as InventoryOrderFields);
+        this.updateOrder(event.payload.dataFields as InventoryOrderFields);
         return;
 
-      case InventoryOrderHeaderEventType.DELETE_INVENTORY_ORDER:
-        this.deleteInventoryOrder();
+      case InventoryOrderHeaderEventType.DELETE_ORDER:
+        this.deleteOrder();
         return;
 
-      case InventoryOrderHeaderEventType.CLOSE_INVENTORY_ORDER:
-        this.closeInventoryOrder();
+      case InventoryOrderHeaderEventType.CLOSE_ORDER:
+        this.closeOrder();
         return;
 
       default:
@@ -70,45 +70,39 @@ export class InventoryOrderEditorComponent {
   }
 
 
-  private updateInventoryOrder(inventoryOrderFields: InventoryOrderFields) {
+  private updateOrder(orderFields: InventoryOrderFields) {
     this.submitted = true;
 
-    this.inventoryOrdersData.updateInventoryOrder(this.inventoryOrder.uid, inventoryOrderFields)
+    this.inventoryData.updateOrder(this.order.uid, orderFields)
       .firstValue()
-      .then(x => this.resolveUpdateInventoryOrder(x))
+      .then(x =>
+        sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_UPDATED, { order: x })
+      )
       .finally(() => this.submitted = false);
   }
 
 
-  private deleteInventoryOrder() {
+  private deleteOrder() {
     this.submitted = true;
 
-    this.inventoryOrdersData.deleteInventoryOrder(this.inventoryOrder.uid)
+    this.inventoryData.deleteOrder(this.order.uid)
       .firstValue()
-      .then(x => this.resolveDeleteInventoryOrder(x))
+      .then(x =>
+        sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_DELETED, { order: x })
+      )
       .finally(() => this.submitted = false);
   }
 
 
-  private closeInventoryOrder() {
+  private closeOrder() {
     this.submitted = true;
 
-    this.inventoryOrdersData.closeInventoryOrder(this.inventoryOrder.uid)
+    this.inventoryData.closeOrder(this.order.uid)
       .firstValue()
-      .then(x => this.resolveUpdateInventoryOrder(x))
+      .then(x =>
+        sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_DELETED, { order: x })
+      )
       .finally(() => this.submitted = false);
-  }
-
-
-  private resolveUpdateInventoryOrder(inventoryOrder: InventoryOrder) {
-    const payload = { inventoryOrder };
-    sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_UPDATED, payload);
-  }
-
-
-  private resolveDeleteInventoryOrder(inventoryOrder: InventoryOrder) {
-    const payload = { inventoryOrder };
-    sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_DELETED, payload);
   }
 
 }

@@ -6,22 +6,29 @@
 
   <div class="primary priority" [class.std-hide]="displayTabbedView">
 
-    <emp-trade-inventory-orders-explorer
-      [query]="query"
-      [inventoryOrdersData]="inventoryOrdersData"
-      [inventoryOrderSelected]="inventoryOrderSelected"
+
+    <emp-trade-orders-explorer
+      [config]="salesConfig"
+      [ordersData]="inventoryOrdersData"
+      [selectedOrderUID]="inventoryOrderSelected?.uid ?? null"
       [isLoading]="isLoading"
       [queryExecuted]="queryExecuted"
-      (inventoryOrdersExplorerEvent)=" onInventoryOrdersExplorerEvent($event)">
+      (ordersExplorerEvent)="onOrdersExplorerEvent($event)">
 
-    </emp-trade-inventory-orders-explorer>
+      <emp-trade-inventory-orders-filter class="fx-item-none"
+        [query]="query"
+        (inventoryOrdersFilterEvent)="onInventoryOrdersFilterEvent($event)">
+
+      </emp-trade-inventory-orders-filter>
+
+    </emp-trade-orders-explorer>
 
   </div>
 
   <div class="secondary" *ngIf="displayTabbedView">
 
     <emp-trade-inventory-order-tabbed-view
-      [inventoryOrder]="inventoryOrderSelected"
+      [order]="inventoryOrderSelected"
       (inventoryOrderTabbedViewEvent)="onInventoryOrderTabbedViewEvent($event)">
 
     </emp-trade-inventory-order-tabbed-view>

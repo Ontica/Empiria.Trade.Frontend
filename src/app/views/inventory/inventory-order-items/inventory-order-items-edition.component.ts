@@ -13,7 +13,7 @@ import { sendEvent } from '@app/shared/utils';
 
 import { AlertService } from '@app/shared/containers/alert/alert.service';
 
-import { InventoryOrdersDataService } from '@app/data-services';
+import { InventoryDataService } from '@app/data-services';
 
 import { InventoryOrder, InventoryOrderItem, InventoryOrderItemFields, InventoryProductSelection,
          mapInventoryOrderItemFieldsFromSelection } from '@app/models';
@@ -36,9 +36,9 @@ export enum InventoryOrderItemsEditionEventType {
 })
 export class InventoryOrderItemsEditionComponent {
 
-  @Input() inventoryOrderUID = '';
+  @Input() orderUID = '';
 
-  @Input() inventoryOrderItems: InventoryOrderItem[] = [];
+  @Input() orderItems: InventoryOrderItem[] = [];
 
   @Input() canEdit = false;
 
@@ -49,7 +49,7 @@ export class InventoryOrderItemsEditionComponent {
   displayProductLocationSelector = false;
 
 
-  constructor(private inventoryOrdersData: InventoryOrdersDataService,
+  constructor(private inventoryData: InventoryDataService,
               private alertService: AlertService) {
 
   }
@@ -73,11 +73,11 @@ export class InventoryOrderItemsEditionComponent {
         Assertion.assert(event.payload.selection.warehouseBin, 'event.payload.selection.warehouseBin');
         Assertion.assert(event.payload.selection.quantity, 'event.payload.selection.quantity');
 
-        const inventoryOrderItem = mapInventoryOrderItemFieldsFromSelection(
+        const orderItem = mapInventoryOrderItemFieldsFromSelection(
           event.payload.selection as InventoryProductSelection
         );
 
-        this.createInventoryOrderItem(inventoryOrderItem);
+        this.createOrderItem(orderItem);
         return;
 
       default:
@@ -94,8 +94,8 @@ export class InventoryOrderItemsEditionComponent {
 
     switch (event.type as InventoryOrderItemsTableEventType) {
       case InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED:
-        Assertion.assertValue(event.payload.inventoryOrderItemUID, 'event.payload.inventoryOrderItemUID');
-        this.deleteInventoryOrderItem(event.payload.inventoryOrderItemUID);
+        Assertion.assertValue(event.payload.orderItemUID, 'event.payload.orderItemUID');
+        this.deleteOrderItem(event.payload.orderItemUID);
         return;
 
       default:
@@ -105,39 +105,39 @@ export class InventoryOrderItemsEditionComponent {
   }
 
 
-  private createInventoryOrderItem(item: InventoryOrderItemFields) {
+  private createOrderItem(item: InventoryOrderItemFields) {
     this.submitted = true;
 
-    this.inventoryOrdersData.createInventoryOrderItem(this.inventoryOrderUID, item)
+    this.inventoryData.createOrderItem(this.orderUID, item)
       .firstValue()
-      .then(x => this.resolveCreateInventoryOrderItem(x))
+      .then(x => this.resolveCreateOrderItem(x))
       .finally(() => this.submitted = false);
   }
 
 
-  private deleteInventoryOrderItem(inventoryOrderItemUID: string) {
+  private deleteOrderItem(orderItemUID: string) {
     this.submitted = true;
 
-    this.inventoryOrdersData.deleteInventoryOrderItem(this.inventoryOrderUID, inventoryOrderItemUID)
+    this.inventoryData.deleteOrderItem(this.orderUID, orderItemUID)
       .firstValue()
-      .then(x => this.resolveDeleteInventoryOrderItem(x))
+      .then(x => this.resolveDeleteOrderItem(x))
       .finally(() => this.submitted = false);
   }
 
 
-  private resolveCreateInventoryOrderItem(inventoryOrder: InventoryOrder) {
+  private resolveCreateOrderItem(order: InventoryOrder) {
     this.alertService.openAlert('Se agregó el producto a la orden de inventario.');
 
     sendEvent(this.inventoryOrderItemsEditionEvent,
-      InventoryOrderItemsEditionEventType.ITEM_CREATED, { inventoryOrder });
+      InventoryOrderItemsEditionEventType.ITEM_CREATED, { order });
   }
 
 
-  private resolveDeleteInventoryOrderItem(inventoryOrder: InventoryOrder) {
+  private resolveDeleteOrderItem(order: InventoryOrder) {
     this.alertService.openAlert('Se eliminó el producto a la orden de inventario.');
 
     sendEvent(this.inventoryOrderItemsEditionEvent,
-      InventoryOrderItemsEditionEventType.ITEM_DELETED, { inventoryOrder });
+      InventoryOrderItemsEditionEventType.ITEM_DELETED, { order });
   }
 
 }

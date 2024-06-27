@@ -13,7 +13,7 @@ import { SearcherDataService } from './_searcher.data.service';
 
 import { ContactsDataService } from './contacts.data.service';
 
-import { InventoryOrdersDataService } from './inventory-orders.data.service';
+import { InventoryDataService } from './inventory.data.service';
 
 import { MoneyAccountsDataService } from './money-accounts.data.service';
 
@@ -32,7 +32,7 @@ import { ShippingDataService } from './shipping-data.service';
     AccessControlDataService,
     SearcherDataService,
     ContactsDataService,
-    InventoryOrdersDataService,
+    InventoryDataService,
     MoneyAccountsDataService,
     PackingDataService,
     ProductsDataService,
