@@ -14,23 +14,13 @@ export const DefaultEndDate: DateString = '2049-12-31';
 
 
 export enum ReportGroup {
-  Reportes = 'Reportes',
+  Inventory = 'inventory',
 }
 
 
-export enum ReportController {
-  Reporting = 'Reporting',
-}
-
-
-export interface ReportType<T> extends Identifiable {
+export interface ReportType extends Identifiable {
   uid: string;
   name: string;
-  group: ReportGroup;
-  controller: ReportController;
-  show?: T;
-  outputType?: Identifiable[];
-  exportTo?: ExportationType[];
 }
 
 
@@ -42,10 +32,10 @@ export interface FileReport {
 
 export enum FileType {
   Excel = 'Excel',
-  Csv = 'Csv',
-  PDF = 'PDF',
-  Xml = 'Xml',
-  HTML = 'HTML',
+  Csv   = 'Csv',
+  PDF   = 'PDF',
+  Xml   = 'Xml',
+  HTML  = 'HTML',
 }
 
 
@@ -56,11 +46,6 @@ export interface ExportationType extends Identifiable {
   dataset?: string;
   startDate?: DateString;
   endDate?: DateString;
-}
-
-
-export interface ReportTypeFlags {
-
 }
 
 
@@ -103,16 +88,9 @@ export const DefaultExportationType: ExportationType = {
 };
 
 
-export const EmptyReportTypeFlags: ReportTypeFlags = {
-
-};
-
-
-export const EmptyReportType: ReportType<ReportTypeFlags> = {
+export const EmptyReportType: ReportType = {
   uid: '',
   name: '',
-  group: null,
-  controller: null,
 };
 
 

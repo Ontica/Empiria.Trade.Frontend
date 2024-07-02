@@ -23,11 +23,11 @@
 
         </ng-container>
 
-        <div *ngIf="exportationTypes.length > 0" [style.paddingTop.px]="16" [style.paddingBottom.px]="8">
+        <div *ngIf="exportationTypes.length > 0" [style.paddingBottom.px]="8">
           {{message || 'Se generará la exportación a '+ selectedExportationType.fileType +' con el último filtro consultado.'}}
         </div>
 
-        <div *ngIf="exportationTypes.length === 0" [style.paddingTop.px]="16" [style.paddingBottom.px]="8">
+        <div *ngIf="exportationTypes.length === 0" [style.paddingBottom.px]="8">
           No se han definido tipos de exportación.
         </div>
 
