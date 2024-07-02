@@ -36,6 +36,8 @@ export * from './imported-data';
 
 export * from './inventory-orders';
 
+export * from './inventory-reports';
+
 export * from './money-account-transaction-items';
 
 export * from './money-account-transactions';

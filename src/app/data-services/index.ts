@@ -21,6 +21,8 @@ export * from './products.data.service';
 
 export * from './purchases.data.service';
 
+export * from './reporting.data.service';
+
 export * from './sales.data.service';
 
 export * from './shipping-data.service';

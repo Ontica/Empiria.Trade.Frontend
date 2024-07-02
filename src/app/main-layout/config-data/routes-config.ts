@@ -148,6 +148,13 @@ export const ROUTES = {
     fullpath: '/almacenes/almacenamiento',
   },
 
+  almacenes_reportes: {
+    permission: PERMISSIONS.NOT_REQUIRED,
+    parent: 'almacenes',
+    path: 'reportes',
+    fullpath: '/almacenes/reportes',
+  },
+
   //#endregion
 
   // #region contabilidad-routing module

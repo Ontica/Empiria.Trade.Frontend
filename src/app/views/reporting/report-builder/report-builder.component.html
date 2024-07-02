@@ -1,0 +1,30 @@
+<div class="explorer">
+
+  <div class="primary priority">
+
+    <emp-trade-report-viewer
+      [reportGroup]="reportGroup"
+      [reportQuery]="reportQuery"
+      [selectedReportType]="selectedReportType"
+      [reportData]="reportData"
+      [queryExecuted]="queryExecuted"
+      [fileUrl]="fileUrl"
+      [isLoading]="isLoading"
+      (reportViewerEvent)="onReportViewerEvent($event)">
+
+      <ng-container [ngSwitch]="reportGroup">
+
+        <emp-trade-inventory-report-filter class="fx-item-none"
+          *ngSwitchCase="ReportGroups.Inventory"
+          [reportGroup]="reportGroup"
+          (inventoryReportFilterEvent)="onReportFilterEvent($event)">
+
+        </emp-trade-inventory-report-filter>
+
+      </ng-container>
+
+    </emp-trade-report-viewer>
+
+  </div>
+
+</div>

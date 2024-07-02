@@ -1,0 +1,84 @@
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
+
+  <div class="fx-column-container fx-gap-half">
+
+    <div class="fx-row-container sm-fx-column-container sm-fx-gap-half">
+
+      <div class="fx-item-half sm-fx-item">
+
+        <label>Tipo de reporte:</label>
+
+        <emp-ng-select
+          formControlName="reportTypeUID"
+          [items]="reportTypeList"
+          [config]="{selectFirst: true}"
+          [showError]="formHelper.isControlInvalid(form.controls.reportTypeUID)"
+          (changes)="onReportTypeChanges()">
+        </emp-ng-select>
+
+      </div>
+
+      <div class="fx-item-size" style="--size: calc(50% - 42px)">
+
+        <ng-container *ngIf="productFieldRequired">
+
+        <label>Producto:</label>
+        <emp-ng-select-typeahead #products
+          formControlName="productUID"
+          bindValue="productUID"
+          [config]="{ clearable: true, minTermLength: 5, searchByQuery: true }"
+          [initQuery]="{ onStock: true, keywords: '' }"
+          [searcherAPI]="productsAPI"
+          [showError]="formHelper.isControlInvalid(form.controls.productUID)">
+
+          <ng-template #tLabelTemplate let-item="item">
+            {{item.productCode}} {{item.description ? ' | ' + item.description : ''}}
+          </ng-template>
+
+          <ng-template #tOptionTemplate let-item="item">
+
+            <div class="wrap" [style.padding]="'0.25rem 0'">
+              <span class="item-highlight">{{item.productCode}}</span> <br>
+              <span class="item-text-xs">{{item.description}}</span>
+            </div>
+
+          </ng-template>
+
+        </emp-ng-select-typeahead>
+
+        </ng-container>
+
+        <ng-container *ngIf="locationFieldRequired">
+
+          <label>Localización:</label>
+          <emp-ng-select-typeahead #warehouseBin
+            formControlName="warehouseBinUID"
+            [config]="{ clearable: true, minTermLength: 5 }"
+            [searcherAPI]="locationsAPI"
+            [showError]="formHelper.isControlInvalid(form.controls.warehouseBinUID)">
+
+          </emp-ng-select-typeahead>
+
+        </ng-container>
+
+      </div>
+
+      <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
+
+        <button title="Generar reporte"
+          [class.btn-icon-action]="this.form.valid"
+          [class.btn-icon]="!this.form.valid"
+          [disabled]="!this.form.valid"
+          (click)="onBuildReportClicked()">
+
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>
