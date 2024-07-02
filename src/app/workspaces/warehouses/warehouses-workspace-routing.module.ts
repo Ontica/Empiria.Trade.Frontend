@@ -25,6 +25,8 @@ import {
   ShippingMainPageComponent
 } from '@app/views/shipping-and-handling/shipping/shipping-main-page/shipping-main-page.component';
 
+import { ReportBuilderComponent } from '@app/views/reporting/report-builder/report-builder.component';
+
 
 const routes: Routes = [
   {
@@ -46,6 +48,11 @@ const routes: Routes = [
     data: { permission: ROUTES.almacenes_almacenamiento.permission },
     path: ROUTES.almacenes_almacenamiento.path,
     component: DefaultComponent,
+  },
+  {
+    data: { permission: ROUTES.almacenes_reportes.permission },
+    path: ROUTES.almacenes_reportes.path,
+    component: ReportBuilderComponent,
   },
   {
     path: '',

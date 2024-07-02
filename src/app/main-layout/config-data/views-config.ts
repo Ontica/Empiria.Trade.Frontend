@@ -85,6 +85,12 @@ export const AlmacenesViews: View[] = [
     url: ROUTES.almacenes_almacenamiento.fullpath,
     permission: ROUTES.almacenes_almacenamiento.permission
   },
+  {
+    name: 'AlmacenesViews.Reportes',
+    title: 'Reportes',
+    url: ROUTES.almacenes_reportes.fullpath,
+    permission: ROUTES.almacenes_reportes.permission
+  },
 ];
 
 

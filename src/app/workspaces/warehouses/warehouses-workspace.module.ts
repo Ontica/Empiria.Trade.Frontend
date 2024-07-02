@@ -12,7 +12,9 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { WarehousesWorkspaceRoutingModule } from './warehouses-workspace-routing.module';
+
 import { InventoryModule } from '@app/views/inventory/inventory.module';
+import { ReportingModule } from '@app/views/reporting/reporting.module';
 import { SalesModule } from '@app/views/sales/sales.module';
 import { ShippingAndHandlingModule } from '@app/views/shipping-and-handling/shipping-and-handling.module';
 
@@ -25,7 +27,9 @@ import { ShippingAndHandlingModule } from '@app/views/shipping-and-handling/ship
     SharedModule,
 
     WarehousesWorkspaceRoutingModule,
+
     InventoryModule,
+    ReportingModule,
     SalesModule,
     ShippingAndHandlingModule,
   ],
