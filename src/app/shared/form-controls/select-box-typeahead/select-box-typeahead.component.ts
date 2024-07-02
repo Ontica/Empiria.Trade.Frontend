@@ -13,14 +13,17 @@ import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/f
 import { Observable, Subject, catchError, concat, debounceTime, delay, distinctUntilChanged, filter, map, of,
          switchMap, tap } from 'rxjs';
 
-import { isEmpty } from '@app/core';
+import { EmpObservable, Identifiable, isEmpty } from '@app/core';
 
 import { SearcherAPIS, SearcherDataService } from '@app/data-services/_searcher.data.service';
+
+import { DataTableQuery, EmptyDataTable } from '@app/models';
 
 
 export interface SelectBoxTypeaheadConfig {
   bindByValue?: boolean;
   clearable?: boolean;
+  searchByQuery?: boolean;
   virtualScroll?: boolean;
   minTermLength?: number;
 }
@@ -29,12 +32,13 @@ export interface SelectBoxTypeaheadConfig {
 const DefaultSelectBoxTypeaheadConfig: SelectBoxTypeaheadConfig = {
   bindByValue: true,
   clearable: false,
+  searchByQuery: false,
   virtualScroll: false,
   minTermLength: 4,
 };
 
 @Component({
-  selector: 'emp-ng-select-typeahead ',
+  selector: 'emp-ng-select-typeahead',
   templateUrl: './select-box-typeahead.component.html',
   providers: [
     {
@@ -64,6 +68,8 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
   @Input() bindLabel = 'name';
 
   @Input() bindValue = 'uid';
+
+  @Input() initQuery: DataTableQuery = {};
 
   @Input()
   get config() {
@@ -179,13 +185,13 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
     this.searcherList$ = concat(
       initialList$,
       this.searcherTerm$.pipe(
-        filter(keyword => keyword !== null && keyword.trim().length >= this.config.minTermLength),
-        map(keyword => keyword.trim()),
+        filter(keywords => keywords !== null && keywords.trim().length >= this.config.minTermLength),
+        map(keywords => keywords.trim()),
         distinctUntilChanged(),
         debounceTime(800),
         tap(() => this.setIsLoading(true)),
-        switchMap(keyword =>
-          this.searcherData.searchData(this.searcherAPI, keyword)
+        switchMap(keywords =>
+          this.searchData(keywords)
             .pipe(
               delay(2000),
               catchError(() => of([])),
@@ -193,6 +199,16 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
             ))
       )
     );
+  }
+
+
+  private searchData(keywords: string): EmpObservable<Identifiable[]> {
+    if (this.config.searchByQuery) {
+      const query = Object.assign({}, this.initQuery, { keywords });
+      return this.searcherData.searchDataByQuery(this.searcherAPI, query);
+    } else {
+      return this.searcherData.searchData(this.searcherAPI, keywords)
+    }
   }
 
 
