@@ -59,7 +59,7 @@ export class SalesOrdersMainPageComponent implements OnInit, OnDestroy {
 
   query: SalesOrdersQuery = EmptySalesOrdersQuery;
 
-  isLoadingOrder = false;
+  isLoadingSelection = false;
 
   salesOrdersData: OrdersDataTable = Object.assign({}, EmptyOrdersDataTable);
 
@@ -254,12 +254,12 @@ export class SalesOrdersMainPageComponent implements OnInit, OnDestroy {
 
 
   private getSaleOrder(orderUID: string) {
-    this.isLoadingOrder = true;
+    this.isLoadingSelection = true;
 
     this.salesData.getOrder(orderUID, this.salesConfig.type)
       .firstValue()
       .then(x => this.setSaleOrderSelected(x))
-      .finally(() => this.isLoadingOrder = false);
+      .finally(() => this.isLoadingSelection = false);
   }
 
 
