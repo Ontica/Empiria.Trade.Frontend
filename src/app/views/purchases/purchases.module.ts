@@ -18,6 +18,8 @@ import { PurchaseOrdersMainPageComponent } from './purchase-orders-main-page/pur
 import { PurchaseOrdersFilterComponent } from './purchase-orders-filter/purchase-orders-filter.component';
 import { PurchaseOrderHeaderComponent } from './purchase-order/purchase-order-header.component';
 import { PurchaseOrderCreatorComponent } from './purchase-order/purchase-order-creator.component';
+import { PurchaseOrderEditorComponent } from './purchase-order/purchase-order-editor.component';
+import { PurchaseOrderTabbedViewComponent } from './purchase-order-tabbed-view/purchase-order-tabbed-view.component';
 
 
 @NgModule({
@@ -35,6 +37,8 @@ import { PurchaseOrderCreatorComponent } from './purchase-order/purchase-order-c
     PurchaseOrdersFilterComponent,
     PurchaseOrderHeaderComponent,
     PurchaseOrderCreatorComponent,
+    PurchaseOrderEditorComponent,
+    PurchaseOrderTabbedViewComponent,
   ],
   exports: [
     PurchaseOrdersMainPageComponent,

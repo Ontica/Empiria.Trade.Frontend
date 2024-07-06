@@ -1,0 +1,19 @@
+<div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
+
+  <emp-ng-spinner #spinner [visible]="submitted">
+
+  </emp-ng-spinner>
+
+  <div class="section-title"> Información general de la orden de compra </div>
+
+  <emp-trade-purchase-order-header
+    [isSaved]="isSaved"
+    [canEdit]="order.actions.canEdit"
+    [canClose]="order.actions.canClose"
+    [canDelete]="order.actions.canDelete"
+    [order]="order"
+    (purchaseOrderHeaderEvent)="onPurchaseOrderHeaderEvent($event)">
+
+  </emp-trade-purchase-order-header>
+
+</div>

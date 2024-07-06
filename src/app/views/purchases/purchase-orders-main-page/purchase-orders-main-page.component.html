@@ -29,6 +29,12 @@
 
   <div class="secondary" *ngIf="displayTabbedView">
 
+    <emp-trade-purchase-order-tabbed-view
+      [order]="purchaseOrderSelected"
+      (purchaseOrderTabbedViewEvent)="onPurchaseOrderTabbedViewEvent($event)">
+
+    </emp-trade-purchase-order-tabbed-view>
+
   </div>
 
 </div>

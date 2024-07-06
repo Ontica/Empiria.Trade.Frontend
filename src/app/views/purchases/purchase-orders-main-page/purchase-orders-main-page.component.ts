@@ -23,6 +23,10 @@ import { PurchaseOrdersFilterEventType } from '../purchase-orders-filter/purchas
 
 import { PurchaseOrderCreatorEventType } from '../purchase-order/purchase-order-creator.component';
 
+import {
+  PurchaseOrderTabbedViewEventType
+} from '../purchase-order-tabbed-view/purchase-order-tabbed-view.component';
+
 
 @Component({
   selector: 'emp-trade-purchase-orders-main-page',
@@ -115,7 +119,7 @@ export class PurchaseOrdersMainPageComponent {
       case OrdersExplorerEventType.SELECT_ORDER:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
         Assertion.assertValue(event.payload.entry.uid, 'event.payload.entry.uid');
-        this.messageBox.showInDevelopment('Seleccionar orden de compra');
+        this.getPurchaseOrder(event.payload.entry.uid);
         return;
 
       case OrdersExplorerEventType.EXECUTE_OPERATION:
@@ -127,7 +131,31 @@ export class PurchaseOrdersMainPageComponent {
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
+    }
+  }
 
+
+  onPurchaseOrderTabbedViewEvent(event: EventInfo) {
+    switch (event.type as PurchaseOrderTabbedViewEventType) {
+      case PurchaseOrderTabbedViewEventType.CLOSE_BUTTON_CLICKED:
+        this.clearPurchaseOrderSelected();
+        return;
+
+      case PurchaseOrderTabbedViewEventType.ORDER_UPDATED:
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        this.refreshPurchaseOrders();
+        this.setPurchaseOrderSelected(event.payload.order as PurchaseOrder);
+        return;
+
+      case PurchaseOrderTabbedViewEventType.ORDER_DELETED:
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        this.refreshPurchaseOrders();
+        this.clearPurchaseOrderSelected();
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
     }
   }
 
@@ -158,6 +186,16 @@ export class PurchaseOrdersMainPageComponent {
       .firstValue()
       .then(x => this.setPurchaseOrdersData(x, true))
       .finally(() => this.isLoading = false)
+  }
+
+
+  private getPurchaseOrder(orderUID: string) {
+    this.isLoadingSelection = true;
+
+    this.purchasesData.getOrder(orderUID)
+      .firstValue()
+      .then(x => this.setPurchaseOrderSelected(x))
+      .finally(() => this.isLoadingSelection = false);
   }
 
 

@@ -34,6 +34,15 @@ export class PurchasesDataService {
   }
 
 
+  getOrder(orderUID: string): EmpObservable<PurchaseOrder> {
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v4/trade/procurement/purchase-orders/${orderUID}`;
+
+    return this.http.get<PurchaseOrder>(path);
+  }
+
+
   createOrder(dataFields: PurchaseOrderFields): EmpObservable<PurchaseOrder> {
     Assertion.assertValue(dataFields, 'dataFields');
 
@@ -41,4 +50,24 @@ export class PurchasesDataService {
 
     return this.http.post<PurchaseOrder>(path, dataFields);
   }
+
+
+  updateOrder(orderUID: string, dataFields: PurchaseOrderFields): EmpObservable<PurchaseOrder> {
+    Assertion.assertValue(orderUID, 'orderUID');
+    Assertion.assertValue(dataFields, 'dataFields');
+
+    const path = `v4/trade/procurement/purchase-orders/${orderUID}`;
+
+    return this.http.put<PurchaseOrder>(path, dataFields);
+  }
+
+
+  deleteOrder(orderUID: string): EmpObservable<void> {
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v4/trade/procurement/purchase-orders/${orderUID}`;
+
+    return this.http.delete<void>(path);
+  }
+
 }
