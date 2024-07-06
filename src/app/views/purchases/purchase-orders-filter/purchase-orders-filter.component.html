@@ -4,6 +4,17 @@
 
     <div class="fx-row-container sm-fx-column-container sm-fx-gap-half">
 
+      <div class="fx-item-half sm-fx-item">
+        <label>Proveedor:</label>
+        <emp-ng-select-typeahead #supplier
+          formControlName="supplierUID"
+          [config]="{ clearable: true, minTermLength: 5, virtualScroll: true }"
+          [searcherAPI]="suppliersAPI"
+          placeholder="Todos">
+
+        </emp-ng-select-typeahead>
+      </div>
+
       <div class="fx-item-quarter sm-fx-item">
 
         <label>Estatus:</label>
@@ -16,18 +27,6 @@
           [loading]="isLoading">
         </emp-ng-select>
 
-      </div>
-
-
-      <div class="fx-item-third sm-fx-item">
-        <label>Proveedor:</label>
-        <emp-ng-select-typeahead #supplier
-          formControlName="supplierUID"
-          [config]="{ clearable: true, minTermLength: 5, virtualScroll: true }"
-          [searcherAPI]="suppliersAPI"
-          placeholder="Todos">
-
-        </emp-ng-select-typeahead>
       </div>
 
       <div class="fx-item fx-items-end sm-fx-item">

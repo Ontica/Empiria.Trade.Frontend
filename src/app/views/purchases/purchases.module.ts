@@ -16,6 +16,8 @@ import { OrdersModule } from '../orders/orders.module';
 
 import { PurchaseOrdersMainPageComponent } from './purchase-orders-main-page/purchase-orders-main-page.component';
 import { PurchaseOrdersFilterComponent } from './purchase-orders-filter/purchase-orders-filter.component';
+import { PurchaseOrderHeaderComponent } from './purchase-order/purchase-order-header.component';
+import { PurchaseOrderCreatorComponent } from './purchase-order/purchase-order-creator.component';
 
 
 @NgModule({
@@ -31,6 +33,8 @@ import { PurchaseOrdersFilterComponent } from './purchase-orders-filter/purchase
   declarations: [
     PurchaseOrdersMainPageComponent,
     PurchaseOrdersFilterComponent,
+    PurchaseOrderHeaderComponent,
+    PurchaseOrderCreatorComponent,
   ],
   exports: [
     PurchaseOrdersMainPageComponent,

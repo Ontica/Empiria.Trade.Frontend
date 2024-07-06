@@ -1,0 +1,136 @@
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+
+  <div class="fx-column-container fx-gap-half">
+
+    <div class="fx-row-container">
+
+      <div class="fx-item-size" style="--size: calc(100% - 126px)">
+        <label>Proveedor:</label>
+        <emp-ng-select-typeahead
+          formControlName="supplierUID"
+          [config]="{ minTermLength: 5, virtualScroll: true }"
+          [searcherAPI]="suppliersAPI"
+          [initialValue]="order.supplier"
+          [showError]="formHelper.isControlInvalid(form.controls.supplierUID)">
+
+        </emp-ng-select-typeahead>
+      </div>
+
+      <div class="fx-item-none">
+        <label>Fecha programada:</label>
+        <emp-ng-datepicker
+          formControlName="scheduledTime"
+          [showError]="formHelper.isControlInvalid(form.controls.scheduledTime)">
+        </emp-ng-datepicker>
+      </div>
+
+    </div>
+
+    <div class="fx-row-container">
+
+      <div class="fx-item-half">
+        <label>Condiciones de pago:</label>
+        <emp-ng-select
+          formControlName="paymentCondition"
+          [items]="paymentConditionList"
+          [showError]="formHelper.isControlInvalid(form.controls.paymentCondition)">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item-half">
+        <label>Forma de envío:</label>
+        <emp-ng-select
+          formControlName="shippingMethod"
+          [items]="receptionMethodList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.shippingMethod)">
+        </emp-ng-select>
+      </div>
+
+    </div>
+
+    <div class="fx-row-container">
+
+      <div class="fx-item">
+        <label>Notas:</label>
+        <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
+          formControlName="notes"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.notes)">
+        </textarea>
+      </div>
+
+    </div>
+
+  </div>
+
+  <mat-divider class="horizontal" *ngIf="!isSaved || hasActions">
+
+  </mat-divider>
+
+  <div #rowFooter class="fx-row-container">
+
+    <ng-container *ngIf="!isSaved">
+
+      <div class="fx-item fx-end fx-items-center">
+
+        <button
+          [class.btn]="!formHelper.isFormReady(form)"
+          [class.btn-action]="formHelper.isFormReady(form)"
+          (click)="onSubmitButtonClicked()">
+          Agregar
+        </button>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isSaved">
+
+      <div class="fx-item fx-items-center">
+
+        <button *ngIf="editionMode && canDelete"
+          type="button" class="btn-warning"
+          (click)="onDeleteButtonClicked()">
+          Eliminar
+        </button>
+
+        <button *ngIf="!editionMode && canClose"
+          type="button" class="btn"
+          (click)="onCloseButtonClicked()">
+          Aplicar
+        </button>
+
+      </div>
+
+      <div class="fx-item fx-end fx-items-center">
+
+        <button *ngIf="!editionMode && canEdit"
+          class="btn-action"
+          (click)="enableEditor(true)">
+          Editar
+        </button>
+
+        <ng-container *ngIf="editionMode">
+
+          <button
+            [class.btn]="!formHelper.isFormReady(form)"
+            [class.btn-action]="formHelper.isFormReady(form)"
+            (click)="onSubmitButtonClicked()">
+            Guardar
+          </button>
+
+          <button
+            class="btn-base uppercase"
+            (click)="enableEditor(false)">
+            Descartar Cambios
+          </button>
+
+        </ng-container>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+
+</form>

@@ -17,7 +17,8 @@ import { expandCollapse } from '@app/shared/animations/animations';
 
 import { SearcherAPIS } from '@app/data-services';
 
-import { InventoryStatusList, PurchaseOrdersQuery, PurchaseOrdersQueryType } from '@app/models';
+import { EmptyPurchaseOrdersQuery, PurchaseOrdersQuery, PurchaseOrdersQueryType,
+         PurchaseStatusList } from '@app/models';
 
 
 export enum PurchaseOrdersFilterEventType {
@@ -40,6 +41,8 @@ export class PurchaseOrdersFilterComponent implements OnChanges {
 
   @Input() orderType: string = PurchaseOrdersQueryType.Purchase;
 
+  @Input() query: PurchaseOrdersQuery = EmptyPurchaseOrdersQuery;
+
   @Input() queryExecuted: boolean = false;
 
   @Output() purchaseOrdersFilterEvent = new EventEmitter<EventInfo>();
@@ -48,7 +51,7 @@ export class PurchaseOrdersFilterComponent implements OnChanges {
 
   formHelper = FormHelper;
 
-  statusList: Identifiable[] = InventoryStatusList;
+  statusList: Identifiable[] = PurchaseStatusList;
 
   suppliersAPI = SearcherAPIS.suppliers;
 
@@ -65,6 +68,10 @@ export class PurchaseOrdersFilterComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.queryExecuted) {
       this.resetShowFilter();
+    }
+
+    if (changes.query) {
+      this.setFormData();
     }
   }
 
@@ -96,6 +103,15 @@ export class PurchaseOrdersFilterComponent implements OnChanges {
       status: [null],
       keywords: [null],
       supplierUID: [null],
+    });
+  }
+
+
+  private setFormData() {
+    this.form.reset({
+      status: this.query.status,
+      keywords: this.query.keywords,
+      supplierUID: this.query.supplierUID,
     });
   }
 

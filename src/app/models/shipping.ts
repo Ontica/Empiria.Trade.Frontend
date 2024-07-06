@@ -55,6 +55,12 @@ export const ShippingMethodList: Identifiable[] = [
 ];
 
 
+export const ReceptionMethodList: Identifiable[] = [
+  { uid: ShippingMethodTypes.Ocurre,     name: 'Ocurre' },
+  { uid: ShippingMethodTypes.Paqueteria, name: 'Paquetería' },
+];
+
+
 export const DefaultShippingMethod: Identifiable = {
   uid: ShippingMethodTypes.Paqueteria,
   name: 'Paquetería',

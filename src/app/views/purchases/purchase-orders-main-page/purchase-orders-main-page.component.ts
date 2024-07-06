@@ -7,19 +7,21 @@
 
 import { Component } from '@angular/core';
 
-import { Assertion, EventInfo, Identifiable } from '@app/core';
+import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { PurchasesDataService } from '@app/data-services';
 
-import { DataTableEntry, EmptyOrdersDataTable, EmptyPurchaseOrdersQuery, OrdersDataTable,
-         OrdersOperationCommand, OrdersTypeConfig, PurchaseOrdersOperationsList, PurchaseOrdersQuery,
-         PurchaseOrdersQueryType } from '@app/models';
+import { DataTableEntry, EmptyOrdersDataTable, EmptyPurchaseOrder, EmptyPurchaseOrdersQuery, OrdersDataTable,
+         OrdersOperationCommand, OrdersTypeConfig, PurchaseOrder, PurchaseOrdersOperationsList,
+         PurchaseOrdersQuery, PurchaseOrdersQueryType } from '@app/models';
 
 import { OrdersExplorerEventType } from '@app/views/orders/orders-explorer/orders-explorer.component';
 
 import { PurchaseOrdersFilterEventType } from '../purchase-orders-filter/purchase-orders-filter.component';
+
+import { PurchaseOrderCreatorEventType } from '../purchase-order/purchase-order-creator.component';
 
 
 @Component({
@@ -37,27 +39,47 @@ export class PurchaseOrdersMainPageComponent {
 
   isLoading = false;
 
+  isLoadingSelection = false;
+
   queryExecuted = false;
 
   query: PurchaseOrdersQuery = EmptyPurchaseOrdersQuery;
 
-  isLoadingOrder = false;
-
   purchaseOrdersData: OrdersDataTable = Object.assign({}, EmptyOrdersDataTable);
 
-  purchaseOrderSelected = null;
+  purchaseOrderSelected: PurchaseOrder = EmptyPurchaseOrder;
 
   operationsList = PurchaseOrdersOperationsList;
 
   operationCommandSeleted: OrdersOperationCommand = { orders: [], operation: null };
 
-  displayOrderTabbedView = false;
+  displayTabbedView = false;
 
-  displayOrderCreator = false;
+  displayCreator = false;
 
 
   constructor(private purchasesData: PurchasesDataService,
               private messageBox: MessageBoxService) {
+  }
+
+
+  onPurchaseOrderCreatorEvent(event: EventInfo) {
+    switch (event.type as PurchaseOrderCreatorEventType) {
+      case PurchaseOrderCreatorEventType.CLOSE_MODAL_CLICKED:
+        this.displayCreator = false;
+        return;
+
+      case PurchaseOrderCreatorEventType.ORDER_CREATED:
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        this.displayCreator = false;
+        this.setPurchaseOrderSelected(event.payload.order as PurchaseOrder);
+        this.validateQueryForRefreshPurchaseOrders(this.purchaseOrderSelected.orderNumber);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
@@ -87,9 +109,7 @@ export class PurchaseOrdersMainPageComponent {
   onOrdersExplorerEvent(event: EventInfo) {
     switch (event.type as OrdersExplorerEventType) {
       case OrdersExplorerEventType.CREATE_ORDER:
-        this.clearPurchaseOrderSelected();
-        this.displayOrderCreator = true;
-        this.messageBox.showInDevelopment('Agregar orden de compra');
+        this.displayCreator = true;
         return;
 
       case OrdersExplorerEventType.SELECT_ORDER:
@@ -109,6 +129,25 @@ export class PurchaseOrdersMainPageComponent {
         return;
 
     }
+  }
+
+
+  private validateQueryForRefreshPurchaseOrders(keywords: string) {
+    const newQuery: PurchaseOrdersQuery = {
+      queryType: this.query.queryType,
+      supplierUID: '',
+      status: '',
+      keywords,
+    };
+
+    this.query = Object.assign({}, this.query, newQuery);
+
+    this.refreshPurchaseOrders();
+  }
+
+
+  private refreshPurchaseOrders() {
+    this.searchPurchaseOrders(this.query);
   }
 
 
@@ -144,9 +183,9 @@ export class PurchaseOrdersMainPageComponent {
   }
 
 
-  private setPurchaseOrderSelected(order: any) {
+  private setPurchaseOrderSelected(order: PurchaseOrder) {
     this.purchaseOrderSelected = order;
-    this.displayOrderTabbedView = !!this.purchaseOrderSelected?.uid;
+    this.displayTabbedView = !isEmpty(this.purchaseOrderSelected);
   }
 
 

@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { OrdersDataTable, PurchaseOrdersQuery } from '@app/models';
+import { OrdersDataTable, PurchaseOrder, PurchaseOrderFields, PurchaseOrdersQuery } from '@app/models';
 
 
 @Injectable()
@@ -33,4 +33,12 @@ export class PurchasesDataService {
     return this.http.post<OrdersDataTable>(path, query);
   }
 
+
+  createOrder(dataFields: PurchaseOrderFields): EmpObservable<PurchaseOrder> {
+    Assertion.assertValue(dataFields, 'dataFields');
+
+    const path = 'v4/trade/procurement/purchase-orders';
+
+    return this.http.post<PurchaseOrder>(path, dataFields);
+  }
 }
