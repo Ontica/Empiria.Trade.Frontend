@@ -149,6 +149,12 @@ export class SaleOrderEditionComponent implements OnChanges, OnDestroy {
         this.updateOrderItem(event.payload.orderItem as SaleOrderItem);
         return;
 
+      case SaleOrderItemsEventType.SHOW_INVALID_DATA:
+        if (!this.isOrderDataValid) {
+          setTimeout(() => this.invalidateForms());
+        }
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -285,19 +291,6 @@ export class SaleOrderEditionComponent implements OnChanges, OnDestroy {
   }
 
 
-  private validateSaleOrderHeaderChanges(data: SaleOrderData) {
-    const recalculateItems = this.needRecalculateItems(data, this.orderForEdition.orderData);
-
-    const orderDataUpdated = { ...this.orderForEdition.orderData, ...data };
-
-    this.setOrderForEdition({ ...this.orderForEdition, ...{ orderData: orderDataUpdated } });
-
-    if (recalculateItems) {
-      this.validateCalculateOrder();
-    }
-  }
-
-
   private needRecalculateItems(newData: SaleOrderData, oldData: SaleOrderData) {
     const hasItems = this.orderForEdition.items.length > 0;
 
@@ -310,11 +303,24 @@ export class SaleOrderEditionComponent implements OnChanges, OnDestroy {
   }
 
 
-  private validateCalculateOrder() {
+  private validateCalculateOrder(order: SaleOrder) {
     if (this.isOrderDataValid) {
-      this.calculateOrder(this.orderForEdition);
+      this.calculateOrder(order);
     } else {
       setTimeout(() => this.invalidateForms());
+    }
+  }
+
+
+  private validateSaleOrderHeaderChanges(data: SaleOrderData) {
+    const recalculateItems = this.needRecalculateItems(data, this.orderForEdition.orderData);
+
+    const orderDataUpdated = { ...this.orderForEdition.orderData, ...data };
+
+    this.setOrderForEdition({ ...this.orderForEdition, ...{ orderData: orderDataUpdated } });
+
+    if (recalculateItems) {
+      this.validateCalculateOrder(this.orderForEdition);
     }
   }
 
@@ -328,7 +334,7 @@ export class SaleOrderEditionComponent implements OnChanges, OnDestroy {
     const orderToRecalculate = clone<SaleOrder>(this.orderForEdition);
     orderToRecalculate.items.push(item);
 
-    this.calculateOrder(orderToRecalculate);
+    this.validateCalculateOrder(orderToRecalculate);
   }
 
 
@@ -338,14 +344,14 @@ export class SaleOrderEditionComponent implements OnChanges, OnDestroy {
 
     if(index !== -1) orderToRecalculate.items[index] = item;
 
-    this.calculateOrder(orderToRecalculate);
+    this.validateCalculateOrder(orderToRecalculate);
   }
 
 
   private removeOrderItem(item: SaleOrderItem) {
     const orderToRecalculate = clone<SaleOrder>(this.orderForEdition);
     orderToRecalculate.items = orderToRecalculate.items.filter(x => !this.isSameOrderItem(x, item));
-    this.calculateOrder(orderToRecalculate);
+    this.validateCalculateOrder(orderToRecalculate);
   }
 
 
@@ -372,7 +378,6 @@ export class SaleOrderEditionComponent implements OnChanges, OnDestroy {
 
   private handleCalculateOrderError() {
     this.setOrderForEdition(this.orderForEdition);
-    this.messageBox.showError('Ocurrió un error al procesar el pedido.');
   }
 
 

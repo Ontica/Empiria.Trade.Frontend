@@ -22,6 +22,7 @@ export enum SaleOrderItemsEventType {
   ADD_ORDER_ITEM_CLICKED    = 'SaleOrderItemsComponent.Event.AddOrderItemClicked',
   REMOVE_ORDER_ITEM_CLICKED = 'SaleOrderItemsComponent.Event.RemoveOrderItemClicked',
   UPDATE_ORDER_ITEM         = 'SaleOrderItemsComponent.Event.UpdateOrderItem',
+  SHOW_INVALID_DATA         = 'SaleOrderItemsComponent.Event.ShowInvalidData',
 }
 
 @Component({
@@ -61,7 +62,7 @@ export class SaleOrderItemsComponent implements OnChanges {
 
   onAddOrderItemClicked() {
     if (!this.canEdit) {
-      this.messageBox.show('Seleccione los datos del pedido para continuar.', 'Agregar producto');
+      this.showInvalidDataMessage('Agregar producto');
       return;
     }
 
@@ -70,12 +71,27 @@ export class SaleOrderItemsComponent implements OnChanges {
 
 
   onRemoveOrderItemClicked(orderItem: SaleOrderItem) {
+    if (!this.canEdit) {
+      this.showInvalidDataMessage('Eliminar producto');
+      return;
+    }
+
     sendEvent(this.saleOrderItemsEvent, SaleOrderItemsEventType.REMOVE_ORDER_ITEM_CLICKED, { orderItem });
   }
 
 
   onOrderItemChange(orderItem: SaleOrderItem) {
+    if (!this.canEdit) {
+      this.showInvalidDataMessage('Editar producto');
+    }
+
     sendEvent(this.saleOrderItemsEvent, SaleOrderItemsEventType.UPDATE_ORDER_ITEM, { orderItem });
+  }
+
+
+  private showInvalidDataMessage(title: string) {
+    sendEvent(this.saleOrderItemsEvent, SaleOrderItemsEventType.SHOW_INVALID_DATA);
+    this.messageBox.show('Seleccione los datos del pedido para continuar.', title);
   }
 
 
