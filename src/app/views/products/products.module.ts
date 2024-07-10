@@ -22,6 +22,7 @@ import { ProductDataComponent } from './product-data/product-data.component';
 import { ProductImageComponent } from './product-data/product-image.component';
 import { ProductPresentationsComponent } from './product-data/product-presentations.component';
 import { ProductLocationComponent } from './product-data/product-location.component';
+import { ProductInputComponent } from './product-data/product-input.component';
 
 import { ProductsSeekerComponent } from './products-seeker/products-seeker.component';
 import { ProductsFilterComponent } from './products-seeker/products-filter.component';
@@ -44,6 +45,7 @@ import { ProductsTableComponent } from './products-seeker/products-table.compone
     ProductImageComponent,
     ProductPresentationsComponent,
     ProductLocationComponent,
+    ProductInputComponent,
 
     ProductsSeekerComponent,
     ProductsFilterComponent,

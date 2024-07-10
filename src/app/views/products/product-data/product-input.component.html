@@ -1,0 +1,112 @@
+<div *ngIf="!product.presentations || product.presentations?.length === 0">
+  N/A
+</div>
+
+<div *ngIf="product.presentations?.length > 0" class="list-container">
+
+  <form autocomplete="off" empNgFormKeyDownEnter #productSelected>
+
+    <div class="fx-column-container fx-gap-half">
+
+      <div class="fx-row-container" [style.margin-right.px]="-8">
+
+        <emp-ng-select #presentationSelected class="fx-item"
+          [(ngModel)]="presentation"
+          [title]="presentation?.description"
+          [name]="'selectPresentation'+ product.productUID"
+          [config]="{bindByValue: false}"
+          [items]="product.presentations"
+          [disabled]="product.presentations.length === 1"
+          bindValue="presentationUID"
+          bindLabel="description"
+          (changes)="onPresentationChanged($event)">
+
+        </emp-ng-select>
+
+      </div>
+
+      <mat-divider>
+
+      </mat-divider>
+
+      <div class="fx-row-container" [style.margin-right.px]="-8">
+
+        <div class="fx-item">
+
+          <emp-ng-input-numeric
+            placeholder="Cantidad"
+            [id]="'quantity-' + product.productUID"
+            [minDecimals]="0"
+            [maxDecimals]="2"
+            [(ngModel)]="quantity"
+            [showError]="touched && isQuantityInvalid"
+            [ngModelOptions]="{standalone: true}"
+            (keyupEscape)="quantity = null">
+
+          </emp-ng-input-numeric>
+
+        </div>
+
+        <div class="fx-item-size" style="--size: 100px">
+
+          <emp-ng-input-numeric
+            placeholder="Costo"
+            [id]="'price-' + product.productUID"
+            [minDecimals]="2"
+            [maxDecimals]="2"
+            [(ngModel)]="price"
+            [ngModelOptions]="{standalone: true}"
+            (keyupEscape)="price = null">
+
+          </emp-ng-input-numeric>
+
+        </div>
+
+        <div class="fx-item-size" style="--size: 100px">
+
+          <emp-ng-input-numeric
+            placeholder="Peso"
+            [id]="'weight-' + product.productUID"
+            [minDecimals]="2"
+            [maxDecimals]="2"
+            [(ngModel)]="weight"
+            [ngModelOptions]="{standalone: true}"
+            (keyupEscape)="weight = null">
+
+          </emp-ng-input-numeric>
+
+        </div>
+
+      </div>
+
+      <div class="fx-row-container" [style.margin-right.px]="-8">
+
+        <div class="fx-item">
+
+          <input type="text" class="text-box"
+            [(ngModel)]="notes"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="Notas">
+
+        </div>
+
+        <div class="fx-item-size fx-items-end"
+          style="--size: 100px"
+          [style.marginBottom.px]="2">
+
+          <button class="btn"
+            [style.width.%]="100"
+            [style.margin-right.px]="8"
+            (click)="onSubmitButtonClicked()">
+            Agregar
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </form>
+
+</div>

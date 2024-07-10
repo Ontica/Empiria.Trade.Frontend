@@ -74,6 +74,17 @@ export interface InventoryProductSelection {
 }
 
 
+export interface PurchaseProductSelection {
+  product: ProductDescriptor;
+  presentation: ProductPresentation;
+  vendor: Vendor;
+  quantity: number,
+  price: number,
+  weight: number,
+  notes: string;
+}
+
+
 export interface ProductDescriptor extends Product {
   productUID: string;
   productCode: string;
