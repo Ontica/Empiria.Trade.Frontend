@@ -17,6 +17,15 @@
 
     <mat-tab label="Productos">
 
+      <emp-trade-purchase-order-items-edition
+        [orderUID]="order.uid"
+        [orderItems]="order.items"
+        [orderTotals]="order.totals"
+        [canEdit]="order.actions.canEdit"
+        (purchaseOrderItemsEditionEvent)="onPurchaseOrderItemsEditionEvent($event)">
+
+      </emp-trade-purchase-order-items-edition>
+
     </mat-tab>
 
   </mat-tab-group>

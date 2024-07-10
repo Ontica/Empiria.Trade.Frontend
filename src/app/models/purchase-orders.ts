@@ -11,6 +11,8 @@ import { DataTableEntry } from './_data-table';
 
 import { OrdersQuery, OrdersOperation } from './orders';
 
+import { PurchaseProductSelection } from './product';
+
 
 export enum PurchaseOrdersQueryType {
   Purchase = 'Purchase',
@@ -75,11 +77,24 @@ export interface PurchaseOrder {
 
 export interface PurchaseOrderItem {
   uid: string;
+
+  vendorProductUID: string;
+  productCode: string;
+  productName: string;
+  presentationName: string;
+
+  quantity: number;
+  price: number;
+  weight: number;
+  total: number;
+
+  notes: string;
 }
 
 
 export interface PurchaseOrderTotals {
-
+  itemsCount: number;
+  orderTotal: number;
 }
 
 
@@ -96,6 +111,15 @@ export interface PurchaseOrderFields {
   paymentCondition: string;
   shippingMethod: string;
   scheduledTime: DateString;
+  notes: string;
+}
+
+
+export interface PurchaseOrderItemFields {
+  vendorProductUID: string;
+  quantity: number;
+  price: number;
+  weight: number;
   notes: string;
 }
 
@@ -122,6 +146,12 @@ export const EmptyPurchaseOrderActions: PurchaseOrderActions = {
 };
 
 
+export const EmptyPurchaseOrderTotals: PurchaseOrderTotals = {
+  itemsCount: 0,
+  orderTotal: 0,
+};
+
+
 export const EmptyPurchaseOrder: PurchaseOrder = {
   uid: '',
   orderNumber: '',
@@ -137,3 +167,17 @@ export const EmptyPurchaseOrder: PurchaseOrder = {
   totals: null,
   actions: EmptyPurchaseOrderActions,
 };
+
+
+export function mapPurchaseOrderItemFieldsFromSelection(
+  item: PurchaseProductSelection): PurchaseOrderItemFields {
+  const itemFields: PurchaseOrderItemFields = {
+    vendorProductUID: item.vendor.vendorProductUID ?? null,
+    quantity: item.quantity ?? null,
+    price: item.price ?? null,
+    weight: item.weight ?? null,
+    notes: item.notes ?? null,
+  };
+
+  return itemFields;
+}

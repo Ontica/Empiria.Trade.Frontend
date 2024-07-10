@@ -9,11 +9,13 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { OrdersDataTable, PurchaseOrder, PurchaseOrderFields, PurchaseOrdersQuery } from '@app/models';
+import { OrdersDataTable, PurchaseOrder, PurchaseOrderFields, PurchaseOrderItemFields,
+         PurchaseOrdersQuery } from '@app/models';
 
 
 @Injectable()
 export class PurchasesDataService {
+
 
   constructor(private http: HttpService) { }
 
@@ -68,6 +70,41 @@ export class PurchasesDataService {
     const path = `v4/trade/procurement/purchase-orders/${orderUID}`;
 
     return this.http.delete<void>(path);
+  }
+
+
+  createOrderItem(orderUID: string,
+                  dataFields: PurchaseOrderItemFields): EmpObservable<PurchaseOrder> {
+    Assertion.assertValue(orderUID, 'orderUID');
+    Assertion.assertValue(dataFields, 'dataFields');
+
+    const path = `v4/trade/procurement/purchase-orders/${orderUID}/item`;
+
+    return this.http.post<PurchaseOrder>(path, dataFields);
+  }
+
+
+  updateOrderItem(orderUID: string,
+                  orderItemUID: string,
+                  dataFields: PurchaseOrderItemFields): EmpObservable<PurchaseOrder> {
+    Assertion.assertValue(orderUID, 'orderUID');
+    Assertion.assertValue(orderItemUID, 'orderItemUID');
+    Assertion.assertValue(dataFields, 'dataFields');
+
+    const path = `v4/trade/procurement/purchase-orders/${orderUID}/item/${orderItemUID}`;
+
+    return this.http.put<PurchaseOrder>(path, dataFields);
+  }
+
+
+  deleteOrderItem(orderUID: string,
+                  orderItemUID: string): EmpObservable<PurchaseOrder> {
+    Assertion.assertValue(orderUID, 'orderUID');
+    Assertion.assertValue(orderItemUID, 'orderItemUID');
+
+    const path = `v4/trade/procurement/purchase-orders/${orderUID}/item/${orderItemUID}`;
+
+    return this.http.delete<PurchaseOrder>(path);
   }
 
 }

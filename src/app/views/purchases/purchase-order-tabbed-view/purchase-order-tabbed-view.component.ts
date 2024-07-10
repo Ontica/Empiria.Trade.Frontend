@@ -15,6 +15,10 @@ import { EmptyPurchaseOrder, PurchaseOrder } from '@app/models';
 
 import { PurchaseOrderEditorEventType } from '../purchase-order/purchase-order-editor.component';
 
+import {
+  PurchaseOrderItemsEditionEventType
+} from '../purchase-order-items/purchase-order-items-edition.component';
+
 
 export enum PurchaseOrderTabbedViewEventType {
   CLOSE_BUTTON_CLICKED = 'PurchaseOrderTabbedViewComponent.Event.CloseButtonClicked',
@@ -36,7 +40,7 @@ export class PurchaseOrderTabbedViewComponent implements OnChanges {
 
   hint = '';
 
-  selectedTabIndex = 0;
+  selectedTabIndex = 1;
 
 
   ngOnChanges() {
@@ -60,6 +64,23 @@ export class PurchaseOrderTabbedViewComponent implements OnChanges {
       case PurchaseOrderEditorEventType.ORDER_DELETED:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         sendEvent(this.purchaseOrderTabbedViewEvent, PurchaseOrderTabbedViewEventType.ORDER_DELETED,
+          event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onPurchaseOrderItemsEditionEvent(event: EventInfo) {
+    switch (event.type as PurchaseOrderItemsEditionEventType) {
+      case PurchaseOrderItemsEditionEventType.ITEM_CREATED:
+      case PurchaseOrderItemsEditionEventType.ITEM_UPDATED:
+      case PurchaseOrderItemsEditionEventType.ITEM_DELETED:
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        sendEvent(this.purchaseOrderTabbedViewEvent, PurchaseOrderTabbedViewEventType.ORDER_UPDATED,
           event.payload);
         return;
 

@@ -205,10 +205,10 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
                 <br><br>¿Elimino la orden de compra?`;
 
       case PurchaseOrderHeaderEventType.CLOSE_ORDER:
-        return `Esta operación aplicará la orden de compra
+        return `Esta operación cerrará la orden de compra
                 <strong> ${this.order.orderNumber}:
                 ${this.order.supplier.name}</strong>.
-                <br><br>¿Aplico la orden de compra?`;
+                <br><br>¿Cierro la orden de compra?`;
 
       default: return '';
     }

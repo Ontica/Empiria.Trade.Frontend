@@ -33,6 +33,7 @@
         <emp-ng-select
           formControlName="paymentCondition"
           [items]="paymentConditionList"
+          [placeholder]="editionMode ? 'Seleccionar' : 'No definido'"
           [showError]="formHelper.isControlInvalid(form.controls.paymentCondition)">
         </emp-ng-select>
       </div>
@@ -43,6 +44,7 @@
           formControlName="shippingMethod"
           [items]="receptionMethodList"
           [loading]="isLoading"
+          [placeholder]="editionMode ? 'Seleccionar' : 'No definido'"
           [showError]="formHelper.isControlInvalid(form.controls.shippingMethod)">
         </emp-ng-select>
       </div>
@@ -97,7 +99,7 @@
         <button *ngIf="!editionMode && canClose"
           type="button" class="btn"
           (click)="onCloseButtonClicked()">
-          Aplicar
+          Cerrar
         </button>
 
       </div>

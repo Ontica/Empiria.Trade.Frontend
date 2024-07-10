@@ -1,0 +1,22 @@
+
+<emp-ng-modal-window [config]="{width: '960px'}">
+
+  <emp-ng-card
+    title="Buscador de productos para orden de compra"
+    hint='Busque y seleccione los productos a agregar.'
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding">
+
+      <emp-trade-products-seeker
+        displayFlat="true"
+        productSeekerQueryType="ProductsForPurchaseOrder"
+        (productsSeekerEvent)="onProductsSeekerEvent($event)">
+
+      </emp-trade-products-seeker>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>
