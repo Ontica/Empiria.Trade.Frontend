@@ -2,7 +2,7 @@
 <emp-ng-modal-window [config]="{width: '960px'}">
 
   <emp-ng-card
-    title="Buscador de productos"
+    title="Buscador de productos para pedido"
     hint='Busque y seleccione los productos a agregar.'
     (cardClose)="onClose()">
 
@@ -10,7 +10,7 @@
 
       <emp-trade-products-seeker
         displayFlat="true"
-        productSeekerQueryType="ProductsForOrder"
+        productSeekerQueryType="ProductsForSaleOrder"
         [order]="orderForQuery"
         (productsSeekerEvent)="onProductsSeekerEvent($event)">
 

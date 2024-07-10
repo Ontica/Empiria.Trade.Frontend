@@ -46,8 +46,8 @@
 </div>
 
 
-<emp-trade-products-selector *ngIf="displayProductsSelector"
+<emp-trade-sale-order-product-selector *ngIf="displayProductsSelector"
   [order]="orderForEdition"
-  (productsSelectorEvent)="onProductsSelectorEvent($event)">
+  (saleOrderProductSelectorEvent)="onSaleOrderProductSelectorEvent($event)">
 
-</emp-trade-products-selector>
+</emp-trade-sale-order-product-selector>

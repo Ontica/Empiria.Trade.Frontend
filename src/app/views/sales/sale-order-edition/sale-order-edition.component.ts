@@ -24,8 +24,6 @@ import { SalesDataService } from '@app/data-services';
 import { DefaultOrdersStatus, EmptySaleOrder, SaleOrder, SaleOrderData, SaleOrderItem, ProductSelection,
          mapSaleOrderFieldsFromSaleOrder,  mapSaleOrderItemFromProductSelection } from '@app/models';
 
-import { ProductsSelectorEventType } from '@app/views/products/products-selector/products-selector.component';
-
 import { SaleOrderSubmitterEventType } from './sale-order-submitter.component';
 
 import { SaleOrderItemsEventType } from './sale-order-items.component';
@@ -33,6 +31,10 @@ import { SaleOrderItemsEventType } from './sale-order-items.component';
 import { SaleOrderHeaderComponent, SaleOrderHeaderEventType } from './sale-order-header.component';
 
 import { SaleOrderSummaryComponent, SaleOrderSummaryEventType } from './sale-order-summary.component';
+
+import {
+  SaleOrderProductSelectorEventType
+} from '../sale-order-product-selector/sale-order-product-selector.component';
 
 
 export enum SaleOrderEditionEventType {
@@ -114,17 +116,14 @@ export class SaleOrderEditionComponent implements OnChanges, OnDestroy {
 
   onSaleOrderHeaderEvent(event: EventInfo) {
     switch (event.type as SaleOrderHeaderEventType) {
-
       case SaleOrderHeaderEventType.CHANGE_DATA:
         Assertion.assertValue(event.payload.isFormValid, 'event.payload.isFormValid');
         Assertion.assertValue(event.payload.isFormDirty, 'event.payload.isFormDirty');
         Assertion.assertValue(event.payload.data, 'event.payload.data');
-
         this.isOrderDataValid = event.payload.isFormValid as boolean;
         this.validateSaleOrderHeaderChanges(event.payload.data as SaleOrderData);
         this.setDirtyOrder(event.payload.isFormDirty);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -134,27 +133,22 @@ export class SaleOrderEditionComponent implements OnChanges, OnDestroy {
 
   onSaleOrderItemsEvent(event: EventInfo) {
     switch (event.type as SaleOrderItemsEventType) {
-
       case SaleOrderItemsEventType.ADD_ORDER_ITEM_CLICKED:
         this.displayProductsSelector = true;
         return;
-
       case SaleOrderItemsEventType.REMOVE_ORDER_ITEM_CLICKED:
         Assertion.assertValue(event.payload.orderItem, 'event.payload.orderItem');
         this.removeOrderItem(event.payload.orderItem as SaleOrderItem);
         return;
-
       case SaleOrderItemsEventType.UPDATE_ORDER_ITEM:
         Assertion.assertValue(event.payload.orderItem, 'event.payload.orderItem');
         this.updateOrderItem(event.payload.orderItem as SaleOrderItem);
         return;
-
       case SaleOrderItemsEventType.SHOW_INVALID_DATA:
         if (!this.isOrderDataValid) {
           setTimeout(() => this.invalidateForms());
         }
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -164,7 +158,6 @@ export class SaleOrderEditionComponent implements OnChanges, OnDestroy {
 
   onSaleOrderSummaryEvent(event: EventInfo) {
     switch (event.type as SaleOrderSummaryEventType) {
-
       case SaleOrderSummaryEventType.CHANGE_DATA:
         Assertion.assertValue(event.payload.isFormValid, 'event.payload.isFormValid');
         Assertion.assertValue(event.payload.isFormDirty, 'event.payload.isFormDirty');
@@ -174,7 +167,6 @@ export class SaleOrderEditionComponent implements OnChanges, OnDestroy {
         this.setOrderForEdition({ ...this.orderForEdition, ...{ orderData: orderDataUpdated } });
         this.setDirtyOrder(event.payload.isFormDirty);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -213,25 +205,20 @@ export class SaleOrderEditionComponent implements OnChanges, OnDestroy {
   }
 
 
-  onProductsSelectorEvent(event: EventInfo) {
-    switch (event.type as ProductsSelectorEventType) {
-
-      case ProductsSelectorEventType.CLOSE_MODAL_CLICKED:
+  onSaleOrderProductSelectorEvent(event: EventInfo) {
+    switch (event.type as SaleOrderProductSelectorEventType) {
+      case SaleOrderProductSelectorEventType.CLOSE_MODAL_CLICKED:
         this.displayProductsSelector = false;
         return;
-
-      case ProductsSelectorEventType.ADD_PRODUCT:
+      case SaleOrderProductSelectorEventType.ADD_PRODUCT:
         Assertion.assert(event.payload.selection, 'event.payload.selection');
         Assertion.assert(event.payload.selection.product, 'event.payload.selection.product');
         Assertion.assert(event.payload.selection.presentation, 'event.payload.selection.presentation');
         Assertion.assert(event.payload.selection.vendor, 'event.payload.selection.vendor');
         Assertion.assert(event.payload.selection.quantity, 'event.payload.selection.quantity');
-
         const orderItem = mapSaleOrderItemFromProductSelection(event.payload.selection as ProductSelection);
-
         this.addOrderItem(orderItem);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;

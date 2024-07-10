@@ -24,6 +24,7 @@ import { InventoryOrderHeaderComponent } from './inventory-order/inventory-order
 import { InventoryOrderTabbedViewComponent } from './inventory-order-tabbed-view/inventory-order-tabbed-view.component';
 import { InventoryOrderItemsEditionComponent } from './inventory-order-items/inventory-order-items-edition.component';
 import { InventoryOrderItemsTableComponent } from './inventory-order-items/inventory-order-items-table.component';
+import { InventoryOrderProductSelectorComponent } from './inventory-order-product-selector/inventory-order-product-selector.component';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { InventoryOrderItemsTableComponent } from './inventory-order-items/inven
     InventoryOrderTabbedViewComponent,
     InventoryOrderItemsEditionComponent,
     InventoryOrderItemsTableComponent,
+    InventoryOrderProductSelectorComponent,
   ],
   exports: [
     InventoryOrdersMainPageComponent,

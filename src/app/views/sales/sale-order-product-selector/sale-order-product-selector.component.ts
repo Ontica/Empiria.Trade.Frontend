@@ -13,23 +13,23 @@ import { sendEvent } from '@app/shared/utils';
 
 import { SaleOrder, SaleOrderFields, mapSaleOrderFieldsFromSaleOrder } from '@app/models';
 
-import { ProductsSeekerEventType } from '../products-seeker/products-seeker.component';
+import { ProductsSeekerEventType } from '@app/views/products/products-seeker/products-seeker.component';
 
 
-export enum ProductsSelectorEventType {
-  CLOSE_MODAL_CLICKED = 'ProductsSelectorComponent.Event.CloseModalClicked',
-  ADD_PRODUCT         = 'ProductsSelectorComponent.Event.AddProduct',
+export enum SaleOrderProductSelectorEventType {
+  CLOSE_MODAL_CLICKED = 'SaleOrderProductSelectorComponent.Event.CloseModalClicked',
+  ADD_PRODUCT         = 'SaleOrderProductSelectorComponent.Event.AddProduct',
 }
 
 @Component({
-  selector: 'emp-trade-products-selector',
-  templateUrl: './products-selector.component.html',
+  selector: 'emp-trade-sale-order-product-selector',
+  templateUrl: './sale-order-product-selector.component.html',
 })
-export class ProductsSelectorComponent implements OnChanges {
+export class SaleOrderProductSelectorComponent implements OnChanges {
 
   @Input() order: SaleOrder = null;
 
-  @Output() productsSelectorEvent = new EventEmitter<EventInfo>();
+  @Output() saleOrderProductSelectorEvent = new EventEmitter<EventInfo>();
 
   orderForQuery: SaleOrderFields = null;
 
@@ -40,24 +40,20 @@ export class ProductsSelectorComponent implements OnChanges {
 
 
   onClose() {
-    sendEvent(this.productsSelectorEvent, ProductsSelectorEventType.CLOSE_MODAL_CLICKED);
+    sendEvent(this.saleOrderProductSelectorEvent, SaleOrderProductSelectorEventType.CLOSE_MODAL_CLICKED);
   }
 
 
   onProductsSeekerEvent(event: EventInfo) {
     switch (event.type as ProductsSeekerEventType) {
-
       case ProductsSeekerEventType.SELECT_PRODUCT:
         Assertion.assertValue(event.payload.product, 'event.payload.product');
-
         return;
-
       case ProductsSeekerEventType.ADD_PRODUCT:
         Assertion.assert(event.payload.selection, 'event.payload.selection');
-
-        sendEvent(this.productsSelectorEvent, ProductsSelectorEventType.ADD_PRODUCT, event.payload);
+        sendEvent(this.saleOrderProductSelectorEvent, SaleOrderProductSelectorEventType.ADD_PRODUCT,
+          event.payload);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;

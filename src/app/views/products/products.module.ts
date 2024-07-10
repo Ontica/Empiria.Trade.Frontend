@@ -26,10 +26,6 @@ import { ProductLocationComponent } from './product-data/product-location.compon
 import { ProductsSeekerComponent } from './products-seeker/products-seeker.component';
 import { ProductsFilterComponent } from './products-seeker/products-filter.component';
 import { ProductsTableComponent } from './products-seeker/products-table.component';
-import { ProductsSelectorComponent } from './products-selector/products-selector.component';
-import {
-  ProductsLocationSelectorComponent
-} from './products-location-selector/products-location-selector.component';
 
 @NgModule({
   imports: [
@@ -52,15 +48,11 @@ import {
     ProductsSeekerComponent,
     ProductsFilterComponent,
     ProductsTableComponent,
-    ProductsSelectorComponent,
-    ProductsLocationSelectorComponent,
   ],
   exports: [
     ProductAttributesComponent,
     ProductImageComponent,
     ProductsSeekerComponent,
-    ProductsSelectorComponent,
-    ProductsLocationSelectorComponent,
   ]
 })
 export class ProductsModule { }

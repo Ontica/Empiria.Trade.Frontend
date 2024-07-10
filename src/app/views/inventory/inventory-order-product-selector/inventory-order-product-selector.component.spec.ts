@@ -7,19 +7,19 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProductsLocationSelectorComponent } from './products-location-selector.component';
+import { InventoryOrderProductSelectorComponent } from './inventory-order-product-selector.component';
 
-describe('ProductsLocationSelectorComponent', () => {
-  let component: ProductsLocationSelectorComponent;
-  let fixture: ComponentFixture<ProductsLocationSelectorComponent>;
+describe('InventoryOrderProductSelectorComponent', () => {
+  let component: InventoryOrderProductSelectorComponent;
+  let fixture: ComponentFixture<InventoryOrderProductSelectorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProductsLocationSelectorComponent]
+      declarations: [InventoryOrderProductSelectorComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ProductsLocationSelectorComponent);
+    fixture = TestBed.createComponent(InventoryOrderProductSelectorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

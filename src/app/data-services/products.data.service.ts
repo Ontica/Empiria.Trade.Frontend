@@ -27,10 +27,10 @@ export class ProductsDataService {
   }
 
 
-  searchProductsForOrder(query: ProductQuery): EmpObservable<ProductDescriptor[]> {
+  searchProductsForSaleOrder(query: ProductQuery): EmpObservable<ProductDescriptor[]> {
     Assertion.assertValue(query, 'query');
 
-    const path = 'v4/trade/products/search-products-for-order';
+    const path = 'v4/trade/products/search-products-for-sale-order';
 
     return this.http.post<ProductDescriptor[]>(path, query);
   }

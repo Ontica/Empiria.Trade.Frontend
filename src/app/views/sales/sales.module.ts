@@ -31,6 +31,8 @@ import { SaleOrderAdditionalDataComponent } from './sale-order-edition/sale-orde
 import { SaleOrderTotalsComponent } from './sale-order-edition/sale-order-totals.component';
 import { SaleOrderSubmitterComponent } from './sale-order-edition/sale-order-submitter.component';
 import { SaleOrderConfirmSubmitModalComponent } from './sale-order-edition/sale-order-confirm-submit-modal.component';
+import { SaleOrderProductSelectorComponent } from './sale-order-product-selector/sale-order-product-selector.component';
+
 
 @NgModule({
   imports: [
@@ -59,6 +61,7 @@ import { SaleOrderConfirmSubmitModalComponent } from './sale-order-edition/sale-
     SaleOrderTotalsComponent,
     SaleOrderSubmitterComponent,
     SaleOrderConfirmSubmitModalComponent,
+    SaleOrderProductSelectorComponent,
   ],
   exports: [
     SalesOrdersMainPageComponent,

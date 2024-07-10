@@ -7,17 +7,17 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProductsSelectorComponent } from './products-selector.component';
+import { SaleOrderProductSelectorComponent } from './sale-order-product-selector.component';
 
-describe('ProductsSelectorComponent', () => {
-  let component: ProductsSelectorComponent;
-  let fixture: ComponentFixture<ProductsSelectorComponent>;
+describe('SaleOrderProductSelectorComponent', () => {
+  let component: SaleOrderProductSelectorComponent;
+  let fixture: ComponentFixture<SaleOrderProductSelectorComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ProductsSelectorComponent]
+      declarations: [SaleOrderProductSelectorComponent]
     });
-    fixture = TestBed.createComponent(ProductsSelectorComponent);
+    fixture = TestBed.createComponent(SaleOrderProductSelectorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -21,8 +21,8 @@ import { InventoryOrder, InventoryOrderItem, InventoryOrderItemFields, Inventory
 import { InventoryOrderItemsTableEventType } from './inventory-order-items-table.component';
 
 import {
-  ProductsLocationSelectorEventType
-} from '@app/views/products/products-location-selector/products-location-selector.component';
+  InventoryOrderProductSelectorEventType
+} from '../inventory-order-product-selector/inventory-order-product-selector.component';
 
 
 export enum InventoryOrderItemsEditionEventType {
@@ -46,7 +46,7 @@ export class InventoryOrderItemsEditionComponent {
 
   submitted = false;
 
-  displayProductLocationSelector = false;
+  displayProductSelector = false;
 
 
   constructor(private inventoryData: InventoryDataService,
@@ -56,30 +56,25 @@ export class InventoryOrderItemsEditionComponent {
 
 
   onAddItemClicked() {
-    this.displayProductLocationSelector = true;
+    this.displayProductSelector = true;
   }
 
 
-  onProductsLocationSelectorEvent(event: EventInfo) {
-    switch (event.type as ProductsLocationSelectorEventType) {
-
-      case ProductsLocationSelectorEventType.CLOSE_MODAL_CLICKED:
-        this.displayProductLocationSelector = false;
+  onInventoryOrderProductSelectorEvent(event: EventInfo) {
+    switch (event.type as InventoryOrderProductSelectorEventType) {
+      case InventoryOrderProductSelectorEventType.CLOSE_MODAL_CLICKED:
+        this.displayProductSelector = false;
         return;
-
-      case ProductsLocationSelectorEventType.ADD_PRODUCT:
+      case InventoryOrderProductSelectorEventType.ADD_PRODUCT:
         Assertion.assert(event.payload.selection, 'event.payload.selection');
         Assertion.assert(event.payload.selection.vendor, 'event.payload.selection.vendor');
         Assertion.assert(event.payload.selection.warehouseBin, 'event.payload.selection.warehouseBin');
         Assertion.assert(event.payload.selection.quantity, 'event.payload.selection.quantity');
-
         const orderItem = mapInventoryOrderItemFieldsFromSelection(
           event.payload.selection as InventoryProductSelection
         );
-
         this.createOrderItem(orderItem);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -97,7 +92,6 @@ export class InventoryOrderItemsEditionComponent {
         Assertion.assertValue(event.payload.orderItemUID, 'event.payload.orderItemUID');
         this.deleteOrderItem(event.payload.orderItemUID);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
