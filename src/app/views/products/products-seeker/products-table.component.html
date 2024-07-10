@@ -47,17 +47,27 @@
         </ng-container>
 
         <ng-container matColumnDef="presentations">
-          <th mat-header-cell *matHeaderCellDef> {{displayLocationSelection ? 'Localización' : 'Presentaciones'}} </th>
+          <th mat-header-cell *matHeaderCellDef>
+            {{displayOutputSelection ? 'Presentaciones' : ''}}
+            {{displayInputSelection  ? 'Entrada' : ''}}
+            {{displayLocationSelection ? 'Localización' : ''}}
+          </th>
           <td mat-cell *matCellDef="let row"
             [style.width.px]="displayLocationSelection ? 350 : 300"
             [style.maxWidth.px]="displayLocationSelection ? 350 :300">
 
-            <emp-trade-product-presentations *ngIf="!displayLocationSelection"
+            <emp-trade-product-presentations *ngIf="displayOutputSelection"
               [product]="row"
               [selectable]="selectable"
               (productPresentationsEvent)="onProductPresentationEvent($event)">
 
             </emp-trade-product-presentations>
+
+            <emp-trade-product-input *ngIf="displayInputSelection"
+              [product]="row"
+              (productInputEvent)="onProductInputEvent($event)">
+
+            </emp-trade-product-input>
 
             <emp-trade-product-location *ngIf="displayLocationSelection"
               [product]="row"

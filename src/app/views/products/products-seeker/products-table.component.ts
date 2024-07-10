@@ -25,6 +25,8 @@ import { ProductPresentationsEventType } from '@app/views/products/product-data/
 
 import { ProductLocationEventType } from '../product-data/product-location.component';
 
+import { ProductInputEventType } from '../product-data/product-input.component';
+
 export enum ProductsTableEventType {
   SELECT_PRODUCT_CLICKED = 'ProductsTableComponent.Event.SelectProductClicked',
   ADD_PRODUCT_CLICKED    = 'ProductsTableComponent.Event.AddProductClicked',
@@ -41,6 +43,10 @@ export class ProductsTableComponent implements OnChanges {
   @Input() products: ProductDescriptor[] = [];
 
   @Input() selectable = false;
+
+  @Input() displayOutputSelection = false;
+
+  @Input() displayInputSelection = false;
 
   @Input() displayLocationSelection = false;
 
@@ -99,6 +105,17 @@ export class ProductsTableComponent implements OnChanges {
   onProductLocationEvent(event: EventInfo) {
     switch (event.type as ProductLocationEventType) {
       case ProductLocationEventType.ADD_PRODUCT_CLICKED:
+        sendEvent(this.productsTableEvent, ProductsTableEventType.ADD_PRODUCT_CLICKED, event.payload);
+        return;
+      default:
+        return;
+    }
+  }
+
+
+  onProductInputEvent(event: EventInfo) {
+    switch (event.type as ProductInputEventType) {
+      case ProductInputEventType.ADD_PRODUCT_CLICKED:
         sendEvent(this.productsTableEvent, ProductsTableEventType.ADD_PRODUCT_CLICKED, event.payload);
         return;
       default:

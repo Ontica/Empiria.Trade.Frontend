@@ -54,7 +54,7 @@
 
     <emp-trade-products-filter #productsFilter
       [style.marginLeft.px]="displayFlat ? -8 : 0"
-      [displayOnStock]="displayOnStock"
+      [displayOnStock]="displayOutputSelection"
       [resultText]="displayFlat && queryExecuted ? resultText : ''"
       (productsFilterEvent)="onProductsFilterEvent($event)">
 
@@ -65,6 +65,8 @@
       [queryExecuted]="queryExecuted"
       [products]="data"
       [selectable]="displayFlat"
+      [displayOutputSelection]="displayOutputSelection"
+      [displayInputSelection]="displayInputSelection"
       [displayLocationSelection]="displayLocationSelection"
       (productsTableEvent)="onProductsTableEvent($event)">
 

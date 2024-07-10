@@ -19,7 +19,8 @@ import { ProductsFilterComponent, ProductsFilterEventType } from './products-fil
 
 import { ProductsTableEventType } from './products-table.component';
 
-export type ProductSeekerQueryType = 'Products' | 'ProductsForSaleOrder' | 'ProductsForInventory';
+export type ProductSeekerQueryType = 'Products' | 'ProductsForSaleOrder' | 'ProductsForPurchaseOrder' |
+                                     'ProductsForInventory';
 
 export enum ProductsSeekerEventType {
   SELECT_PRODUCT = 'ProductsSeekerComponent.Event.SelectProduct',
@@ -58,8 +59,13 @@ export class ProductsSeekerComponent implements OnInit {
   }
 
 
-  get displayOnStock(): boolean {
+  get displayOutputSelection(): boolean {
     return ['Products', 'ProductsForSaleOrder'].includes(this.productSeekerQueryType);
+  }
+
+
+  get displayInputSelection(): boolean {
+    return ['ProductsForPurchaseOrder'].includes(this.productSeekerQueryType);
   }
 
 
@@ -136,7 +142,11 @@ export class ProductsSeekerComponent implements OnInit {
         break;
 
       case 'ProductsForSaleOrder':
-        observable = this.productsData.searchProductsForOrder(queryValid);
+        observable = this.productsData.searchProductsForSaleOrder(queryValid);
+        break;
+
+      case 'ProductsForPurchaseOrder':
+        observable = this.productsData.searchProductsForPurchaseOrder(queryValid);
         break;
 
       case 'ProductsForInventory':
