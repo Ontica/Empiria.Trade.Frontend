@@ -5,8 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
-         SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -28,15 +27,16 @@ export enum InventoryReportFilterEventType {
 
 interface InventoryReportFilterFormModel extends FormGroup<{
   reportTypeUID: FormControl<string>;
-  productUID: FormControl<string>;
-  warehouseBinUID: FormControl<string>;
+  products: FormControl<string[]>;
+  warehouseBins: FormControl<string[]>;
+  keywords: FormControl<string>;
 }> { }
 
 @Component({
   selector: 'emp-trade-inventory-report-filter',
   templateUrl: './inventory-report-filter.component.html',
 })
-export class InventoryReportFilterComponent implements OnChanges, OnInit, OnDestroy {
+export class InventoryReportFilterComponent implements OnChanges, OnDestroy {
 
   @Input() reportGroup: ReportGroup;
 
@@ -72,11 +72,6 @@ export class InventoryReportFilterComponent implements OnChanges, OnInit, OnDest
   }
 
 
-  ngOnInit() {
-    console.log('X')
-  }
-
-
   ngOnDestroy() {
     this.helper.destroy();
   }
@@ -93,22 +88,28 @@ export class InventoryReportFilterComponent implements OnChanges, OnInit, OnDest
 
 
   onReportTypeChanges() {
-    this.form.controls.productUID.reset();
-    this.form.controls.warehouseBinUID.reset();
+    this.form.controls.products.reset(null);
+    this.form.controls.warehouseBins.reset(null);
+    this.form.controls.keywords.reset('');
 
     if (this.productFieldRequired) {
-      FormHelper.setControlValidators(this.form.controls.productUID, [Validators.required]);
-      FormHelper.clearControlValidators(this.form.controls.warehouseBinUID);
+      FormHelper.setControlValidators(this.form.controls.products, [Validators.required]);
+      FormHelper.clearControlValidators(this.form.controls.warehouseBins);
     }
 
     if (this.locationFieldRequired) {
-      FormHelper.setControlValidators(this.form.controls.warehouseBinUID, [Validators.required]);
-      FormHelper.clearControlValidators(this.form.controls.productUID);
+      FormHelper.setControlValidators(this.form.controls.warehouseBins, [Validators.required]);
+      FormHelper.clearControlValidators(this.form.controls.products);
     }
   }
 
 
   onBuildReportClicked() {
+    if (this.form.invalid) {
+      FormHelper.markFormControlsAsTouched(this.form);
+      return;
+    }
+
     const reportType = this.reportTypeList.find(x => x.uid === this.form.value.reportTypeUID);
 
     const payload = {
@@ -126,8 +127,9 @@ export class InventoryReportFilterComponent implements OnChanges, OnInit, OnDest
 
     this.form = fb.group({
       reportTypeUID: ['', Validators.required],
-      productUID: [''],
-      warehouseBinUID: [''],
+      products: [null],
+      warehouseBins: [null],
+      keywords: [''],
     });
   }
 
@@ -135,8 +137,9 @@ export class InventoryReportFilterComponent implements OnChanges, OnInit, OnDest
   private setFormData() {
     this.form.reset({
       reportTypeUID: this.query.reportType,
-      productUID: this.query.productUID,
-      warehouseBinUID: this.query.warehouseBinUID,
+      products: this.query.products,
+      warehouseBins: this.query.warehouseBins,
+      keywords: this.query.keywords,
     });
   }
 
@@ -144,6 +147,7 @@ export class InventoryReportFilterComponent implements OnChanges, OnInit, OnDest
   private getReportQuery(): InventoryReportQuery {
     const data: InventoryReportQuery = {
       reportType: this.form.value.reportTypeUID,
+      keywords: this.form.value.keywords,
     };
 
     this.validateReportQueryFields(data);
@@ -154,11 +158,11 @@ export class InventoryReportFilterComponent implements OnChanges, OnInit, OnDest
 
   private validateReportQueryFields(data: InventoryReportQuery) {
     if (this.productFieldRequired) {
-      data.productUID = this.form.value.productUID;
+      data.products = this.form.value.products ?? [];
     }
 
     if (this.locationFieldRequired) {
-      data.warehouseBinUID = this.form.value.warehouseBinUID;
+      data.warehouseBins = this.form.value.warehouseBins ?? [];
     }
   }
 
