@@ -73,6 +73,15 @@ export class PurchasesDataService {
   }
 
 
+  closeOrder(orderUID: string): EmpObservable<PurchaseOrder> {
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v4/trade/procurement/purchase-orders/${orderUID}/close`;
+
+    return this.http.post<PurchaseOrder>(path);
+  }
+
+
   createOrderItem(orderUID: string,
                   dataFields: PurchaseOrderItemFields): EmpObservable<PurchaseOrder> {
     Assertion.assertValue(orderUID, 'orderUID');

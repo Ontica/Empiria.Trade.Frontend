@@ -1,4 +1,3 @@
-
 /**
  * @license
  * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
@@ -9,8 +8,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo, isEmpty } from '@app/core';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -39,8 +36,7 @@ export class PurchaseOrderEditorComponent {
   submitted = false;
 
 
-  constructor(private purchasesData: PurchasesDataService,
-              private messageBox: MessageBoxService) { }
+  constructor(private purchasesData: PurchasesDataService) { }
 
 
   get isSaved(): boolean {
@@ -64,7 +60,7 @@ export class PurchaseOrderEditorComponent {
         return;
 
       case PurchaseOrderHeaderEventType.CLOSE_ORDER:
-        this.messageBox.showInDevelopment('Cerrar orden de compra');
+        this.closeOrder();
         return;
 
       default:
@@ -93,6 +89,18 @@ export class PurchaseOrderEditorComponent {
       .firstValue()
       .then(x => sendEvent(this.purchaseOrderEditorEvent, PurchaseOrderEditorEventType.ORDER_DELETED,
         { orderUID: this.order.uid }))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private closeOrder() {
+    this.submitted = true;
+
+    this.purchasesData.closeOrder(this.order.uid)
+      .firstValue()
+      .then(x =>
+        sendEvent(this.purchaseOrderEditorEvent, PurchaseOrderEditorEventType.ORDER_UPDATED, { order: x })
+      )
       .finally(() => this.submitted = false);
   }
 
