@@ -51,8 +51,6 @@ export interface ExportationType extends Identifiable {
 
 export interface ReportQuery extends DataTableQuery {
   reportType?: string;
-  fromDate?: DateString;
-  toDate?: DateString;
   exportTo?: string;
 }
 
@@ -104,3 +102,9 @@ export const EmptyReportData: ReportData = {
   columns: [],
   entries: [],
 };
+
+
+export const DefaultExportationTypesList: ExportationType[] = [
+  { uid: 'excel', name: 'Excel', fileType: FileType.Excel },
+  { uid: 'pdf',   name: 'PDF',   fileType: FileType.PDF },
+];

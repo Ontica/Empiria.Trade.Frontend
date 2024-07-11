@@ -12,7 +12,7 @@ import { Assertion, EventInfo } from '@app/core';
 import { sendEvent } from '@app/shared/utils';
 
 import { ReportGroup, ReportType, ReportQuery, ReportData, EmptyReportData, EmptyReportQuery,
-         EmptyReportType } from '@app/models';
+         EmptyReportType, ExportationType } from '@app/models';
 
 import { DataTableEventType } from '@app/views/_reports-controls/data-table/data-table.component';
 
@@ -41,6 +41,8 @@ export class ReportViewerComponent implements OnChanges {
   @Input() reportData: ReportData = Object.assign({}, EmptyReportData);
 
   @Input() queryExecuted = false;
+
+  @Input() exportationTypesList: ExportationType[] = [];
 
   @Input() fileUrl = '';
 

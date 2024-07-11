@@ -20,7 +20,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { ReportingDataService } from '@app/data-services';
 
 import { FileType, ReportGroup, ReportQuery, ReportType, ReportData, EmptyReportData,
-         EmptyReportType } from '@app/models';
+         EmptyReportType, ExportationType, DefaultExportationTypesList, FileReport } from '@app/models';
 
 import { ReportViewerEventType } from './report-viewer.component';
 
@@ -33,9 +33,9 @@ import { InventoryReportFilterEventType } from './reports-filters/inventory-repo
 })
 export class ReportBuilderComponent implements OnInit, OnDestroy {
 
-  reportGroup: ReportGroup;
-
   ReportGroups = ReportGroup;
+
+  reportGroup: ReportGroup;
 
   isLoading = false;
 
@@ -46,6 +46,8 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
   selectedReportType: ReportType = EmptyReportType;
 
   reportData: ReportData = Object.assign({}, EmptyReportData);
+
+  exportationTypesList: ExportationType[] = DefaultExportationTypesList;
 
   fileUrl = '';
 
@@ -134,7 +136,9 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
 
   private validateExportReportData(reportQuery: ReportQuery) {
-    setTimeout(() => this.messageBox.showInDevelopment('Exportar reporte', reportQuery), 500);
+    let observable: EmpObservable<FileReport> = this.reportingData.exportReportData(this.reportGroup,
+                                                                                    reportQuery);
+    this.exportReportData(observable);
   }
 
 
@@ -145,6 +149,13 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
       .firstValue()
       .then(x => this.setReportData(x))
       .finally(() => this.isLoading = false);
+  }
+
+
+  private exportReportData(observable: EmpObservable<FileReport>) {
+    observable
+      .firstValue()
+      .then(x => this.fileUrl = x.url);
   }
 
 
