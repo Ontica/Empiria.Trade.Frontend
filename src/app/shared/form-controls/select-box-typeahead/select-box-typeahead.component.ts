@@ -23,6 +23,7 @@ import { DataTableQuery, EmptyDataTable } from '@app/models';
 export interface SelectBoxTypeaheadConfig {
   bindByValue?: boolean;
   clearable?: boolean;
+  multiple?: boolean;
   searchByQuery?: boolean;
   virtualScroll?: boolean;
   minTermLength?: number;
@@ -32,6 +33,7 @@ export interface SelectBoxTypeaheadConfig {
 const DefaultSelectBoxTypeaheadConfig: SelectBoxTypeaheadConfig = {
   bindByValue: true,
   clearable: false,
+  multiple: false,
   searchByQuery: false,
   virtualScroll: false,
   minTermLength: 4,
