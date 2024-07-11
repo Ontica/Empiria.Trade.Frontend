@@ -100,7 +100,7 @@ export class InventoryOrderEditorComponent {
     this.inventoryData.closeOrder(this.order.uid)
       .firstValue()
       .then(x =>
-        sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_DELETED, { order: x })
+        sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_UPDATED, { order: x })
       )
       .finally(() => this.submitted = false);
   }
