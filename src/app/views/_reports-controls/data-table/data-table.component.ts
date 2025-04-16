@@ -47,6 +47,8 @@ export class DataTableComponent implements OnChanges {
 
   @Input() selectedUID: string = null;
 
+  @Input() selectedFieldValue: { field: string; value: any; } = null;
+
   @Input() executed = true;
 
   @Input() controlsAligned = false;
@@ -93,6 +95,7 @@ export class DataTableComponent implements OnChanges {
 
   entryItemTypeList = EntryItemTypeList;
 
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.dataTable) {
       this.filter = '';
@@ -112,25 +115,31 @@ export class DataTableComponent implements OnChanges {
   }
 
 
-  get entriesTotal() {
+  get entriesTotal(): number {
     return this.countOnlyEntries ?
       this.dataTable.entries.filter(x => EntryItemTypeList.includes(x.itemType)).length :
       this.dataTable.entries.length;
   }
 
 
-  get filteredEntriesTotal() {
+  get filteredEntriesTotal(): number {
     return this.countOnlyEntries ?
       this.dataSource.filteredData.filter(x => EntryItemTypeList.includes(x.itemType)).length :
       this.dataSource.filteredData.length;
   }
 
 
-  isClickableEntry(entry: DataTableEntry) {
+  isClickableEntry(entry: DataTableEntry): boolean {
     return this.canClickRow && (
       !!entry.clickableEntry ||
       (this.clickableEntry && ClickeableItemTypeList.includes(entry.itemType))
     );
+  }
+
+
+  isSelectedEntry(entry: DataTableEntry): boolean {
+    return entry === this.selectedEntry || entry.uid === this.selectedUID ||
+      (!!this.selectedFieldValue && entry[this.selectedFieldValue.field] === this.selectedFieldValue.value);
   }
 
 
@@ -165,8 +174,7 @@ export class DataTableComponent implements OnChanges {
   }
 
 
-  onDeleteButtonClicked(event, entry: DataTableEntry) {
-    event.stopPropagation();
+  onDeleteButtonClicked(entry: DataTableEntry) {
     this.emitDeleteEntryClicked(entry);
   }
 

@@ -16,11 +16,12 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccessControlStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { EmptySubject, Subject, SubjectFields} from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { ArrayLibrary, FormHelper, sendEvent } from '@app/shared/utils';
+
+import { EmptySubject, Subject, SubjectFields} from '@app/models';
+
 
 export enum SubjectHeaderEventType {
   CREATE_SUBJECT    = 'SubjectHeaderComponent.Event.CreateSubject',
@@ -231,7 +232,7 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
     switch (eventType) {
       case SubjectHeaderEventType.GENERATE_PASSWORD: return 'Generar contraseña';
       case SubjectHeaderEventType.ACTIVATE_SUBJECT: return 'Desbloquear cuenta';
-      case SubjectHeaderEventType.SUSPEND_SUBJECT: return 'Suspender cuenta';
+      case SubjectHeaderEventType.SUSPEND_SUBJECT: return 'Bloquear cuenta';
       case SubjectHeaderEventType.DELETE_SUBJECT: return 'Dar de baja la cuenta';
       default: return '';
     }
@@ -251,9 +252,9 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
                 <br><br>¿Desbloqueo la cuenta?`;
 
       case SubjectHeaderEventType.SUSPEND_SUBJECT:
-        return `Esta operación suspenderá la cuenta:
+        return `Esta operación bloqueará la cuenta:
                 <strong> (${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo} </strong>.
-                <br><br>¿Suspendo la cuenta?`;
+                <br><br>¿Bloqueo la cuenta?`;
 
       case SubjectHeaderEventType.DELETE_SUBJECT:
         return `Esta operación <strong>dará de baja / eliminará</strong> la cuenta

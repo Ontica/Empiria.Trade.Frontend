@@ -15,7 +15,7 @@ import { MainUIStateSelector } from '@app/presentation/exported.presentation.typ
 
 import { View } from '@app/main-layout';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { ReportingDataService } from '@app/data-services';
 

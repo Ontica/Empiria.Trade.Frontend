@@ -7,19 +7,19 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AuthenticationMainPageComponent } from './authentication-main-page.component';
+import { ListControlsComponent } from './list-controls.component';
 
-describe('AuthenticationMainPageComponent', () => {
-  let component: AuthenticationMainPageComponent;
-  let fixture: ComponentFixture<AuthenticationMainPageComponent>;
+describe('ListControlsComponent', () => {
+  let component: ListControlsComponent;
+  let fixture: ComponentFixture<ListControlsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AuthenticationMainPageComponent ]
+      declarations: [ListControlsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AuthenticationMainPageComponent);
+    fixture = TestBed.createComponent(ListControlsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

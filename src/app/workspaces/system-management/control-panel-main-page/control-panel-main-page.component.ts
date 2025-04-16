@@ -7,13 +7,13 @@
 
 import { Component } from '@angular/core';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { ControlPanelOption, ControlPanelOptionList } from './control-panel-config';
 
 
 @Component({
-  selector: 'emp-trade-control-panel-main-page',
+  selector: 'emp-ng-control-panel-main-page',
   templateUrl: './control-panel-main-page.component.html',
 })
 export class ControlPanelMainPageComponent {
@@ -21,6 +21,7 @@ export class ControlPanelMainPageComponent {
   displayChangePasswordModal = false;
 
   controlPanelOptionList = ControlPanelOptionList;
+
 
   constructor(private messageBox: MessageBoxService) {}
 

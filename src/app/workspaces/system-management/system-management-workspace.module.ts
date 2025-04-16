@@ -13,14 +13,13 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { AccessControlModule } from '@app/views/_access-control/access-control.module';
+import { MoneyAccountsModule } from '@app/views/money-accounts/money-accounts.module';
 
-import { SystemManagementWorkspaceRoutingModule } from './system-management-workspace-routing.module';
 
 import { AccessControlMainPageComponent } from './access-control-main-page/access-control-main-page.component';
-
 import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-main-page.component';
 
-import { MoneyAccountsModule } from '@app/views/money-accounts/money-accounts.module';
+import { SystemManagementWorkspaceRoutingModule } from './system-management-workspace-routing.module';
 
 
 @NgModule({
@@ -29,13 +28,13 @@ import { MoneyAccountsModule } from '@app/views/money-accounts/money-accounts.mo
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+
     AngularMaterialModule,
     SharedModule,
 
-    SystemManagementWorkspaceRoutingModule,
     AccessControlModule,
-
     MoneyAccountsModule,
+    SystemManagementWorkspaceRoutingModule,
   ],
 
   declarations: [

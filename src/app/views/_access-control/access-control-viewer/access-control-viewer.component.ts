@@ -9,17 +9,17 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { Assertion, Empty, EventInfo } from '@app/core';
 
-import { AccessControlDataService } from '@app/data-services';
-
 import { PERMISSIONS } from '@app/main-layout';
 
 import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { AccessControlDataService } from '@app/data-services';
+
 import { AccessControlQueryType, Feature, Role, Subject, AccessControlSelectionData,
          DefaultAccessControlQueryType, AccessControlQuery, SubjectsQuery,
          buildSubjectsQueryFromAccessControlQuery } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { AccessControlControlsEventType } from './access-control-controls.component';
 
@@ -64,7 +64,7 @@ export class AccessControlViewerComponent implements OnInit {
 
   QueryTypes = AccessControlQueryType;
 
-  Permissions = PERMISSIONS;
+  PERMISSION_TO_CREATE = PERMISSIONS.FEATURE_EDICION_CONTROL_DE_ACCESOS;
 
 
   constructor(private accessControlData: AccessControlDataService,

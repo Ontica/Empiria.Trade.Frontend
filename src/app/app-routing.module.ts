@@ -51,7 +51,6 @@ const routes: Routes = [
     loadChildren: () => import('./workspaces/accounting/accounting-workspace.module')
       .then((m) => m.AccountingWorkspaceModule)
   },
-
   {
     data: { permission: ROUTES.administracion.permission },
     path: ROUTES.administracion.path,
