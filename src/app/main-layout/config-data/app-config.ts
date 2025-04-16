@@ -24,6 +24,7 @@ export const APP_CONFIG: AppConfig = {
     protectUserWork: true,
   },
   layout: {
+    displayLoginRight: false,
     displayLogo: false,
     displayNavbarHeader: true,
     displayNavbarHint: false,

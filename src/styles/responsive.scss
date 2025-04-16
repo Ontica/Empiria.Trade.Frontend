@@ -28,6 +28,13 @@
   }
 }
 
+.std-show {
+  display: none;
+
+  @include standard() {
+    display: block;
+  }
+}
 
 .sm-hide {
   @include small() {
@@ -208,4 +215,21 @@
       max-width: 100%;
     }
   }
+}
+
+
+@include standard() {
+
+  .std-stacked {
+    background-color: $white;
+    border: 1px solid $border-color-light;
+    height: calc(100% - 10px) !important;
+    margin-top: 10px;
+
+    > * > .card {
+      margin: -10px -10px 0 10px;
+    }
+
+  }
+
 }

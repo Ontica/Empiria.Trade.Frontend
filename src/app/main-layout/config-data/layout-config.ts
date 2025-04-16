@@ -10,23 +10,27 @@ import { ROUTES } from '../config-data';
 import { View, Layout } from '../common-models/common';
 
 import {
+  UnauthorizedViews,
   VentasViews,
   ComprasViews,
   AlmacenesViews,
   ContabilidadViews,
   AdministracionSistemaViews,
-  UnauthorizedViews,
 } from './views-config';
 
 
-export const APP_VIEWS: View[] = VentasViews.concat(ComprasViews,
-                                                    AlmacenesViews,
-                                                    ContabilidadViews,
-                                                    AdministracionSistemaViews,
-                                                    UnauthorizedViews);
+export type LAYOUT_TYPE = 'Ventas' | 'Compras' | 'Almacenes' | 'Contabilidad' | 'Administración' |
+                          'Unauthorized';
 
 
-export const APP_LAYOUTS: Layout[] = [
+export const APP_VIEWS: View[] = UnauthorizedViews.concat(VentasViews,
+                                                          ComprasViews,
+                                                          AlmacenesViews,
+                                                          ContabilidadViews,
+                                                          AdministracionSistemaViews,);
+
+
+export const APP_LAYOUTS: Layout<LAYOUT_TYPE>[] = [
   {
     name: 'Ventas',
     views: VentasViews,

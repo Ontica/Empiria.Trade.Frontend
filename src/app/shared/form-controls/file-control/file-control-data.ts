@@ -7,7 +7,7 @@
 
 import { Observable } from 'rxjs';
 
-import { Progress } from '@app/shared/utils/http-progress';
+import { Progress } from '@app/shared/utils';
 
 
 export const CsvFileTypeException = 'application/vnd.ms-excel'; // csv, xls
@@ -20,10 +20,11 @@ export enum FileTypeAccepted {
   csv = '.csv, text/csv',
   image = 'image/*',
   txt = 'text/plain',
+  xml = 'application/xml, text/xml',
 }
 
 
-export type FileType = 'all' | 'pdf' | 'excel' | 'csv' | 'txt' | 'image';
+export type FileType = 'all' | 'pdf' | 'excel' | 'csv' | 'txt' | 'image' | 'xml';
 
 
 export interface FileControlConfig {
@@ -83,6 +84,7 @@ export class FileData {
   file?: File;
   tag?: string;
   download$?: Observable<Progress>;
+  hasError?: boolean;
 }
 
 

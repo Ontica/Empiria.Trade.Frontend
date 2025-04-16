@@ -26,7 +26,7 @@ import { FormatLibrary } from '@app/shared/utils';
 })
 export class InputNumericComponent implements ControlValueAccessor {
 
-  @ViewChild("input") inputField: ElementRef;
+  @ViewChild('input') inputField: ElementRef;
 
   @Input() id: string;
 
@@ -38,9 +38,9 @@ export class InputNumericComponent implements ControlValueAccessor {
 
   @Input() noMargin = false;
 
-  @Input() format: 'decimal' | 'percent' = 'decimal';
-
   @Input() placeholder = '';
+
+  @Input() format: 'decimal' | 'percent' | 'year' = 'decimal';
 
   @Output() valueChange = new EventEmitter<number>();
 
@@ -109,10 +109,30 @@ export class InputNumericComponent implements ControlValueAccessor {
 
 
   private setFormattedValue(value: any) {
-    const formatted =  value === null || value === undefined || value === '' ? null :
-      FormatLibrary.numberWithCommas(value, `1.${this.minDecimals}-${this.maxDecimals}`);
+    switch (this.format) {
+      case 'percent':{
+        const formatted = this.getFormatted(value);
+        this.formattedValue = formatted !== null ? formatted + '%' : formatted;
+        break;
+      }
+      case 'decimal':{
+        this.formattedValue = this.getFormatted(value);
+        break;
+      }
+      case 'year': {
+        this.formattedValue = value;
+        break;
+      }
+      default:
+        break;
+    }
+  }
 
-    this.formattedValue = this.format === 'percent' && formatted !== null ? formatted + '%' : formatted;
+
+  private getFormatted(value: any): string {
+    return value === null || value === undefined || value === '' ?
+      null :
+      FormatLibrary.numberWithCommas(value, `1.${this.minDecimals}-${this.maxDecimals}`);
   }
 
 }

@@ -15,14 +15,13 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 @Component({
   selector: 'emp-ng-check-box-all',
   template: `
-    <mat-checkbox
+    <mat-checkbox empNgStopPropagation
       [color]="showWarning ? 'warn' : 'primary'"
       [checked]="isChecked()"
       [indeterminate]="isIndeterminate()"
       [disabled]="disabled"
       [class.no-label]="!text"
-      (change)="toggleSelection($event)"
-      (click)="$event.stopPropagation()">
+      (change)="toggleSelection($event)">
       {{text}}
     </mat-checkbox>
   `
@@ -42,8 +41,8 @@ export class CheckboxAllComponent {
   }
 
   isIndeterminate(): boolean {
-    return ( this.selection.hasValue() && this.selection.selected.length !== this.values.length ) ||
-           ( this.disabled && this.indeterminated );
+    return (this.selection.hasValue() && this.selection.selected.length !== this.values.length) ||
+      (this.disabled && this.indeterminated);
   }
 
   toggleSelection(change: MatCheckboxChange): void {

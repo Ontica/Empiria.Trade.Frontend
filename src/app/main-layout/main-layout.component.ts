@@ -9,9 +9,7 @@ import { Component, OnDestroy } from '@angular/core';
 
 import { ActivationEnd, Router } from '@angular/router';
 
-import { Subject } from 'rxjs';
-
-import { takeUntil } from 'rxjs/operators';
+import { Subject, filter, takeUntil } from 'rxjs';
 
 import { PresentationState } from '@app/core/presentation';
 
@@ -39,7 +37,6 @@ export class MainLayoutComponent implements OnDestroy {
 
   private unsubscribe: Subject<void> = new Subject();
 
-
   constructor(private store: PresentationState, private router: Router) {
     this.setSpinnerService();
     this.subscribeToRouterActivationEnd();
@@ -58,6 +55,11 @@ export class MainLayoutComponent implements OnDestroy {
   }
 
 
+  onAction(action: string) {
+
+  }
+
+
   private setSpinnerService() {
     this.spinnerService = this.store.select<boolean>(MainUIStateSelector.IS_PROCESSING);
   }
@@ -65,12 +67,14 @@ export class MainLayoutComponent implements OnDestroy {
 
   private subscribeToRouterActivationEnd() {
     this.router.events
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(val => {
-        if (val instanceof ActivationEnd) {
-          const url = this.router.routerState.snapshot.url.split(';')[0];
-          this.store.dispatch(MainUIStateAction.SET_CURRENT_VIEW_FROM_URL, { url });
-        }
+      .pipe(
+        filter((event): event is ActivationEnd => event instanceof ActivationEnd),
+        takeUntil(this.unsubscribe)
+      )
+      .subscribe(() => {
+        const currentUrl = this.router.routerState.snapshot.url;
+        const sanitizedUrl = this.sanitizeViewUrl(currentUrl);
+        this.store.dispatch(MainUIStateAction.SET_CURRENT_VIEW_FROM_URL, { url: sanitizedUrl });
       });
   }
 
@@ -85,6 +89,15 @@ export class MainLayoutComponent implements OnDestroy {
   private setToolSelected(tool: Tool) {
     this.toolSelected = tool.toolType;
     this.displayAsideRight = this.toolSelected !== 'None';
+  }
+
+
+  private sanitizeViewUrl(url: string): string {
+    if (!url) {
+      return '';
+    }
+
+    return url.split(/[;?]/)[0];
   }
 
 }

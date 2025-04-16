@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Router } from '@angular/router';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { LOGIN_PATH } from '@app/main-layout';
 
@@ -30,13 +30,13 @@ export class ErrorMessageService {
 
 
   handleClientSideError(error) {
-    this.displayConsoleMessage('CLIENT SIDE ERROR', error.message, error);
+    this.displayConsoleMessage('CLIENT SIDE ERROR', error.message);
     this.showErrorMessage(CLIENT_SIDE_ERROR_MESSAGE);
   }
 
 
   handleServerSideError(error, request?) {
-    this.displayConsoleMessage('SERVER SIDE ERROR', `Status: ${error.status}.`, error);
+    this.displayConsoleMessage('SERVER SIDE ERROR', `Status: ${error.status}.`, error.message);
 
     switch (error.status) {
       case 401:
@@ -70,8 +70,8 @@ export class ErrorMessageService {
       const statusMessage = `<strong>(401)</strong> ${message}`;
 
       this.messageBox.showError(statusMessage)
-          .firstValue()
-          .then(x => this.router.navigateByUrl(LOGIN_PATH))
+        .firstValue()
+        .then(x => this.router.navigateByUrl(LOGIN_PATH))
     }
   }
 

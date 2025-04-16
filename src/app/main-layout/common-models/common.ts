@@ -5,6 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+
 export interface AppData {
   name: string;
   nameShort: string;
@@ -16,6 +17,7 @@ export interface AppData {
 
 
 export interface AppLayout {
+  displayLoginRight: boolean;
   displayLogo: boolean;
   displayNavbarHeader: boolean;
   displayNavbarHint: boolean;
@@ -42,12 +44,8 @@ export interface AppConfig {
 }
 
 
-export type LayoutType = 'Ventas' | 'Compras' | 'Almacenes' | 'Contabilidad' | 'Administración' |
-                         'Unauthorized';
-
-
-export interface Layout {
-  name: LayoutType;
+export interface Layout<T> {
+  name: T;
   views: View[];
   hint: string;
   defaultTitle: string;
@@ -66,6 +64,7 @@ export interface View {
   url: string;
   menuTitle?: string;
   disabled?: boolean;
+  hidden?: boolean;
   permission?: string;
   actions?: ViewAction[];
 }

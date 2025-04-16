@@ -5,11 +5,15 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+import * as moment from 'moment';
+
 import { DateFormat, LocalizationLibrary, DEFAULT_LANGUAGE, Language } from '../localization';
+
+import { SPANISH_MONTHS } from '../localization/locales/locale-spanish';
 
 import { Assertion } from '../general/assertion';
 
-import * as moment from 'moment';
+import { FlexibleIdentifiable } from './core-types';
 
 
 export type DateString = Date | string;
@@ -17,6 +21,21 @@ export type DateString = Date | string;
 export const MINUTES_IN_HOUR = 60;
 
 export const MINUTES_IN_DAY = 1440;
+
+export const MONTHS_LIST: FlexibleIdentifiable[] = [
+  { uid: '1', name: SPANISH_MONTHS[0]},
+  { uid: '2', name: SPANISH_MONTHS[1] },
+  { uid: '3', name: SPANISH_MONTHS[2] },
+  { uid: '4', name: SPANISH_MONTHS[3] },
+  { uid: '5', name: SPANISH_MONTHS[4] },
+  { uid: '6', name: SPANISH_MONTHS[5] },
+  { uid: '7', name: SPANISH_MONTHS[6] },
+  { uid: '8', name: SPANISH_MONTHS[7] },
+  { uid: '9', name: SPANISH_MONTHS[8] },
+  { uid: '10', name: SPANISH_MONTHS[9] },
+  { uid: '11', name: SPANISH_MONTHS[10] },
+  { uid: '12', name: SPANISH_MONTHS[11] },
+];
 
 export class DateStringLibrary {
 
@@ -84,6 +103,17 @@ export class DateStringLibrary {
     const date = this.toDate(value);
     const firstDate = moment().date(1).month(date.getMonth()).year(date.getFullYear());
     return this.mapDateStringFromMoment(firstDate);
+  }
+
+
+  static getLastDayOfYearFromDateString(value: DateString): DateString {
+    if (!this.isDate(value)) {
+      return '';
+    }
+
+    const date = this.toDate(value);
+    const lastDate = moment(date).endOf('year');
+    return this.mapDateStringFromMoment(lastDate);
   }
 
 

@@ -11,11 +11,14 @@ import { CommonModule } from '@angular/common';
 import { EmpContextMenuDisabledDirective } from './context-menu-disabled.directive';
 import { EmpCurrencyDirective } from './currency.directive';
 import { EmpFormKeyDownEnterDirective } from './form-keydown-enter.directive';
+import { EmpFractionDirective } from './fraction.directive';
 import { EmpHasPermissionDirective } from './has-permission.directive';
 import { EmpInputKeysDirective } from './input-keys.directive';
 import { EmpIntegerDirective } from './integer.directive';
 import { EmpNumerationDirective } from './numeration.directive';
+import { EmpPreventDefaultDirective } from './prevent-default.directive';
 import { EmpResizableDirective } from './resizable.directive';
+import { EmpStopPropagationDirective } from './stop-propagation.directive';
 import { EmpTextareaAutoresizeDirective } from './text-area-autoresize.directive';
 
 
@@ -29,11 +32,14 @@ import { EmpTextareaAutoresizeDirective } from './text-area-autoresize.directive
     EmpContextMenuDisabledDirective,
     EmpCurrencyDirective,
     EmpFormKeyDownEnterDirective,
+    EmpFractionDirective,
     EmpHasPermissionDirective,
     EmpInputKeysDirective,
     EmpIntegerDirective,
     EmpNumerationDirective,
+    EmpPreventDefaultDirective,
     EmpResizableDirective,
+    EmpStopPropagationDirective,
     EmpTextareaAutoresizeDirective,
   ],
 
@@ -41,11 +47,14 @@ import { EmpTextareaAutoresizeDirective } from './text-area-autoresize.directive
     EmpContextMenuDisabledDirective,
     EmpCurrencyDirective,
     EmpFormKeyDownEnterDirective,
+    EmpFractionDirective,
     EmpHasPermissionDirective,
     EmpInputKeysDirective,
     EmpIntegerDirective,
     EmpNumerationDirective,
+    EmpPreventDefaultDirective,
     EmpResizableDirective,
+    EmpStopPropagationDirective,
     EmpTextareaAutoresizeDirective,
   ],
 

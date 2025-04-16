@@ -23,8 +23,9 @@ $warning-color: hsl(345, 62%, 45%) !default;
 $warning-color-light: hsl(345, 62%, 48%);
 $warning-color-dark: hsl(345, 62%, 28%) !default;
 
-$title-color: $primary-color-dark !default;
-$title-border-color: $primary-color-dark !default;
+$accent-color: hsl(207, 91%, 25%) !default;
+$accent-color-light: hsl(207, 91%, 25%) !default;
+$accent-color-dark: hsl(207, 91%, 25%) !default;
 
 $text-color: $secondary-color-semi-light !default;
 $text-color-light: $secondary-color-light !default;
@@ -87,9 +88,11 @@ $layout-gradient-initial-color: $primary-color-dark;
 $layout-gradient-final-color: $primary-color;
 $layout-secondary-color: $secondary-color;
 $layout-secondary-color-dark: $secondary-color-light;
-$toolbar-item-background: lighten($primary-color, 67);
-$toolbar-item-background-hover: lighten($primary-color, 60);
-$toolbar-icon-color: $primary-color;
+$layout-margin-size: 16px;
+$toolbar-item-background: hsl(207, 91%, 97%);
+$toolbar-item-background-hover: hsl(207, 91%, 90%);
+$toolbar-icon-color: hsl(207, 91%, 45%);
+$toolbar-icon-color-hover: hsl(207, 91%, 40%);
 $toolbar-item-size: 34px;
 $toolbar-icon-size: 24px;
 
@@ -173,6 +176,8 @@ $tag-info-background-color: hsl(207, 91%, 45%) !default;
 $tag-success-background-color: hsl(166, 26%, 52%) !default;
 $tag-warning-background-color: hsl(39, 81%, 70%) !default;
 $tag-error-background-color: hsl(345, 65%, 70%) !default;
+$tag-disabled-color: #212121 !default;
+$tag-disabled-background-color: $disabled-color !default;
 
 $list-selection-header-background-color: hsl(210, 20%, 90%) !default;
 $simple-list-background-color: hsl(210, 20%, 96%) !default;
@@ -183,24 +188,22 @@ $simple-list-background-color: hsl(210, 20%, 96%) !default;
 $grid-header-background-color: hsl(240, 1%, 94%) !default;
 $grid-header-color: $primary-color !default;
 $grid-footer-background-color: $disabled-color;
-$grid-odd-background-color: hsl(240, 1%, 96%) !default;
-$grid-even-background-color: $white;
-
-$grid-selected-background-color: hsl(207, 91%, 98%);
-$grid-nested-background-color: hsl(207, 91%, 94%);
-$grid-nested-border: 2px solid hsl(207, 91%, 45%);
-
-$grid-hover-background-color: hsl(240, 1%, 97%);
-$grid-selected-hover-background-color: hsl(207, 91%, 96%);
-$grid-nested-hover-background-color: hsl(240, 1%, 90%);
-
 $grid-border: 0;
+$grid-even-background-color: $white;
+$grid-odd-background-color: hsl(240, 1%, 96%) !default;
+$grid-hover-background-color: hsl(240, 1%, 97%);
+$grid-selected-background-color: hsl(207, 91%, 98%);
+$grid-selected-hover-background-color: hsl(207, 91%, 96%);
 $grid-header-height: 30px;
 $grid-row-height: 32px;
 $grid-entry-padding-vertical: 0.75rem;
 $grid-entry-padding-horizontal: 1.5rem;
 $grid-entry-padding-vertical-first: 10px;
 $grid-entry-padding-vertical-default: 8px;
+$grid-nested-background-color: hsl(207, 91%, 94%);
+$grid-nested-hover-background-color: hsl(240, 1%, 90%);
+$grid-nested-border-color: hsl(207, 91%, 45%);
+$grid-nested-border: 2px solid $grid-nested-border-color;
 
 //
 // Designer

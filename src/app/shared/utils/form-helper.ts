@@ -10,7 +10,6 @@ import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 
 export class FormHelper {
 
-
   static isFormReady(form: FormGroup<any>): boolean {
     return form.valid && form.dirty;
   }
@@ -34,6 +33,15 @@ export class FormHelper {
     Object.keys(form.controls).forEach(key => {
       const control = form.controls[key];
       control.markAsTouched({ onlySelf: true });
+    });
+  }
+
+
+  static markFormControlsAsUntouched(form: FormGroup<any>) {
+    Object.keys(form.controls).forEach(key => {
+      const control = form.controls[key];
+      control.markAsPristine();
+      control.markAsUntouched();
     });
   }
 
@@ -65,6 +73,17 @@ export class FormHelper {
     } else {
       control.enable();
     }
+  }
+
+
+  static markcontrolsAsTouched(control: FormControl<any>) {
+    control.markAsTouched({ onlySelf: true });
+  }
+
+
+  static markControlsAsUntouched(control: FormControl<any>) {
+      control.markAsPristine();
+      control.markAsUntouched();
   }
 
 }

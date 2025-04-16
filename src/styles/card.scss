@@ -31,7 +31,7 @@
 
   .card-title {
     flex: 1 1 auto;
-    color: $title-color;
+    color: $accent-color;
     font-size: 14pt;
     font-weight: 600;
   }
@@ -87,13 +87,13 @@
 }
 
 .card-header-raised {
-  border-bottom: 3px solid $title-border-color;
+  border-bottom: 3px solid $accent-color-light;
 
   @include raised-header;
 }
 
 .card-header-flat {
-  border-bottom: 3px solid $title-border-color;
+  border-bottom: 3px solid $accent-color-light;
 }
 
 .card-shadow {
@@ -130,28 +130,6 @@
   .card-floating-secondary > .card {
     margin: -10px 0 0 -10px;
   }
-}
-
-
-.card-floating-container-gt-md {
-
-  @include gt-medium() {
-    background-color: $white;
-    border: 1px solid $border-color-light;
-    height: calc(100% - 10px) !important;
-    margin-top: 10px;
-
-    .card-floating-primary-gt-md.card,
-    .card-floating-primary-gt-md > .card {
-      margin: -10px -10px 0 10px;
-    }
-
-    .card-floating-secondary-gt-md.card,
-    .card-floating-secondary-gt-md > .card {
-      margin: -10px 0 0 -10px;
-    }
-  }
-
 }
 
 

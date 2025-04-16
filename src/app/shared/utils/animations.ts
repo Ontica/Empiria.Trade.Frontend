@@ -8,7 +8,7 @@
 import { trigger, transition, animate, style, state } from '@angular/animations';
 
 
-export const expandCollapse = trigger('expandCollapse', [
+export const empExpandCollapse = trigger('empExpandCollapse', [
   state('*', style({
     'overflow-y': 'hidden',
     'overflow-x': 'hidden',
@@ -19,6 +19,6 @@ export const expandCollapse = trigger('expandCollapse', [
     'overflow-y': 'hidden',
     'overflow-x': 'hidden',
   })),
-  transition('* => void', animate('150ms ease')),
-  transition('void => *', animate('150ms ease'))
+  transition('* => void', animate('250ms ease-out')),
+  transition('void => *', animate('250ms ease-in'))
 ]);

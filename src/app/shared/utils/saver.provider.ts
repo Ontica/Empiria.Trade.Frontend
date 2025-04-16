@@ -20,7 +20,7 @@ export function getSaver(): Saver {
 }
 
 
-function saveAs(blob: Blob, filename: string){
+function saveAs(blob: Blob, filename: string) {
   const blobURL = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.style.display = 'none';
