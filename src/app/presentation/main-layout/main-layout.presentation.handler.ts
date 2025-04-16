@@ -14,13 +14,14 @@ import { AbstractPresentationHandler, StateValues } from '@app/core/presentation
 import { NavigationHeader, DefaultNavigationHeader, buildNavigationHeader, Layout, View, DefaultView,
          ViewActionType } from '@app/main-layout/common-models';
 
-import { APP_LAYOUTS, APP_VIEWS, DefaultTool, Tool, TOOLS_LIST } from '@app/main-layout/config-data';
+import { APP_LAYOUTS, APP_VIEWS, LAYOUT_TYPE, TOOLS_LIST, DefaultTool,
+         Tool } from '@app/main-layout/config-data';
 
 
 export enum ActionType {
   SET_CURRENT_VIEW_FROM_URL = 'Empiria.UI-Item.MainUserInterface.SetCurrentViewFromUrl',
   SET_VIEW_ACTION           = 'Empiria.UI-Item.MainUserInterface.SetViewAction',
-  SET_VIEW_ACTION_DEFAULT   =  'Empiria.UI-Item.MainUserInterface.SetViewActionDefault',
+  SET_VIEW_ACTION_DEFAULT   = 'Empiria.UI-Item.MainUserInterface.SetViewActionDefault',
   SET_IS_PROCESSING_FLAG    = 'Empiria.UI-Item.MainUserInterface.SetIsProcessingFlag',
   SET_TOOL_SELECTED         = 'Empiria.UI-Item.MainUserInterface.SetToolSelected',
 }
@@ -37,7 +38,7 @@ export enum SelectorType {
 
 
 export interface MainLayoutState {
-  readonly layout: Layout;
+  readonly layout: Layout<LAYOUT_TYPE>;
   readonly navigationHeader: NavigationHeader;
   readonly currentView: View;
   readonly viewActionSelected: ViewActionType;
@@ -121,7 +122,7 @@ export class MainLayoutPresentationHandler extends AbstractPresentationHandler {
   // private methods
 
 
-  private getViewLayout(view: View): Layout {
+  private getViewLayout(view: View): Layout<LAYOUT_TYPE> {
     for (const layout of APP_LAYOUTS) {
       if (layout.views.includes(view)) {
         return layout;
@@ -152,7 +153,7 @@ export class MainLayoutPresentationHandler extends AbstractPresentationHandler {
   }
 
 
-  private setLayout(value: Layout) {
+  private setLayout(value: Layout<LAYOUT_TYPE>) {
     if (this.state.layout !== value) {
       this.setValue(SelectorType.LAYOUT, value);
     }
