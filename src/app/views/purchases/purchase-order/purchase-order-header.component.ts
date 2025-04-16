@@ -13,7 +13,7 @@ import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/co
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { SearcherAPIS } from '@app/data-services';
 

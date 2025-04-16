@@ -19,14 +19,14 @@ import { View } from '@app/main-layout';
 
 import { ArrayLibrary, clone } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
+
+import { SalesDataService } from '@app/data-services';
 
 import { EmptySaleOrder, EmptyOrdersDataTable, EmptySalesOrdersQuery, SaleOrder, OrdersDataTable,
          DataTableEntry, SalesOrdersQuery, OrdersTypeConfig, SalesOrdersOperationType, SalesOrdersQueryType,
          mapSaleOrderDescriptorFromSaleOrder, SalesOrdersOperationsList,
          OrdersOperationCommand } from '@app/models';
-
-import { SalesDataService } from '@app/data-services';
 
 import { OrdersExplorerEventType } from '@app/views/orders/orders-explorer/orders-explorer.component';
 

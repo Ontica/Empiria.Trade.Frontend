@@ -11,17 +11,17 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { PackingDataService } from '@app/data-services';
 
 import { EmptyPacking, InventoryOrderFields, SaleOrder, SaleOrderItem, Packing } from '@app/models';
 
-import { PackingStatusEventType } from '../packing/packing-view/packing-status.component';
-
 import {
   InventoryOrderHeaderEventType
 } from '@app/views/inventory/inventory-order/inventory-order-header.component';
+
+import { PackingStatusEventType } from '../packing/packing-view/packing-status.component';
 
 
 export enum PickingEditorEventType {

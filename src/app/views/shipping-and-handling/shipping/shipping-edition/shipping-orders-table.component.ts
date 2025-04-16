@@ -13,7 +13,7 @@ import { EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { SearcherAPIS } from '@app/data-services';
 
@@ -22,6 +22,7 @@ import { EmptyShipping, SaleOrderDescriptor, OrderForShipping, Shipping } from '
 import {
   SelectBoxTypeaheadComponent
 } from '@app/shared/form-controls/select-box-typeahead/select-box-typeahead.component';
+
 
 export enum ShippingOrdersTableEventType {
   CHANGE_ORDERS = 'ShippingOrdersTableComponent.Event.ChangeOrders',

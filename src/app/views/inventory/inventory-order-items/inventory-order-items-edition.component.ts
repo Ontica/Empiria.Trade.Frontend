@@ -11,7 +11,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { AlertService } from '@app/shared/containers/alert/alert.service';
+import { AlertService } from '@app/shared/services';
 
 import { InventoryDataService } from '@app/data-services';
 

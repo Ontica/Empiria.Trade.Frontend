@@ -14,7 +14,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { FormatLibrary, sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { EmptyPurchaseOrderTotals, PurchaseOrderItem, PurchaseOrderItemFields,
          PurchaseOrderTotals } from '@app/models';
@@ -89,23 +89,19 @@ export class PurchaseOrderItemsTableComponent implements OnChanges {
   }
 
 
-  onEditItemClicked(event, item: PurchaseOrderItem) {
-    event.stopPropagation();
+  onEditItemClicked(item: PurchaseOrderItem) {
     this.rowInEdition = {...{}, ...item};
     this.editionMode = true;
   }
 
 
-  onCancelEditionClicked(event) {
-    event.stopPropagation();
+  onCancelEditionClicked() {
     this.editionMode = false;
     this.rowInEdition = null;
   }
 
 
-  onUpdateItemClicked(event) {
-    event.stopPropagation();
-
+  onUpdateItemClicked() {
     const payload = {
       orderItemUID: this.rowInEdition.uid,
       dataFields: this.getDataFields(),
@@ -116,9 +112,7 @@ export class PurchaseOrderItemsTableComponent implements OnChanges {
   }
 
 
-  onDeleteItemClicked(event, item: PurchaseOrderItem) {
-    event.stopPropagation();
-
+  onDeleteItemClicked(item: PurchaseOrderItem) {
     const message = this.getConfirmDeleteMessage(item);
 
     this.messageBox.confirm(message, 'Eliminar producto', 'DeleteCancel')

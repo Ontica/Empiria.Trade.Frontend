@@ -9,9 +9,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 
 import { EventInfo } from '@app/core';
 
-import { ArrayLibrary, sendEvent } from '@app/shared/utils';
-
-import { expandCollapse } from '@app/shared/animations/animations';
+import { ArrayLibrary, empExpandCollapse, sendEvent } from '@app/shared/utils';
 
 import { MissingItem, PackingOrderItemField, WarehouseBin } from '@app/models';
 
@@ -23,7 +21,7 @@ export enum MissingItemLocationEventType {
   selector: 'emp-trade-missing-item-location',
   templateUrl: './missing-item-location.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [expandCollapse],
+  animations: [empExpandCollapse],
 })
 export class MissingItemLocationComponent implements OnChanges {
 

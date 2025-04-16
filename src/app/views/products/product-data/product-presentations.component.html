@@ -93,7 +93,7 @@
 
       </ng-container>
 
-      <div *ngIf="showAllVendors" #productSelection [@expandCollapse]>
+      <div *ngIf="showAllVendors" [@empExpandCollapse]>
 
         <mat-radio-group class="radio-group-vertical fx-column-container fx-gap-quarter"
           [(ngModel)]="vendor" [name]="vendor.vendorUID">

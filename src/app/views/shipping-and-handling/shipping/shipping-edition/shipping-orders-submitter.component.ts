@@ -9,11 +9,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { EventInfo } from '@app/core';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { sendEvent } from '@app/shared/utils';
 
+import { MessageBoxService } from '@app/shared/services';
+
 import { EmptyShippingActions, EmptyShippingData, ShippingActions, ShippingData } from '@app/models';
+
 
 export enum ShippingOrdersSubmitterEventType {
   TOGGLE_EDITION_MODE_CLICKED   = 'ShippingOrdersSubmitterComponent.Event.ToggleEditionModeClicked',

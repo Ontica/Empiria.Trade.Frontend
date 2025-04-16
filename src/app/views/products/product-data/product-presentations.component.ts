@@ -10,9 +10,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 
 import { EventInfo } from '@app/core';
 
-import { ArrayLibrary, sendEvent } from '@app/shared/utils';
-
-import { expandCollapse } from '@app/shared/animations/animations';
+import { ArrayLibrary, empExpandCollapse, sendEvent } from '@app/shared/utils';
 
 import { ProductDescriptor, ProductPresentation, ProductSelection, Vendor } from '@app/models';
 
@@ -24,7 +22,7 @@ export enum ProductPresentationsEventType {
   selector: 'emp-trade-product-presentations',
   templateUrl: './product-presentations.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [expandCollapse],
+  animations: [empExpandCollapse],
 })
 export class ProductPresentationsComponent implements OnChanges {
 

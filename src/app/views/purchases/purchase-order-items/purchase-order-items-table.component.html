@@ -107,16 +107,16 @@
 
         <div class="fx-row-container" *ngIf="!isRowInEdition(row.uid)">
 
-          <button mat-icon-button
+          <button mat-icon-button empNgStopPropagation
             title="Editar"
-            (click)="onEditItemClicked($event, row)">
+            (click)="onEditItemClicked(row)">
             <mat-icon> edit </mat-icon>
           </button>
 
-          <button mat-icon-button
+          <button mat-icon-button empNgStopPropagation
             title="Eliminar"
             [style.marginRight]="0"
-            (click)="onDeleteItemClicked($event, row)">
+            (click)="onDeleteItemClicked(row)">
             <mat-icon> delete </mat-icon>
           </button>
 
@@ -124,17 +124,17 @@
 
         <div class="fx-row-container" *ngIf="isRowInEdition(row.uid)">
 
-          <button mat-icon-button
+          <button mat-icon-button empNgStopPropagation
             title="Cancelar"
-            (click)="onCancelEditionClicked($event)">
+            (click)="onCancelEditionClicked()">
             <mat-icon> close </mat-icon>
           </button>
 
-          <button mat-icon-button
+          <button mat-icon-button empNgStopPropagation
             title="Guardar"
             [color]="isItemInEditionValid ? 'primary' : null"
             [style.marginRight]="0"
-            (click)="onUpdateItemClicked($event)">
+            (click)="onUpdateItemClicked()">
             <mat-icon [color]="isItemInEditionValid ? 'primary' : null"> done </mat-icon>
           </button>
         </div>

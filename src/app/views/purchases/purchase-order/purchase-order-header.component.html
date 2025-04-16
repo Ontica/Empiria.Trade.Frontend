@@ -8,7 +8,7 @@
         <label>Proveedor:</label>
         <emp-ng-select-typeahead
           formControlName="supplierUID"
-          [config]="{ minTermLength: 5, virtualScroll: true }"
+          [config]="{ minTermLength: 5 }"
           [searcherAPI]="suppliersAPI"
           [initialValue]="order.supplier"
           [showError]="formHelper.isControlInvalid(form.controls.supplierUID)">

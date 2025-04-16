@@ -9,9 +9,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { EventInfo } from '@app/core';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { sendEvent } from '@app/shared/utils';
+
+import { MessageBoxService } from '@app/shared/services';
 
 export enum PackingStatusEventType {
   VIEW_ITEMS_CLICKED   = 'PackingStatusComponent.Event.ViewItemsClicked',

@@ -14,15 +14,15 @@ import { combineLatest } from 'rxjs';
 
 import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
-import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
-
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { ArrayLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
-import { ContactsDataService } from '@app/data-services';
+import { MessageBoxService } from '@app/shared/services';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { ContactsDataService } from '@app/data-services';
 
 import { EmptyInventoryPicking, InventoryOrderFields, InventoryPicking } from '@app/models';
 

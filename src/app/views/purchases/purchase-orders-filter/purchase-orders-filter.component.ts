@@ -11,9 +11,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { EventInfo, Identifiable } from '@app/core';
 
-import { FormHelper, sendEvent } from '@app/shared/utils';
-
-import { expandCollapse } from '@app/shared/animations/animations';
+import { empExpandCollapse, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { SearcherAPIS } from '@app/data-services';
 
@@ -35,7 +33,7 @@ interface PurchaseOrdersFilterFormModel extends FormGroup<{
 @Component({
   selector: 'emp-trade-purchase-orders-filter',
   templateUrl: './purchase-orders-filter.component.html',
-  animations: [expandCollapse],
+  animations: [empExpandCollapse],
 })
 export class PurchaseOrdersFilterComponent implements OnChanges {
 

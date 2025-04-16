@@ -1,14 +1,13 @@
 <div class="fx-row-container">
 
-  <mat-checkbox #checkExpandAllOrders class="fx-item-half"
-    (click)="$event.stopPropagation"
+  <mat-checkbox #checkExpandAllOrders empNgStopPropagation
+    class="fx-item-half"
     (change)="onToggleExpandAllOrders(checkExpandAllOrders.checked)">
     {{checkExpandAllOrders.checked ? 'Ocultar todos los paquetes' : 'Mostrar todos los paquetes'}}
   </mat-checkbox>
 
-  <mat-checkbox #checkSelectAllOrders *ngIf="shipping.actions.canEdit"
+  <mat-checkbox #checkSelectAllOrders empNgStopPropagation *ngIf="shipping.actions.canEdit"
     class="fx-item-half"
-    (click)="$event.stopPropagation"
     (change)="onToggleSelectAllOrders(checkSelectAllOrders.checked)">
     Seleccionar todos los paquetes
   </mat-checkbox>
@@ -80,12 +79,11 @@
               [style.width.px]="28"
               [style.margin]="'0 8px 0 0'">
 
-              <mat-checkbox
+              <mat-checkbox empNgStopPropagation
                 [value]="package.packingItemUID"
                 [checked]="item.selection.isSelected(package.packingItemUID)"
                 [indeterminate]="packagesDisabled.includes(package.packingItemUID)"
                 [disabled]="!shipping.actions.canEdit || packagesDisabled.includes(package.packingItemUID)"
-                (click)="$event.stopPropagation()"
                 (change)="onSelectPackageToOrder(item, package)">
 
               </mat-checkbox>

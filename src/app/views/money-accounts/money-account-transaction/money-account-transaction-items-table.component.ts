@@ -11,11 +11,12 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EventInfo } from '@app/core';
 
+import { sendEvent } from '@app/shared/utils';
+
+import { MessageBoxService } from '@app/shared/services';
+
 import { MoneyAccountTransactionItem } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { sendEvent } from '@app/shared/utils';
 
 export enum MoneyAccountTransactionItemsEventType {
   SELECT_ITEM_CLICKED = 'MoneyAccountTransactionItemsTableComponent.Event.SelectItemClicked',
@@ -63,9 +64,7 @@ export class MoneyAccountTransactionItemsTableComponent implements OnChanges {
   }
 
 
-  onDeleteItemClicked(event, transactionItem: MoneyAccountTransactionItem) {
-    event.stopPropagation();
-
+  onDeleteItemClicked(transactionItem: MoneyAccountTransactionItem) {
     const message = this.getConfirmDeleteMessage(transactionItem);
 
     this.messageBox.confirm(message, 'Eliminar movimiento', 'DeleteCancel')

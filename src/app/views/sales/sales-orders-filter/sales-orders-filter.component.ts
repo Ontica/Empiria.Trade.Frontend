@@ -11,9 +11,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { ApplicationStatusService, EmpObservable, EventInfo, Identifiable } from '@app/core';
 
-import { FormHelper, sendEvent } from '@app/shared/utils';
-
-import { expandCollapse } from '@app/shared/animations/animations';
+import { empExpandCollapse, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { SalesDataService, SearcherAPIS } from '@app/data-services';
 
@@ -38,7 +36,7 @@ interface SalesOrdersFilterFormModel extends FormGroup<{
 @Component({
   selector: 'emp-trade-sales-orders-filter',
   templateUrl: './sales-orders-filter.component.html',
-  animations: [expandCollapse],
+  animations: [empExpandCollapse],
 })
 export class SalesOrdersFilterComponent implements OnChanges, OnInit {
 

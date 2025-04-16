@@ -34,9 +34,8 @@
 
       <div class="fx-item-none" *ngIf="displayOnStock">
 
-        <mat-checkbox
-          formControlName="onStock"
-          (click)="$event.stopPropagation">
+        <mat-checkbox empNgStopPropagation
+          formControlName="onStock">
           Con inventario
         </mat-checkbox>
 

@@ -13,7 +13,7 @@ import { EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { InventoryOrderItem } from '@app/models';
 
@@ -57,9 +57,7 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
   }
 
 
-  onDeleteItemClicked(event, item: InventoryOrderItem) {
-    event.stopPropagation();
-
+  onDeleteItemClicked(item: InventoryOrderItem) {
     const message = this.getConfirmDeleteMessage(item);
 
     this.messageBox.confirm(message, 'Eliminar movimiento', 'DeleteCancel')

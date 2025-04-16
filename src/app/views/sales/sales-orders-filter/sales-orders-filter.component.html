@@ -22,7 +22,7 @@
         <label>Cliente:</label>
         <emp-ng-select-typeahead #customer
           formControlName="customer"
-          [config]="{ bindByValue: false, clearable: true, minTermLength: 5, virtualScroll: true }"
+          [config]="{ bindByValue: false, clearable: true, minTermLength: 5 }"
           [searcherAPI]="customersWithContactsAPI"
           placeholder="Todos">
 
@@ -68,7 +68,7 @@
 
     </div>
 
-    <div *ngIf="showFilters" [@expandCollapse]>
+    <div *ngIf="showFilters" [@empExpandCollapse]>
 
       <mat-divider class="horizontal-md">
 

@@ -15,9 +15,7 @@ import { AppStatusStateAction } from '@app/presentation/app-data/_app-data.prese
 
 import { clone, sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { AlertService } from '@app/shared/containers/alert/alert.service';
+import { AlertService, MessageBoxService } from '@app/shared/services';
 
 import { SalesDataService } from '@app/data-services';
 

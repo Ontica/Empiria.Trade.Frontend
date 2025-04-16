@@ -29,7 +29,7 @@
         <label>Propietario:</label>
         <emp-ng-select-typeahead
           formControlName="moneyAccountOwner"
-          [config]="{ minTermLength: 5, virtualScroll: true }"
+          [config]="{ minTermLength: 5 }"
           [searcherAPI]="accountHoldersAPI"
           [initialValue]="moneyAccount.moneyAccountOwner"
           [showError]="formHelper.isControlInvalid(form.controls.moneyAccountOwner)"

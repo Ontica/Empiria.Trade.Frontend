@@ -13,11 +13,12 @@ import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { ShippingDataService } from '@app/data-services';
 
 import { EmptyShippingData, ShippingData, ShippingDataFields } from '@app/models';
+
 
 export enum ShippingDataViewEventType {
   CHANGE_DATA = 'ShippingDataViewComponent.Event.ChangeData',

@@ -8,7 +8,7 @@
         <label>Proveedor:</label>
         <emp-ng-select-typeahead #supplier
           formControlName="supplierUID"
-          [config]="{ clearable: true, minTermLength: 5, virtualScroll: true }"
+          [config]="{ clearable: true, minTermLength: 5 }"
           [searcherAPI]="suppliersAPI"
           placeholder="Todos">
 
@@ -72,7 +72,7 @@
 
     </div>
 
-    <div *ngIf="showFilters" [@expandCollapse]>
+    <div *ngIf="showFilters" [@empExpandCollapse]>
 
       <mat-divider class="horizontal-md">
 

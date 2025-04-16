@@ -11,11 +11,11 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EventInfo } from '@app/core';
 
-import { SaleOrderItem } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { sendEvent } from '@app/shared/utils';
+
+import { MessageBoxService } from '@app/shared/services';
+
+import { SaleOrderItem } from '@app/models';
 
 
 export enum SaleOrderItemsEventType {

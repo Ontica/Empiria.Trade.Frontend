@@ -13,7 +13,7 @@ import { EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { EmptyPackagingTotals, PackagingTotals, ShippingPalletWithPackages } from '@app/models';
 

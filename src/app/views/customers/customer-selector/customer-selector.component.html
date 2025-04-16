@@ -5,7 +5,7 @@
 
     <emp-ng-select-typeahead #customer
       [(ngModel)]="customerSelected"
-      [config]="{ bindByValue: false, clearable: true, minTermLength: 5, virtualScroll: true }"
+      [config]="{ bindByValue: false, clearable: true, minTermLength: 5 }"
       [searcherAPI]="customersWithContactsAPI"
       [initialValue]="initialValue"
       [disabled]="disabled"

@@ -11,11 +11,9 @@ import { Assertion, DateStringLibrary, EventInfo, MediaBase } from '@app/core';
 
 import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
-import {
-  FilePrintPreviewComponent
-} from '@app/shared/form-controls/file-print-preview/file-print-preview.component';
+import { FilePreviewComponent } from '@app/shared/containers';
 
 import { ShippingDataService } from '@app/data-services';
 
@@ -52,7 +50,7 @@ export enum ShippingEditionEventType {
 })
 export class ShippingEditionComponent implements OnChanges, OnInit {
 
-  @ViewChild('filePrintPreview', { static: true }) filePrintPreview: FilePrintPreviewComponent;
+  @ViewChild('filePreview', { static: true }) filePreview: FilePreviewComponent;
 
   @Input() queryType: ShippingQueryType = ShippingQueryType.Shipping;
 
@@ -187,11 +185,11 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
         return;
 
       case ShippingOrdersSubmitterEventType.PRINT_SHIPPING_LABELS_CLICKED:
-        this.openPrintViewer(this.shipping.shippingData.shippingLabelsMedia, 'Label');
+        this.openFilePreview(this.shipping.shippingData.shippingLabelsMedia, 'Label');
         return;
 
       case ShippingOrdersSubmitterEventType.PRINT_ORDERS_CLICKED:
-        this.openPrintViewer(this.shipping.shippingData.billingsMedia, 'Order');
+        this.openFilePreview(this.shipping.shippingData.billingsMedia, 'Order');
         return;
 
       default:
@@ -226,7 +224,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
       case ShippingOrdersTableEventType.PRINT_ORDER:
         Assertion.assertValue(event.payload.media, 'event.payload.media');
-        this.openPrintViewer(event.payload.media, 'Order');
+        this.openFilePreview(event.payload.media, 'Order');
         return;
 
       default:
@@ -265,7 +263,7 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
 
       case ShippingOrdersModalEventType.PRINT_ORDER:
         Assertion.assertValue(event.payload.media, 'event.payload.media');
-        this.openPrintViewer(event.payload.media, 'Order');
+        this.openFilePreview(event.payload.media, 'Order');
         return;
 
       default:
@@ -658,13 +656,13 @@ export class ShippingEditionComponent implements OnChanges, OnInit {
   }
 
 
-  private openPrintViewer(media: MediaBase, type: 'Label' | 'Order') {
+  private openFilePreview(media: MediaBase, type: 'Label' | 'Order') {
     if (type === 'Label') {
-      this.filePrintPreview.open(media.url, media.mediaType, 700, 750);
+      this.filePreview.open(media.url, media.mediaType); // TODO: fix label sizes: 700, 750
       return;
     }
 
-    this.filePrintPreview.open(media.url, media.mediaType);
+    this.filePreview.open(media.url, media.mediaType);
   }
 
 }
