@@ -13,14 +13,14 @@ export const ROUTES = {
   // #region app-routing module
 
   ventas: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: '',
     path: 'ventas',
     fullpath: '/ventas',
   },
 
   compras: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: '',
     path: 'compras',
     fullpath: '/compras',
@@ -34,7 +34,7 @@ export const ROUTES = {
   },
 
   contabilidad: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: '',
     path: 'contabilidad',
     fullpath: '/contabilidad',
@@ -64,35 +64,35 @@ export const ROUTES = {
   // #region ventas-routing module
 
   ventas_pedidos: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'ventas',
     path: 'pedidos',
     fullpath: '/ventas/pedidos',
   },
 
   ventas_autorizaciones: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'ventas',
     path: 'autorizaciones',
     fullpath: '/ventas/autorizaciones',
   },
 
   ventas_envios: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'ventas',
     path: 'envios',
     fullpath: '/ventas/envios',
   },
 
   ventas_cuentas_x_cobrar: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'ventas',
     path: 'cuentas-x-cobrar',
     fullpath: '/ventas/cuentas-x-cobrar',
   },
 
   ventas_facturacion: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'ventas',
     path: 'facturacion',
     fullpath: '/ventas/facturacion',
@@ -103,14 +103,14 @@ export const ROUTES = {
   // #region compras-routing module
 
   compras_ordenes_de_compra: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'compras',
     path: 'ordenes-de-compra',
     fullpath: '/compras/ordenes-de-compra',
   },
 
   compras_cuentas_x_pagar: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'compras',
     path: 'cuentas-x-pagar',
     fullpath: '/compras/cuentas-x-pagar',
@@ -121,14 +121,14 @@ export const ROUTES = {
   // #region almacenes-routing module
 
   almacenes_surtidos: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'almacenes',
     path: 'surtidos',
     fullpath: '/almacenes/surtidos',
   },
 
   almacenes_embarques: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'almacenes',
     path: 'embarques',
     fullpath: '/almacenes/embarques',
@@ -142,14 +142,14 @@ export const ROUTES = {
   },
 
   almacenes_almacenamiento: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'almacenes',
     path: 'almacenamiento',
     fullpath: '/almacenes/almacenamiento',
   },
 
   almacenes_reportes: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'almacenes',
     path: 'reportes',
     fullpath: '/almacenes/reportes',
@@ -160,28 +160,28 @@ export const ROUTES = {
   // #region contabilidad-routing module
 
   contabilidad_polizas: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'contabilidad',
     path: 'polizas',
     fullpath: '/contabilidad/polizas',
   },
 
   contabilidad_reportes: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'contabilidad',
     path: 'reportes',
     fullpath: '/contabilidad/reportes',
   },
 
   contabilidad_catalogo_de_cuentas: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'contabilidad',
     path: 'catalogo-de-cuentas',
     fullpath: '/contabilidad/catalogo-de-cuentas',
   },
 
   contabilidad_auxiliares: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'contabilidad',
     path: 'auxiliares',
     fullpath: '/contabilidad/auxiliares',
@@ -199,7 +199,7 @@ export const ROUTES = {
   },
 
   administracion_cuentas_y_cajas: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.BLOCKED,
     parent: 'administracion',
     path: 'cuentas-y-cajas',
     fullpath: '/administracion/cuentas-y-cajas',
@@ -227,7 +227,7 @@ export const ROUTES = {
   },
 
   administracion_control_de_accesos: {
-    permission: PERMISSIONS.ALL,
+    permission: PERMISSIONS.NOT_REQUIRED,
     parent: 'administracion',
     path: 'control-de-accesos',
     fullpath: '/administracion/control-de-accesos',
