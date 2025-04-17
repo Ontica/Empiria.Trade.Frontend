@@ -14,25 +14,37 @@ import { ChildRouteGuard, ParentRouteGuard } from './core';
 import { DEFAULT_PATH, MainLayoutComponent, NoContentComponent, ROUTES } from '@app/main-layout';
 
 const routes: Routes = [
-  {
-    data: { permission: ROUTES.ventas.permission },
-    path: ROUTES.ventas.path,
-    component: MainLayoutComponent,
-    canActivate: [ParentRouteGuard],
-    canActivateChild: [ChildRouteGuard],
-    loadChildren: () => import('./workspaces/sales/sales-workspace.module')
-      .then((m) => m.SalesWorkspaceModule)
-  },
+  //
+  // Temporarily disabled for first production release
+  //
+  // {
+  //   data: { permission: ROUTES.ventas.permission },
+  //   path: ROUTES.ventas.path,
+  //   component: MainLayoutComponent,
+  //   canActivate: [ParentRouteGuard],
+  //   canActivateChild: [ChildRouteGuard],
+  //   loadChildren: () => import('./workspaces/sales/sales-workspace.module')
+  //     .then((m) => m.SalesWorkspaceModule)
+  // },
 
-  {
-    data: { permission: ROUTES.compras.permission },
-    path: ROUTES.compras.path,
-    component: MainLayoutComponent,
-    canActivate: [ParentRouteGuard],
-    canActivateChild: [ChildRouteGuard],
-    loadChildren: () => import('./workspaces/purchases/purchases-workspace.module')
-      .then((m) => m.PurchasesWorkspaceModule)
-  },
+  // {
+  //   data: { permission: ROUTES.compras.permission },
+  //   path: ROUTES.compras.path,
+  //   component: MainLayoutComponent,
+  //   canActivate: [ParentRouteGuard],
+  //   canActivateChild: [ChildRouteGuard],
+  //   loadChildren: () => import('./workspaces/purchases/purchases-workspace.module')
+  //     .then((m) => m.PurchasesWorkspaceModule)
+  // },
+  // {
+  //   data: { permission: ROUTES.contabilidad.permission },
+  //   path: ROUTES.contabilidad.path,
+  //   component: MainLayoutComponent,
+  //   canActivate: [ParentRouteGuard],
+  //   canActivateChild: [ChildRouteGuard],
+  //   loadChildren: () => import('./workspaces/accounting/accounting-workspace.module')
+  //     .then((m) => m.AccountingWorkspaceModule)
+  // },
   {
     data: { permission: ROUTES.almacenes.permission },
     path: ROUTES.almacenes.path,
@@ -41,15 +53,6 @@ const routes: Routes = [
     canActivateChild: [ChildRouteGuard],
     loadChildren: () => import('./workspaces/warehouses/warehouses-workspace.module')
       .then((m) => m.WarehousesWorkspaceModule)
-  },
-  {
-    data: { permission: ROUTES.contabilidad.permission },
-    path: ROUTES.contabilidad.path,
-    component: MainLayoutComponent,
-    canActivate: [ParentRouteGuard],
-    canActivateChild: [ChildRouteGuard],
-    loadChildren: () => import('./workspaces/accounting/accounting-workspace.module')
-      .then((m) => m.AccountingWorkspaceModule)
   },
   {
     data: { permission: ROUTES.administracion.permission },

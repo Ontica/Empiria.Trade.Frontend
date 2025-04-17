@@ -31,7 +31,8 @@
               "quill-delta",
               "crypto-js",
               "moment",
-              "lodash/cloneDeep"
+              "lodash/cloneDeep",
+              "pako"
             ],
             "outputPath": "dist/empiria-trade-frontend",
             "index": "src/index.html",
