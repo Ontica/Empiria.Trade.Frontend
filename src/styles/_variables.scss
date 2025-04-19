@@ -176,8 +176,8 @@ $tag-info-background-color: hsl(207, 91%, 45%) !default;
 $tag-success-background-color: hsl(166, 26%, 52%) !default;
 $tag-warning-background-color: hsl(39, 81%, 70%) !default;
 $tag-error-background-color: hsl(345, 65%, 70%) !default;
-$tag-disabled-color: #212121 !default;
-$tag-disabled-background-color: $disabled-color !default;
+$tag-disabled-color: hsl(240, 1%, 20%) !default;
+$tag-disabled-background-color: hsl(240, 1%, 95%) !default;
 
 $list-selection-header-background-color: hsl(210, 20%, 90%) !default;
 $simple-list-background-color: hsl(210, 20%, 96%) !default;
