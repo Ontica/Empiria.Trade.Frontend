@@ -11,14 +11,15 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EventInfo } from '@app/core';
 
-import { sendEvent } from '@app/shared/utils';
+import { sendEvent, sendEventIf } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/services';
 
-import { InventoryOrderItem } from '@app/models';
+import { OrderItem } from '@app/models';
 
 export enum InventoryOrderItemsTableEventType {
-  REMOVE_ITEM_CLICKED = 'InventoryOrderItemsTableComponent.Event.RemoveItemClicked',
+  EDIT_ITEM_ENTRIES_CLICKED = 'InventoryOrderItemsTableComponent.Event.EditItemEntriesClicked',
+  REMOVE_ITEM_CLICKED       = 'InventoryOrderItemsTableComponent.Event.RemoveItemClicked',
 }
 
 @Component({
@@ -27,52 +28,56 @@ export enum InventoryOrderItemsTableEventType {
 })
 export class InventoryOrderItemsTableComponent implements OnChanges {
 
-  @Input() orderItems: InventoryOrderItem[] = [];
+  @Input() items: OrderItem[] = [];
 
-  @Input() canEdit = false;
+  @Input() canDelete = false;
+
+  @Input() canEditEntries = false;
 
   @Output() inventoryOrderItemsTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumnsDefault: string[] = ['vendorProduct', 'warehouseBin', 'notes', 'quantity'];
+  displayedColumnsDefault: string[] = ['product', 'quantity'];
 
   displayedColumns = [...this.displayedColumnsDefault];
 
-  dataSource: MatTableDataSource<InventoryOrderItem>;
+  dataSource: MatTableDataSource<OrderItem>;
 
 
-  constructor(private messageBox: MessageBoxService) {
-
-  }
+  constructor(private messageBox: MessageBoxService) { }
 
 
-  get hasOrderItems(): boolean {
-    return this.orderItems.length > 0;
+  get hasItems(): boolean {
+    return this.items.length > 0;
   }
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.orderItems) {
+    if (changes.items) {
       this.setDataTable();
     }
   }
 
 
-  onDeleteItemClicked(item: InventoryOrderItem) {
+  onEditItemEntriesClicked(item: OrderItem) {
+    sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.EDIT_ITEM_ENTRIES_CLICKED,
+      { item })  ;
+  }
+
+
+  onDeleteItemClicked(item: OrderItem) {
     const message = this.getConfirmDeleteMessage(item);
 
     this.messageBox.confirm(message, 'Eliminar movimiento', 'DeleteCancel')
       .firstValue()
-      .then(x => {
-        if (x) {
-          sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED,
-            { orderItemUID: item.uid });
-        }
-      });
+      .then(x =>
+        sendEventIf(x, this.inventoryOrderItemsTableEvent,
+          InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED, { itemUID: item.uid })
+      );
   }
 
 
   private setDataTable() {
-    this.dataSource = new MatTableDataSource(this.orderItems ?? []);
+    this.dataSource = new MatTableDataSource(this.items ?? []);
     this.resetColumns();
   }
 
@@ -80,21 +85,21 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
   private resetColumns() {
     this.displayedColumns = [...this.displayedColumnsDefault];
 
-    if (this.canEdit) {
-      this.displayedColumns.push('actionDelete');
+    if (this.canEditEntries) {
+      this.displayedColumns.push('assignedQuantity');
+    }
+
+    if (this.canEditEntries || this.canDelete) {
+      this.displayedColumns.push('action');
     }
   }
 
 
-  private getConfirmDeleteMessage(item: InventoryOrderItem): string {
+  private getConfirmDeleteMessage(item: OrderItem): string {
     return `
       <table class="confirm-data">
         <tr><td>Producto: </td><td><strong>
-          ${item.product?.productCode} - ${item.product?.presentation}
-        </strong></td></tr>
-
-        <tr><td>Localización: </td><td><strong>
-          ${item.warehouseBin?.rackDescription}
+          ${item.productName}
         </strong></td></tr>
 
         <tr><td class='nowrap'>Cantidad: </td><td><strong>

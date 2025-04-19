@@ -5,26 +5,17 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
-         SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { combineLatest } from 'rxjs';
-
 import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
-
-import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
-
-import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { ArrayLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/services';
 
-import { ContactsDataService } from '@app/data-services';
-
-import { EmptyInventoryPicking, InventoryOrderFields, InventoryPicking } from '@app/models';
+import { EmptyOrder, InventoryOrderFields, Order } from '@app/models';
 
 
 export enum InventoryOrderHeaderEventType {
@@ -40,24 +31,24 @@ interface InventoryOrderFormModel extends FormGroup<{
   inventoryOrderNo: FormControl<string>;
   responsibleUID: FormControl<string>;
   assignedToUID: FormControl<string>;
-  notes: FormControl<string>;
+  description: FormControl<string>;
 }> { }
 
 @Component({
   selector: 'emp-trade-inventory-order-header',
   templateUrl: './inventory-order-header.component.html',
 })
-export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestroy {
+export class InventoryOrderHeaderComponent implements OnChanges {
 
   @Input() isSaved = false;
 
-  @Input() canEdit = false;
+  @Input() canUpdate = false;
 
   @Input() canClose = false;
 
   @Input() canDelete = false;
 
-  @Input() order: InventoryPicking = EmptyInventoryPicking;
+  @Input() order: Order = EmptyOrder;
 
   @Output() inventoryOrderHeaderEvent = new EventEmitter<EventInfo>();
 
@@ -71,24 +62,14 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
   inventoryTypesList: Identifiable[] = [];
 
-  responsableList: Identifiable[] = [];
+  responsibleList: Identifiable[] = [];
 
   warehousemenList: Identifiable[] = [];
 
-  helper: SubscriptionHelper;
 
-
-  constructor(private uiLayer: PresentationLayer,
-              private contactsData: ContactsDataService,
-              private messageBox: MessageBoxService) {
-    this.helper = uiLayer.createSubscriptionHelper();
+  constructor(private messageBox: MessageBoxService) {
     this.initForm();
     this.enableEditor(true);
-  }
-
-
-  ngOnInit() {
-    this.loadDataLists();
   }
 
 
@@ -99,13 +80,13 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
   }
 
 
-  ngOnDestroy() {
-    this.helper.destroy();
+  get hasActions(): boolean {
+    return this.canUpdate || this.canClose || this.canDelete;
   }
 
 
-  get hasActions(): boolean {
-    return this.canEdit || this.canClose;
+  get selectionPlaceholder(): string {
+    return this.isSaved && !this.canUpdate ? 'No proporcionado' : 'Seleccionar';
   }
 
 
@@ -139,56 +120,7 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
       this.setFormData();
     }
 
-    this.formHelper.setDisableForm(this.form, !this.editionMode);
-    FormHelper.setDisableControl(this.form.controls.inventoryOrderNo);
-    FormHelper.setDisableControl(this.form.controls.inventoryOrderType, this.isSaved);
-    FormHelper.setDisableControl(this.form.controls.responsibleUID, this.responsableList.length === 1);
-  }
-
-
-  private loadDataLists() {
-    this.isLoading = true;
-
-    combineLatest([
-      this.helper.select<Identifiable[]>(CataloguesStateSelector.INVENTORY_ORDER_TYPES),
-      this.contactsData.getWarehousemen(),
-      this.contactsData.getSupervisors()
-    ])
-    .subscribe(([x, y, z]) => {
-      this.inventoryTypesList = x;
-      this.warehousemenList = y;
-      this.setResponsableData(z);
-      this.isLoading = false;
-    });
-  }
-
-
-  private setResponsableData(data: Identifiable[]) {
-    this.responsableList = data;
-    this.validateResponsableInList();
-    this.validateResponsableDefault();
-    this.validateResponsableDisabled();
-  }
-
-
-  private validateResponsableInList() {
-    this.responsableList = isEmpty(this.order.responsible) ? this.responsableList :
-      ArrayLibrary.insertIfNotExist(this.responsableList ?? [], this.order.responsible, 'uid');
-  }
-
-
-  private validateResponsableDefault() {
-    const responsableDefault = ArrayLibrary.getFirstItem(this.responsableList);
-    const responsable = isEmpty(this.order.responsible) ? responsableDefault : this.order.responsible;
-    this.form.controls.responsibleUID.reset(responsable?.uid ?? null);
-  }
-
-
-  private validateResponsableDisabled() {
-    const inEdition = !this.isSaved || (this.isSaved && this.editionMode)
-    const hasOptions = this.responsableList.length > 1;
-    const enable = inEdition && hasOptions;
-    FormHelper.setDisableControl(this.form.controls.responsibleUID, !enable);
+    this.validateFormDisabled();
   }
 
 
@@ -200,22 +132,36 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
       inventoryOrderNo: ['', Validators.required],
       responsibleUID: ['', Validators.required],
       assignedToUID: ['', Validators.required],
-      notes: ['', Validators.required],
+      description: ['', Validators.required],
     });
   }
 
 
   private setFormData() {
     this.form.reset({
-      inventoryOrderType: isEmpty(this.order.inventoryOrderType) ? null : this.order.inventoryOrderType.uid,
-      inventoryOrderNo: this.order.inventoryOrderNo ?? null,
+      inventoryOrderType: isEmpty(this.order.orderType) ? null : this.order.orderType.uid,
+      inventoryOrderNo: this.order.orderNo ?? null,
       responsibleUID: isEmpty(this.order.responsible) ? null : this.order.responsible.uid,
-      assignedToUID: isEmpty(this.order.assignedTo) ? null : this.order.assignedTo.uid,
-      notes: this.order.notes,
+      description: this.order.description,
     });
 
-    this.validateResponsableInList();
-    this.validateResponsableDefault();
+    this.initLists();
+  }
+
+
+  private validateFormDisabled() {
+    const disable = this.isSaved && (!this.editionMode || !this.canUpdate);
+    FormHelper.setDisableForm(this.form, disable);
+    FormHelper.setDisableControl(this.form.controls.inventoryOrderNo, this.isSaved);
+    FormHelper.setDisableControl(this.form.controls.inventoryOrderType, this.isSaved);
+  }
+
+
+  private initLists() {
+    this.inventoryTypesList = isEmpty(this.order.orderType) ? this.inventoryTypesList :
+      ArrayLibrary.insertIfNotExist(this.inventoryTypesList ?? [], this.order.orderType, 'uid');
+    this.responsibleList = isEmpty(this.order.responsible) ? this.responsibleList :
+      ArrayLibrary.insertIfNotExist(this.responsibleList ?? [], this.order.responsible, 'uid');
   }
 
 
@@ -228,7 +174,7 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
       inventoryOrderTypeUID: formModel.inventoryOrderType ?? '',
       responsibleUID: formModel.responsibleUID ?? '',
       assignedToUID: formModel.assignedToUID ?? '',
-      notes: formModel.notes ?? '',
+      description: formModel.description ?? '',
     };
 
     return data;
@@ -272,14 +218,14 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
     switch (eventType) {
       case InventoryOrderHeaderEventType.DELETE_ORDER:
         return `Esta operación eliminará la orden de inventario
-                <strong> ${this.order.inventoryOrderType.name}:
-                ${this.order.inventoryOrderNo}</strong>.
+                <strong> ${this.order.orderType.name}:
+                ${this.order.orderNo}</strong>.
                 <br><br>¿Elimino la orden de inventario?`;
 
       case InventoryOrderHeaderEventType.CLOSE_ORDER:
         return `Esta operación aplicará la orden de inventario
-                <strong> ${this.order.inventoryOrderType.name}:
-                ${this.order.inventoryOrderNo}</strong>.
+                <strong> ${this.order.orderType.name}:
+                ${this.order.orderNo}</strong>.
                 <br><br>¿Aplico la orden de inventario?`;
 
       default: return '';

@@ -5,24 +5,16 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
-         SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-
-import { combineLatest } from 'rxjs';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { EventInfo, Identifiable } from '@app/core';
 
-import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
-
-import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
-
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
-import { ContactsDataService } from '@app/data-services';
-
-import { EmptyInventoryOrdersQuery, InventoryOrdersQuery, InventoryStatusList } from '@app/models';
+import { EmptyInventoryOrdersQuery, InventoryOrdersQuery, EntityStatusList,
+         OrdersQueryType } from '@app/models';
 
 
 export enum InventoryOrdersFilterEventType {
@@ -30,9 +22,7 @@ export enum InventoryOrdersFilterEventType {
 }
 
 interface InventoryOrdersFilterFormModel extends FormGroup<{
-  inventoryOrderTypeUID: FormControl<string>;
   status: FormControl<string>;
-  assignedToUID: FormControl<string>;
   keywords: FormControl<string>;
 }> { }
 
@@ -40,7 +30,7 @@ interface InventoryOrdersFilterFormModel extends FormGroup<{
   selector: 'emp-trade-inventory-orders-filter',
   templateUrl: './inventory-orders-filter.component.html',
 })
-export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDestroy {
+export class InventoryOrdersFilterComponent implements OnChanges {
 
   @Input() query: InventoryOrdersQuery = EmptyInventoryOrdersQuery;
 
@@ -54,16 +44,12 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
 
   assignedToList: Identifiable[] = [];
 
-  statusList: Identifiable[] = InventoryStatusList;
-
-  helper: SubscriptionHelper;
+  statusList: Identifiable[] = EntityStatusList;
 
   isLoading = false;
 
 
-  constructor(private uiLayer: PresentationLayer,
-              private contactsData: ContactsDataService) {
-    this.helper = uiLayer.createSubscriptionHelper();
+  constructor() {
     this.initForm();
   }
 
@@ -72,16 +58,6 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
     if (changes.query) {
       this.setFormData();
     }
-  }
-
-
-  ngOnInit() {
-    this.loadDataLists();
-  }
-
-
-  ngOnDestroy() {
-    this.helper.destroy();
   }
 
 
@@ -103,9 +79,7 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
     const fb = new FormBuilder();
 
     this.form = fb.group({
-      inventoryOrderTypeUID: ['', Validators.required],
       status: [''],
-      assignedToUID: [''],
       keywords: [''],
     });
   }
@@ -113,35 +87,16 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
 
   private setFormData() {
     this.form.reset({
-      inventoryOrderTypeUID: this.query.inventoryOrderTypeUID,
       status: this.query.status,
-      assignedToUID: this.query.assignedToUID,
       keywords: this.query.keywords,
-    });
-  }
-
-
-  private loadDataLists() {
-    this.isLoading = true;
-
-    combineLatest([
-      this.helper.select<Identifiable[]>(CataloguesStateSelector.INVENTORY_ORDER_TYPES),
-      this.contactsData.getWarehousemen()
-    ])
-    .subscribe(([x, y]) => {
-      this.inventoryTypesList = x;
-      this.assignedToList = y;
-      this.isLoading = false;
     });
   }
 
 
   private getFormData(): InventoryOrdersQuery {
     const query: InventoryOrdersQuery = {
-      queryType: '',
-      inventoryOrderTypeUID: this.form.value.inventoryOrderTypeUID ?? '',
+      queryType: OrdersQueryType.Inventory,
       status: this.form.value.status ?? '',
-      assignedToUID: this.form.value.assignedToUID ?? '',
       keywords: this.form.value.keywords ?? '',
     };
 

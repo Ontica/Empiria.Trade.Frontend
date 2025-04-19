@@ -17,6 +17,7 @@
           formControlName="inventoryOrderType"
           [items]="inventoryTypesList"
           [loading]="isLoading"
+          [placeholder]="selectionPlaceholder"
           [showError]="formHelper.isControlInvalid(form.controls.inventoryOrderType)">
         </emp-ng-select>
       </div>
@@ -29,8 +30,9 @@
         <label>Responsable:</label>
         <emp-ng-select
           formControlName="responsibleUID"
-          [items]="responsableList"
+          [items]="responsibleList"
           [loading]="isLoading"
+          [placeholder]="selectionPlaceholder"
           [showError]="formHelper.isControlInvalid(form.controls.responsibleUID)">
         </emp-ng-select>
       </div>
@@ -41,6 +43,7 @@
             formControlName="assignedToUID"
             [items]="warehousemenList"
             [loading]="isLoading"
+            [placeholder]="selectionPlaceholder"
             [showError]="formHelper.isControlInvalid(form.controls.assignedToUID)">
           </emp-ng-select>
       </div>
@@ -50,10 +53,10 @@
     <div class="fx-row-container">
 
       <div class="fx-item">
-        <label>Notas:</label>
+        <label>Descripción:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
-          formControlName="notes"
-          [class.invalid-control]="formHelper.isControlInvalid(form.controls.notes)">
+          formControlName="description"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.description)">
         </textarea>
       </div>
 
@@ -102,7 +105,7 @@
 
       <div class="fx-item fx-end fx-items-center">
 
-        <button *ngIf="!editionMode && canEdit"
+        <button *ngIf="!editionMode && (canUpdate || canDelete)"
           class="btn-action"
           (click)="enableEditor(true)">
           Editar
@@ -110,7 +113,7 @@
 
         <ng-container *ngIf="editionMode">
 
-          <button
+          <button *ngIf="canUpdate"
             [class.btn]="!formHelper.isFormReady(form)"
             [class.btn-action]="formHelper.isFormReady(form)"
             (click)="onSubmitButtonClicked()">

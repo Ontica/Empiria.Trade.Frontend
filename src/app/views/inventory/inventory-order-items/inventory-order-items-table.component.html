@@ -2,41 +2,50 @@
 
   <table mat-table [dataSource]="dataSource">
 
-    <ng-container matColumnDef="vendorProduct">
+    <ng-container matColumnDef="product">
       <th mat-header-cell *matHeaderCellDef> Producto </th>
       <td mat-cell *matCellDef="let row">
-        {{ row.product?.productCode }} - {{ row.product?.presentation }}
+        {{ row.productName }}
       </td>
-    </ng-container>
-
-    <ng-container matColumnDef="warehouseBin">
-      <th mat-header-cell *matHeaderCellDef> Localización </th>
-      <td mat-cell *matCellDef="let row" class="nowrap">
-        {{ row.warehouseBin?.rackDescription }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="notes">
-      <th mat-header-cell *matHeaderCellDef> Notas </th>
-      <td mat-cell *matCellDef="let row">{{ row.notes }}</td>
     </ng-container>
 
     <ng-container matColumnDef="quantity">
       <th mat-header-cell *matHeaderCellDef class="text-align-right"> Cantidad </th>
-      <td mat-cell *matCellDef="let row" class="text-align-right">{{ row.quantity | number : '1.2-2' }}</td>
+      <td mat-cell *matCellDef="let row" class="text-align-right shadow-cell">
+        {{ row.quantity | empDecimal }}
+      </td>
     </ng-container>
 
-    <ng-container matColumnDef="actionDelete">
+    <ng-container matColumnDef="assignedQuantity">
+      <th mat-header-cell *matHeaderCellDef class="text-align-right"> Asignados </th>
+      <td mat-cell *matCellDef="let row" class="text-align-right">
+        {{ row.assignedQuantity | empDecimal }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef> </th>
       <td mat-cell *matCellDef="let row" class="column-action">
 
-        <button mat-icon-button empNgStopPropagation
-          title="Eliminar movimiento"
-          (click)="onDeleteItemClicked(row)">
-          <mat-icon>
-            delete
-          </mat-icon>
-        </button>
+        <div class="fx-row-container">
+
+          <button mat-icon-button empNgStopPropagation *ngIf="canEditEntries"
+            title="Editar localizaciones"
+            (click)="onEditItemEntriesClicked(row)">
+            <mat-icon>
+              edit
+            </mat-icon>
+          </button>
+
+          <button mat-icon-button empNgStopPropagation *ngIf="canDelete"
+            title="Eliminar movimiento"
+            (click)="onDeleteItemClicked(row)">
+            <mat-icon>
+              delete
+            </mat-icon>
+          </button>
+
+        </div>
 
       </td>
     </ng-container>
@@ -49,8 +58,7 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    <tr mat-footer-row *matFooterRowDef="['notFoundMessage']" class="text-not-found"
-      [hidden]="hasOrderItems"></tr>
+    <tr mat-footer-row *matFooterRowDef="['notFoundMessage']" class="text-not-found" [hidden]="hasItems"></tr>
 
   </table>
 

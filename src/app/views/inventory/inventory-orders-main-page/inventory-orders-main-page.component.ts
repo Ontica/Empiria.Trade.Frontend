@@ -11,9 +11,8 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { InventoryDataService } from '@app/data-services';
 
-import { EmptyInventoryOrder, EmptyOrdersDataTable, EmptyInventoryOrdersQuery, InventoryOrder,
-         OrdersDataTable, InventoryOrdersQuery, InventoryQueryType,
-         OrdersTypeConfig } from '@app/models';
+import { EmptyOrdersDataTable, EmptyOrdersQuery, OrdersDataTable, OrdersQuery, OrdersTypeConfig, OrderHolder,
+         EmptyOrderHolder, OrdersQueryType } from '@app/models';
 
 import { OrdersExplorerEventType } from '@app/views/orders/orders-explorer/orders-explorer.component';
 
@@ -35,24 +34,24 @@ import {
 })
 export class InventoryOrdersMainPageComponent {
 
-  salesConfig: OrdersTypeConfig = {
-    type: InventoryQueryType.Inventory,
+  config: OrdersTypeConfig = {
+    type: OrdersQueryType.Inventory,
     titleText: 'Ordenes de inventario',
     itemText: 'orden',
-    canAdd: true,
+    canAdd: false,
   };
+
+  query: OrdersQuery = Object.assign({}, EmptyOrdersQuery);
+
+  data: OrdersDataTable = Object.assign({}, EmptyOrdersDataTable);
+
+  selectedData: OrderHolder = EmptyOrderHolder;
 
   isLoading = false;
 
   isLoadingSelection = false;
 
   queryExecuted = false;
-
-  query: InventoryOrdersQuery = EmptyInventoryOrdersQuery;
-
-  inventoryOrdersData: OrdersDataTable = Object.assign({}, EmptyOrdersDataTable);
-
-  inventoryOrderSelected: InventoryOrder = EmptyInventoryOrder;
 
   displayTabbedView = false;
 
@@ -62,20 +61,18 @@ export class InventoryOrdersMainPageComponent {
   constructor(private inventoryData: InventoryDataService) { }
 
 
-  onInventoryOrderCreatorEvent(event: EventInfo) {
+  onOrderCreatorEvent(event: EventInfo) {
     switch (event.type as InventoryOrderCreatorEventType) {
       case InventoryOrderCreatorEventType.CLOSE_MODAL_CLICKED:
         this.displayCreator = false;
         return;
-
       case InventoryOrderCreatorEventType.ORDER_CREATED:
         Assertion.assertValue(event.payload.order, 'event.payload.order');
         this.displayCreator = false;
-        this.setInventoryOrderSelected(event.payload.order as InventoryOrder);
-        this.validateQueryForRefreshInventoryOrders(this.inventoryOrderSelected.inventoryOrderType.uid,
-                                                    this.inventoryOrderSelected.inventoryOrderNo);
+        this.setSelectedData(event.payload.order as OrderHolder);
+        this.validateQueryForRefreshOrders(this.selectedData.order.orderType.uid,
+                                           this.selectedData.order.orderNo);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -83,14 +80,14 @@ export class InventoryOrdersMainPageComponent {
   }
 
 
-  onInventoryOrdersFilterEvent(event: EventInfo) {
+  onOrdersFilterEvent(event: EventInfo) {
     switch (event.type as InventoryOrdersFilterEventType) {
       case InventoryOrdersFilterEventType.SEARCH_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
-        this.query = Object.assign({}, this.query, event.payload.query as InventoryOrdersQuery);
-        this.clearInventoryOrdersData();
-        this.clearInventoryOrderSelected();
-        this.searchInventoryOrders(this.query);
+        this.query = Object.assign({}, this.query, event.payload.query as OrdersQuery);
+        this.clearOrdersData();
+        this.clearSelectedData();
+        this.searchOrders(this.query);
         return;
 
       default:
@@ -109,7 +106,7 @@ export class InventoryOrdersMainPageComponent {
       case OrdersExplorerEventType.SELECT_ORDER:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
         Assertion.assertValue(event.payload.entry.uid, 'event.payload.entry.uid');
-        this.getInventoryOrder(event.payload.entry.uid);
+        this.getOrder(event.payload.entry.uid);
         return;
 
       default:
@@ -119,22 +116,27 @@ export class InventoryOrdersMainPageComponent {
   }
 
 
-  onInventoryOrderTabbedViewEvent(event: EventInfo) {
+  onOrderTabbedViewEvent(event: EventInfo) {
     switch (event.type as InventoryOrderTabbedViewEventType) {
       case InventoryOrderTabbedViewEventType.CLOSE_BUTTON_CLICKED:
-        this.clearInventoryOrderSelected();
+        this.clearSelectedData();
         return;
 
       case InventoryOrderTabbedViewEventType.ORDER_UPDATED:
         Assertion.assertValue(event.payload.order, 'event.payload.order');
-        this.refreshInventoryOrders();
-        this.setInventoryOrderSelected(event.payload.order as InventoryOrder);
+        this.refreshOrders();
+        this.setSelectedData(event.payload.order as OrderHolder);
         return;
 
       case InventoryOrderTabbedViewEventType.ORDER_DELETED:
         Assertion.assertValue(event.payload.order, 'event.payload.order');
-        this.refreshInventoryOrders();
-        this.clearInventoryOrderSelected();
+        this.refreshOrders();
+        this.clearSelectedData();
+        return;
+
+      case InventoryOrderTabbedViewEventType.ENTRIES_UPDATED:
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        this.setSelectedData(event.payload.order as OrderHolder);
         return;
 
       default:
@@ -144,73 +146,68 @@ export class InventoryOrdersMainPageComponent {
   }
 
 
-  private validateQueryForRefreshInventoryOrders(orderTypeUID: string, keywords: string) {
-    if (this.query.inventoryOrderTypeUID !== orderTypeUID) {
-      const newQuery: InventoryOrdersQuery = {
-        queryType: '',
-        inventoryOrderTypeUID: orderTypeUID,
-        keywords,
-        assignedToUID: '',
-        status: ''
-      };
+  private validateQueryForRefreshOrders(orderTypeUID: string, keywords: string) {
+    // if (this.query.orderTypeUID !== orderTypeUID) {
+    //   const newQuery: OrdersQuery = {
+    //     queryType: '',
+    //     orderTypeUID: orderTypeUID,
+    //     keywords,
+    //     assignedToUID: '',
+    //     status: ''
+    //   };
 
-      this.query = Object.assign({}, this.query, newQuery);
-    }
+    //   this.query = Object.assign({}, this.query, newQuery);
+    // }
 
-    this.refreshInventoryOrders();
+    this.refreshOrders();
   }
 
 
-  private refreshInventoryOrders() {
-    this.searchInventoryOrders(this.query);
+  private refreshOrders() {
+    this.searchOrders(this.query);
   }
 
 
-  private searchInventoryOrders(query: InventoryOrdersQuery) {
+  private searchOrders(query: OrdersQuery) {
     this.isLoading = true;
 
     this.inventoryData.searchOrders(query)
       .firstValue()
-      .then(x => this.resolveSearchInventoryOrders(x))
+      .then(x => this.setOrdersData(x, true))
       .finally(() => this.isLoading = false);
   }
 
 
 
-  private getInventoryOrder(orderUID: string) {
+  private getOrder(orderUID: string) {
     this.isLoadingSelection = true;
 
     this.inventoryData.getOrder(orderUID)
       .firstValue()
-      .then(x => this.setInventoryOrderSelected(x))
+      .then(x => this.setSelectedData(x))
       .finally(() => this.isLoadingSelection = false);
   }
 
 
-  private resolveSearchInventoryOrders(data: OrdersDataTable) {
-    this.setInventoryOrdersData(data, true);
-  }
-
-
-  private setInventoryOrdersData(data: OrdersDataTable, queryExecuted: boolean = true) {
-    this.inventoryOrdersData = data;
+  private setOrdersData(data: OrdersDataTable, queryExecuted: boolean = true) {
+    this.data = data;
     this.queryExecuted = queryExecuted;
   }
 
 
-  private clearInventoryOrdersData() {
-    this.setInventoryOrdersData(EmptyOrdersDataTable, false);
+  private clearOrdersData() {
+    this.setOrdersData(EmptyOrdersDataTable, false);
   }
 
 
-  private setInventoryOrderSelected(data: InventoryOrder) {
-    this.inventoryOrderSelected = data;
-    this.displayTabbedView = !isEmpty(this.inventoryOrderSelected);
+  private setSelectedData(data: OrderHolder) {
+    this.selectedData = data;
+    this.displayTabbedView = !isEmpty(this.selectedData.order);
   }
 
 
-  private clearInventoryOrderSelected() {
-    this.setInventoryOrderSelected(EmptyInventoryOrder);
+  private clearSelectedData() {
+    this.setSelectedData(EmptyOrderHolder);
   }
 
 }

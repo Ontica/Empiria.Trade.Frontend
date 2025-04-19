@@ -11,7 +11,7 @@ import { Assertion, DateStringLibrary, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyInventoryOrder, InventoryOrder } from '@app/models';
+import { EmptyOrderHolder, OrderHolder } from '@app/models';
 
 import { InventoryOrderEditorEventType } from '../inventory-order/inventory-order-editor.component';
 
@@ -24,6 +24,7 @@ export enum InventoryOrderTabbedViewEventType {
   CLOSE_BUTTON_CLICKED = 'InventoryOrderTabbedViewComponent.Event.CloseButtonClicked',
   ORDER_UPDATED        = 'InventoryOrderTabbedViewComponent.Event.OrderUpdated',
   ORDER_DELETED        = 'InventoryOrderTabbedViewComponent.Event.OrderDeleted',
+  ENTRIES_UPDATED      = 'InventoryOrderTabbedViewComponent.Event.EntriesUpdated',
 }
 
 @Component({
@@ -32,7 +33,7 @@ export enum InventoryOrderTabbedViewEventType {
 })
 export class InventoryOrderTabbedViewComponent implements OnChanges {
 
-  @Input() order: InventoryOrder = EmptyInventoryOrder;
+  @Input() data: OrderHolder = EmptyOrderHolder;
 
   @Output() inventoryOrderTabbedViewEvent = new EventEmitter<EventInfo>();
 
@@ -40,7 +41,7 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
 
   hint = '';
 
-  selectedTabIndex = 0;
+  selectedTabIndex = 1;
 
 
   ngOnChanges() {
@@ -60,13 +61,11 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
         sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ORDER_UPDATED,
           event.payload);
         return;
-
       case InventoryOrderEditorEventType.ORDER_DELETED:
         Assertion.assertValue(event.payload.order, 'event.payload.order');
         sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ORDER_DELETED,
           event.payload);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -82,7 +81,11 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
         sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ORDER_UPDATED,
           event.payload);
         return;
-
+      case InventoryOrderItemsEditionEventType.ENTRIES_UPDATED:
+        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ENTRIES_UPDATED,
+          event.payload);
+        return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -91,12 +94,13 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
 
 
   private setTitle() {
-    const postingTime = DateStringLibrary.format(this.order.postingTime);
+    const postingTime = DateStringLibrary.format(this.data.order.postingTime);
 
-    this.title = `${this.order.inventoryOrderNo}` +
-      `<span class="tag tag-small">${this.order.status}</span>`;
+    this.title = `${this.data.order.orderNo}` +
+      `<span class="tag tag-small">${this.data.order.status?.name}</span>`;
 
-    this.hint = `<strong>${this.order.inventoryOrderType.name} </strong>` +
+    this.hint = `<strong>${this.data.order.orderType?.name ?? 'N/D'} </strong>` +
+      ` &nbsp; &nbsp; | &nbsp; &nbsp; ${this.data.order.responsible?.name ?? 'N/D'}` +
       ` &nbsp; &nbsp; | &nbsp; &nbsp; ${postingTime}`;
   }
 

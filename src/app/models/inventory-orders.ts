@@ -11,83 +11,61 @@ import { DataTableEntry } from './_data-table';
 
 import { InventoryProductSelection } from './product';
 
-import { OrdersQuery } from './orders';
+import { EmptyOrderActions, Order, OrderActions, OrdersQuery } from './orders';
 
-
-
-export enum InventoryStatus {
-  Abierto   = 'Abierto',
-  EnProceso = 'EnProceso',
-  Cerrado   = 'Cerrado',
-}
-
-
-export const InventoryStatusList: Identifiable[] = [
-  { uid: InventoryStatus.Abierto,   name: 'Abierto' },
-  { uid: InventoryStatus.EnProceso, name: 'En proceso' },
-  { uid: InventoryStatus.Cerrado,   name: 'Cerrado' },
-];
+import { EntityStatus } from './_explorer-data';
 
 
 export interface InventoryOrdersQuery extends OrdersQuery {
-  inventoryOrderTypeUID: string;
-  assignedToUID: string;
   status: string;
   keywords: string;
+  // inventoryOrderTypeUID: string;
+  // assignedToUID: string;
 }
 
 
 export interface InventoryOrderDescriptor extends DataTableEntry {
   uid: string;
-  inventoryOrderTypeName: string;
-  inventoryOrderNo: string;
+  orderTypeName: string;
+  orderNo: string;
   responsibleName: string;
-  assignedToName: string;
   postingTime: DateString;
-  notes: string;
-  inventoryStatus: InventoryStatus;
+  description: string;
+  status: string;
+  // assignedToName: string;
 }
 
 
-export interface InventoryOrder extends InventoryPicking {
+export interface InventoryOrder extends Order {
   uid: string;
-  inventoryOrderType: Identifiable;
-  inventoryOrderNo: string;
+  orderType: Identifiable;
+  orderNo: string;
   responsible: Identifiable;
   assignedTo: Identifiable;
-  notes: string;
+  description: string;
   closingTime: DateString;
   postingTime: DateString;
   postedBy: Identifiable;
-  status: InventoryStatus;
+  status: Identifiable<EntityStatus>;
   items: InventoryOrderItem[];
-  actions: InventoryOrderActions;
+  actions: OrderActions;
 }
 
 
-export interface InventoryPicking {
-  inventoryOrderType: Identifiable;
-  inventoryOrderNo: string;
+export interface InventoryPicking extends Order {
+  orderType: Identifiable;
+  orderNo: string;
   responsible: Identifiable;
   assignedTo: Identifiable;
-  notes: string;
-}
-
-
-export interface InventoryOrderActions {
-  canEdit: boolean;
-  canEditItems: boolean;
-  canDelete: boolean;
-  canClose: boolean;
-  canOpen: boolean;
+  description: string;
 }
 
 
 export interface InventoryOrderFields {
   inventoryOrderTypeUID: string;
   responsibleUID: string;
+  description: string;
   assignedToUID: string;
-  notes: string;
 }
 
 
@@ -96,7 +74,7 @@ export interface InventoryOrderItem {
   product: InventoryProduct;
   warehouseBin: InventoryWarehouseBin;
   quantity: number;
-  notes: string;
+  description: string;
 }
 
 
@@ -117,50 +95,46 @@ export interface InventoryOrderItemFields {
   vendorProductUID: string;
   warehouseBinUID: string;
   quantity: number;
-  notes: string;
+  description: string;
 }
 
 
 export const EmptyInventoryOrdersQuery: InventoryOrdersQuery = {
   queryType: '',
-  inventoryOrderTypeUID: '',
-  assignedToUID: '',
   status: '',
   keywords: '',
-};
-
-
-export const EmptyInventoryOrderActions: InventoryOrderActions = {
-  canEdit: false,
-  canEditItems: false,
-  canDelete: false,
-  canClose: false,
-  canOpen: false,
+  // inventoryOrderTypeUID: '',
+  // assignedToUID: '',
 };
 
 
 export const EmptyInventoryOrder: InventoryOrder = {
   uid: '',
-  inventoryOrderType: Empty,
-  inventoryOrderNo: '',
+  orderType: Empty,
+  orderNo: '',
   responsible: Empty,
   assignedTo: Empty,
-  notes: '',
+  description: '',
   closingTime: '',
   postingTime: '',
   postedBy: Empty,
-  status: null,
+  status: Empty,
   items: [],
-  actions: EmptyInventoryOrderActions,
+  actions: EmptyOrderActions,
 };
 
 
 export const EmptyInventoryPicking: InventoryPicking = {
-  inventoryOrderType: Empty,
-  inventoryOrderNo: '',
+  uid: '',
+  orderType: Empty,
+  orderNo: '',
   responsible: Empty,
   assignedTo: Empty,
-  notes: '',
+  description: '',
+  closingTime: '',
+  postingTime: '',
+  postedBy: Empty,
+  status: Empty,
 }
 
 
@@ -170,7 +144,7 @@ export function mapInventoryOrderItemFieldsFromSelection(
     vendorProductUID: item.vendor.vendorProductUID ?? null,
     warehouseBinUID: item.warehouseBin.uid ?? null,
     quantity: item.quantity ?? null,
-    notes: item.notes ?? null,
+    description: item.notes ?? null,
   };
 
   return itemFields;

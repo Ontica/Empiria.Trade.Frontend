@@ -13,7 +13,7 @@ import { sendEvent } from '@app/shared/utils';
 
 import { InventoryDataService } from '@app/data-services';
 
-import { EmptyInventoryOrder, InventoryOrder, InventoryOrderFields } from '@app/models';
+import { EmptyOrder, EmptyOrderActions, InventoryOrderFields, Order, OrderActions } from '@app/models';
 
 import { InventoryOrderHeaderEventType } from './inventory-order-header.component';
 
@@ -29,7 +29,9 @@ export enum InventoryOrderEditorEventType {
 })
 export class InventoryOrderEditorComponent {
 
-  @Input() order: InventoryOrder = EmptyInventoryOrder;
+  @Input() order: Order = EmptyOrder;
+
+  @Input() actions: OrderActions = EmptyOrderActions;
 
   @Output() inventoryOrderEditorEvent = new EventEmitter<EventInfo>();
 
@@ -54,15 +56,12 @@ export class InventoryOrderEditorComponent {
         Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
         this.updateOrder(event.payload.dataFields as InventoryOrderFields);
         return;
-
       case InventoryOrderHeaderEventType.DELETE_ORDER:
         this.deleteOrder();
         return;
-
       case InventoryOrderHeaderEventType.CLOSE_ORDER:
         this.closeOrder();
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;

@@ -8,7 +8,8 @@
     <mat-tab label="Información">
 
       <emp-trade-inventory-order-editor
-        [order]="order"
+        [order]="data.order"
+        [actions]="data.actions"
         (inventoryOrderEditorEvent)="onInventoryOrderEditorEvent($event)">
 
       </emp-trade-inventory-order-editor>
@@ -18,9 +19,10 @@
     <mat-tab label="Movimientos">
 
       <emp-trade-inventory-order-items-edition
-        [canEdit]="order.actions.canEditItems"
-        [orderUID]="order.uid"
-        [orderItems]="order.items"
+        [orderUID]="data.order.uid"
+        [items]="data.items"
+        [canEditItems]="data.actions.canEditItems"
+        [canEditEntries]="data.actions.canEditEntries"
         (inventoryOrderItemsEditionEvent)="onInventoryOrderItemsEditionEvent($event)">
 
       </emp-trade-inventory-order-items-edition>

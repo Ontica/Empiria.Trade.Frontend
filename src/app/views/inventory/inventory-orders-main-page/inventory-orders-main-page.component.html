@@ -2,42 +2,39 @@
 
 </emp-ng-spinner>
 
+
 <div class="explorer">
 
-  <div class="primary priority" [class.std-hide]="displayTabbedView">
+  <emp-trade-orders-explorer
+    class="primary priority"
+    [class.std-hide]="displayTabbedView"
+    [config]="config"
+    [data]="data"
+    [selectedUID]="selectedData?.order?.uid ?? null"
+    [isLoading]="isLoading"
+    [queryExecuted]="queryExecuted"
+    (ordersExplorerEvent)="onOrdersExplorerEvent($event)">
 
-    <emp-trade-orders-explorer
-      [config]="salesConfig"
-      [ordersData]="inventoryOrdersData"
-      [selectedOrderUID]="inventoryOrderSelected?.uid ?? null"
-      [isLoading]="isLoading"
-      [queryExecuted]="queryExecuted"
-      (ordersExplorerEvent)="onOrdersExplorerEvent($event)">
+    <emp-trade-inventory-orders-filter class="fx-item-none"
+      [query]="query"
+      (inventoryOrdersFilterEvent)="onOrdersFilterEvent($event)">
 
-      <emp-trade-inventory-orders-filter class="fx-item-none"
-        [query]="query"
-        (inventoryOrdersFilterEvent)="onInventoryOrdersFilterEvent($event)">
+    </emp-trade-inventory-orders-filter>
 
-      </emp-trade-inventory-orders-filter>
+  </emp-trade-orders-explorer>
 
-    </emp-trade-orders-explorer>
 
-  </div>
+  <emp-trade-inventory-order-tabbed-view *ngIf="displayTabbedView"
+    class="secondary std-stacked"
+    [data]="selectedData"
+    (inventoryOrderTabbedViewEvent)="onOrderTabbedViewEvent($event)">
 
-  <div class="secondary" *ngIf="displayTabbedView">
-
-    <emp-trade-inventory-order-tabbed-view
-      [order]="inventoryOrderSelected"
-      (inventoryOrderTabbedViewEvent)="onInventoryOrderTabbedViewEvent($event)">
-
-    </emp-trade-inventory-order-tabbed-view>
-
-  </div>
+  </emp-trade-inventory-order-tabbed-view>
 
 </div>
 
 
 <emp-trade-inventory-order-creator *ngIf="displayCreator"
-  (inventoryOrderCreatorEvent)="onInventoryOrderCreatorEvent($event)">
+  (inventoryOrderCreatorEvent)="onOrderCreatorEvent($event)">
 
 </emp-trade-inventory-order-creator>
