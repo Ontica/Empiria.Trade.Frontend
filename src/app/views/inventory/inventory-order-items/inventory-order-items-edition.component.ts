@@ -99,13 +99,17 @@ export class InventoryOrderItemsEditionComponent {
 
   onInventoryOrderItemsTableEvent(event: EventInfo) {
     switch (event.type as InventoryOrderItemsTableEventType) {
-      case InventoryOrderItemsTableEventType.EDIT_ITEM_ENTRIES_CLICKED:
+      case InventoryOrderItemsTableEventType.SELECT_ITEM_CLICKED:
         Assertion.assertValue(event.payload.item, 'event.payload.item');
         this.setSelectedItem(event.payload.item as OrderItem);
         return;
       case InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED:
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
         this.deleteOrderItem(event.payload.itemUID);
+        return;
+      case InventoryOrderItemsTableEventType.EDIT_ITEM_ENTRIES_CLICKED:
+        Assertion.assertValue(event.payload.item, 'event.payload.item');
+        this.setSelectedItem(event.payload.item as OrderItem);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);

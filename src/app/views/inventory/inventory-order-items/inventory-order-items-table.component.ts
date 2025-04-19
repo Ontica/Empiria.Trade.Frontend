@@ -18,8 +18,9 @@ import { MessageBoxService } from '@app/shared/services';
 import { OrderItem } from '@app/models';
 
 export enum InventoryOrderItemsTableEventType {
-  EDIT_ITEM_ENTRIES_CLICKED = 'InventoryOrderItemsTableComponent.Event.EditItemEntriesClicked',
+  SELECT_ITEM_CLICKED       = 'InventoryOrderItemsTableComponent.Event.SelectItemClicked',
   REMOVE_ITEM_CLICKED       = 'InventoryOrderItemsTableComponent.Event.RemoveItemClicked',
+  EDIT_ITEM_ENTRIES_CLICKED = 'InventoryOrderItemsTableComponent.Event.EditItemEntriesClicked',
 }
 
 @Component({
@@ -58,9 +59,9 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
   }
 
 
-  onEditItemEntriesClicked(item: OrderItem) {
-    sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.EDIT_ITEM_ENTRIES_CLICKED,
-      { item })  ;
+  onSelectItemClicked(item: OrderItem) {
+    sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.SELECT_ITEM_CLICKED,
+      { item });
   }
 
 
@@ -73,6 +74,12 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
         sendEventIf(x, this.inventoryOrderItemsTableEvent,
           InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED, { itemUID: item.uid })
       );
+  }
+
+
+  onEditItemEntriesClicked(item: OrderItem) {
+    sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.EDIT_ITEM_ENTRIES_CLICKED,
+      { item })  ;
   }
 
 
