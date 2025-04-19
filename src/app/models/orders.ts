@@ -10,11 +10,19 @@ import { Identifiable } from '@app/core';
 import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './_data-table';
 
 
-export const DefaultOrderType: string = 'Sales';
+
+export enum OrdersQueryType {
+  Sales              = 'Sales',
+  SalesAuthorization = 'SalesAuthorization',
+  SalesPacking       = 'SalesPacking',
+  SalesShipping      = 'SalesShipping',
+  Inventory          = 'Inventory',
+  Purchase           = 'Purchase',
+}
 
 
 export interface OrdersTypeConfig {
-  type: string;
+  type: OrdersQueryType;
   titleText: string;
   itemText: string;
   canAdd?: boolean;
@@ -22,7 +30,7 @@ export interface OrdersTypeConfig {
 
 
 export const DefaultOrdersTypeConfig = {
-  type: DefaultOrderType,
+  type: OrdersQueryType.Sales,
   titleText: 'Pedidos',
   itemText: 'pedido',
   canAdd: false,
@@ -59,7 +67,7 @@ export interface OrdersOperationCommand {
 
 
 export const EmptyOrdersQuery: OrdersQuery = {
-  queryType: DefaultOrderType,
+  queryType: OrdersQueryType.Sales,
   keywords: null,
   status: null,
 };

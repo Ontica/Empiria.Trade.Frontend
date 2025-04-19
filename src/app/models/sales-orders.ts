@@ -16,21 +16,13 @@ import { Address, Contact, Party } from './contacts';
 import { Customer, CustomerCredit, EmptyAddress, EmptyContact, EmptyCustomer,
          EmptyCustomerCredit } from './customer';
 
-import { OrdersQuery, OrdersOperation } from './orders';
+import { OrdersQuery, OrdersOperation, OrdersQueryType } from './orders';
 
 import { EmptyPacking, Packing } from './packing';
 
 import { Presentation, Product, ProductSelection, Vendor } from './product';
 
 import { EmptyShippingData, ShippingData } from './shipping';
-
-
-export enum SalesOrdersQueryType {
-  Sales              = 'Sales',
-  SalesAuthorization = 'SalesAuthorization',
-  SalesPacking       = 'SalesPacking',
-  SalesShipping      = 'SalesShipping',
-}
 
 
 export enum SalesOrdersOperationType {
@@ -66,7 +58,7 @@ export interface SalesOrdersQuery extends OrdersQuery {
 
 
 export const EmptySalesOrdersQuery: SalesOrdersQuery = {
-  queryType: SalesOrdersQueryType.Sales,
+  queryType: OrdersQueryType.Sales,
   keywords: null,
   fromDate: null,
   toDate: null,

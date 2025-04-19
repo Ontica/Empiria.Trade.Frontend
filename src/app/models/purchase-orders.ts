@@ -9,14 +9,9 @@ import { DateString, Empty, Identifiable } from '@app/core';
 
 import { DataTableEntry } from './_data-table';
 
-import { OrdersQuery, OrdersOperation } from './orders';
+import { OrdersQuery, OrdersOperation, OrdersQueryType } from './orders';
 
 import { PurchaseProductSelection } from './product';
-
-
-export enum PurchaseOrdersQueryType {
-  Purchase = 'Purchase',
-}
 
 
 export enum PurchaseStatus {
@@ -131,7 +126,7 @@ export const PurchaseOrdersOperationsList: OrdersOperation[] = [
 
 
 export const EmptyPurchaseOrdersQuery: PurchaseOrdersQuery = {
-  queryType: PurchaseOrdersQueryType.Purchase,
+  queryType: OrdersQueryType.Purchase,
   keywords: null,
   status: null,
   supplierUID: null,

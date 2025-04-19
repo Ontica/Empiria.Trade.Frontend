@@ -46,9 +46,9 @@
       </emp-trade-orders-controls>
 
       <emp-ng-data-table class="fx-item"
-        [dataTable]="ordersData"
+        [dataTable]="data"
         [executed]="queryExecuted"
-        [selectedUID]="selectedOrderUID"
+        [selectedUID]="selectedUID"
         [notQueryExecutedText]="isLoading ? 'Cargando...' : 'No se ha invocado la consulta.'"
         [showControls]="false"
         [showCheckboxSelection]="canSelectOrders"

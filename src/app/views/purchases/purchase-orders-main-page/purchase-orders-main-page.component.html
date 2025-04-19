@@ -9,8 +9,8 @@
     <emp-trade-orders-explorer
       [config]="purchasesConfig"
       [operationsList]="operationsList"
-      [ordersData]="purchaseOrdersData"
-      [selectedOrderUID]="purchaseOrderSelected?.uid ?? null"
+      [data]="purchaseOrdersData"
+      [selectedUID]="purchaseOrderSelected?.uid ?? null"
       [isLoading]="isLoading"
       [queryExecuted]="queryExecuted"
       (ordersExplorerEvent)="onOrdersExplorerEvent($event)">

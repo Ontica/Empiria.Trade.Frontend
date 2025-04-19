@@ -15,7 +15,7 @@ import { empExpandCollapse, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { SalesDataService, SearcherAPIS } from '@app/data-services';
 
-import { Customer, DateRange, SalesOrdersQuery, OrderShippingStatusList, SalesOrdersQueryType,
+import { Customer, DateRange, SalesOrdersQuery, OrderShippingStatusList, OrdersQueryType,
          ShippingMethodList } from '@app/models';
 
 
@@ -40,7 +40,7 @@ interface SalesOrdersFilterFormModel extends FormGroup<{
 })
 export class SalesOrdersFilterComponent implements OnChanges, OnInit {
 
-  @Input() orderType: string = SalesOrdersQueryType.Sales;
+  @Input() orderType: string = OrdersQueryType.Sales;
 
   @Input() queryExecuted: boolean = false;
 
@@ -144,14 +144,14 @@ export class SalesOrdersFilterComponent implements OnChanges, OnInit {
 
 
   private getStatusByOrderType() {
-    switch (this.orderType as SalesOrdersQueryType) {
-      case SalesOrdersQueryType.Sales:
+    switch (this.orderType as OrdersQueryType) {
+      case OrdersQueryType.Sales:
         this.getStatus(this.salesData.getOrderStatus());
         return;
-      case SalesOrdersQueryType.SalesAuthorization:
+      case OrdersQueryType.SalesAuthorization:
         this.getStatus(this.salesData.getOrderStatusForAuthorizations());
         return;
-      case SalesOrdersQueryType.SalesPacking:
+      case OrdersQueryType.SalesPacking:
         this.getStatus(this.salesData.getOrderStatusForPacking());
         return;
       default:

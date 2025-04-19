@@ -14,10 +14,6 @@ import { InventoryProductSelection } from './product';
 import { OrdersQuery } from './orders';
 
 
-export enum InventoryQueryType {
-  Inventory = 'Inventory',
-}
-
 
 export enum InventoryStatus {
   Abierto   = 'Abierto',

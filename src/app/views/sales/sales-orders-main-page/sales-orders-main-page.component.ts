@@ -24,7 +24,7 @@ import { MessageBoxService } from '@app/shared/services';
 import { SalesDataService } from '@app/data-services';
 
 import { EmptySaleOrder, EmptyOrdersDataTable, EmptySalesOrdersQuery, SaleOrder, OrdersDataTable,
-         DataTableEntry, SalesOrdersQuery, OrdersTypeConfig, SalesOrdersOperationType, SalesOrdersQueryType,
+         DataTableEntry, SalesOrdersQuery, OrdersTypeConfig, SalesOrdersOperationType, OrdersQueryType,
          mapSaleOrderDescriptorFromSaleOrder, SalesOrdersOperationsList,
          OrdersOperationCommand } from '@app/models';
 
@@ -47,7 +47,7 @@ import { SaleOrderTabbedViewEventType } from '../sale-order-tabbed-view/sale-ord
 export class SalesOrdersMainPageComponent implements OnInit, OnDestroy {
 
   salesConfig: OrdersTypeConfig = {
-    type: SalesOrdersQueryType.Sales,
+    type: OrdersQueryType.Sales,
     titleText: 'Pedido',
     itemText: 'pedido',
     canAdd: false,
@@ -96,7 +96,7 @@ export class SalesOrdersMainPageComponent implements OnInit, OnDestroy {
 
 
   get canSelectOrders(): boolean {
-    return this.salesConfig.type === SalesOrdersQueryType.Sales;
+    return this.salesConfig.type === OrdersQueryType.Sales;
   }
 
 
@@ -220,15 +220,15 @@ export class SalesOrdersMainPageComponent implements OnInit, OnDestroy {
   private validateCurrentView(view: string) {
     switch (view) {
       case 'VentasViews.Pedidos':
-        this.setInitConfig(SalesOrdersQueryType.Sales, 'Pedidos', 'pedido', true);
+        this.setInitConfig(OrdersQueryType.Sales, 'Pedidos', 'pedido', true);
         return;
 
       case 'VentasViews.Autorizaciones':
-        this.setInitConfig(SalesOrdersQueryType.SalesAuthorization, 'Autorizaciones', '', false);
+        this.setInitConfig(OrdersQueryType.SalesAuthorization, 'Autorizaciones', '', false);
         return;
 
       case 'AlmacenesViews.Surtidos':
-        this.setInitConfig(SalesOrdersQueryType.SalesPacking, 'Surtidos', '', false);
+        this.setInitConfig(OrdersQueryType.SalesPacking, 'Surtidos', '', false);
         return;
 
       default:
@@ -237,7 +237,7 @@ export class SalesOrdersMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private setInitConfig(type: SalesOrdersQueryType, titleText: string, itemText: string, canAdd: boolean) {
+  private setInitConfig(type: OrdersQueryType, titleText: string, itemText: string, canAdd: boolean) {
     this.salesConfig = { type, titleText, itemText, canAdd };
     this.query = Object.assign({}, EmptySalesOrdersQuery, { queryType: type });
   }

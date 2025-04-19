@@ -10,7 +10,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { ApplicationStatusService, DateStringLibrary, EventInfo } from '@app/core';
 
 import { DefaultOrdersTypeConfig, EmptySaleOrder, SaleOrder, OrdersTypeConfig,
-         SalesOrdersQueryType } from '@app/models';
+         OrdersQueryType } from '@app/models';
 
 import { FormatLibrary, sendEvent } from '@app/shared/utils';
 
@@ -60,7 +60,7 @@ export class SaleOrderTabbedViewComponent implements OnChanges {
 
 
   get showShippingTab(): boolean {
-    return this.config.type === SalesOrdersQueryType.Sales && this.order.actions.show.orderData;
+    return this.config.type === OrdersQueryType.Sales && this.order.actions.show.orderData;
   }
 
 
@@ -128,11 +128,11 @@ export class SaleOrderTabbedViewComponent implements OnChanges {
 
     this.title = `${this.order.orderData.orderNumber}`;
 
-    if (this.config.type === SalesOrdersQueryType.SalesPacking) {
+    if (this.config.type === OrdersQueryType.SalesPacking) {
       this.title += this.order?.packing.data.totalPackages ?? '';
     }
 
-    if (this.config.type === SalesOrdersQueryType.SalesAuthorization) {
+    if (this.config.type === OrdersQueryType.SalesAuthorization) {
       this.title += this.order.customerCredit?.totalDebt > 0 ?
         `<span class="tag tag-medium tag-base-warning">Adeudo: &nbsp; ` +
         `${FormatLibrary.numberWithCommas(this.order.customerCredit?.totalDebt, '1.2-2')}</span>` :

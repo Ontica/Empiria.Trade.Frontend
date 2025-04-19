@@ -14,8 +14,8 @@ import { MessageBoxService } from '@app/shared/services';
 import { PurchasesDataService } from '@app/data-services';
 
 import { DataTableEntry, EmptyOrdersDataTable, EmptyPurchaseOrder, EmptyPurchaseOrdersQuery, OrdersDataTable,
-         OrdersOperationCommand, OrdersTypeConfig, PurchaseOrder, PurchaseOrdersOperationsList,
-         PurchaseOrdersQuery, PurchaseOrdersQueryType } from '@app/models';
+         OrdersOperationCommand, OrdersQueryType, OrdersTypeConfig, PurchaseOrder,
+         PurchaseOrdersOperationsList, PurchaseOrdersQuery } from '@app/models';
 
 import { OrdersExplorerEventType } from '@app/views/orders/orders-explorer/orders-explorer.component';
 
@@ -35,7 +35,7 @@ import {
 export class PurchaseOrdersMainPageComponent {
 
   purchasesConfig: OrdersTypeConfig = {
-    type: PurchaseOrdersQueryType.Purchase,
+    type: OrdersQueryType.Purchase,
     titleText: 'Ordenes de compra',
     itemText: 'Orden',
     canAdd: true,

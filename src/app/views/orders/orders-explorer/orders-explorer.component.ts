@@ -32,9 +32,9 @@ export class OrdersExplorerComponent implements OnChanges {
 
   @Input() config: OrdersTypeConfig = DefaultOrdersTypeConfig;
 
-  @Input() ordersData: OrdersDataTable = Object.assign({}, EmptyOrdersDataTable);
+  @Input() data: OrdersDataTable = Object.assign({}, EmptyOrdersDataTable);
 
-  @Input() selectedOrderUID = null;
+  @Input() selectedUID = null;
 
   @Input() operationsList: OrdersOperation[] = [];
 
@@ -55,7 +55,7 @@ export class OrdersExplorerComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.ordersData) {
+    if (changes.data) {
       this.setText();
       this.resetOrderSelected();
     }
@@ -116,7 +116,7 @@ export class OrdersExplorerComponent implements OnChanges {
       return;
     }
 
-    this.cardHint = `${this.ordersData.entries.length} registros encontrados`;
+    this.cardHint = `${this.data.entries.length} registros encontrados`;
   }
 
 
