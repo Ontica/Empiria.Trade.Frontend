@@ -5,7 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output,
+         ViewChild } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -30,7 +31,9 @@ interface InventoryOrderItemEntryFormModel extends FormGroup<{
   selector: 'emp-trade-inventory-order-item-entry-editor',
   templateUrl: './inventory-order-item-entry-editor.component.html',
 })
-export class InventoryOrderItemEntryEditorComponent implements OnChanges {
+export class InventoryOrderItemEntryEditorComponent implements OnChanges, AfterViewInit {
+
+  @ViewChild('productInput') productInput!: ElementRef<HTMLInputElement>;
 
   @Input() orderUID = '';
 
@@ -55,6 +58,20 @@ export class InventoryOrderItemEntryEditorComponent implements OnChanges {
   }
 
 
+  ngAfterViewInit() {
+    this.initFormFocus();
+  }
+
+
+  onFocusNext(next: any) {
+    if (next?.nativeElement?.focus) {
+      next.nativeElement.focus();
+    } else if (next?.focus) {
+      next.focus();
+    }
+  }
+
+
   onAssignOrderItemEntryClicked() {
     if (FormHelper.isFormReadyAndInvalidate(this.form)) {
       const payload = {
@@ -65,7 +82,15 @@ export class InventoryOrderItemEntryEditorComponent implements OnChanges {
 
       sendEvent(this.inventoryOrderItemEntryEditorEvent,
         InventoryOrderItemEntryEditorEventType.ASSIGN_BUTTON_CLICKED, payload);
+
     }
+
+    this.initFormFocus();
+  }
+
+
+  private initFormFocus() {
+    setTimeout(() => this.productInput.nativeElement.focus());
   }
 
 
