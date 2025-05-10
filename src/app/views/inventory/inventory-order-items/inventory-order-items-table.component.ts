@@ -37,7 +37,7 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
 
   @Output() inventoryOrderItemsTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumnsDefault: string[] = ['product', 'quantity'];
+  displayedColumnsDefault: string[] = ['number', 'product', 'quantity'];
 
   displayedColumns = [...this.displayedColumnsDefault];
 

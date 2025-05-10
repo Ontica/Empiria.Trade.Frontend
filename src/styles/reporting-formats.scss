@@ -9,15 +9,20 @@
 // mat-table row formats (ItemType)
 //
 
-table.mat-mdc-table th.column-checkbox {
-  padding-top: 4px;
-  padding-bottom: 4px;
-  width: calc($checkbox-size + $grid-entry-padding-horizontal);
+table.mat-mdc-table {
+  th.column-checkbox,
+  th.column-index {
+    width: calc($checkbox-size + $grid-entry-padding-horizontal);
 
-  &:first-of-type {
-    width: calc($checkbox-size + $grid-entry-padding-horizontal + $grid-entry-padding-vertical);
+    &:first-of-type {
+      width: calc($checkbox-size + $grid-entry-padding-horizontal + $grid-entry-padding-vertical);
+    }
   }
 
+  th.column-checkbox {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
 }
 
 
