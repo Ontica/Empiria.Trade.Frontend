@@ -1,8 +1,9 @@
 <div class="card card-border" [class.card-shadow]="!showCardHeaderFlat">
 
   <div class="card-header"
-    [class.card-header-flat]="showCardHeaderFlat"
-    [class.no-hint]="!showHint">
+    [ngClass]="{'card-header-flat': showCardHeaderFlat,
+                'card-highlight': headerHighlight,
+                'no-hint': !showHint,}">
 
     <div class="card-title">
       <span [innerHTML]="title | empSafeHtml"></span>

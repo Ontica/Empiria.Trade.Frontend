@@ -167,9 +167,9 @@ export class ShippingOrdersTableComponent implements OnChanges {
 
   private resetOrderSearcher() {
     if (this.resetSearcher) {
-      this.orderSearcher.resetSearcherData();
+      this.orderSearcher.resetListAndClearValue();
     } else {
-      this.orderSearcher.resetValue();
+      this.orderSearcher.clearValue();
     }
   }
 

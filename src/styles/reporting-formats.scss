@@ -9,33 +9,91 @@
 // mat-table row formats (ItemType)
 //
 
-table.mat-mdc-table {
-  th.column-checkbox,
-  th.column-index {
-    width: calc($checkbox-size + $grid-entry-padding-horizontal);
+table.mat-mdc-table th.column-checkbox {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  width: calc($checkbox-size + $grid-entry-padding-horizontal);
 
-    &:first-of-type {
-      width: calc($checkbox-size + $grid-entry-padding-horizontal + $grid-entry-padding-vertical);
+  &:first-of-type {
+    width: calc($checkbox-size + $grid-entry-padding-horizontal + $grid-entry-padding-vertical);
+  }
+
+}
+
+table.mat-mdc-table {
+
+  th,
+  td {
+
+    &.sticky-start {
+      box-shadow: 4px 0 6px -2px rgba(0, 0, 0, 0.1);
+      left: 0;
+      position: sticky !important;
+    }
+
+    &.sticky-start-width {
+      min-width: 200px;
+    }
+
+    &.sticky-padding {
+      padding-left: 8px;
+    }
+
+    &.sticky-end {
+      box-shadow: -4px 0 6px -2px rgba(0, 0, 0, 0.1);
+      right: 0;
+      position: sticky !important;
+      padding-left: 8px;
+    }
+
+    &.shadow-cell {
+      position: relative;
+      box-shadow: 4px 0 6px -2px rgba(0, 0, 0, 0.1);
+      padding: 8px;
+    }
+
+    &.spacing-level {
+      padding-left: calc(16px * var(--level, 1));
+
+      @include small() {
+        padding-left: 16px;
+      }
     }
   }
 
-  th.column-checkbox {
-    padding-top: 4px;
-    padding-bottom: 4px;
+  th {
+
+    &.sticky-start {
+      z-index: 101 !important;
+    }
+
   }
+
 }
 
 
 table.mat-mdc-table tr.mat-mdc-row {
-  background-color: $white;
-
-  .item-strikethrough {
-    text-decoration: line-through;
-  }
 
   td.mat-mdc-cell.column-checkbox {
     padding-top: 4px;
     padding-bottom: 4px;
+    width: calc($checkbox-size + $grid-entry-padding-horizontal);
+  }
+
+  td.mat-mdc-cell.column-xs {
+    width: 7.5%;
+  }
+
+  td.mat-mdc-cell.column-sm {
+    width: 15%;
+  }
+
+  td.mat-mdc-cell.column-md {
+    width: 20%;
+  }
+
+  td.mat-mdc-cell.column-lg {
+    width: 30%;
   }
 
   &.item-type-summary td.mat-mdc-cell,
@@ -45,8 +103,8 @@ table.mat-mdc-table tr.mat-mdc-row {
   }
 
   &.item-type-group td.mat-mdc-cell {
-    border-top: 1px solid rgba(0, 0, 0, 0.5);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
   }
 
   &.item-type-total {
@@ -75,7 +133,7 @@ table.mat-mdc-table tr.mat-mdc-row {
     background: $grid-nested-background-color;
 
     td {
-      border-bottom: $grid-nested-border;
+      border-bottom: $grid-nested-border !important;
     }
 
     &:hover {
@@ -89,16 +147,6 @@ table.mat-mdc-table tr.mat-mdc-row {
     td:first-of-type {
       border-right: $grid-nested-border;
     }
-  }
-
-  td.shadow-cell {
-    position: relative;
-    box-shadow: 4px 0 6px -2px rgba(0, 0, 0, 0.1);
-    padding: 8px;
-  }
-
-  td.spacing-level {
-    padding-left: calc(16px * var(--level));
   }
 
   &:hover {
@@ -153,6 +201,7 @@ table.mat-mdc-table.emp-designer tr.mat-mdc-row.fixed-cells-type {
 // row selection
 
 table.mat-mdc-table.emp-designer tr.mat-mdc-row.designer-row-selected {
+
   td {
     border-top: 1px solid $designer-bar-selected-border-color;
     border-bottom: 1px solid $designer-bar-selected-border-color !important;
@@ -290,8 +339,8 @@ table.mat-mdc-table.emp-designer tr.mat-mdc-row.fixed-cells-type td.mat-mdc-cell
 table.mat-mdc-table tr.mat-mdc-row.row-selected {
 
   td:first-of-type {
-    padding-left: calc($grid-entry-padding-vertical-first - 3px); // 7px; //calc(1rem - 3px=;
-    border-left: 3px solid darken($grid-selected-background-color, 50%);
+    padding-left: calc($grid-entry-padding-vertical-first - $grid-selected-border-width);
+    border-left: $grid-selected-border-width solid $grid-selected-border-color;
 
     &.column-checkbox {
       width: calc($checkbox-size + $grid-entry-padding-horizontal + $grid-entry-padding-vertical);

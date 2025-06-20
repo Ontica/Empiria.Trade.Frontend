@@ -21,6 +21,8 @@ export class CardComponent {
 
   @Input() showHint = true;
 
+  @Input() headerHighlight = false;
+
   @Input() disableClose = false;
 
   @Input() showCardHeaderFlat = false;

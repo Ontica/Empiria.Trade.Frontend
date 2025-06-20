@@ -244,6 +244,22 @@ table.mat-mdc-table {
       vertical-align: middle;
     }
 
+    &.column-input {
+      padding: 0 !important;
+      border-right: 1px solid $designer-border-color;
+      min-width: 96px;
+
+      input {
+        border: none;
+        color: $control-color;
+        font: $control-font;
+        font-size: $font-size-grid;
+        font-weight: normal;
+        width: 100%;
+        height: 32px;
+      }
+    }
+
     &.column-no-padding {
       padding-top: 2px;
       padding-bottom: 2px;
@@ -444,7 +460,7 @@ table.mat-mdc-table.emp-designer {
   }
 }
 
-.mdc-data-table__row:last-child .mdc-data-table__cell {
+.mdc-data-table__row:last-child .mdc-data-table__cell:not(.footer-not-data) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
 }
 
@@ -514,7 +530,7 @@ table.mat-mdc-table.emp-designer {
   }
 
   &.vertical-inline {
-    margin: 0 6px;
+    margin: 0 0.75rem;
     height: $control-height;
   }
 
@@ -788,21 +804,23 @@ table.mat-mdc-table.emp-designer {
       height: $checkbox-size !important;
     }
 
-    .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true]) ~ .mdc-checkbox__background {
-      background-color: $white !important;
-    }
+    .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])
+
+      ~ .mdc-checkbox__background {
+        background-color: $white !important;
+      }
 
   }
 
   .mdc-form-field > label {
-    font-size: 8pt;
-    line-height: 9pt;
+    font-size: 8.5pt;
     margin-right: 8px;
+    line-height: 16px;
   }
 
   &.no-label .mdc-form-field > label {
-    display: none;
     margin-right: 0;
+    display: none;
   }
 
   &.mat-warn.text-light .mdc-form-field > label,

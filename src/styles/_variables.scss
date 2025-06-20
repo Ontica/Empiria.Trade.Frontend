@@ -147,6 +147,8 @@ $select-padding: 2px 2px 2px 6px;
 $button-font: 9.5pt $font-family;
 $button-color: hsl(0, 0%, 98%);
 $button-selected-color: hsl(0, 0%, 90%);
+$button-login-background-color: $layout-secondary-color;
+$button-login-background-color-hover: $layout-secondary-color-dark;
 
 $button-border: 0 solid hsl(0, 0%, 81%);
 $button-height: 28px;
@@ -194,6 +196,8 @@ $grid-odd-background-color: hsl(240, 1%, 96%) !default;
 $grid-hover-background-color: hsl(240, 1%, 97%);
 $grid-selected-background-color: hsl(207, 91%, 98%);
 $grid-selected-hover-background-color: hsl(207, 91%, 96%);
+$grid-selected-border-width: 3px;
+$grid-selected-border-color: darken($grid-selected-background-color, 50%);
 $grid-header-height: 30px;
 $grid-row-height: 32px;
 $grid-entry-padding-vertical: 0.75rem;
