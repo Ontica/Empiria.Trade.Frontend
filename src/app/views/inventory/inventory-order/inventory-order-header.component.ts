@@ -259,14 +259,14 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
     switch (eventType) {
       case InventoryOrderHeaderEventType.DELETE:
         return `Esta operación eliminará la orden de inventario
-                <strong> ${this.order.inventoryType.name}:
-                ${this.order.orderNo}</strong>.
+                <strong> ${this.order.orderNo}:
+                ${this.order.inventoryType.name}</strong>.
                 <br><br>¿Elimino la orden de inventario?`;
 
       case InventoryOrderHeaderEventType.CLOSE:
         return `Esta operación aplicará la orden de inventario
-                <strong> ${this.order.inventoryType.name}:
-                ${this.order.orderNo}</strong>.
+                <strong> ${this.order.orderNo}:
+                ${this.order.inventoryType.name}</strong>.
                 <br><br>¿Aplico la orden de inventario?`;
 
       default: return '';

@@ -96,10 +96,10 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
   private setTitle() {
     const postingTime = DateStringLibrary.format(this.data.order.postingTime);
 
-    this.title = `${this.data.order.orderNo}` +
+    this.title = `${this.data.order.orderNo}: ${this.data.order.inventoryType.name}` +
       `<span class="tag tag-small">${this.data.order.status?.name}</span>`;
 
-    this.hint = `<strong>${this.data.order.orderType?.name ?? 'N/D'} </strong>` +
+    this.hint = `<strong>${this.data.order.warehouse?.name ?? 'N/D'} </strong>` +
       ` &nbsp; &nbsp; | &nbsp; &nbsp; ${this.data.order.responsible?.name ?? 'N/D'}` +
       ` &nbsp; &nbsp; | &nbsp; &nbsp; ${postingTime}`;
   }

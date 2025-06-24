@@ -9,8 +9,6 @@ import { DateString, Empty, Identifiable } from '@app/core';
 
 import { DataTableEntry } from './_data-table';
 
-import { InventoryProductSelection } from './product';
-
 import { EmptyOrderActions, Order, OrderActions, OrderHolder, OrderItem, OrderItemEntry,
          OrdersQuery } from './orders';
 
@@ -113,10 +111,9 @@ export interface InventoryWarehouseBin {
 
 
 export interface InventoryOrderItemFields {
-  vendorProductUID: string;
-  warehouseBinUID: string;
+  product: string;
+  location: string;
   quantity: number;
-  description: string;
 }
 
 
@@ -182,17 +179,4 @@ export const EmptyInventoryPicking: InventoryPicking = {
   postingTime: '',
   postedBy: Empty,
   status: Empty,
-}
-
-
-export function mapInventoryOrderItemFieldsFromSelection(
-  item: InventoryProductSelection): InventoryOrderItemFields {
-  const itemFields: InventoryOrderItemFields = {
-    vendorProductUID: item.vendor.vendorProductUID ?? null,
-    warehouseBinUID: item.warehouseBin.uid ?? null,
-    quantity: item.quantity ?? null,
-    description: item.notes ?? null,
-  };
-
-  return itemFields;
 }

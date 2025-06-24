@@ -4,22 +4,24 @@
 
   </emp-ng-spinner>
 
-  <div class="fx-item-none">
+  <div class="fx-item-none" *ngIf="canEditItems || canEditEntries">
 
-    <div class="fx-row-container fx-end">
+    <div class="fx-row-container fx-items-center">
 
+      <button type="button" *ngIf="canEditItems"
+        class="btn-action"
+        (click)="onCreateItemClicked()">
+        Agregar movimiento
+      </button>
+
+      <div class="fx-item">
+
+      </div>
 
       <button type="button" *ngIf="canEditEntries"
         class="btn"
         (click)="onCloseEntriesClicked()">
         Cerrar asignación
-      </button>
-
-      <button type="button" *ngIf="canEditItems"
-        class="btn-action"
-        [style.margin-left.px]="8"
-        (click)="onAddItemClicked()">
-        Agregar movimiento
       </button>
 
     </div>
@@ -45,9 +47,3 @@
   (inventoryOrderItemEntriesEditionEvent)="onInventoryOrderItemEntriesEditionEvent($event)">
 
 </emp-trade-inventory-order-item-entries-edition>
-
-
-<emp-trade-inventory-order-product-selector *ngIf="displayProductSelector"
-  (inventoryOrderProductSelectorEvent)="onInventoryOrderProductSelectorEvent($event)">
-
-</emp-trade-inventory-order-product-selector>

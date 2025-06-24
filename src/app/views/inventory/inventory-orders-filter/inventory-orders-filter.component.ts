@@ -83,6 +83,11 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
   }
 
 
+  onClearClicked() {
+    this.form.controls.keywords.reset()
+  }
+
+
   onSearchClicked() {
     if (this.form.valid) {
       sendEvent(this.inventoryOrdersFilterEvent, InventoryOrdersFilterEventType.SEARCH_CLICKED, {

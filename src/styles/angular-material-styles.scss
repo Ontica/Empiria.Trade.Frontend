@@ -202,6 +202,11 @@ table.mat-mdc-table {
       padding-right: $grid-entry-padding-vertical-first !important;
     }
 
+    &.column-index {
+      font-weight: 600;
+      width: 60px;
+    }
+
     &.column-action {
       text-align: center;
       width: $grid-row-height !important;
@@ -226,6 +231,11 @@ table.mat-mdc-table {
     &.mat-mdc-footer-cell:last-of-type {
       padding-right: $grid-entry-padding-vertical-first;
       width: auto;
+    }
+
+    &.column-index {
+      font-weight: 600;
+      width: 60px;
     }
 
     &.column-action {

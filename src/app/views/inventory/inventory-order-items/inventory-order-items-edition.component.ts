@@ -15,14 +15,10 @@ import { AlertService, MessageBoxService } from '@app/shared/services';
 
 import { InventoryDataService } from '@app/data-services';
 
-import { EmptyInventoryOrderItem, InventoryOrderHolder, InventoryOrderItem, InventoryOrderItemFields,
-         InventoryProductSelection, mapInventoryOrderItemFieldsFromSelection } from '@app/models';
+import { EmptyInventoryOrderItem, InventoryOrderHolder, InventoryOrderItem,
+         InventoryOrderItemFields } from '@app/models';
 
 import { InventoryOrderItemsTableEventType } from './inventory-order-items-table.component';
-
-import {
-  InventoryOrderProductSelectorEventType
-} from '../inventory-order-product-selector/inventory-order-product-selector.component';
 
 import {
   InventoryOrderItemEntriesEditionEventType
@@ -53,7 +49,7 @@ export class InventoryOrderItemsEditionComponent {
 
   submitted = false;
 
-  displayProductSelector = false;
+  displayItemEditor = false;
 
   displayItemEntriesEdition = false;
 
@@ -65,35 +61,14 @@ export class InventoryOrderItemsEditionComponent {
               private alertService: AlertService) { }
 
 
-  onAddItemClicked() {
-    this.displayProductSelector = true;
+  onCreateItemClicked() {
+    this.displayItemEditor = true;
+    this.messageBox.showInDevelopment('Agregar movimiento');
   }
 
 
   onCloseEntriesClicked() {
     this.showConfirmCloseEntriesMessage();
-  }
-
-
-  onInventoryOrderProductSelectorEvent(event: EventInfo) {
-    switch (event.type as InventoryOrderProductSelectorEventType) {
-      case InventoryOrderProductSelectorEventType.CLOSE_MODAL_CLICKED:
-        this.displayProductSelector = false;
-        return;
-      case InventoryOrderProductSelectorEventType.ADD_PRODUCT:
-        Assertion.assert(event.payload.selection, 'event.payload.selection');
-        Assertion.assert(event.payload.selection.vendor, 'event.payload.selection.vendor');
-        Assertion.assert(event.payload.selection.warehouseBin, 'event.payload.selection.warehouseBin');
-        Assertion.assert(event.payload.selection.quantity, 'event.payload.selection.quantity');
-        const orderItem = mapInventoryOrderItemFieldsFromSelection(
-          event.payload.selection as InventoryProductSelection
-        );
-        this.createOrderItem(orderItem);
-        return;
-      default:
-        console.log(`Unhandled user interface event ${event.type}`);
-        return;
-    }
   }
 
 
@@ -171,11 +146,7 @@ export class InventoryOrderItemsEditionComponent {
 
     this.messageBox.confirm(message, title)
       .firstValue()
-      .then(x => {
-        if (x) {
-          this.closeOrderEntries();
-        }
-      });
+      .then(x => x ? this.closeOrderEntries() : null);
   }
 
 

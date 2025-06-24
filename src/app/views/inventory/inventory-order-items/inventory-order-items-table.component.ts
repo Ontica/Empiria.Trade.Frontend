@@ -94,29 +94,17 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
   private resetColumns() {
     this.displayAssigned = this.canEditEntries || !!this.items.find(x => x.assignedQuantity > 0);
     this.displayedColumns = [...this.displayedColumnsDefault];
-
-    if (this.displayAssigned) {
-      this.displayedColumns.push('assignedQuantity');
-    }
-
-    if (this.displayAssigned || this.canDelete) {
-      this.displayedColumns.push('action');
-    }
+    if (this.displayAssigned) this.displayedColumns.push('assignedQuantity');
+    if (this.displayAssigned || this.canDelete) this.displayedColumns.push('action');
   }
 
 
   private getConfirmDeleteMessage(item: OrderItem): string {
-    return `
+    return `Esta operación eliminará el movimiento:<br><br>
       <table class="confirm-data">
-        <tr><td>Producto: </td><td><strong>
-          ${item.productName}
-        </strong></td></tr>
-
-        <tr><td class='nowrap'>Cantidad: </td><td><strong>
-          ${item.quantity}
-        </strong></td></tr>
+        <tr><td>Producto: </td><td><strong> ${item.productName} </strong></td></tr>
+        <tr><td>Cantidad: </td><td><strong> ${item.quantity} </strong></td></tr>
       </table>
-
      <br>¿Elimino el movimiento?`;
   }
 
