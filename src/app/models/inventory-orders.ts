@@ -20,8 +20,8 @@ import { EntityStatus } from './_explorer-data';
 export interface InventoryOrdersQuery extends OrdersQuery {
   status: string;
   keywords: string;
-  inventoryTypeUID?: string;
-  warehouseUID?: string;
+  inventoryTypeUID: string;
+  warehouseUID: string;
 }
 
 
@@ -130,9 +130,10 @@ export interface InventoryOrderItemEntryFields {
 
 export const EmptyInventoryOrdersQuery: InventoryOrdersQuery = {
   queryType: '',
+  inventoryTypeUID: '',
+  warehouseUID: '',
   status: '',
   keywords: '',
-  inventoryTypeUID: '',
 };
 
 

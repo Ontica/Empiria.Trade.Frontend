@@ -4,7 +4,7 @@
 
     <div class="fx-row-container">
 
-      <div class="fx-item-half">
+      <div class="fx-item-quarter">
 
         <label>Tipo de inventario:</label>
 
@@ -15,6 +15,21 @@
           [items]="inventoryTypesList"
           [loading]="isLoading"
           [showError]="formHelper.isControlInvalid(form.controls.inventoryTypeUID)">
+        </emp-ng-select>
+
+      </div>
+
+      <div class="fx-item-quarter">
+
+        <label>Almacén:</label>
+
+        <emp-ng-select
+          formControlName="warehouseUID"
+          placeholder="Todos"
+          [config]="{clearable: true}"
+          [items]="warehousesList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.warehouseUID)">
         </emp-ng-select>
 
       </div>

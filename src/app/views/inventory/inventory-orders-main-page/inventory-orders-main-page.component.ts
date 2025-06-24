@@ -145,6 +145,7 @@ export class InventoryOrdersMainPageComponent {
       const newQuery: InventoryOrdersQuery = {
         queryType: '',
         inventoryTypeUID,
+        warehouseUID: '',
         keywords,
         status: ''
       };

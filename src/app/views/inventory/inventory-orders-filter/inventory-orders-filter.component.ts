@@ -10,6 +10,8 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
 
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
+import { combineLatest } from 'rxjs';
+
 import { EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
@@ -28,6 +30,7 @@ export enum InventoryOrdersFilterEventType {
 
 interface InventoryOrdersFilterFormModel extends FormGroup<{
   inventoryTypeUID: FormControl<string>;
+  warehouseUID: FormControl<string>;
   status: FormControl<string>;
   keywords: FormControl<string>;
 }> { }
@@ -49,6 +52,8 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
   formHelper = FormHelper;
 
   inventoryTypesList: Identifiable[] = [];
+
+  warehousesList: Identifiable[] = [];
 
   statusList: Identifiable[] = EntityStatusList;
 
@@ -93,11 +98,15 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
   private loadDataLists() {
     this.isLoading = true;
 
-    this.helper.select<Identifiable[]>(InventaryStateSelector.INVENTORY_TYPES)
-      .subscribe(x => {
-        this.inventoryTypesList = x;
-        this.isLoading = x.length === 0;
-      });
+    combineLatest([
+      this.helper.select<Identifiable[]>(InventaryStateSelector.INVENTORY_TYPES),
+      this.helper.select<Identifiable[]>(InventaryStateSelector.WAREHOUSES),
+    ])
+    .subscribe(([a, b]) => {
+      this.inventoryTypesList = a;
+      this.warehousesList = b;
+      this.isLoading = a.length === 0;
+    });
   }
 
 
@@ -106,6 +115,7 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
 
     this.form = fb.group({
       inventoryTypeUID: [''],
+      warehouseUID: [''],
       status: [''],
       keywords: [''],
     });
@@ -115,6 +125,7 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
   private setFormData() {
     this.form.reset({
       inventoryTypeUID: this.query.inventoryTypeUID,
+      warehouseUID: this.query.warehouseUID,
       status: this.query.status,
       keywords: this.query.keywords,
     });
@@ -125,6 +136,7 @@ export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDest
     const query: InventoryOrdersQuery = {
       queryType: OrdersQueryType.Inventory,
       inventoryTypeUID: this.form.value.inventoryTypeUID ?? '',
+      warehouseUID: this.form.value.warehouseUID ?? '',
       status: this.form.value.status ?? '',
       keywords: this.form.value.keywords ?? '',
     };
