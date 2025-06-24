@@ -15,7 +15,7 @@ import { sendEventIf } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/services';
 
-import { OrderItemEntry } from '@app/models';
+import { InventoryOrderItemEntry } from '@app/models';
 
 
 export enum InventoryOrderItemEntriesTableEventType {
@@ -32,7 +32,7 @@ export class InventoryOrderItemEntriesTableComponent implements OnChanges {
 
   @Input() itemUID = '';
 
-  @Input() entries: OrderItemEntry[] = [];
+  @Input() entries: InventoryOrderItemEntry[] = [];
 
   @Input() assignedQuantity = 0;
 
@@ -44,7 +44,7 @@ export class InventoryOrderItemEntriesTableComponent implements OnChanges {
 
   displayedColumns = [...this.displayedColumnsDefault];
 
-  dataSource: MatTableDataSource<OrderItemEntry>;
+  dataSource: MatTableDataSource<InventoryOrderItemEntry>;
 
 
   constructor(private messageBox: MessageBoxService) { }
@@ -66,7 +66,7 @@ export class InventoryOrderItemEntriesTableComponent implements OnChanges {
   }
 
 
-  onRemoveEntryClicked(entry: OrderItemEntry) {
+  onRemoveEntryClicked(entry: InventoryOrderItemEntry) {
     const message = this.getConfirmDeleteMessage(entry);
 
     this.messageBox.confirm(message, 'Eliminar registro', 'DeleteCancel')
@@ -94,7 +94,7 @@ export class InventoryOrderItemEntriesTableComponent implements OnChanges {
   }
 
 
-  private getConfirmDeleteMessage(entry: OrderItemEntry): string {
+  private getConfirmDeleteMessage(entry: InventoryOrderItemEntry): string {
     return `
       <table class="confirm-data">
         <tr><td class="nowrap">Producto: </td><td><strong>

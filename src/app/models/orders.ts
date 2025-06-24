@@ -50,6 +50,7 @@ export const DefaultOrdersStatus: string = 'Captured';
 
 export interface OrdersQuery extends DataTableQuery {
   queryType: string;
+  orderTypeUID?: string;
   keywords: string;
   status: string;
 }
@@ -119,9 +120,6 @@ export interface OrderItem {
 
 export interface OrderItemEntry {
   uid: string;
-  product: string;
-  location: string;
-  quantity: number;
 }
 
 

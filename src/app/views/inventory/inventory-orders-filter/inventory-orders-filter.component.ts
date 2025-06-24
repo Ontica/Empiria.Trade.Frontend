@@ -5,11 +5,16 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
+         SimpleChanges } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { EventInfo, Identifiable } from '@app/core';
+
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { InventaryStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
@@ -22,6 +27,7 @@ export enum InventoryOrdersFilterEventType {
 }
 
 interface InventoryOrdersFilterFormModel extends FormGroup<{
+  inventoryTypeUID: FormControl<string>;
   status: FormControl<string>;
   keywords: FormControl<string>;
 }> { }
@@ -30,11 +36,13 @@ interface InventoryOrdersFilterFormModel extends FormGroup<{
   selector: 'emp-trade-inventory-orders-filter',
   templateUrl: './inventory-orders-filter.component.html',
 })
-export class InventoryOrdersFilterComponent implements OnChanges {
+export class InventoryOrdersFilterComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() query: InventoryOrdersQuery = EmptyInventoryOrdersQuery;
 
   @Output() inventoryOrdersFilterEvent = new EventEmitter<EventInfo>();
+
+  helper: SubscriptionHelper;
 
   form: InventoryOrdersFilterFormModel;
 
@@ -42,15 +50,19 @@ export class InventoryOrdersFilterComponent implements OnChanges {
 
   inventoryTypesList: Identifiable[] = [];
 
-  assignedToList: Identifiable[] = [];
-
   statusList: Identifiable[] = EntityStatusList;
 
   isLoading = false;
 
 
-  constructor() {
+  constructor(private uiLayer: PresentationLayer) {
+    this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
+  }
+
+
+  ngOnInit() {
+    this.loadDataLists();
   }
 
 
@@ -61,17 +73,31 @@ export class InventoryOrdersFilterComponent implements OnChanges {
   }
 
 
+  ngOnDestroy() {
+    this.helper.destroy();
+  }
+
+
   onSearchClicked() {
     if (this.form.valid) {
-      const payload = {
+      sendEvent(this.inventoryOrdersFilterEvent, InventoryOrdersFilterEventType.SEARCH_CLICKED, {
         isFormValid: this.form.valid,
         query: this.getFormData(),
-      };
-
-      sendEvent(this.inventoryOrdersFilterEvent, InventoryOrdersFilterEventType.SEARCH_CLICKED, payload);
+      });
     } else {
       FormHelper.markFormControlsAsTouched(this.form);
     }
+  }
+
+
+  private loadDataLists() {
+    this.isLoading = true;
+
+    this.helper.select<Identifiable[]>(InventaryStateSelector.INVENTORY_TYPES)
+      .subscribe(x => {
+        this.inventoryTypesList = x;
+        this.isLoading = x.length === 0;
+      });
   }
 
 
@@ -79,6 +105,7 @@ export class InventoryOrdersFilterComponent implements OnChanges {
     const fb = new FormBuilder();
 
     this.form = fb.group({
+      inventoryTypeUID: [''],
       status: [''],
       keywords: [''],
     });
@@ -87,6 +114,7 @@ export class InventoryOrdersFilterComponent implements OnChanges {
 
   private setFormData() {
     this.form.reset({
+      inventoryTypeUID: this.query.inventoryTypeUID,
       status: this.query.status,
       keywords: this.query.keywords,
     });
@@ -96,6 +124,7 @@ export class InventoryOrdersFilterComponent implements OnChanges {
   private getFormData(): InventoryOrdersQuery {
     const query: InventoryOrdersQuery = {
       queryType: OrdersQueryType.Inventory,
+      inventoryTypeUID: this.form.value.inventoryTypeUID ?? '',
       status: this.form.value.status ?? '',
       keywords: this.form.value.keywords ?? '',
     };

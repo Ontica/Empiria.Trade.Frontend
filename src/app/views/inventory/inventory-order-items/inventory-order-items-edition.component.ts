@@ -15,8 +15,8 @@ import { AlertService, MessageBoxService } from '@app/shared/services';
 
 import { InventoryDataService } from '@app/data-services';
 
-import { EmptyOrderItem, InventoryOrder, InventoryOrderItemFields, InventoryProductSelection,
-         mapInventoryOrderItemFieldsFromSelection, OrderHolder, OrderItem } from '@app/models';
+import { EmptyInventoryOrderItem, InventoryOrderHolder, InventoryOrderItem, InventoryOrderItemFields,
+         InventoryProductSelection, mapInventoryOrderItemFieldsFromSelection } from '@app/models';
 
 import { InventoryOrderItemsTableEventType } from './inventory-order-items-table.component';
 
@@ -43,7 +43,7 @@ export class InventoryOrderItemsEditionComponent {
 
   @Input() orderUID = '';
 
-  @Input() items: OrderItem[] = [];
+  @Input() items: InventoryOrderItem[] = [];
 
   @Input() canEditItems = false;
 
@@ -57,7 +57,7 @@ export class InventoryOrderItemsEditionComponent {
 
   displayItemEntriesEdition = false;
 
-  selectedItem: OrderItem = EmptyOrderItem;
+  selectedItem: InventoryOrderItem = EmptyInventoryOrderItem;
 
 
   constructor(private inventoryData: InventoryDataService,
@@ -101,7 +101,7 @@ export class InventoryOrderItemsEditionComponent {
     switch (event.type as InventoryOrderItemsTableEventType) {
       case InventoryOrderItemsTableEventType.SELECT_ITEM_CLICKED:
         Assertion.assertValue(event.payload.item, 'event.payload.item');
-        this.setSelectedItem(event.payload.item as OrderItem);
+        this.setSelectedItem(event.payload.item as InventoryOrderItem);
         return;
       case InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED:
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
@@ -109,7 +109,7 @@ export class InventoryOrderItemsEditionComponent {
         return;
       case InventoryOrderItemsTableEventType.EDIT_ITEM_ENTRIES_CLICKED:
         Assertion.assertValue(event.payload.item, 'event.payload.item');
-        this.setSelectedItem(event.payload.item as OrderItem);
+        this.setSelectedItem(event.payload.item as InventoryOrderItem);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -121,11 +121,11 @@ export class InventoryOrderItemsEditionComponent {
   onInventoryOrderItemEntriesEditionEvent(event: EventInfo) {
     switch (event.type as InventoryOrderItemEntriesEditionEventType) {
       case InventoryOrderItemEntriesEditionEventType.CLOSE_BUTTON_CLICKED:
-        this.setSelectedItem(EmptyOrderItem);
+        this.setSelectedItem(EmptyInventoryOrderItem);
         return;
       case InventoryOrderItemEntriesEditionEventType.ENTRIES_UPDATED:
-        Assertion.assertValue(event.payload.order, 'event.payload.order');
-        this.resolveOrderItemEntriesUpdated(event.payload.order as OrderHolder);
+        Assertion.assertValue(event.payload.data, 'event.payload.data');
+        this.resolveOrderItemEntriesUpdated(event.payload.data as InventoryOrderHolder);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -179,42 +179,42 @@ export class InventoryOrderItemsEditionComponent {
   }
 
 
-  private resolveOrderItemUpdated(order: InventoryOrder) {
+  private resolveOrderItemUpdated(data: InventoryOrderHolder) {
     this.alertService.openAlert('Se agregó el producto a la orden de inventario.');
 
     sendEvent(this.inventoryOrderItemsEditionEvent,
-      InventoryOrderItemsEditionEventType.ITEM_CREATED, { order });
+      InventoryOrderItemsEditionEventType.ITEM_CREATED, { data });
   }
 
 
-  private resolveDeleteOrderItem(order: InventoryOrder) {
+  private resolveDeleteOrderItem(data: InventoryOrderHolder) {
     this.alertService.openAlert('Se eliminó el producto a la orden de inventario.');
 
     sendEvent(this.inventoryOrderItemsEditionEvent,
-      InventoryOrderItemsEditionEventType.ITEM_DELETED, { order });
+      InventoryOrderItemsEditionEventType.ITEM_DELETED, { data });
   }
 
 
-  private resolveOrderItemEntriesUpdated(order: OrderHolder) {
+  private resolveOrderItemEntriesUpdated(data: InventoryOrderHolder) {
     this.alertService.openAlert('Se actualizaron las ubicaciones del producto.');
 
     sendEvent(this.inventoryOrderItemsEditionEvent,
-      InventoryOrderItemsEditionEventType.ENTRIES_UPDATED, { order });
+      InventoryOrderItemsEditionEventType.ENTRIES_UPDATED, { data });
 
-    const selectedItemUpdated = order.items.find(x => x.uid === this.selectedItem.uid);
-    this.setSelectedItem(isEmpty(selectedItemUpdated) ? EmptyOrderItem : selectedItemUpdated);
+    const selectedItemUpdated = data.items.find(x => x.uid === this.selectedItem.uid);
+    this.setSelectedItem(isEmpty(selectedItemUpdated) ? EmptyInventoryOrderItem : selectedItemUpdated);
   }
 
 
-  private resolveCloseOrderItemEntries(order: OrderHolder) {
+  private resolveCloseOrderItemEntries(data: InventoryOrderHolder) {
     this.alertService.openAlert('Se cerró el inventario.');
 
     sendEvent(this.inventoryOrderItemsEditionEvent,
-      InventoryOrderItemsEditionEventType.ENTRIES_UPDATED, { order });
+      InventoryOrderItemsEditionEventType.ENTRIES_UPDATED, { data });
   }
 
 
-  private setSelectedItem(item: OrderItem) {
+  private setSelectedItem(item: InventoryOrderItem) {
     this.selectedItem = item;
     this.displayItemEntriesEdition = !isEmpty(this.selectedItem);
   }

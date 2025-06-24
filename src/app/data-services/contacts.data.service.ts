@@ -29,18 +29,4 @@ export class ContactsDataService {
     return this.http.get<Identifiable[]>(path);
   }
 
-
-  getWarehousemen(): EmpObservable<Identifiable[]> {
-    const path = 'v4/trade/contacts/warehousemen';
-
-    return this.http.get<Identifiable[]>(path);
-  }
-
-
-  getSupervisors(): EmpObservable<Identifiable[]> {
-    const path = 'v4/trade/contacts/inventory-supervisors';
-
-    return this.http.get<Identifiable[]>(path);
-  }
-
 }

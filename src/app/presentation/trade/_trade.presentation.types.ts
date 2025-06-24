@@ -26,4 +26,8 @@ export type TradeEffects = '';
 import { SelectorType as CataloguesStateSelector } from './catalogues.presentation.handler';
 export { SelectorType as CataloguesStateSelector } from './catalogues.presentation.handler';
 
-export type TradeSelectors = CataloguesStateSelector;
+import { SelectorType as InventaryStateSelector } from './inventary.presentation.handler';
+export { SelectorType as InventaryStateSelector } from './inventary.presentation.handler';
+
+export type TradeSelectors = CataloguesStateSelector |
+                             InventaryStateSelector;

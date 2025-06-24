@@ -11,7 +11,8 @@ import { DataTableEntry } from './_data-table';
 
 import { InventoryProductSelection } from './product';
 
-import { EmptyOrderActions, Order, OrderActions, OrdersQuery } from './orders';
+import { EmptyOrderActions, Order, OrderActions, OrderHolder, OrderItem, OrderItemEntry,
+         OrdersQuery } from './orders';
 
 import { EntityStatus } from './_explorer-data';
 
@@ -19,8 +20,8 @@ import { EntityStatus } from './_explorer-data';
 export interface InventoryOrdersQuery extends OrdersQuery {
   status: string;
   keywords: string;
-  // inventoryOrderTypeUID: string;
-  // assignedToUID: string;
+  inventoryTypeUID?: string;
+  warehouseUID?: string;
 }
 
 
@@ -28,11 +29,13 @@ export interface InventoryOrderDescriptor extends DataTableEntry {
   uid: string;
   orderTypeName: string;
   orderNo: string;
+  inventoryTypeName: string;
+  warehouseName: string;
   responsibleName: string;
-  postingTime: DateString;
+  requestedByName: string;
   description: string;
+  postingTime: DateString;
   status: string;
-  // assignedToName: string;
 }
 
 
@@ -40,41 +43,59 @@ export interface InventoryOrder extends Order {
   uid: string;
   orderType: Identifiable;
   orderNo: string;
+  inventoryType: Identifiable;
+  warehouse: Identifiable;
   responsible: Identifiable;
-  assignedTo: Identifiable;
+  requestedBy: Identifiable;
   description: string;
   closingTime: DateString;
   postingTime: DateString;
   postedBy: Identifiable;
   status: Identifiable<EntityStatus>;
+}
+
+
+export interface InventoryOrderHolder extends OrderHolder {
+  order: InventoryOrder;
   items: InventoryOrderItem[];
   actions: OrderActions;
+}
+
+
+export interface InventoryOrderFields {
+  inventoryTypeUID: string;
+  warehouseUID: string;
+  responsibleUID: string;
+  requestedByUID: string;
+  description: string;
 }
 
 
 export interface InventoryPicking extends Order {
   orderType: Identifiable;
   orderNo: string;
+  inventoryType: Identifiable;
+  warehouse: Identifiable;
   responsible: Identifiable;
-  assignedTo: Identifiable;
+  requestedBy: Identifiable;
   description: string;
 }
 
 
-export interface InventoryOrderFields {
-  inventoryOrderTypeUID: string;
-  responsibleUID: string;
-  description: string;
-  assignedToUID: string;
-}
-
-
-export interface InventoryOrderItem {
+export interface InventoryOrderItem extends OrderItem {
   uid: string;
-  product: InventoryProduct;
-  warehouseBin: InventoryWarehouseBin;
+  productName: string;
   quantity: number;
-  description: string;
+  assignedQuantity: number;
+  entries: InventoryOrderItemEntry[];
+}
+
+
+export interface InventoryOrderItemEntry extends OrderItemEntry {
+  uid: string;
+  product: string;
+  location: string;
+  quantity: number;
 }
 
 
@@ -99,12 +120,19 @@ export interface InventoryOrderItemFields {
 }
 
 
+export interface InventoryOrderItemEntryFields {
+  uid: string;
+  product: string;
+  location: string;
+  quantity: number;
+}
+
+
 export const EmptyInventoryOrdersQuery: InventoryOrdersQuery = {
   queryType: '',
   status: '',
   keywords: '',
-  // inventoryOrderTypeUID: '',
-  // assignedToUID: '',
+  inventoryTypeUID: '',
 };
 
 
@@ -112,16 +140,32 @@ export const EmptyInventoryOrder: InventoryOrder = {
   uid: '',
   orderType: Empty,
   orderNo: '',
+  inventoryType: Empty,
+  warehouse: Empty,
   responsible: Empty,
-  assignedTo: Empty,
+  requestedBy: Empty,
   description: '',
   closingTime: '',
   postingTime: '',
   postedBy: Empty,
   status: Empty,
+};
+
+
+export const EmptyInventoryOrderHolder: InventoryOrderHolder = {
+  order: EmptyInventoryOrder,
   items: [],
   actions: EmptyOrderActions,
 };
+
+
+export const EmptyInventoryOrderItem: InventoryOrderItem = {
+  uid: '',
+  productName: '',
+  quantity: null,
+  assignedQuantity: null,
+  entries: [],
+}
 
 
 export const EmptyInventoryPicking: InventoryPicking = {
@@ -129,7 +173,9 @@ export const EmptyInventoryPicking: InventoryPicking = {
   orderType: Empty,
   orderNo: '',
   responsible: Empty,
-  assignedTo: Empty,
+  inventoryType: Empty,
+  warehouse: Empty,
+  requestedBy: Empty,
   description: '',
   closingTime: '',
   postingTime: '',

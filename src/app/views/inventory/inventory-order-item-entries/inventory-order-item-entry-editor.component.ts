@@ -14,7 +14,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
-import { OrderItemEntry } from '@app/models';
+import { InventoryOrderItemEntryFields } from '@app/models';
 
 
 export enum InventoryOrderItemEntryEditorEventType {
@@ -110,12 +110,12 @@ export class InventoryOrderItemEntryEditorComponent implements OnChanges, AfterV
   }
 
 
-  private getFormData(): OrderItemEntry {
+  private getFormData(): InventoryOrderItemEntryFields {
     Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
     const formModel = this.form.getRawValue();
 
-    const data: OrderItemEntry = {
+    const data: InventoryOrderItemEntryFields = {
       uid: null,
       product: formModel.product,
       location: formModel.location,

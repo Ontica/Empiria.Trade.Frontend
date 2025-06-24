@@ -11,16 +11,19 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
+import { SkipIf } from '@app/shared/decorators';
+
 import { InventoryDataService } from '@app/data-services';
 
-import { EmptyOrder, EmptyOrderActions, InventoryOrderFields, Order, OrderActions } from '@app/models';
+import { EmptyInventoryOrder, EmptyOrderActions, InventoryOrder, InventoryOrderFields,
+         OrderActions } from '@app/models';
 
 import { InventoryOrderHeaderEventType } from './inventory-order-header.component';
 
 
 export enum InventoryOrderEditorEventType {
-  ORDER_UPDATED = 'InventoryOrderEditorComponent.Event.OrderUpdated',
-  ORDER_DELETED = 'InventoryOrderEditorComponent.Event.OrderDeleted',
+  UPDATED = 'InventoryOrderEditorComponent.Event.OrderUpdated',
+  DELETED = 'InventoryOrderEditorComponent.Event.OrderDeleted',
 }
 
 @Component({
@@ -29,7 +32,7 @@ export enum InventoryOrderEditorEventType {
 })
 export class InventoryOrderEditorComponent {
 
-  @Input() order: Order = EmptyOrder;
+  @Input() order: InventoryOrder = EmptyInventoryOrder;
 
   @Input() actions: OrderActions = EmptyOrderActions;
 
@@ -45,21 +48,17 @@ export class InventoryOrderEditorComponent {
     return !isEmpty(this.order);
   }
 
-
+  @SkipIf('submitted')
   onInventoryOrderHeaderEvent(event: EventInfo) {
-    if (this.submitted) {
-      return;
-    }
-
     switch (event.type as InventoryOrderHeaderEventType) {
-      case InventoryOrderHeaderEventType.UPDATE_ORDER:
+      case InventoryOrderHeaderEventType.UPDATE:
         Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
         this.updateOrder(event.payload.dataFields as InventoryOrderFields);
         return;
-      case InventoryOrderHeaderEventType.DELETE_ORDER:
+      case InventoryOrderHeaderEventType.DELETE:
         this.deleteOrder();
         return;
-      case InventoryOrderHeaderEventType.CLOSE_ORDER:
+      case InventoryOrderHeaderEventType.CLOSE:
         this.closeOrder();
         return;
       default:
@@ -74,9 +73,7 @@ export class InventoryOrderEditorComponent {
 
     this.inventoryData.updateOrder(this.order.uid, orderFields)
       .firstValue()
-      .then(x =>
-        sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_UPDATED, { order: x })
-      )
+      .then(x => sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.UPDATED, {data: x}))
       .finally(() => this.submitted = false);
   }
 
@@ -86,9 +83,7 @@ export class InventoryOrderEditorComponent {
 
     this.inventoryData.deleteOrder(this.order.uid)
       .firstValue()
-      .then(x =>
-        sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_DELETED, { order: x })
-      )
+      .then(x => sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.DELETED, {data: x}))
       .finally(() => this.submitted = false);
   }
 
@@ -98,9 +93,7 @@ export class InventoryOrderEditorComponent {
 
     this.inventoryData.closeOrder(this.order.uid)
       .firstValue()
-      .then(x =>
-        sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.ORDER_UPDATED, { order: x })
-      )
+      .then(x => sendEvent(this.inventoryOrderEditorEvent, InventoryOrderEditorEventType.UPDATED, {data: x}))
       .finally(() => this.submitted = false);
   }
 

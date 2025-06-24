@@ -4,21 +4,22 @@
 
     <div class="fx-row-container">
 
-      <!-- <div class="fx-item-quarter sm-fx-item">
+      <div class="fx-item-half">
 
         <label>Tipo de inventario:</label>
 
         <emp-ng-select
-          formControlName="inventoryOrderTypeUID"
+          formControlName="inventoryTypeUID"
+          placeholder="Todos"
+          [config]="{clearable: true}"
           [items]="inventoryTypesList"
-          [config]="{selectFirst: true}"
           [loading]="isLoading"
-          [showError]="formHelper.isControlInvalid(form.controls.inventoryOrderTypeUID)">
+          [showError]="formHelper.isControlInvalid(form.controls.inventoryTypeUID)">
         </emp-ng-select>
 
-      </div> -->
+      </div>
 
-      <div class="fx-item-half">
+      <div class="fx-item">
 
         <label>Estatus:</label>
 
@@ -30,17 +31,6 @@
         </emp-ng-select>
 
       </div>
-
-      <!-- <div class="fx-item-quarter sm-fx-item">
-        <label>Asignado a:</label>
-        <emp-ng-select
-          formControlName="assignedToUID"
-          placeholder="Todos"
-          [config]="{clearable: true}"
-          [loading]="isLoading"
-          [items]="assignedToList">
-        </emp-ng-select>
-      </div> -->
 
       <div class="fx-item fx-items-end">
 

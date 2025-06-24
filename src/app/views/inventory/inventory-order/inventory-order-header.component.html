@@ -5,20 +5,24 @@
     <div class="fx-row-container">
 
       <div class="fx-item-half">
-        <label>Número de orden de inventario:</label>
-        <input type="text" class="text-box"
-          formControlName="inventoryOrderNo"
-          [class.invalid-control]="formHelper.isControlInvalid(form.controls.inventoryOrderNo)">
+        <label>Tipo de inventario:</label>
+        <emp-ng-select
+          formControlName="inventoryTypeUID"
+          [items]="inventoryTypesList"
+          [loading]="isLoading"
+          [placeholder]="formHelper.getSimplePlaceholder(editionMode)"
+          [showError]="formHelper.isControlInvalid(form.controls.inventoryTypeUID)">
+        </emp-ng-select>
       </div>
 
       <div class="fx-item-half">
-        <label>Tipo de inventario:</label>
+        <label>Almacén:</label>
         <emp-ng-select
-          formControlName="inventoryOrderType"
-          [items]="inventoryTypesList"
+          formControlName="warehouseUID"
+          [items]="warehousesList"
           [loading]="isLoading"
-          [placeholder]="selectionPlaceholder"
-          [showError]="formHelper.isControlInvalid(form.controls.inventoryOrderType)">
+          [placeholder]="formHelper.getSimplePlaceholder(editionMode)"
+          [showError]="formHelper.isControlInvalid(form.controls.warehouseUID)">
         </emp-ng-select>
       </div>
 
@@ -30,21 +34,21 @@
         <label>Responsable:</label>
         <emp-ng-select
           formControlName="responsibleUID"
-          [items]="responsibleList"
+          [items]="warehousemenList"
           [loading]="isLoading"
-          [placeholder]="selectionPlaceholder"
+          [placeholder]="formHelper.getSimplePlaceholder(editionMode)"
           [showError]="formHelper.isControlInvalid(form.controls.responsibleUID)">
         </emp-ng-select>
       </div>
 
       <div class="fx-item-half">
-        <label>Asignado a:</label>
+        <label>Solicitado por:</label>
           <emp-ng-select
-            formControlName="assignedToUID"
-            [items]="warehousemenList"
+            formControlName="requestedByUID"
+            [items]="supervisorsList"
             [loading]="isLoading"
-            [placeholder]="selectionPlaceholder"
-            [showError]="formHelper.isControlInvalid(form.controls.assignedToUID)">
+            [placeholder]="formHelper.getSimplePlaceholder(editionMode)"
+            [showError]="formHelper.isControlInvalid(form.controls.requestedByUID)">
           </emp-ng-select>
       </div>
 

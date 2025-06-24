@@ -11,6 +11,8 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
+import { SkipIf } from '@app/shared/decorators';
+
 import { InventoryDataService } from '@app/data-services';
 
 import { InventoryOrderFields } from '@app/models';
@@ -20,7 +22,7 @@ import { InventoryOrderHeaderEventType } from './inventory-order-header.componen
 
 export enum InventoryOrderCreatorEventType {
   CLOSE_MODAL_CLICKED = 'InventoryOrderCreatorComponent.Event.CloseModalClicked',
-  ORDER_CREATED       = 'InventoryOrderCreatorComponent.Event.OrderCreated',
+  CREATED             = 'InventoryOrderCreatorComponent.Event.OrderCreated',
 }
 
 @Component({
@@ -42,17 +44,13 @@ export class InventoryOrderCreatorComponent {
   }
 
 
+  @SkipIf('submitted')
   onInventoryOrderHeaderEvent(event: EventInfo) {
-    if (this.submitted) {
-      return;
-    }
-
     switch (event.type as InventoryOrderHeaderEventType) {
-      case InventoryOrderHeaderEventType.CREATE_ORDER:
+      case InventoryOrderHeaderEventType.CREATE:
         Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
         this.createOrder(event.payload.dataFields as InventoryOrderFields);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -60,14 +58,12 @@ export class InventoryOrderCreatorComponent {
   }
 
 
-  private createOrder(orderFields: InventoryOrderFields) {
+  private createOrder(dataFields: InventoryOrderFields) {
     this.submitted = true;
 
-    this.inventoryData.createOrder(orderFields)
+    this.inventoryData.createOrder(dataFields)
       .firstValue()
-      .then(x =>
-        sendEvent(this.inventoryOrderCreatorEvent, InventoryOrderCreatorEventType.ORDER_CREATED, { order: x })
-      )
+      .then(x => sendEvent(this.inventoryOrderCreatorEvent, InventoryOrderCreatorEventType.CREATED, {data: x}))
       .finally(() => this.submitted = false);
   }
 

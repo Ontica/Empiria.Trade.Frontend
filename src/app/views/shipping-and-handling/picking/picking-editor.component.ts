@@ -73,7 +73,7 @@ export class PickingEditorComponent {
     }
 
     switch (event.type as InventoryOrderHeaderEventType) {
-      case InventoryOrderHeaderEventType.UPDATE_ORDER:
+      case InventoryOrderHeaderEventType.UPDATE:
         Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
         this.updateOrderPicking(event.payload.dataFields as InventoryOrderFields);
         return;

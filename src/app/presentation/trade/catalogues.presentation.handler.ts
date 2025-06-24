@@ -11,11 +11,10 @@ import { EmpObservable } from '@app/core';
 
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
-import { InventoryDataService, MoneyAccountsDataService } from '@app/data-services';
+import { MoneyAccountsDataService } from '@app/data-services';
 
 
 export enum SelectorType {
-  INVENTORY_ORDER_TYPES                = 'Trade.Inventory.Selectors.InventoryOrderTypes.List',
   MONEY_ACCOUNT_TYPES                  = 'Trade.MoneyAccount.Selectors.Types.List',
   MONEY_ACCOUNT_STATUS                 = 'Trade.MoneyAccount.Selectors.Status.List',
   MONEY_ACCOUNT_TRANSACTION_TYPES      = 'Trade.MoneyAccount.Selectors.TransactionTypes.List',
@@ -25,7 +24,6 @@ export enum SelectorType {
 
 
 const initialState: StateValues = [
-  { key: SelectorType.INVENTORY_ORDER_TYPES, value: [] },
   { key: SelectorType.MONEY_ACCOUNT_TYPES, value: [] },
   { key: SelectorType.MONEY_ACCOUNT_STATUS, value: [] },
   { key: SelectorType.MONEY_ACCOUNT_TRANSACTION_TYPES, value: [] },
@@ -37,8 +35,7 @@ const initialState: StateValues = [
 @Injectable()
 export class CataloguesPresentationHandler extends AbstractPresentationHandler {
 
-  constructor(private inventoryData: InventoryDataService,
-              private moneyAccountsData: MoneyAccountsDataService) {
+  constructor(private moneyAccountsData: MoneyAccountsDataService) {
     super({
       initialState,
       selectors: SelectorType,
@@ -48,12 +45,6 @@ export class CataloguesPresentationHandler extends AbstractPresentationHandler {
 
   select<U>(selectorType: SelectorType, params?: any): EmpObservable<U> {
     switch (selectorType) {
-
-      case SelectorType.INVENTORY_ORDER_TYPES: {
-        const provider = () => this.inventoryData.getOrderTypes();
-
-        return super.selectFirst<U>(selectorType, provider);
-      }
 
       case SelectorType.MONEY_ACCOUNT_TYPES: {
         const provider = () => this.moneyAccountsData.getMoneyAccountTypes();

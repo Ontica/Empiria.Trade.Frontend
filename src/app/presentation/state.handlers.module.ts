@@ -17,6 +17,9 @@ import { AccessControlPresentationHandler } from './security-management/access-c
 
 import { CataloguesPresentationHandler } from './trade/catalogues.presentation.handler';
 
+import { InventaryPresentationHandler } from './trade/inventary.presentation.handler';
+
+
 @NgModule({
 
   providers: [
@@ -24,11 +27,13 @@ import { CataloguesPresentationHandler } from './trade/catalogues.presentation.h
     AppStatusPresentationHandler,
     AccessControlPresentationHandler,
     CataloguesPresentationHandler,
+    InventaryPresentationHandler,
 
     { provide: STATE_HANDLERS, useExisting: MainLayoutPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AppStatusPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AccessControlPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: CataloguesPresentationHandler, multi: true },
+    { provide: STATE_HANDLERS, useExisting: InventaryPresentationHandler, multi: true },
   ]
 
 })

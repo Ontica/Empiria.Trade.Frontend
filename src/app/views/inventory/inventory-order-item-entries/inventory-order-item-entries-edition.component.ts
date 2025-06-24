@@ -13,7 +13,8 @@ import { FormatLibrary, sendEvent } from '@app/shared/utils';
 
 import { InventoryDataService } from '@app/data-services';
 
-import { EmptyOrderItem, OrderHolder, OrderItem, OrderItemEntry } from '@app/models';
+import { EmptyInventoryOrderItem, InventoryOrderHolder, InventoryOrderItem,
+         InventoryOrderItemEntry } from '@app/models';
 
 import { InventoryOrderItemEntryEditorEventType } from './inventory-order-item-entry-editor.component';
 
@@ -35,7 +36,7 @@ export class InventoryOrderItemEntriesEditionComponent implements OnChanges {
 
   @Input() assignedQuantity = 0;
 
-  @Input() item: OrderItem = EmptyOrderItem;
+  @Input() item: InventoryOrderItem = EmptyInventoryOrderItem;
 
   @Input() canEdit = false;
 
@@ -70,7 +71,7 @@ export class InventoryOrderItemEntriesEditionComponent implements OnChanges {
         Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
         this.assignOrderItemEntry(event.payload.orderUID,
                                   event.payload.itemUID,
-                                  event.payload.dataFields as OrderItemEntry);
+                                  event.payload.dataFields as InventoryOrderItemEntry);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -96,7 +97,7 @@ export class InventoryOrderItemEntriesEditionComponent implements OnChanges {
   }
 
 
-  private assignOrderItemEntry(orderUID: string, itemUID: string, entry: OrderItemEntry) {
+  private assignOrderItemEntry(orderUID: string, itemUID: string, entry: InventoryOrderItemEntry) {
     this.submitted = true;
 
     this.inventoryData.assignOrderItemEntry(orderUID, itemUID, entry)
@@ -116,9 +117,9 @@ export class InventoryOrderItemEntriesEditionComponent implements OnChanges {
   }
 
 
-  private resolveItemEntriesUpdated(order: OrderHolder) {
+  private resolveItemEntriesUpdated(data: InventoryOrderHolder) {
     sendEvent(this.inventoryOrderItemEntriesEditionEvent,
-      InventoryOrderItemEntriesEditionEventType.ENTRIES_UPDATED, { order });
+      InventoryOrderItemEntriesEditionEventType.ENTRIES_UPDATED, { data });
   }
 
 

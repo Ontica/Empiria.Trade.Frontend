@@ -9,18 +9,40 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { InventoryOrder, OrdersDataTable, InventoryOrderFields, InventoryOrderItemFields, OrderHolder,
-         OrdersQuery, OrderItemEntry } from '@app/models';
+import { OrdersDataTable, InventoryOrderFields, InventoryOrderItemFields, InventoryOrderHolder,
+         OrdersQuery, InventoryOrderItemEntry } from '@app/models';
 
 
 @Injectable()
 export class InventoryDataService {
 
+
   constructor(private http: HttpService) { }
 
 
   getOrderTypes(): EmpObservable<Identifiable[]> {
-    const path = 'v4/trade/inventory/orders/inventory-types';
+    const path = 'v8/order-management/inventory-types';
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
+  getWareHouses(): EmpObservable<Identifiable[]> {
+    const path = 'v8/order-management/wareHouses';
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
+  getWarehousemen(): EmpObservable<Identifiable[]> {
+    const path = 'v8/order-management/inventory-orders/warehousemen';
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
+  getSupervisors(): EmpObservable<Identifiable[]> {
+    const path = 'v8/order-management/inventory-orders/inventory-supervisor';
 
     return this.http.get<Identifiable[]>(path);
   }
@@ -35,110 +57,112 @@ export class InventoryDataService {
   }
 
 
-  getOrder(orderUID: string): EmpObservable<OrderHolder> {
+  getOrder(orderUID: string): EmpObservable<InventoryOrderHolder> {
     Assertion.assertValue(orderUID, 'orderUID');
 
     const path = `v8/order-management/inventory-orders/${orderUID}`;
 
-    return this.http.get<OrderHolder>(path);
+    return this.http.get<InventoryOrderHolder>(path);
   }
 
 
-  closeOrderEntries(orderUID: string): EmpObservable<OrderHolder> {
+  createOrder(dataFields: InventoryOrderFields): EmpObservable<InventoryOrderHolder> {
+    Assertion.assertValue(dataFields, 'dataFields');
+
+    const path = 'v8/order-management/inventory-orders/';
+
+    return this.http.post<InventoryOrderHolder>(path, dataFields);
+  }
+
+
+  updateOrder(orderUID: string,
+              dataFields: InventoryOrderFields): EmpObservable<InventoryOrderHolder> {
+    Assertion.assertValue(orderUID, 'orderUID');
+    Assertion.assertValue(dataFields, 'dataFields');
+
+    const path = `v8/order-management/inventory-orders/${orderUID}`;
+
+    return this.http.put<InventoryOrderHolder>(path, dataFields);
+  }
+
+
+  deleteOrder(orderUID: string): EmpObservable<InventoryOrderHolder> {
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v8/order-management/inventory-orders/${orderUID}`;
+
+    return this.http.delete<InventoryOrderHolder>(path);
+  }
+
+
+  closeOrder(orderUID: string): EmpObservable<InventoryOrderHolder> {
     Assertion.assertValue(orderUID, 'orderUID');
 
     const path = `v8/order-management/inventory-orders/${orderUID}/close`;
 
-    return this.http.post<OrderHolder>(path);
+    return this.http.post<InventoryOrderHolder>(path);
+  }
+
+
+  closeOrderEntries(orderUID: string): EmpObservable<InventoryOrderHolder> {
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v8/order-management/inventory-orders/${orderUID}/close`;
+
+    return this.http.post<InventoryOrderHolder>(path);
   }
 
 
   assignOrderItemEntry(orderUID: string,
                        itemUID: string,
-                       dataFields: OrderItemEntry): EmpObservable<OrderHolder> {
+                       dataFields: InventoryOrderItemEntry): EmpObservable<InventoryOrderHolder> {
     Assertion.assertValue(orderUID, 'orderUID');
     Assertion.assertValue(itemUID, 'itemUID');
     Assertion.assertValue(dataFields, 'dataFields');
 
     const path = `v8/order-management/inventory-orders/${orderUID}/items/${itemUID}/entries`;
 
-    return this.http.post<OrderHolder>(path, dataFields);
+    return this.http.post<InventoryOrderHolder>(path, dataFields);
   }
 
 
   removeOrderItemEntry(orderUID: string,
                        itemUID: string,
-                       entryUID: string): EmpObservable<OrderHolder> {
+                       entryUID: string): EmpObservable<InventoryOrderHolder> {
     Assertion.assertValue(orderUID, 'orderUID');
     Assertion.assertValue(itemUID, 'itemUID');
     Assertion.assertValue(entryUID, 'entryUID');
 
     const path = `v8/order-management/inventory-orders/${orderUID}/items/${itemUID}/entries/${entryUID}`;
 
-    return this.http.delete<OrderHolder>(path);
+    return this.http.delete<InventoryOrderHolder>(path);
   }
 
   //
-  // TODO: Refactor the following functions
+  // #region TODO: Refactor the following functions
   //
-
-  createOrder(dataFields: InventoryOrderFields): EmpObservable<InventoryOrder> {
-    Assertion.assertValue(dataFields, 'dataFields');
-
-    const path = 'v4/trade/inventory/orders/';
-
-    return this.http.post<InventoryOrder>(path, dataFields);
-  }
-
-
-  updateOrder(orderUID: string,
-              dataFields: InventoryOrderFields): EmpObservable<InventoryOrder> {
-    Assertion.assertValue(orderUID, 'orderUID');
-    Assertion.assertValue(dataFields, 'dataFields');
-
-    const path = `v4/trade/inventory/orders/${orderUID}`;
-
-    return this.http.put<InventoryOrder>(path, dataFields);
-  }
-
-
-  deleteOrder(orderUID: string): EmpObservable<InventoryOrder> {
-    Assertion.assertValue(orderUID, 'orderUID');
-
-    const path = `v4/trade/inventory/orders/${orderUID}`;
-
-    return this.http.delete<InventoryOrder>(path);
-  }
-
-
-  closeOrder(orderUID: string): EmpObservable<InventoryOrder> {
-    Assertion.assertValue(orderUID, 'orderUID');
-
-    const path = `v4/trade/inventory/orders/${orderUID}/close`;
-
-    return this.http.post<InventoryOrder>(path);
-  }
-
-
   createOrderItem(orderUID: string,
-                  dataFields: InventoryOrderItemFields): EmpObservable<InventoryOrder> {
+                  dataFields: InventoryOrderItemFields): EmpObservable<InventoryOrderHolder> {
     Assertion.assertValue(orderUID, 'orderUID');
     Assertion.assertValue(dataFields, 'dataFields');
 
     const path = `v4/trade/inventory/orders/${orderUID}/item`;
 
-    return this.http.post<InventoryOrder>(path, dataFields);
+    return this.http.post<InventoryOrderHolder>(path, dataFields);
   }
 
 
   deleteOrderItem(orderUID: string,
-                  orderItemUID: string): EmpObservable<InventoryOrder> {
+                  orderItemUID: string): EmpObservable<InventoryOrderHolder> {
     Assertion.assertValue(orderUID, 'orderUID');
     Assertion.assertValue(orderItemUID, 'orderItemUID');
 
     const path = `v4/trade/inventory/orders/${orderUID}/item/${orderItemUID}`;
 
-    return this.http.delete<InventoryOrder>(path);
+    return this.http.delete<InventoryOrderHolder>(path);
   }
+  //
+  // #endregion
+  //
 
 }

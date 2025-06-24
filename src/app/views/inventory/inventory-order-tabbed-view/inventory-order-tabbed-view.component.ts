@@ -11,7 +11,7 @@ import { Assertion, DateStringLibrary, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyOrderHolder, OrderHolder } from '@app/models';
+import { EmptyInventoryOrderHolder, InventoryOrderHolder } from '@app/models';
 
 import { InventoryOrderEditorEventType } from '../inventory-order/inventory-order-editor.component';
 
@@ -33,7 +33,7 @@ export enum InventoryOrderTabbedViewEventType {
 })
 export class InventoryOrderTabbedViewComponent implements OnChanges {
 
-  @Input() data: OrderHolder = EmptyOrderHolder;
+  @Input() data: InventoryOrderHolder = EmptyInventoryOrderHolder;
 
   @Output() inventoryOrderTabbedViewEvent = new EventEmitter<EventInfo>();
 
@@ -56,13 +56,13 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
 
   onInventoryOrderEditorEvent(event: EventInfo) {
     switch (event.type as InventoryOrderEditorEventType) {
-      case InventoryOrderEditorEventType.ORDER_UPDATED:
-        Assertion.assertValue(event.payload.order, 'event.payload.order');
+      case InventoryOrderEditorEventType.UPDATED:
+        Assertion.assertValue(event.payload.data, 'event.payload.data');
         sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ORDER_UPDATED,
           event.payload);
         return;
-      case InventoryOrderEditorEventType.ORDER_DELETED:
-        Assertion.assertValue(event.payload.order, 'event.payload.order');
+      case InventoryOrderEditorEventType.DELETED:
+        Assertion.assertValue(event.payload.data, 'event.payload.data');
         sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ORDER_DELETED,
           event.payload);
         return;
@@ -77,12 +77,12 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
     switch (event.type as InventoryOrderItemsEditionEventType) {
       case InventoryOrderItemsEditionEventType.ITEM_CREATED:
       case InventoryOrderItemsEditionEventType.ITEM_DELETED:
-        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        Assertion.assertValue(event.payload.data, 'event.payload.data');
         sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ORDER_UPDATED,
           event.payload);
         return;
       case InventoryOrderItemsEditionEventType.ENTRIES_UPDATED:
-        Assertion.assertValue(event.payload.order, 'event.payload.order');
+        Assertion.assertValue(event.payload.data, 'event.payload.data');
         sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ENTRIES_UPDATED,
           event.payload);
         return;

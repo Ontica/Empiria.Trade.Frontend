@@ -34,11 +34,11 @@
 
         <div class="fx-row-container">
 
-          <button mat-icon-button empNgStopPropagation *ngIf="canEditEntries"
-            title="Editar localizaciones"
+          <button mat-icon-button empNgStopPropagation
+            [title]="canEditEntries ? 'Editar localizaciones' : 'Ver localizaciones'"
             (click)="onEditItemEntriesClicked(row)">
             <mat-icon>
-              edit
+              playlist_add_check
             </mat-icon>
           </button>
 
@@ -62,8 +62,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="selectable-row"
-      (click)="onSelectItemClicked(row)"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     <tr mat-footer-row *matFooterRowDef="['notFoundMessage']" class="text-not-found" [hidden]="hasItems"></tr>
 
   </table>

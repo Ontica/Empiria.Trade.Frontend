@@ -15,7 +15,7 @@ import { sendEvent, sendEventIf } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/services';
 
-import { OrderItem } from '@app/models';
+import { InventoryOrderItem, OrderItem } from '@app/models';
 
 export enum InventoryOrderItemsTableEventType {
   SELECT_ITEM_CLICKED       = 'InventoryOrderItemsTableComponent.Event.SelectItemClicked',
@@ -29,7 +29,7 @@ export enum InventoryOrderItemsTableEventType {
 })
 export class InventoryOrderItemsTableComponent implements OnChanges {
 
-  @Input() items: OrderItem[] = [];
+  @Input() items: InventoryOrderItem[] = [];
 
   @Input() canDelete = false;
 
@@ -41,7 +41,9 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
 
   displayedColumns = [...this.displayedColumnsDefault];
 
-  dataSource: MatTableDataSource<OrderItem>;
+  dataSource: MatTableDataSource<InventoryOrderItem>;
+
+  displayAssigned = false;
 
 
   constructor(private messageBox: MessageBoxService) { }
@@ -59,13 +61,13 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
   }
 
 
-  onSelectItemClicked(item: OrderItem) {
+  onSelectItemClicked(item: InventoryOrderItem) {
     sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.SELECT_ITEM_CLICKED,
       { item });
   }
 
 
-  onDeleteItemClicked(item: OrderItem) {
+  onDeleteItemClicked(item: InventoryOrderItem) {
     const message = this.getConfirmDeleteMessage(item);
 
     this.messageBox.confirm(message, 'Eliminar movimiento', 'DeleteCancel')
@@ -77,7 +79,7 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
   }
 
 
-  onEditItemEntriesClicked(item: OrderItem) {
+  onEditItemEntriesClicked(item: InventoryOrderItem) {
     sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.EDIT_ITEM_ENTRIES_CLICKED,
       { item })  ;
   }
@@ -90,13 +92,14 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
 
 
   private resetColumns() {
+    this.displayAssigned = this.canEditEntries || !!this.items.find(x => x.assignedQuantity > 0);
     this.displayedColumns = [...this.displayedColumnsDefault];
 
-    if (this.canEditEntries) {
+    if (this.displayAssigned) {
       this.displayedColumns.push('assignedQuantity');
     }
 
-    if (this.canEditEntries || this.canDelete) {
+    if (this.displayAssigned || this.canDelete) {
       this.displayedColumns.push('action');
     }
   }
