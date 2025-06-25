@@ -11,6 +11,14 @@
 // Responsive classes
 //
 
+.xs-show {
+  display: none;
+
+  @include xsmall() {
+    display: block;
+  }
+}
+
 .sm-show {
   display: none;
 
@@ -36,6 +44,12 @@
   }
 }
 
+.xs-hide {
+  @include xsmall() {
+    display: none;
+  }
+}
+
 .sm-hide {
   @include small() {
     display: none;
@@ -56,6 +70,13 @@
   }
 }
 
+.xs-fx-column-container {
+  @include xsmall() {
+    @include column;
+    flex: 0;
+  }
+}
+
 
 .sm-fx-column-container {
   @include small() {
@@ -63,6 +84,15 @@
     flex: 0;
   }
 }
+
+
+.xs-fx-wrap {
+  @include xsmall() {
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+}
+
 
 .sm-fx-wrap {
   @include small() {
@@ -142,19 +172,33 @@
 }
 
 .fx-row-container-fill {
+  > .xs-fx-item-one {
+    @include xsmall() {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+  }
+
+  > .xs-fx-item-half {
+    @include xsmall() {
+      flex: 1 1 50%;
+      max-width: 50%;
+    }
+  }
+
   > .sm-fx-item-half {
     @include small() {
       flex: 1 1 50%;
       max-width: 50%;
       max-height: 100%;
     }
+  }
 
-    > .sm-fx-item-third {
-      @include small() {
-        flex: 1 1 33.33%;
-        max-width: 33.33%;
-        max-height: 100%;
-      }
+  > .sm-fx-item-third {
+    @include small() {
+      flex: 1 1 33.33%;
+      max-width: 33.33%;
+      max-height: 100%;
     }
   }
 
@@ -174,12 +218,12 @@
       flex: 1 1 50%;
       max-height: 50%;
     }
+  }
 
-    > .sm-fx-item-third {
-      @include small() {
-        flex: 1 1 33.33%;
-        max-height: 33.33%;
-      }
+  > .sm-fx-item-third {
+    @include small() {
+      flex: 1 1 33.33%;
+      max-height: 33.33%;
     }
   }
 
@@ -198,13 +242,13 @@
       max-height: 50%;
       max-width: 100%;
     }
+  }
 
-    > .sm-fx-item-third {
-      @include small() {
-        flex: 1 1 33.33%;
-        max-height: 33.33%;
-        max-width: 100%;
-      }
+  > .sm-fx-item-third {
+    @include small() {
+      flex: 1 1 33.33%;
+      max-height: 33.33%;
+      max-width: 100%;
     }
   }
 

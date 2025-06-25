@@ -2,23 +2,27 @@
 
   <div class="fx-row-container fx-end fx-items-center">
 
-    <div class="fx-item-size" style="--size: 45%">
+    <div class="fx-item fx-row-container">
 
-      <input type="text" class="text-box" #productInput
-        formControlName="product"
-        placeholder="Producto"
-        [class.invalid-control]="formHelper.isControlInvalid(form.controls.product)"
-        (keyup.enter)="onFocusNext(locationInput)">
+      <div class="fx-item-half">
 
-    </div>
+        <input type="text" class="text-box" #productInput
+          formControlName="product"
+          placeholder="Producto"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.product)"
+          (keyup.enter)="onFocusNext(locationInput)">
 
-    <div class="fx-item">
+      </div>
 
-      <input type="text" class="text-box" #locationInput
-        formControlName="location"
-        placeholder="Localización"
-        [class.invalid-control]="formHelper.isControlInvalid(form.controls.location)"
-        (keyup.enter)="onFocusNext(quantityInput.inputField)">
+      <div class="fx-item-half">
+
+        <input type="text" class="text-box" #locationInput
+          formControlName="location"
+          placeholder="Localización"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.location)"
+          (keyup.enter)="onFocusNext(quantityInput.inputField)">
+
+      </div>
 
     </div>
 

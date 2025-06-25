@@ -2,9 +2,9 @@
 
   <div class="fx-column-container fx-gap-half">
 
-    <div class="fx-row-container">
+    <div class="fx-row-container-fill xs-fx-wrap">
 
-      <div class="fx-item-half">
+      <div class="fx-item-half xs-fx-item-one">
         <label>Tipo de inventario:</label>
         <emp-ng-select
           formControlName="inventoryTypeUID"
@@ -15,7 +15,7 @@
         </emp-ng-select>
       </div>
 
-      <div class="fx-item-half">
+      <div class="fx-item-half xs-fx-item-one">
         <label>Almacén:</label>
         <emp-ng-select
           formControlName="warehouseUID"
@@ -28,9 +28,9 @@
 
     </div>
 
-    <div class="fx-row-container">
+    <div class="fx-row-container-fill xs-fx-wrap">
 
-      <div class="fx-item-half">
+      <div class="fx-item-half xs-fx-item-one">
         <label>Responsable:</label>
         <emp-ng-select
           formControlName="responsibleUID"
@@ -41,7 +41,7 @@
         </emp-ng-select>
       </div>
 
-      <div class="fx-item-half">
+      <div class="fx-item-half xs-fx-item-one">
         <label>Solicitado por:</label>
           <emp-ng-select
             formControlName="requestedByUID"
@@ -54,9 +54,9 @@
 
     </div>
 
-    <div class="fx-row-container">
+    <div class="fx-row-container-fill xs-fx-wrap">
 
-      <div class="fx-item">
+      <div class="fx-item xs-fx-item-one">
         <label>Descripción:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
           formControlName="description"
