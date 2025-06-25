@@ -29,21 +29,23 @@ export enum InventoryOrderItemsTableEventType {
 })
 export class InventoryOrderItemsTableComponent implements OnChanges {
 
+  @Input() orderUID: string = null;
+
   @Input() items: InventoryOrderItem[] = [];
 
   @Input() canDelete = false;
 
   @Input() canEditEntries = false;
 
+  @Input() itemsRequired = false;
+
+  @Input() entriesRequired = false;
+
   @Output() inventoryOrderItemsTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumnsDefault: string[] = ['number', 'product', 'quantity'];
-
-  displayedColumns = [...this.displayedColumnsDefault];
+  displayedColumns = ['number', 'product', 'quantity'];
 
   dataSource: MatTableDataSource<InventoryOrderItem>;
-
-  displayAssigned = false;
 
 
   constructor(private messageBox: MessageBoxService) { }
@@ -74,7 +76,7 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
       .firstValue()
       .then(x =>
         sendEventIf(x, this.inventoryOrderItemsTableEvent,
-          InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED, { itemUID: item.uid })
+          InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED, {orderUID: this.orderUID, itemUID: item.uid})
       );
   }
 
@@ -92,10 +94,14 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
 
 
   private resetColumns() {
-    this.displayAssigned = this.canEditEntries || !!this.items.find(x => x.assignedQuantity > 0);
-    this.displayedColumns = [...this.displayedColumnsDefault];
-    if (this.displayAssigned) this.displayedColumns.push('assignedQuantity');
-    if (this.displayAssigned || this.canDelete) this.displayedColumns.push('action');
+    const columns = this.itemsRequired ?
+      ['number', 'product', 'location', 'quantity'] :
+      ['number', 'product', 'quantity'];
+
+    if (this.entriesRequired) columns.push('assignedQuantity');
+    if (this.entriesRequired || this.canDelete) columns.push('action');
+
+    this.displayedColumns = [...columns];
   }
 
 

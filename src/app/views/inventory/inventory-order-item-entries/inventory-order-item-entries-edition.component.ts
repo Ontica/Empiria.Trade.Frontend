@@ -14,9 +14,11 @@ import { FormatLibrary, sendEvent } from '@app/shared/utils';
 import { InventoryDataService } from '@app/data-services';
 
 import { EmptyInventoryOrderItem, InventoryOrderHolder, InventoryOrderItem,
-         InventoryOrderItemEntry } from '@app/models';
+         InventoryOrderItemEntryFields } from '@app/models';
 
-import { InventoryOrderItemEntryEditorEventType } from './inventory-order-item-entry-editor.component';
+import {
+  ProductLocationInputEventType
+} from '@app/views/products/product-location/product-location-input.component';
 
 import { InventoryOrderItemEntriesTableEventType } from './inventory-order-item-entries-table.component';
 
@@ -63,15 +65,15 @@ export class InventoryOrderItemEntriesEditionComponent implements OnChanges {
   }
 
 
-  onInventoryOrderItemEntryEditorEvent(event: EventInfo) {
-    switch (event.type as InventoryOrderItemEntryEditorEventType) {
-      case InventoryOrderItemEntryEditorEventType.ASSIGN_BUTTON_CLICKED:
+  onProductLocationInputEvent(event: EventInfo) {
+    switch (event.type as ProductLocationInputEventType) {
+      case ProductLocationInputEventType.ADD_BUTTON_CLICKED:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
         Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
         this.assignOrderItemEntry(event.payload.orderUID,
                                   event.payload.itemUID,
-                                  event.payload.dataFields as InventoryOrderItemEntry);
+                                  event.payload.dataFields as InventoryOrderItemEntryFields);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -97,7 +99,7 @@ export class InventoryOrderItemEntriesEditionComponent implements OnChanges {
   }
 
 
-  private assignOrderItemEntry(orderUID: string, itemUID: string, entry: InventoryOrderItemEntry) {
+  private assignOrderItemEntry(orderUID: string, itemUID: string, entry: InventoryOrderItemEntryFields) {
     this.submitted = true;
 
     this.inventoryData.assignOrderItemEntry(orderUID, itemUID, entry)

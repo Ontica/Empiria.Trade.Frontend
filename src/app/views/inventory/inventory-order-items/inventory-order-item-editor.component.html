@@ -1,0 +1,22 @@
+
+<emp-ng-modal-window [config]="{width: '960px'}">
+
+  <emp-ng-card
+    title="Agregar movimiento"
+    hint='Información del movimiento a agregar.'
+    (cardClose)="onCloseButtonClicked()">
+
+    <div class="card-body-padding">
+
+      <emp-trade-product-location-input
+        [orderUID]="orderUID"
+        [assignedQuantity]="assignedQuantity"
+        (productLocationInputEvent)="onProductLocationInputEvent($event)">
+
+      </emp-trade-product-location-input>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

@@ -23,6 +23,8 @@
         [items]="data.items"
         [canEditItems]="data.actions.canEditItems"
         [canEditEntries]="data.actions.canEditEntries"
+        [itemsRequired]="data.order.inventoryType.rules?.itemsRequired"
+        [entriesRequired]="data.order.inventoryType.rules?.entriesRequired"
         (inventoryOrderItemsEditionEvent)="onInventoryOrderItemsEditionEvent($event)">
 
       </emp-trade-inventory-order-items-edition>

@@ -7,21 +7,19 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InventoryOrderItemEntryEditorComponent } from './inventory-order-item-entry-editor.component';
+import { InventoryOrderItemEditorComponent } from './inventory-order-item-editor.component';
 
-describe('InventoryOrderItemEntryEditorComponent', () => {
-  let component: InventoryOrderItemEntryEditorComponent;
-  let fixture: ComponentFixture<InventoryOrderItemEntryEditorComponent>;
+describe('InventoryOrderItemEditorComponent', () => {
+  let component: InventoryOrderItemEditorComponent;
+  let fixture: ComponentFixture<InventoryOrderItemEditorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InventoryOrderItemEntryEditorComponent ]
+      declarations: [InventoryOrderItemEditorComponent]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(InventoryOrderItemEntryEditorComponent);
+    fixture = TestBed.createComponent(InventoryOrderItemEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

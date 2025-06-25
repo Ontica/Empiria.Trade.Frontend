@@ -6,17 +6,13 @@
 
   <div class="fx-item-none" *ngIf="canEditItems || canEditEntries">
 
-    <div class="fx-row-container fx-items-center">
+    <div class="fx-row-container fx-items-center fx-end fx-gap">
 
       <button type="button" *ngIf="canEditItems"
         class="btn-action"
         (click)="onCreateItemClicked()">
         Agregar movimiento
       </button>
-
-      <div class="fx-item">
-
-      </div>
 
       <button type="button" *ngIf="canEditEntries"
         class="btn"
@@ -29,14 +25,25 @@
   </div>
 
   <emp-trade-inventory-order-items-table  class="fx-item"
+    [orderUID]="orderUID"
     [items]="items"
     [canDelete]="canEditItems"
     [canEditEntries]="canEditEntries"
+    [itemsRequired]="itemsRequired"
+    [entriesRequired]="entriesRequired"
     (inventoryOrderItemsTableEvent)="onInventoryOrderItemsTableEvent($event)">
 
   </emp-trade-inventory-order-items-table>
 
 </div>
+
+
+<emp-trade-inventory-order-item-editor *ngIf="displayItemEditor"
+  [orderUID]="orderUID"
+  [assignedQuantity]="items.length"
+  (inventoryOrderItemEditorEvent)="onInventoryOrderItemEditorEvent($event)">
+
+</emp-trade-inventory-order-item-editor>
 
 
 <emp-trade-inventory-order-item-entries-edition *ngIf="displayItemEntriesEdition"

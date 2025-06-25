@@ -37,11 +37,24 @@ export interface InventoryOrderDescriptor extends DataTableEntry {
 }
 
 
+export interface InventoryType {
+  uid: string;
+  name: string;
+  rules: InventoryTypeRules;
+}
+
+
+export interface InventoryTypeRules {
+  entriesRequired: boolean;
+  itemsRequired: boolean;
+}
+
+
 export interface InventoryOrder extends Order {
   uid: string;
   orderType: Identifiable;
   orderNo: string;
-  inventoryType: Identifiable;
+  inventoryType: InventoryType;
   warehouse: Identifiable;
   responsible: Identifiable;
   requestedBy: Identifiable;
@@ -70,9 +83,10 @@ export interface InventoryOrderFields {
 
 
 export interface InventoryPicking extends Order {
+  uid: string;
   orderType: Identifiable;
   orderNo: string;
-  inventoryType: Identifiable;
+  inventoryType: InventoryType;
   warehouse: Identifiable;
   responsible: Identifiable;
   requestedBy: Identifiable;
@@ -83,6 +97,7 @@ export interface InventoryPicking extends Order {
 export interface InventoryOrderItem extends OrderItem {
   uid: string;
   productName: string;
+  location: string;
   quantity: number;
   assignedQuantity: number;
   entries: InventoryOrderItemEntry[];
@@ -110,19 +125,22 @@ export interface InventoryWarehouseBin {
 }
 
 
-export interface InventoryOrderItemFields {
+export interface ProductLocationFields {
   product: string;
   location: string;
   quantity: number;
 }
 
 
-export interface InventoryOrderItemEntryFields {
-  uid: string;
-  product: string;
-  location: string;
-  quantity: number;
+export interface InventoryOrderItemFields extends ProductLocationFields {
+
 }
+
+
+export interface InventoryOrderItemEntryFields extends ProductLocationFields {
+
+}
+
 
 
 export const EmptyInventoryOrdersQuery: InventoryOrdersQuery = {
@@ -134,11 +152,21 @@ export const EmptyInventoryOrdersQuery: InventoryOrdersQuery = {
 };
 
 
+export const EmptyInventoryType: InventoryType = {
+  uid: '',
+  name: '',
+  rules: {
+    itemsRequired: false,
+    entriesRequired: false,
+  }
+};
+
+
 export const EmptyInventoryOrder: InventoryOrder = {
   uid: '',
   orderType: Empty,
   orderNo: '',
-  inventoryType: Empty,
+  inventoryType: EmptyInventoryType,
   warehouse: Empty,
   responsible: Empty,
   requestedBy: Empty,
@@ -160,6 +188,7 @@ export const EmptyInventoryOrderHolder: InventoryOrderHolder = {
 export const EmptyInventoryOrderItem: InventoryOrderItem = {
   uid: '',
   productName: '',
+  location: '',
   quantity: null,
   assignedQuantity: null,
   entries: [],
@@ -171,7 +200,7 @@ export const EmptyInventoryPicking: InventoryPicking = {
   orderType: Empty,
   orderNo: '',
   responsible: Empty,
-  inventoryType: Empty,
+  inventoryType: EmptyInventoryType,
   warehouse: Empty,
   requestedBy: Empty,
   description: '',

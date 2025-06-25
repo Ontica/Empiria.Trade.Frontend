@@ -20,9 +20,12 @@ import { EmptyInventoryOrderItem, InventoryOrderHolder, InventoryOrderItem,
 
 import { InventoryOrderItemsTableEventType } from './inventory-order-items-table.component';
 
+import { InventoryOrderItemEditorEventType } from './inventory-order-item-editor.component';
+
 import {
   InventoryOrderItemEntriesEditionEventType
 } from '../inventory-order-item-entries/inventory-order-item-entries-edition.component';
+
 
 
 export enum InventoryOrderItemsEditionEventType {
@@ -45,6 +48,10 @@ export class InventoryOrderItemsEditionComponent {
 
   @Input() canEditEntries = false;
 
+  @Input() itemsRequired = false;
+
+  @Input() entriesRequired = false;
+
   @Output() inventoryOrderItemsEditionEvent = new EventEmitter<EventInfo>();
 
   submitted = false;
@@ -63,12 +70,28 @@ export class InventoryOrderItemsEditionComponent {
 
   onCreateItemClicked() {
     this.displayItemEditor = true;
-    this.messageBox.showInDevelopment('Agregar movimiento');
   }
 
 
   onCloseEntriesClicked() {
     this.showConfirmCloseEntriesMessage();
+  }
+
+
+  onInventoryOrderItemEditorEvent(event: EventInfo) {
+    switch (event.type as InventoryOrderItemEditorEventType) {
+      case InventoryOrderItemEditorEventType.CLOSE_BUTTON_CLICKED:
+        this.displayItemEditor = false;
+        return;
+      case InventoryOrderItemEditorEventType.ADD_BUTTON_CLICKED:
+        Assertion.assert(event.payload.orderUID, 'event.payload.orderUID');
+        Assertion.assert(event.payload.dataFields, 'event.payload.dataFields');
+        this.createOrderItem(event.payload.orderUID, event.payload.dataFields as InventoryOrderItemFields);
+        return;
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
@@ -79,8 +102,9 @@ export class InventoryOrderItemsEditionComponent {
         this.setSelectedItem(event.payload.item as InventoryOrderItem);
         return;
       case InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED:
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
-        this.deleteOrderItem(event.payload.itemUID);
+        this.deleteOrderItem(event.payload.orderUID, event.payload.itemUID);
         return;
       case InventoryOrderItemsTableEventType.EDIT_ITEM_ENTRIES_CLICKED:
         Assertion.assertValue(event.payload.item, 'event.payload.item');
@@ -109,30 +133,30 @@ export class InventoryOrderItemsEditionComponent {
   }
 
 
-  private createOrderItem(item: InventoryOrderItemFields) {
+  private createOrderItem(orderUID: string, dataFields: InventoryOrderItemFields) {
     this.submitted = true;
 
-    this.inventoryData.createOrderItem(this.orderUID, item)
+    this.inventoryData.createOrderItem(orderUID, dataFields)
       .firstValue()
       .then(x => this.resolveOrderItemUpdated(x))
       .finally(() => this.submitted = false);
   }
 
 
-  private deleteOrderItem(itemUID: string) {
+  private deleteOrderItem(orderUID: string, itemUID: string) {
     this.submitted = true;
 
-    this.inventoryData.deleteOrderItem(this.orderUID, itemUID)
+    this.inventoryData.deleteOrderItem(orderUID, itemUID)
       .firstValue()
       .then(x => this.resolveDeleteOrderItem(x))
       .finally(() => this.submitted = false);
   }
 
 
-  private closeOrderEntries() {
+  private closeOrderEntries(orderUID: string) {
     this.submitted = true;
 
-    this.inventoryData.closeOrderEntries(this.orderUID)
+    this.inventoryData.closeOrderEntries(orderUID)
       .firstValue()
       .then(x => this.resolveCloseOrderItemEntries(x))
       .finally(() => this.submitted = false);
@@ -146,7 +170,7 @@ export class InventoryOrderItemsEditionComponent {
 
     this.messageBox.confirm(message, title)
       .firstValue()
-      .then(x => x ? this.closeOrderEntries() : null);
+      .then(x => x ? this.closeOrderEntries(this.orderUID) : null);
   }
 
 
@@ -159,7 +183,7 @@ export class InventoryOrderItemsEditionComponent {
 
 
   private resolveDeleteOrderItem(data: InventoryOrderHolder) {
-    this.alertService.openAlert('Se eliminó el producto a la orden de inventario.');
+    this.alertService.openAlert('Se eliminó el producto de la orden de inventario.');
 
     sendEvent(this.inventoryOrderItemsEditionEvent,
       InventoryOrderItemsEditionEventType.ITEM_DELETED, { data });

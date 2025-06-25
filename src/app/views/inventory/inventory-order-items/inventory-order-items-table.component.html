@@ -9,14 +9,17 @@
 
     <ng-container matColumnDef="product">
       <th mat-header-cell *matHeaderCellDef> Producto </th>
-      <td mat-cell *matCellDef="let row">
-        {{ row.productName }}
-      </td>
+      <td mat-cell *matCellDef="let row">{{ row.productName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef> Localización </th>
+      <td mat-cell *matCellDef="let row">{{ row.location }}</td>
     </ng-container>
 
     <ng-container matColumnDef="quantity">
       <th mat-header-cell *matHeaderCellDef class="text-align-right"> Cantidad </th>
-      <td mat-cell *matCellDef="let row" class="text-align-right shadow-cell">
+      <td mat-cell *matCellDef="let row" class="text-align-right" [class.shadow-cell]="entriesRequired">
         {{ row.quantity | empDecimal }}
       </td>
     </ng-container>
@@ -34,7 +37,7 @@
 
         <div class="fx-row-container">
 
-          <button mat-icon-button empNgStopPropagation
+          <button mat-icon-button empNgStopPropagation *ngIf="entriesRequired"
             [title]="canEditEntries ? 'Editar localizaciones' : 'Ver localizaciones'"
             (click)="onEditItemEntriesClicked(row)">
             <mat-icon>

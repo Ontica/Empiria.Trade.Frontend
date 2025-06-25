@@ -11,13 +11,13 @@
 
       </emp-ng-spinner>
 
-      <emp-trade-inventory-order-item-entry-editor *ngIf="canEdit"
+      <emp-trade-product-location-input *ngIf="canEdit"
         [orderUID]="orderUID"
         [itemUID]="item.uid"
         [assignedQuantity]="assignedQuantity"
-        (inventoryOrderItemEntryEditorEvent)="onInventoryOrderItemEntryEditorEvent($event)">
+        (productLocationInputEvent)="onProductLocationInputEvent($event)">
 
-      </emp-trade-inventory-order-item-entry-editor>
+      </emp-trade-product-location-input>
 
       <br>
 
