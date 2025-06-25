@@ -28,6 +28,8 @@ import { ProductsSeekerComponent } from './products-seeker/products-seeker.compo
 import { ProductsFilterComponent } from './products-seeker/products-filter.component';
 import { ProductsTableComponent } from './products-seeker/products-table.component';
 
+import { ProductLocationInputComponent } from './product-location/product-location-input.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -50,11 +52,14 @@ import { ProductsTableComponent } from './products-seeker/products-table.compone
     ProductsSeekerComponent,
     ProductsFilterComponent,
     ProductsTableComponent,
+
+    ProductLocationInputComponent,
   ],
   exports: [
     ProductAttributesComponent,
     ProductImageComponent,
     ProductsSeekerComponent,
+    ProductLocationInputComponent,
   ]
 })
 export class ProductsModule { }
