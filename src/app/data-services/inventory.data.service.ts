@@ -107,7 +107,7 @@ export class InventoryDataService {
   closeOrderEntries(orderUID: string): EmpObservable<InventoryOrderHolder> {
     Assertion.assertValue(orderUID, 'orderUID');
 
-    const path = `v8/order-management/inventory-orders/${orderUID}/close`;
+    const path = `v8/order-management/inventory-orders/${orderUID}/close-entries`;
 
     return this.http.post<InventoryOrderHolder>(path);
   }
