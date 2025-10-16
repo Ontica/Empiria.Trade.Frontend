@@ -5,20 +5,21 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
+         SimpleChanges } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { EventInfo, isEmpty } from '@app/core';
+import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
+import { InventaryStateSelector } from '@app/presentation/exported.presentation.types';
+
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
-import { SearcherAPIS } from '@app/data-services';
-
-import { EmptyInventoryReportQuery, EmptyReportType, InventoryReportQuery, InventoryReportType,
-         InventoryReportTypesList, ReportGroup, ReportType } from '@app/models';
+import { EmptyInventoryReportQuery, EmptyReportType, InventoryReportQuery, InventoryReportTypesList,
+         ReportGroup, ReportType } from '@app/models';
 
 
 export enum InventoryReportFilterEventType {
@@ -27,8 +28,10 @@ export enum InventoryReportFilterEventType {
 
 interface InventoryReportFilterFormModel extends FormGroup<{
   reportTypeUID: FormControl<string>;
+  warehouses: FormControl<string[]>;
+  locations: FormControl<string[]>;
   products: FormControl<string[]>;
-  warehouseBins: FormControl<string[]>;
+  orders: FormControl<string[]>;
   keywords: FormControl<string>;
 }> { }
 
@@ -36,7 +39,7 @@ interface InventoryReportFilterFormModel extends FormGroup<{
   selector: 'emp-trade-inventory-report-filter',
   templateUrl: './inventory-report-filter.component.html',
 })
-export class InventoryReportFilterComponent implements OnChanges, OnDestroy {
+export class InventoryReportFilterComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() reportGroup: ReportGroup;
 
@@ -50,9 +53,7 @@ export class InventoryReportFilterComponent implements OnChanges, OnDestroy {
 
   reportTypeList: ReportType[] = InventoryReportTypesList;
 
-  productsAPI = SearcherAPIS.products;
-
-  locationsAPI = SearcherAPIS.warehouseBins;
+  warehousesList: Identifiable[] = [];
 
   isLoading = false;
 
@@ -72,35 +73,13 @@ export class InventoryReportFilterComponent implements OnChanges, OnDestroy {
   }
 
 
+  ngOnInit() {
+    this.loadDataLists();
+  }
+
+
   ngOnDestroy() {
     this.helper.destroy();
-  }
-
-
-  get productFieldRequired(): boolean {
-    return this.form.value.reportTypeUID === InventoryReportType.StocksByProduct;
-  }
-
-
-  get locationFieldRequired(): boolean {
-    return this.form.value.reportTypeUID === InventoryReportType.StocksByLocation;
-  }
-
-
-  onReportTypeChanges() {
-    this.form.controls.products.reset(null);
-    this.form.controls.warehouseBins.reset(null);
-    this.form.controls.keywords.reset('');
-
-    if (this.productFieldRequired) {
-      FormHelper.setControlValidators(this.form.controls.products, [Validators.required]);
-      FormHelper.clearControlValidators(this.form.controls.warehouseBins);
-    }
-
-    if (this.locationFieldRequired) {
-      FormHelper.setControlValidators(this.form.controls.warehouseBins, [Validators.required]);
-      FormHelper.clearControlValidators(this.form.controls.products);
-    }
   }
 
 
@@ -110,15 +89,29 @@ export class InventoryReportFilterComponent implements OnChanges, OnDestroy {
       return;
     }
 
-    const reportType = this.reportTypeList.find(x => x.uid === this.form.value.reportTypeUID);
-
     const payload = {
       query: this.getReportQuery(),
-      reportType: isEmpty(reportType) ? EmptyReportType : reportType,
+      reportType: this.getReportType(),
     };
 
-    sendEvent(this.inventoryReportFilterEvent,
-      InventoryReportFilterEventType.BUILD_REPORT_CLICKED, payload);
+    sendEvent(this.inventoryReportFilterEvent, InventoryReportFilterEventType.BUILD_REPORT_CLICKED, payload);
+  }
+
+
+  private getReportType() {
+    const reportType = this.reportTypeList.find(x => x.uid === this.form.value.reportTypeUID);
+    return isEmpty(reportType) ? EmptyReportType : reportType;
+  }
+
+
+   private loadDataLists() {
+    this.isLoading = true;
+
+    this.helper.select<Identifiable[]>(InventaryStateSelector.WAREHOUSES)
+      .subscribe(x => {
+        this.warehousesList = x;
+        this.isLoading = x.length === 0;
+      });
   }
 
 
@@ -127,8 +120,10 @@ export class InventoryReportFilterComponent implements OnChanges, OnDestroy {
 
     this.form = fb.group({
       reportTypeUID: ['', Validators.required],
+      warehouses: [null],
+      locations: [null],
       products: [null],
-      warehouseBins: [null],
+      orders: [null],
       keywords: [''],
     });
   }
@@ -137,8 +132,10 @@ export class InventoryReportFilterComponent implements OnChanges, OnDestroy {
   private setFormData() {
     this.form.reset({
       reportTypeUID: this.query.reportType,
+      warehouses: this.query.warehouses,
+      locations: this.query.locations,
       products: this.query.products,
-      warehouseBins: this.query.warehouseBins,
+      orders: this.query.products,
       keywords: this.query.keywords,
     });
   }
@@ -148,22 +145,13 @@ export class InventoryReportFilterComponent implements OnChanges, OnDestroy {
     const data: InventoryReportQuery = {
       reportType: this.form.value.reportTypeUID,
       keywords: this.form.value.keywords,
+      warehouses: this.form.value.warehouses,
+      locations: this.form.value.locations,
+      products: this.form.value.products,
+      orders: this.form.value.orders,
     };
 
-    this.validateReportQueryFields(data);
-
     return data;
-  }
-
-
-  private validateReportQueryFields(data: InventoryReportQuery) {
-    if (this.productFieldRequired) {
-      data.products = this.form.value.products ?? [];
-    }
-
-    if (this.locationFieldRequired) {
-      data.warehouseBins = this.form.value.warehouseBins ?? [];
-    }
   }
 
 }

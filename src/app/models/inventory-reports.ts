@@ -24,8 +24,10 @@ export const InventoryReportTypesList: ReportType[] = [
 
 export interface InventoryReportQuery extends ReportQuery {
   reportType: string;
-  products?: string[]
-  warehouseBins?: string[];
+  warehouses: string[];
+  locations: string[];
+  products: string[]
+  orders: string[]
   keywords: string
 }
 
@@ -44,8 +46,10 @@ export interface InventoryReportEntry extends ReportEntry {
 
 export const EmptyInventoryReportQuery: InventoryReportQuery = {
   reportType: null,
+  warehouses: [],
+  locations: [],
   products: [],
-  warehouseBins: [],
+  orders: [],
   keywords: '',
 };
 

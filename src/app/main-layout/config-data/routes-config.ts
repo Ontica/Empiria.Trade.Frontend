@@ -149,7 +149,7 @@ export const ROUTES = {
   },
 
   almacenes_reportes: {
-    permission: PERMISSIONS.BLOCKED,
+    permission: PERMISSIONS.NOT_REQUIRED,
     parent: 'almacenes',
     path: 'reportes',
     fullpath: '/almacenes/reportes',

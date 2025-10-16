@@ -4,7 +4,7 @@
 
     <div class="fx-row-container sm-fx-column-container sm-fx-gap-half">
 
-      <div class="fx-item-quarter sm-fx-item">
+      <div class="fx-item-third sm-fx-item">
 
         <label>Tipo de reporte:</label>
 
@@ -12,52 +12,24 @@
           formControlName="reportTypeUID"
           [items]="reportTypeList"
           [config]="{selectFirst: true}"
-          [showError]="formHelper.isControlInvalid(form.controls.reportTypeUID)"
-          (changes)="onReportTypeChanges()">
+          [showError]="formHelper.isControlInvalid(form.controls.reportTypeUID)">
         </emp-ng-select>
 
       </div>
 
 
-      <div class="fx-item-half sm-fx-item">
+      <div class="fx-item-third sm-fx-item">
 
-        <ng-container *ngIf="productFieldRequired">
+        <label>Almacenes:</label>
 
-          <label>Productos:</label>
-          <emp-ng-select-typeahead #products
-            formControlName="products"
-            bindValue="productUID"
-            bindLabel="productCode"
-            [config]="{ clearable: true, multiple: true, minTermLength: 5, searchByQuery: true }"
-            [initQuery]="{ onStock: true, keywords: '' }"
-            [searcherAPI]="productsAPI"
-            [showError]="formHelper.isControlInvalid(form.controls.products)">
-
-            <ng-template #tOptionTemplate let-item="item">
-
-              <div class="wrap" [style.padding]="'0.25rem 0'">
-                <span class="item-highlight">{{item.productCode}}</span> <br>
-                <span class="item-text-xs">{{item.description}}</span>
-              </div>
-
-            </ng-template>
-
-          </emp-ng-select-typeahead>
-
-        </ng-container>
-
-        <ng-container *ngIf="locationFieldRequired">
-
-          <label>Localizaciones:</label>
-          <emp-ng-select-typeahead #warehouseBins
-            formControlName="warehouseBins"
-            [config]="{ multiple: true, clearable: true, minTermLength: 5 }"
-            [searcherAPI]="locationsAPI"
-            [showError]="formHelper.isControlInvalid(form.controls.warehouseBins)">
-
-          </emp-ng-select-typeahead>
-
-        </ng-container>
+        <emp-ng-select
+          formControlName="warehouses"
+          placeholder="Todos"
+          [config]="{clearable: true, multiple: true}"
+          [items]="warehousesList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.warehouses)">
+        </emp-ng-select>
 
       </div>
 
@@ -75,7 +47,6 @@
 
       </div>
 
-
       <div class="fx-item-none" [style.margin-top.px]="13">
 
         <button title="Generar reporte"
@@ -86,6 +57,45 @@
           <mat-icon>search</mat-icon>
 
         </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="fx-row-container sm-fx-column-container sm-fx-gap-half">
+
+      <div class="fx-item-third sm-fx-item">
+
+        <label>Localización:</label>
+        <emp-ng-input-tags
+          formControlName="locations"
+          placeholder="Todas"
+          [showError]="formHelper.isControlInvalid(form.controls.locations)">
+        </emp-ng-input-tags>
+
+      </div>
+
+
+      <div class="fx-item-third sm-fx-item">
+
+        <label>Productos:</label>
+        <emp-ng-input-tags
+          formControlName="products"
+          placeholder="Todos"
+          [showError]="formHelper.isControlInvalid(form.controls.products)">
+        </emp-ng-input-tags>
+
+      </div>
+
+      <div class="fx-item-third sm-fx-item">
+
+        <label>Ordenes:</label>
+        <emp-ng-input-tags
+          formControlName="orders"
+          placeholder="Todas"
+          [showError]="formHelper.isControlInvalid(form.controls.orders)">
+        </emp-ng-input-tags>
 
       </div>
 

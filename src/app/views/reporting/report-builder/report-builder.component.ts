@@ -129,16 +129,20 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
   private validateGetReportData() {
     this.clearReportData();
-    let observable: EmpObservable<ReportData> = this.reportingData.getReportData(this.reportGroup,
-                                                                                 this.reportQuery);
-    this.getReportData(observable);
+    this.setTmpData();
+
+    // let observable: EmpObservable<ReportData> = this.reportingData.getReportData(this.reportGroup,
+    //                                                                              this.reportQuery);
+    // this.getReportData(observable);
   }
 
 
   private validateExportReportData(reportQuery: ReportQuery) {
-    let observable: EmpObservable<FileReport> = this.reportingData.exportReportData(this.reportGroup,
-                                                                                    reportQuery);
-    this.exportReportData(observable);
+    this.setTmpExportData();
+
+    // let observable: EmpObservable<FileReport> = this.reportingData.exportReportData(this.reportGroup,
+    //                                                                                 reportQuery);
+    // this.exportReportData(observable);
   }
 
 
@@ -182,6 +186,27 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
   private getReportQueryForExport(exportTo: FileType): ReportQuery {
     return Object.assign({}, this.reportQuery, { exportTo });
+  }
+
+
+  private setTmpData() {
+    this.isLoading = true;
+
+    setTimeout(() => {
+      this.messageBox.showInDevelopment(`Generar reporte (${this.selectedReportType.name})`,
+        { group: this.reportGroup, reportType: this.selectedReportType, query: this.reportQuery });
+      this.setReportData(EmptyReportData);
+      this.isLoading = false;
+    }, 500);
+  }
+
+
+  private setTmpExportData() {
+    setTimeout(() => {
+      this.messageBox.showInDevelopment(`Exportar reporte (${this.selectedReportType.name})`,
+        { group: this.reportGroup, reportType: this.selectedReportType, query: this.reportQuery });
+      this.fileUrl = 'Tmp data';
+    }, 500);
   }
 
 }
