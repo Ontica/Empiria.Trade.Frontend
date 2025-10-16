@@ -132,6 +132,11 @@ export interface ProductLocationFields {
 }
 
 
+export interface InventoryOrderItemQuantityFields {
+  quantity: number;
+}
+
+
 export interface InventoryOrderItemFields extends ProductLocationFields {
 
 }

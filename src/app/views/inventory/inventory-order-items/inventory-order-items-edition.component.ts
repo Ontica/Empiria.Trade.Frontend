@@ -15,8 +15,8 @@ import { AlertService, MessageBoxService } from '@app/shared/services';
 
 import { InventoryDataService } from '@app/data-services';
 
-import { EmptyInventoryOrderItem, InventoryOrderHolder, InventoryOrderItem,
-         InventoryOrderItemFields } from '@app/models';
+import { EmptyInventoryOrderItem, InventoryOrderHolder, InventoryOrderItem, InventoryOrderItemFields,
+         InventoryOrderItemQuantityFields } from '@app/models';
 
 import { InventoryOrderItemsTableEventType } from './inventory-order-items-table.component';
 
@@ -27,10 +27,8 @@ import {
 } from '../inventory-order-item-entries/inventory-order-item-entries-edition.component';
 
 
-
 export enum InventoryOrderItemsEditionEventType {
-  ITEM_CREATED    = 'InventoryOrderItemsEditionComponent.Event.ItemCreated',
-  ITEM_DELETED    = 'InventoryOrderItemsEditionComponent.Event.ItemDeleted',
+  ITEM_UPDATED    = 'InventoryOrderItemsEditionComponent.Event.ItemsUpdated',
   ENTRIES_UPDATED = 'InventoryOrderItemsEditionComponent.Event.EntriesUpdated',
 }
 
@@ -101,6 +99,13 @@ export class InventoryOrderItemsEditionComponent {
         Assertion.assertValue(event.payload.item, 'event.payload.item');
         this.setSelectedItem(event.payload.item as InventoryOrderItem);
         return;
+      case InventoryOrderItemsTableEventType.UPDATE_ITEM_CLICKED:
+        Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
+        Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
+        Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
+        this.updateOrderItemQuantity(event.payload.orderUID, event.payload.itemUID,
+                                     event.payload.dataFields as InventoryOrderItemQuantityFields);
+        return;
       case InventoryOrderItemsTableEventType.REMOVE_ITEM_CLICKED:
         Assertion.assertValue(event.payload.orderUID, 'event.payload.orderUID');
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
@@ -138,6 +143,16 @@ export class InventoryOrderItemsEditionComponent {
 
     this.inventoryData.createOrderItem(orderUID, dataFields)
       .firstValue()
+      .then(x => this.resolveOrderItemCreated(x))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private updateOrderItemQuantity(orderUID: string, itemUID: string, dataFields: InventoryOrderItemQuantityFields) {
+    this.submitted = true;
+
+    this.inventoryData.updateOrderItemQuantity(orderUID, itemUID, dataFields)
+      .firstValue()
       .then(x => this.resolveOrderItemUpdated(x))
       .finally(() => this.submitted = false);
   }
@@ -148,7 +163,7 @@ export class InventoryOrderItemsEditionComponent {
 
     this.inventoryData.deleteOrderItem(orderUID, itemUID)
       .firstValue()
-      .then(x => this.resolveDeleteOrderItem(x))
+      .then(x => this.resolveOrderItemDeleted(x))
       .finally(() => this.submitted = false);
   }
 
@@ -174,19 +189,27 @@ export class InventoryOrderItemsEditionComponent {
   }
 
 
-  private resolveOrderItemUpdated(data: InventoryOrderHolder) {
+  private resolveOrderItemCreated(data: InventoryOrderHolder) {
     this.alertService.openAlert('Se agregó el producto a la orden de inventario.');
-
-    sendEvent(this.inventoryOrderItemsEditionEvent,
-      InventoryOrderItemsEditionEventType.ITEM_CREATED, { data });
+    this.emitItemsUpdated(data);
   }
 
 
-  private resolveDeleteOrderItem(data: InventoryOrderHolder) {
-    this.alertService.openAlert('Se eliminó el producto de la orden de inventario.');
+  private resolveOrderItemUpdated(data: InventoryOrderHolder) {
+    this.alertService.openAlert('Se actualizo la cantidad de producto.');
+    this.emitItemsUpdated(data);
+  }
 
+
+  private resolveOrderItemDeleted(data: InventoryOrderHolder) {
+    this.alertService.openAlert('Se eliminó el producto de la orden de inventario.');
+    this.emitItemsUpdated(data);
+  }
+
+
+  private emitItemsUpdated(data: InventoryOrderHolder) {
     sendEvent(this.inventoryOrderItemsEditionEvent,
-      InventoryOrderItemsEditionEventType.ITEM_DELETED, { data });
+      InventoryOrderItemsEditionEventType.ITEM_UPDATED, { data });
   }
 
 

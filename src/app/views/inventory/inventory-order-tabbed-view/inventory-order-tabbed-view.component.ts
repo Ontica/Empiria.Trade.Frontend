@@ -75,8 +75,7 @@ export class InventoryOrderTabbedViewComponent implements OnChanges {
 
   onInventoryOrderItemsEditionEvent(event: EventInfo) {
     switch (event.type as InventoryOrderItemsEditionEventType) {
-      case InventoryOrderItemsEditionEventType.ITEM_CREATED:
-      case InventoryOrderItemsEditionEventType.ITEM_DELETED:
+      case InventoryOrderItemsEditionEventType.ITEM_UPDATED:
         Assertion.assertValue(event.payload.data, 'event.payload.data');
         sendEvent(this.inventoryOrderTabbedViewEvent, InventoryOrderTabbedViewEventType.ORDER_UPDATED,
           event.payload);

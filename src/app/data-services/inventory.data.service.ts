@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 import { InventoryOrderFields, InventoryOrderHolder, InventoryOrderItemEntryFields, InventoryOrderItemFields,
-         OrdersDataTable, OrdersQuery } from '@app/models';
+         InventoryOrderItemQuantityFields, OrdersDataTable, OrdersQuery } from '@app/models';
 
 
 @Injectable()
@@ -121,6 +121,19 @@ export class InventoryDataService {
     const path = `v8/order-management/inventory-orders/${orderUID}/items`;
 
     return this.http.post<InventoryOrderHolder>(path, dataFields);
+  }
+
+
+  updateOrderItemQuantity(orderUID: string,
+                          itemUID: string,
+                          dataFields: InventoryOrderItemQuantityFields): EmpObservable<InventoryOrderHolder> {
+    Assertion.assertValue(orderUID, 'orderUID');
+    Assertion.assertValue(itemUID, 'itemUID');
+    Assertion.assertValue(dataFields, 'dataFields');
+
+    const path = `v8/order-management/inventory-orders/${orderUID}/items/${itemUID}`;
+
+    return this.http.put<InventoryOrderHolder>(path, dataFields);
   }
 
 
