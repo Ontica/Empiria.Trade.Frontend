@@ -25,6 +25,7 @@ export enum InventoryOrderItemsTableEventType {
   UPDATE_ITEM_CLICKED       = 'InventoryOrderItemsTableComponent.Event.UpdateItemClicked',
   REMOVE_ITEM_CLICKED       = 'InventoryOrderItemsTableComponent.Event.RemoveItemClicked',
   EDIT_ITEM_ENTRIES_CLICKED = 'InventoryOrderItemsTableComponent.Event.EditItemEntriesClicked',
+  EXPORT_REPORT_CLICKED     = 'InventoryOrderItemsTableComponent.Event.ExportReportClicked',
 }
 
 @Component({
@@ -55,6 +56,10 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
   @Input() canDelete = false;
 
   @Input() canEdit = false;
+
+  @Input() displayCountStatus = false;
+
+  @Input() hasCountVariance = false;
 
   @Input() canEditEntries = false;
 
@@ -145,6 +150,11 @@ export class InventoryOrderItemsTableComponent implements OnChanges {
   onEditItemEntriesClicked(item: InventoryOrderItem) {
     sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.EDIT_ITEM_ENTRIES_CLICKED,
       { item })  ;
+  }
+
+
+  onExportReportClicked() {
+    sendEvent(this.inventoryOrderItemsTableEvent, InventoryOrderItemsTableEventType.EXPORT_REPORT_CLICKED);
   }
 
 

@@ -36,6 +36,8 @@ export class InventoryOrderEditorComponent {
 
   @Input() actions: OrderActions = EmptyOrderActions;
 
+  @Input() hasCountVariance = false;
+
   @Output() inventoryOrderEditorEvent = new EventEmitter<EventInfo>();
 
   submitted = false;

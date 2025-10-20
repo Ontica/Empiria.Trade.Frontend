@@ -130,6 +130,8 @@ export interface OrderActions {
   canDelete: boolean;
   canClose: boolean;
   canOpen: boolean;
+  displayCountStatus: boolean;
+  hasCountVariance: boolean;
 }
 
 
@@ -153,6 +155,8 @@ export const EmptyOrderActions: OrderActions = {
   canDelete: false,
   canClose: false,
   canOpen: false,
+  displayCountStatus: false,
+  hasCountVariance: false,
 };
 
 

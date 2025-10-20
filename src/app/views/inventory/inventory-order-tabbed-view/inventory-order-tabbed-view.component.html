@@ -10,6 +10,7 @@
       <emp-trade-inventory-order-editor
         [order]="data.order"
         [actions]="data.actions"
+        [hasCountVariance]="data.actions.hasCountVariance"
         (inventoryOrderEditorEvent)="onInventoryOrderEditorEvent($event)">
 
       </emp-trade-inventory-order-editor>
@@ -21,10 +22,12 @@
       <emp-trade-inventory-order-items-edition
         [orderUID]="data.order.uid"
         [items]="data.items"
-        [canEditItems]="data.order.inventoryType.rules.itemsRequired && data.actions.canEditItems"
-        [canEditEntries]="data.order.inventoryType.rules.entriesRequired && data.actions.canEditEntries"
         [itemsRequired]="data.order.inventoryType.rules.itemsRequired"
         [entriesRequired]="data.order.inventoryType.rules.entriesRequired"
+        [canEditItems]="data.order.inventoryType.rules.itemsRequired && data.actions.canEditItems"
+        [canEditEntries]="data.order.inventoryType.rules.entriesRequired && data.actions.canEditEntries"
+        [displayCountStatus]="data.actions.displayCountStatus"
+        [hasCountVariance]="data.actions.hasCountVariance"
         (inventoryOrderItemsEditionEvent)="onInventoryOrderItemsEditionEvent($event)">
 
       </emp-trade-inventory-order-items-edition>

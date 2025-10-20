@@ -9,8 +9,9 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { InventoryOrderFields, InventoryOrderHolder, InventoryOrderItemEntryFields, InventoryOrderItemFields,
-         InventoryOrderItemQuantityFields, OrdersDataTable, OrdersQuery } from '@app/models';
+import { FileReport, InventoryOrderFields, InventoryOrderHolder, InventoryOrderItemEntryFields,
+         InventoryOrderItemFields, InventoryOrderItemQuantityFields, OrdersDataTable,
+         OrdersQuery } from '@app/models';
 
 
 @Injectable()
@@ -171,6 +172,15 @@ export class InventoryDataService {
     const path = `v8/order-management/inventory-orders/${orderUID}/items/${itemUID}/entries/${entryUID}`;
 
     return this.http.delete<InventoryOrderHolder>(path);
+  }
+
+
+  exportOrderItemReport(orderUID: string,): EmpObservable<FileReport> {
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v8/order-management/inventory-orders/${orderUID}/items/export-report`;
+
+    return this.http.get<FileReport>(path);
   }
 
 }

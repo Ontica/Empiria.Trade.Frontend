@@ -102,6 +102,33 @@
       </td>
     </ng-container>
 
+
+    <ng-container matColumnDef="status">
+      <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="column-no-padding">
+
+        <div class="fx-row-container fx-end fx-items-center fx-gap-half" style="padding: 5px 0;">
+
+          <mat-icon [ngClass]="hasCountVariance ? 'icon-error' : 'icon-info'">info</mat-icon>
+
+          <span class="text-status">
+            {{ hasCountVariance ? 'Existen diferencias en el conteo de productos.' :
+                 'No existen diferencias en el conteo de productos.' }}
+          </span>
+
+          <div class="fx-item">
+
+          </div>
+
+          <button class="btn"
+            (click)="onExportReportClicked()">
+            Exportar reporte
+          </button>
+
+        </div>
+
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="notFoundMessage">
       <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
         Esta orden de inventario no tiene movimientos.
@@ -112,6 +139,8 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"
       [class.row-selected]="isRowInEdition(row.uid)"></tr>
     <tr mat-footer-row *matFooterRowDef="['notFoundMessage']" class="text-not-found" [hidden]="hasItems"></tr>
+    <tr mat-footer-row *matFooterRowDef="['status']; sticky: true;"
+        [hidden]="!displayCountStatus"></tr>
 
   </table>
 

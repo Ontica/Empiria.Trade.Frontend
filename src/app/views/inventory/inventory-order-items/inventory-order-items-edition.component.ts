@@ -18,6 +18,10 @@ import { InventoryDataService } from '@app/data-services';
 import { EmptyInventoryOrderItem, InventoryOrderHolder, InventoryOrderItem, InventoryOrderItemFields,
          InventoryOrderItemQuantityFields } from '@app/models';
 
+import {
+  ExportReportModalEventType
+} from '@app/views/_reports-controls/export-report-modal/export-report-modal.component';
+
 import { InventoryOrderItemsTableEventType } from './inventory-order-items-table.component';
 
 import { InventoryOrderItemEditorEventType } from './inventory-order-item-editor.component';
@@ -50,6 +54,10 @@ export class InventoryOrderItemsEditionComponent {
 
   @Input() entriesRequired = false;
 
+  @Input() displayCountStatus = false;
+
+  @Input() hasCountVariance = false;
+
   @Output() inventoryOrderItemsEditionEvent = new EventEmitter<EventInfo>();
 
   submitted = false;
@@ -58,7 +66,11 @@ export class InventoryOrderItemsEditionComponent {
 
   displayItemEntriesEdition = false;
 
+  displayExportModal = false;
+
   selectedItem: InventoryOrderItem = EmptyInventoryOrderItem;
+
+  fileUrl = '';
 
 
   constructor(private inventoryData: InventoryDataService,
@@ -115,6 +127,9 @@ export class InventoryOrderItemsEditionComponent {
         Assertion.assertValue(event.payload.item, 'event.payload.item');
         this.setSelectedItem(event.payload.item as InventoryOrderItem);
         return;
+      case InventoryOrderItemsTableEventType.EXPORT_REPORT_CLICKED:
+        this.setDisplayExportModal(true);
+        return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -130,6 +145,21 @@ export class InventoryOrderItemsEditionComponent {
       case InventoryOrderItemEntriesEditionEventType.ENTRIES_UPDATED:
         Assertion.assertValue(event.payload.data, 'event.payload.data');
         this.resolveOrderItemEntriesUpdated(event.payload.data as InventoryOrderHolder);
+        return;
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onExportReportModalEvent(event: EventInfo) {
+    switch (event.type as ExportReportModalEventType) {
+      case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
+        this.setDisplayExportModal(false);
+        return;
+      case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
+        this.exportOrderItemReport(this.orderUID);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -175,6 +205,13 @@ export class InventoryOrderItemsEditionComponent {
       .firstValue()
       .then(x => this.resolveCloseOrderItemEntries(x))
       .finally(() => this.submitted = false);
+  }
+
+
+  private exportOrderItemReport(orderUID: string) {
+    this.inventoryData.exportOrderItemReport(orderUID)
+      .firstValue()
+      .then(x => { this.fileUrl = x.url; });
   }
 
 
@@ -235,6 +272,12 @@ export class InventoryOrderItemsEditionComponent {
   private setSelectedItem(item: InventoryOrderItem) {
     this.selectedItem = item;
     this.displayItemEntriesEdition = !isEmpty(this.selectedItem);
+  }
+
+
+  private setDisplayExportModal(display: boolean) {
+    this.displayExportModal = display;
+    this.fileUrl = '';
   }
 
 }

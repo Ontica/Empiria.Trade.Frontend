@@ -11,6 +11,11 @@
   color: $icon-color;
   font-family: "Material Icons" !important;
 
+  &.icon-info,
+  &.icon-info:hover {
+    color: $icon-color-info;
+  }
+
   &.icon-success,
   &.icon-success:hover {
     color: $icon-color-success;

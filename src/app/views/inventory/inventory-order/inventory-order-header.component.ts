@@ -57,6 +57,8 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
 
   @Input() canDelete = false;
 
+  @Input() hasCountVariance = false;
+
   @Output() inventoryOrderHeaderEvent = new EventEmitter<EventInfo>();
 
   helper: SubscriptionHelper;
@@ -264,10 +266,18 @@ export class InventoryOrderHeaderComponent implements OnChanges, OnInit, OnDestr
                 <br><br>¿Elimino la orden de inventario?`;
 
       case InventoryOrderHeaderEventType.CLOSE:
+        const countVarianceMessage = !this.hasCountVariance ? '<br><br>' :
+          `<br><br>
+           <div class="fx-row-container fx-items-center fx-gap">
+             <mat-icon class="mat-icon material-icons icon-error">info</mat-icon>
+             <span class="warning-text">Existen diferencias en el conteo de productos.</span>
+           </div>
+           <br>`;
+
         return `Esta operación aplicará la orden de inventario
-                <strong> ${this.order.orderNo}:
-                ${this.order.inventoryType.name}</strong>.
-                <br><br>¿Aplico la orden de inventario?`;
+                <strong> ${this.order.orderNo}: ${this.order.inventoryType.name}</strong>.
+                ${countVarianceMessage}
+                ¿Aplico la orden de inventario?`;
 
       default: return '';
     }

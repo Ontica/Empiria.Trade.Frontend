@@ -30,6 +30,8 @@
     [canDelete]="canEditItems"
     [canEdit]="canEditItems"
     [canEditEntries]="canEditEntries"
+    [displayCountStatus]="displayCountStatus"
+    [hasCountVariance]="hasCountVariance"
     [itemsRequired]="itemsRequired"
     [entriesRequired]="entriesRequired"
     (inventoryOrderItemsTableEvent)="onInventoryOrderItemsTableEvent($event)">
@@ -55,3 +57,12 @@
   (inventoryOrderItemEntriesEditionEvent)="onInventoryOrderItemEntriesEditionEvent($event)">
 
 </emp-trade-inventory-order-item-entries-edition>
+
+
+<emp-ng-export-report-modal *ngIf="displayExportModal"
+  title="Exportar reporte de diferencias"
+  message="Se generará la exportación a Excel del reporte para la orden seleccionada."
+  [fileUrl]="fileUrl"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-ng-export-report-modal>
