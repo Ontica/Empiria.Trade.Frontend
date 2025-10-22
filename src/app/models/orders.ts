@@ -7,6 +7,8 @@
 
 import { DateString, Empty, Identifiable } from '@app/core';
 
+import { PERMISSIONS } from '@app/main-layout';
+
 import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './_data-table';
 
 import { EntityStatus } from './_explorer-data';
@@ -33,7 +35,7 @@ export interface OrdersTypeConfig {
   type: OrdersQueryType;
   titleText: string;
   itemText: string;
-  canAdd?: boolean;
+  permissionToCreate?: PERMISSIONS;
 }
 
 

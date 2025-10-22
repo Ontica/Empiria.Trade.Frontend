@@ -17,14 +17,19 @@ export enum PERMISSIONS {
   BLOCKED = 'permission-blocked',
 
   //
-  // APP PERMISSIONS
+  // ALMACENES
   //
+  MODULE_ALMACENES = 'module-almacenes',
 
-  ALL = '*',
+  ROUTE_ALMACENES_INVENTARIOS = 'route-almacenes-inventario',
+  ROUTE_ALMACENES_REPORTES = 'route-almacenes-reportes',
+
+  FEATURE_EDICION_ORDENES_DE_INVENTARIO = 'feature-edicion-ordenes-de-inventario',
 
   //
   // ADMINISTRACION
   //
+  MODULE_ADMINISTRACION_DE_SISTEMA = 'module-administracion-de-sistema',
 
   // PANEL DE CONTROL
   ROUTE_PANEL_CONTROL = 'route-panel-control',

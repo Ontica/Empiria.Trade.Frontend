@@ -15,7 +15,7 @@ import { AppStatusStateAction } from '@app/presentation/app-data/_app-data.prese
 
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { View } from '@app/main-layout';
+import { PERMISSIONS, View } from '@app/main-layout';
 
 import { ArrayLibrary, clone } from '@app/shared/utils';
 
@@ -50,7 +50,7 @@ export class SalesOrdersMainPageComponent implements OnInit, OnDestroy {
     type: OrdersQueryType.Sales,
     titleText: 'Pedido',
     itemText: 'pedido',
-    canAdd: false,
+    permissionToCreate: PERMISSIONS.BLOCKED,
   };
 
   isLoading = false;
@@ -220,15 +220,15 @@ export class SalesOrdersMainPageComponent implements OnInit, OnDestroy {
   private validateCurrentView(view: string) {
     switch (view) {
       case 'VentasViews.Pedidos':
-        this.setInitConfig(OrdersQueryType.Sales, 'Pedidos', 'pedido', true);
+        this.setInitConfig(OrdersQueryType.Sales, 'Pedidos', 'pedido', PERMISSIONS.NOT_REQUIRED);
         return;
 
       case 'VentasViews.Autorizaciones':
-        this.setInitConfig(OrdersQueryType.SalesAuthorization, 'Autorizaciones', '', false);
+        this.setInitConfig(OrdersQueryType.SalesAuthorization, 'Autorizaciones', '', PERMISSIONS.BLOCKED);
         return;
 
       case 'AlmacenesViews.Surtidos':
-        this.setInitConfig(OrdersQueryType.SalesPacking, 'Surtidos', '', false);
+        this.setInitConfig(OrdersQueryType.SalesPacking, 'Surtidos', '', PERMISSIONS.BLOCKED);
         return;
 
       default:
@@ -237,8 +237,8 @@ export class SalesOrdersMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private setInitConfig(type: OrdersQueryType, titleText: string, itemText: string, canAdd: boolean) {
-    this.salesConfig = { type, titleText, itemText, canAdd };
+  private setInitConfig(type: OrdersQueryType, titleText: string, itemText: string, permissionToCreate: PERMISSIONS) {
+    this.salesConfig = { type, titleText, itemText, permissionToCreate };
     this.query = Object.assign({}, EmptySalesOrdersQuery, { queryType: type });
   }
 

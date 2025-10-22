@@ -9,6 +9,8 @@ import { Component } from '@angular/core';
 
 import { Assertion, EventInfo, isEmpty } from '@app/core';
 
+import { PERMISSIONS } from '@app/main-layout';
+
 import { InventoryDataService } from '@app/data-services';
 
 import { EmptyOrdersDataTable, OrdersDataTable, OrdersTypeConfig, OrdersQueryType, InventoryOrderHolder,
@@ -39,7 +41,7 @@ export class InventoryOrdersMainPageComponent {
     type: OrdersQueryType.Inventory,
     titleText: 'Ordenes de inventario',
     itemText: 'orden',
-    canAdd: true,
+    permissionToCreate: PERMISSIONS.FEATURE_EDICION_ORDENES_DE_INVENTARIO,
   };
 
   data: OrdersDataTable = Object.assign({}, EmptyOrdersDataTable);

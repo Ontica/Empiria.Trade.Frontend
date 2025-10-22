@@ -27,7 +27,7 @@ export const ROUTES = {
   },
 
   almacenes: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.MODULE_ALMACENES,
     parent: '',
     path: 'almacenes',
     fullpath: '/almacenes',
@@ -41,7 +41,7 @@ export const ROUTES = {
   },
 
   administracion: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.MODULE_ADMINISTRACION_DE_SISTEMA,
     parent: '',
     path: 'administracion',
     fullpath: '/administracion',
@@ -135,7 +135,7 @@ export const ROUTES = {
   },
 
   almacenes_inventario: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.ROUTE_ALMACENES_INVENTARIOS,
     parent: 'almacenes',
     path: 'inventario',
     fullpath: '/almacenes/inventario',
@@ -149,7 +149,7 @@ export const ROUTES = {
   },
 
   almacenes_reportes: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.ROUTE_ALMACENES_REPORTES,
     parent: 'almacenes',
     path: 'reportes',
     fullpath: '/almacenes/reportes',
@@ -192,7 +192,7 @@ export const ROUTES = {
   // #region system-management-routing module
 
   administracion_panel_de_control: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.ROUTE_PANEL_CONTROL,
     parent: 'administracion',
     path: 'panel-de-control',
     fullpath: '/administracion/panel-de-control',
@@ -227,7 +227,7 @@ export const ROUTES = {
   },
 
   administracion_control_de_accesos: {
-    permission: PERMISSIONS.NOT_REQUIRED,
+    permission: PERMISSIONS.ROUTE_CONTROL_DE_ACCESOS,
     parent: 'administracion',
     path: 'control-de-accesos',
     fullpath: '/administracion/control-de-accesos',

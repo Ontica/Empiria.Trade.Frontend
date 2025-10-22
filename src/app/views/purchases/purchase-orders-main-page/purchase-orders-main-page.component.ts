@@ -9,6 +9,8 @@ import { Component } from '@angular/core';
 
 import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
+import { PERMISSIONS } from '@app/main-layout';
+
 import { MessageBoxService } from '@app/shared/services';
 
 import { PurchasesDataService } from '@app/data-services';
@@ -38,7 +40,7 @@ export class PurchaseOrdersMainPageComponent {
     type: OrdersQueryType.Purchase,
     titleText: 'Ordenes de compra',
     itemText: 'Orden',
-    canAdd: true,
+    permissionToCreate: PERMISSIONS.NOT_REQUIRED,
   };
 
   isLoading = false;
