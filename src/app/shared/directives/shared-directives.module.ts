@@ -8,6 +8,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { EmpAutofocusDirective } from './auto-focus.directive';
 import { EmpContextMenuDisabledDirective } from './context-menu-disabled.directive';
 import { EmpCurrencyDirective } from './currency.directive';
 import { EmpFormKeyDownEnterDirective } from './form-keydown-enter.directive';
@@ -20,6 +21,7 @@ import { EmpPreventDefaultDirective } from './prevent-default.directive';
 import { EmpResizableDirective } from './resizable.directive';
 import { EmpStopPropagationDirective } from './stop-propagation.directive';
 import { EmpTextareaAutoresizeDirective } from './text-area-autoresize.directive';
+import { EmpTextTruncateToggleDirective } from './text-truncate-toggle.directive';
 
 
 @NgModule({
@@ -29,6 +31,7 @@ import { EmpTextareaAutoresizeDirective } from './text-area-autoresize.directive
   ],
 
   declarations: [
+    EmpAutofocusDirective,
     EmpContextMenuDisabledDirective,
     EmpCurrencyDirective,
     EmpFormKeyDownEnterDirective,
@@ -41,9 +44,11 @@ import { EmpTextareaAutoresizeDirective } from './text-area-autoresize.directive
     EmpResizableDirective,
     EmpStopPropagationDirective,
     EmpTextareaAutoresizeDirective,
+    EmpTextTruncateToggleDirective,
   ],
 
   exports: [
+    EmpAutofocusDirective,
     EmpContextMenuDisabledDirective,
     EmpCurrencyDirective,
     EmpFormKeyDownEnterDirective,
@@ -56,6 +61,7 @@ import { EmpTextareaAutoresizeDirective } from './text-area-autoresize.directive
     EmpResizableDirective,
     EmpStopPropagationDirective,
     EmpTextareaAutoresizeDirective,
+    EmpTextTruncateToggleDirective,
   ],
 
 })

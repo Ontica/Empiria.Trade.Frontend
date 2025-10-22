@@ -110,12 +110,12 @@ export class InputNumericComponent implements ControlValueAccessor {
 
   private setFormattedValue(value: any) {
     switch (this.format) {
-      case 'percent':{
+      case 'percent': {
         const formatted = this.getFormatted(value);
         this.formattedValue = formatted !== null ? formatted + '%' : formatted;
         break;
       }
-      case 'decimal':{
+      case 'decimal': {
         this.formattedValue = this.getFormatted(value);
         break;
       }
