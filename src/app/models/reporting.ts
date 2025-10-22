@@ -106,5 +106,4 @@ export const EmptyReportData: ReportData = {
 
 export const DefaultExportationTypesList: ExportationType[] = [
   { uid: 'excel', name: 'Excel', fileType: FileType.Excel },
-  { uid: 'pdf',   name: 'PDF',   fileType: FileType.PDF },
 ];
