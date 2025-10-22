@@ -11,14 +11,16 @@ import { ReportData, ReportEntry, ReportQuery, ReportType } from './reporting';
 
 
 export enum InventoryReportType {
-  StocksByProduct  = 'StocksByProduct',
   StocksByLocation = 'StocksByLocation',
+  StocksByOrder    = 'StocksByOrder',
+  StocksByProduct  = 'StocksByProduct',
 }
 
 
 export const InventoryReportTypesList: ReportType[] = [
-  { uid: InventoryReportType.StocksByProduct,  name: 'Producto / Localizaciones' },
+  { uid: InventoryReportType.StocksByOrder,    name: 'Orden / Productos' },
   { uid: InventoryReportType.StocksByLocation, name: 'Localización / Productos' },
+  { uid: InventoryReportType.StocksByProduct,  name: 'Producto / Localizaciones' },
 ];
 
 
