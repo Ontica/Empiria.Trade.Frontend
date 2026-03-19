@@ -20,7 +20,7 @@ export const ROUTES = {
   },
 
   compras: {
-    permission: PERMISSIONS.BLOCKED,
+    permission: PERMISSIONS.MODULE_COMPRAS,
     parent: '',
     path: 'compras',
     fullpath: '/compras',
@@ -103,7 +103,7 @@ export const ROUTES = {
   // #region compras-routing module
 
   compras_ordenes_de_compra: {
-    permission: PERMISSIONS.BLOCKED,
+    permission: PERMISSIONS.ROUTE_COMPRAS_ORDENES_DE_COMPRA,
     parent: 'compras',
     path: 'ordenes-de-compra',
     fullpath: '/compras/ordenes-de-compra',

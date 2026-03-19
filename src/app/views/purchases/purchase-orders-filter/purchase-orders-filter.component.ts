@@ -15,7 +15,7 @@ import { empExpandCollapse, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { SearcherAPIS } from '@app/data-services';
 
-import { EmptyPurchaseOrdersQuery, PurchaseOrdersQuery, PurchaseOrdersQueryType,
+import { EmptyPurchaseOrdersQuery, PurchaseOrdersQuery, OrdersQueryType,
          PurchaseStatusList } from '@app/models';
 
 
@@ -37,7 +37,7 @@ interface PurchaseOrdersFilterFormModel extends FormGroup<{
 })
 export class PurchaseOrdersFilterComponent implements OnChanges {
 
-  @Input() orderType: string = PurchaseOrdersQueryType.Purchase;
+  @Input() orderType: string = OrdersQueryType.Purchase;
 
   @Input() query: PurchaseOrdersQuery = EmptyPurchaseOrdersQuery;
 

@@ -40,7 +40,7 @@ export class PurchaseOrdersMainPageComponent {
     type: OrdersQueryType.Purchase,
     titleText: 'Ordenes de compra',
     itemText: 'Orden',
-    permissionToCreate: PERMISSIONS.NOT_REQUIRED,
+    permissionToCreate: PERMISSIONS.FEATURE_EDICION_ORDENES_DE_COMPRA,
   };
 
   isLoading = false;

@@ -27,15 +27,15 @@ const routes: Routes = [
   //     .then((m) => m.SalesWorkspaceModule)
   // },
 
-  // {
-  //   data: { permission: ROUTES.compras.permission },
-  //   path: ROUTES.compras.path,
-  //   component: MainLayoutComponent,
-  //   canActivate: [ParentRouteGuard],
-  //   canActivateChild: [ChildRouteGuard],
-  //   loadChildren: () => import('./workspaces/purchases/purchases-workspace.module')
-  //     .then((m) => m.PurchasesWorkspaceModule)
-  // },
+  {
+    data: { permission: ROUTES.compras.permission },
+    path: ROUTES.compras.path,
+    component: MainLayoutComponent,
+    canActivate: [ParentRouteGuard],
+    canActivateChild: [ChildRouteGuard],
+    loadChildren: () => import('./workspaces/purchases/purchases-workspace.module')
+      .then((m) => m.PurchasesWorkspaceModule)
+  },
   // {
   //   data: { permission: ROUTES.contabilidad.permission },
   //   path: ROUTES.contabilidad.path,
