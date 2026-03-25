@@ -4,7 +4,7 @@
   "lang": "es-MX",
   "dir": "ltr",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "/assets/img/favicon/android-chrome-144x144.png",
