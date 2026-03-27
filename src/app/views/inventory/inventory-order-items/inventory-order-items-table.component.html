@@ -108,21 +108,27 @@
 
         <div class="fx-row-container fx-end fx-items-center fx-gap-half" style="padding: 5px 0;">
 
-          <mat-icon [ngClass]="hasCountVariance ? 'icon-error' : 'icon-info'">info</mat-icon>
+          <div class="fx-item-none">
 
-          <span class="text-status">
-            {{ hasCountVariance ? 'Existen diferencias en el conteo de productos.' :
-                 'No existen diferencias en el conteo de productos.' }}
-          </span>
-
-          <div class="fx-item">
+            <mat-icon [ngClass]="hasCountVariance ? 'icon-error' : 'icon-info'">
+              info
+            </mat-icon>
 
           </div>
 
-          <button class="btn"
-            (click)="onExportReportClicked()">
-            Exportar reporte
-          </button>
+          <div class="fx-item">
+            {{ hasCountVariance ? 'Existen diferencias en el conteo de productos.' :
+                 'No existen diferencias en el conteo de productos.' }}
+          </div>
+
+          <div class="fx-item-none">
+
+            <button class="btn"
+              (click)="onExportReportClicked()">
+              Exportar reporte
+            </button>
+
+          </div>
 
         </div>
 

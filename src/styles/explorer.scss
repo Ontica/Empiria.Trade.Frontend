@@ -82,3 +82,38 @@
     width: 960px;
   }
 }
+
+
+@include xsmall() {
+  .explorer {
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+
+    > :not(:last-child) {
+      margin-right: 0;
+      margin-bottom: 16px;
+    }
+
+    .primary,
+    .primary-resizable,
+    .primary-resizable-disable,
+    .secondary,
+    .priority {
+      min-width: 0;
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .primary-resizable::after,
+    .primary-resizable.primary-floating::after {
+      display: none;
+    }
+  }
+
+  .explorer.fluid {
+    .primary,
+    .secondary {
+      width: 100%;
+    }
+  }
+}

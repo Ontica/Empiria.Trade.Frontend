@@ -116,10 +116,10 @@ export class MessageBoxService {
     config.autoFocus = config.autoFocus || true;
     config.role = config.role || 'alertdialog';
 
-    config.minWidth = config.minWidth || '380px';
-    config.maxWidth = config.maxWidth || '500px';
+    config.minWidth = config.minWidth || 'min(380px, calc(100vw - 16px))';
+    config.maxWidth = config.maxWidth || 'min(500px, calc(100vw - 16px))';
 
-    config.width = config.width || '500px';
+    config.width = config.width || 'min(500px, calc(100vw - 16px))';
 
     config.data = Object.assign(messageBoxData, config.data);
 

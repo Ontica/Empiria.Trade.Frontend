@@ -277,3 +277,19 @@
   }
 
 }
+
+@include xsmall() {
+
+  .std-stacked {
+    background-color: transparent;
+    border: 0;
+    height: 100% !important;
+    margin-top: 0;
+
+    > * > .card {
+      margin: 0;
+    }
+
+  }
+
+}

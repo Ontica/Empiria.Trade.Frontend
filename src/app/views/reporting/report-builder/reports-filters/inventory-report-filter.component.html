@@ -2,9 +2,9 @@
 
   <div class="fx-column-container fx-gap-half">
 
-    <div class="fx-row-container sm-fx-column-container sm-fx-gap-half">
+    <div class="fx-row-container">
 
-      <div class="fx-item-third sm-fx-item">
+      <div class="fx-item-half">
 
         <label>Tipo de reporte:</label>
 
@@ -17,23 +17,7 @@
 
       </div>
 
-
-      <div class="fx-item-third sm-fx-item">
-
-        <label>Almacenes:</label>
-
-        <emp-ng-select
-          formControlName="warehouses"
-          placeholder="Todos"
-          [config]="{clearable: true, multiple: true}"
-          [items]="warehousesList"
-          [loading]="isLoading"
-          [showError]="formHelper.isControlInvalid(form.controls.warehouses)">
-        </emp-ng-select>
-
-      </div>
-
-      <div class="fx-item sm-fx-item" [style.margin-top.px]="11">
+      <div class="fx-item fx-items-end">
 
         <div class="input-search-container">
 
@@ -47,7 +31,7 @@
 
       </div>
 
-      <div class="fx-item-none" [style.margin-top.px]="13">
+      <div class="fx-item-none fx-items-end"  [style.padding-bottom.px]="2">
 
         <button title="Generar reporte"
           [class.btn-icon-action]="this.form.valid"
@@ -62,10 +46,24 @@
 
     </div>
 
+    <div class="fx-row-container">
 
-    <div class="fx-row-container sm-fx-column-container sm-fx-gap-half">
+      <div class="fx-item-half">
 
-      <div class="fx-item-third sm-fx-item">
+        <label>Almacenes:</label>
+
+        <emp-ng-select
+          formControlName="warehouses"
+          placeholder="Todos"
+          [config]="{clearable: true, multiple: true}"
+          [items]="warehousesList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.warehouses)">
+        </emp-ng-select>
+
+      </div>
+
+      <div class="fx-item-half">
 
         <label>Localizaciones:</label>
         <emp-ng-input-tags
@@ -76,8 +74,11 @@
 
       </div>
 
+    </div>
 
-      <div class="fx-item-third sm-fx-item">
+    <div class="fx-row-container">
+
+      <div class="fx-item-half">
 
         <label>Productos:</label>
         <emp-ng-input-tags
@@ -88,7 +89,7 @@
 
       </div>
 
-      <div class="fx-item-third sm-fx-item">
+      <div class="fx-item-half">
 
         <label>Ordenes:</label>
         <emp-ng-input-tags
