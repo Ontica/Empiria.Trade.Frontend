@@ -5,15 +5,17 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-@import "../../../../styles/variables";
+@import '../../../../styles/variables';
 
 $medium-max-width: 1024px;
 $logo-width: 335px;
 $logo-padding: 20px;
 $width: 450px;
+$mobile-max-width: 768px;
+$mobile-max-height: 480px;
 
-$background-right-url: url("../../../../assets/img/customer/background.png");
-$background-left-url: url("../../../../assets/img/customer/background.png");
+$background-right-url: url('../../../../assets/img/customer/background.png');
+$background-left-url: url('../../../../assets/img/customer/background.png');
 
 .outer {
   align-items: center;
@@ -48,7 +50,7 @@ $background-left-url: url("../../../../assets/img/customer/background.png");
 }
 
 .authentication-center {
-
+  width: 100%;
 }
 
 .authentication-section-logo {
@@ -115,4 +117,78 @@ $background-left-url: url("../../../../assets/img/customer/background.png");
   .outer {
     padding-right: 0;
   }
+}
+
+@media only screen and (max-width: $mobile-max-width) {
+  .outer,
+  .outer-right,
+  .outer-left {
+    min-height: 100dvh;
+    overflow-y: auto;
+    padding-left: 0;
+    padding-right: 0;
+    background-attachment: scroll;
+  }
+
+  .authentication-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .authentication-section-welcome {
+    padding: $logo-padding;
+  }
+
+  .authentication-error {
+    width: 100%;
+    min-height: 0;
+  }
+
+  .authentication-section-logo {
+    margin: 0;
+    padding: 16px 12px;
+  }
+
+  .logo {
+    width: min(70vw, 260px);
+    height: auto;
+  }
+
+}
+
+@media only screen and (max-height: $mobile-max-height) {
+  .outer,
+  .outer-right,
+  .outer-left {
+    align-items: flex-start;
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-attachment: scroll;
+  }
+  .authentication-container {
+    height: auto;
+    min-height: 100%;
+  }
+
+  .authentication-section-welcome {
+    padding: 15px;
+  }
+
+  .authentication-section-logo {
+    margin: 0;
+    padding: 8px 6px;
+  }
+
+  .logo {
+    width: auto;
+    max-width: 52vw;
+    max-height: 72px;
+  }
+
+  .authentication-error {
+    width: 100%;
+  }
+
 }
