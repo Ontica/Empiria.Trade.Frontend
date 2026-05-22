@@ -88,6 +88,7 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
   @Input() items: any[];
   @Input() bindLabel = 'name';
   @Input() bindValue = 'uid';
+  @Input() bindTooltip = null;
   @Input() placeholder = 'Seleccionar';
 
   @Input() loading = false;
@@ -189,16 +190,24 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
     return item?.search_field?.toLowerCase().includes(term.toLowerCase());
   }
 
+  get bindTooltipField(): string {
+    return this.bindTooltip ?? this.bindLabel;
+  }
+
   get valueTooltip(): string {
     if (!this.selectBoxConfig.showTooltip || Array.isArray(this.value) || !this.value) {
       return '';
     }
 
     if (this.selectBoxConfig.bindByValue && this.bindValue) {
-      const valueFromList = this.items.find(x => x[this.bindValue] === this.value);
-      return valueFromList ? valueFromList[this.bindLabel] : '';
+      const valueFromList = !this.selectBoxConfig.groupBy ?
+        this.items.find(x => x[this.bindValue] === this.value) :
+        this.items
+          .reduce((itemsFlat, item) => itemsFlat.concat(item[this.selectBoxConfig.groupBy]), [])
+          .find(x => x[this.bindValue] === this.value);
+      return valueFromList ? valueFromList[this.bindTooltipField] : '';
     } else {
-      return this.value;
+      return this.bindTooltipField ? this.value[this.bindTooltipField] : this.value;
     }
   }
 
