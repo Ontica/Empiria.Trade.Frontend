@@ -10,7 +10,7 @@ import { DateString, Identifiable, isEmpty } from '@app/core';
 import { Address, Contact, Party } from '@app/models';
 
 
-export const PaymentConditionList: Identifiable[] = [
+export const PaymentConditionsList: Identifiable[] = [
   { uid: 'Credito', name: 'Crédito' },
   { uid: 'Contado', name: 'Contado' },
 ];

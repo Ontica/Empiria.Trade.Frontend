@@ -15,7 +15,7 @@ import { DateString, DateStringLibrary, EventInfo, Identifiable, Validate, isEmp
 
 import { ContactsDataService, SalesDataService } from '@app/data-services';
 
-import { DefaultOrdersStatus, EmptySaleOrderGeneralData, SaleOrderGeneralData, Party, PaymentConditionList,
+import { DefaultOrdersStatus, EmptySaleOrderGeneralData, SaleOrderGeneralData, Party, PaymentConditionsList,
          ShippingMethodList, ShippingMethodTypes, CustomerSelection, EmptyCustomerSelection,
          buildCustomerSelection } from '@app/models';
 
@@ -33,7 +33,7 @@ interface SaleOrderFormModel extends FormGroup<{
   priceList: FormControl<string>;
   supplier: FormControl<Party>;
   salesAgent: FormControl<Party>;
-  paymentCondition: FormControl<string>;
+  paymentConditions: FormControl<string>;
   shippingMethod: FormControl<string>;
   customer: FormControl<CustomerSelection>;
 }> { }
@@ -64,7 +64,7 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
 
   shippingMethodList: Identifiable[] = ShippingMethodList;
 
-  paymentConditionList: Identifiable[] = PaymentConditionList;
+  paymentConditionsList: Identifiable[] = PaymentConditionsList;
 
   salesAgentsList: Party[] = [];
 
@@ -122,7 +122,7 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
       priceList: ['', Validators.required],
       supplier: [null as Party, Validators.required],
       salesAgent: [null as Party, Validators.required],
-      paymentCondition: ['', Validators.required],
+      paymentConditions: ['', Validators.required],
       shippingMethod: ['', Validators.required],
       customer: [EmptyCustomerSelection, Validate.objectFieldsRequired('customer', 'address')],
     });
@@ -162,7 +162,7 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
         priceList: this.orderData.priceList,
         supplier: this.orderData.supplier,
         salesAgent: this.orderData.salesAgent,
-        paymentCondition: this.orderData.paymentCondition,
+        paymentConditions: this.orderData.paymentConditions,
         shippingMethod: this.orderData.shippingMethod,
         customer: customerData,
       });
@@ -196,7 +196,7 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
       priceList: formModel.priceList ?? '',
       supplier: formModel.supplier ?? null,
       salesAgent: formModel.salesAgent ?? null,
-      paymentCondition: formModel.paymentCondition ?? '',
+      paymentConditions: formModel.paymentConditions ?? '',
       shippingMethod: formModel.shippingMethod ?? '',
       customer: formModel.customer?.customer ?? null,
       customerContact: formModel.customer?.contact ?? null,

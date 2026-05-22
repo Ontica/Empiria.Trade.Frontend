@@ -31,10 +31,10 @@
       <div class="fx-item-half">
         <label>Condiciones de pago:</label>
         <emp-ng-select
-          formControlName="paymentCondition"
-          [items]="paymentConditionList"
+          formControlName="paymentConditions"
+          [items]="paymentConditionsList"
           [placeholder]="editionMode ? 'Seleccionar' : 'No definido'"
-          [showError]="formHelper.isControlInvalid(form.controls.paymentCondition)">
+          [showError]="formHelper.isControlInvalid(form.controls.paymentConditions)">
         </emp-ng-select>
       </div>
 

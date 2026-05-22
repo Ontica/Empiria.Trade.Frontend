@@ -57,7 +57,7 @@ export interface PurchaseOrder {
   uid: string;
   orderNumber: string;
   supplier: Identifiable;
-  paymentCondition: string;
+  paymentConditions: string;
   shippingMethod: string;
   notes: string;
   status: Identifiable;
@@ -103,7 +103,7 @@ export interface PurchaseOrderActions {
 
 export interface PurchaseOrderFields {
   supplierUID: string;
-  paymentCondition: string;
+  paymentConditions: string;
   shippingMethod: string;
   scheduledTime: DateString;
   notes: string;
@@ -151,7 +151,7 @@ export const EmptyPurchaseOrder: PurchaseOrder = {
   uid: '',
   orderNumber: '',
   supplier: Empty,
-  paymentCondition: '',
+  paymentConditions: '',
   shippingMethod: '',
   notes: '',
   status: Empty,

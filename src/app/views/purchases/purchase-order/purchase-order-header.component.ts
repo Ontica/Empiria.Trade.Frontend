@@ -11,13 +11,13 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
 
-import { FormHelper, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent, sendEventIf } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/services';
 
 import { SearcherAPIS } from '@app/data-services';
 
-import { EmptyPurchaseOrder, PaymentConditionList, PurchaseOrder, PurchaseOrderFields,
+import { EmptyPurchaseOrder, PaymentConditionsList, PurchaseOrder, PurchaseOrderFields,
          ReceptionMethodList } from '@app/models';
 
 
@@ -31,7 +31,7 @@ export enum PurchaseOrderHeaderEventType {
 
 interface PurchaseOrderFormModel extends FormGroup<{
   supplierUID: FormControl<string>;
-  paymentCondition: FormControl<string>;
+  paymentConditions: FormControl<string>;
   shippingMethod: FormControl<string>;
   scheduledTime: FormControl<DateString>;
   notes: FormControl<string>;
@@ -67,7 +67,7 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
 
   receptionMethodList: Identifiable[] = ReceptionMethodList;
 
-  paymentConditionList: Identifiable[] = PaymentConditionList;
+  paymentConditionsList: Identifiable[] = PaymentConditionsList;
 
 
   constructor(private messageBox: MessageBoxService) {
@@ -127,7 +127,7 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
 
     this.form = fb.group({
       supplierUID: ['', Validators.required],
-      paymentCondition: [''],
+      paymentConditions: [''],
       shippingMethod: [''],
       scheduledTime: ['' as DateString],
       notes: [''],
@@ -138,7 +138,7 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
   private setFormData() {
     this.form.reset({
       supplierUID: isEmpty(this.order.supplier) ? '' : this.order.supplier.uid,
-      paymentCondition: this.order.paymentCondition,
+      paymentConditions: this.order.paymentConditions,
       shippingMethod: this.order.shippingMethod,
       scheduledTime: this.order.scheduledTime,
       notes: this.order.notes,
@@ -153,7 +153,7 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
 
     const data: PurchaseOrderFields = {
       supplierUID: formModel.supplierUID ?? '',
-      paymentCondition: formModel.paymentCondition ?? '',
+      paymentConditions: formModel.paymentConditions ?? '',
       shippingMethod: formModel.shippingMethod ?? '',
       scheduledTime: formModel.scheduledTime ?? '',
       notes: formModel.notes ?? '',
@@ -170,11 +170,7 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
 
     this.messageBox.confirm(message, title, confirmType)
       .firstValue()
-      .then(x => {
-        if (x) {
-          sendEvent(this.purchaseOrderHeaderEvent, eventType);
-        }
-      });
+      .then(x => sendEventIf(x, this.purchaseOrderHeaderEvent, eventType));
   }
 
 

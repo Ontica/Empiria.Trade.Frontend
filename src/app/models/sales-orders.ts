@@ -96,7 +96,7 @@ export interface SaleOrderFields {
   customerAddressUID: string;
   salesAgentUID: string;
   supplierUID: string;
-  paymentCondition: string;
+  paymentConditions: string;
   shippingMethod: string;
   priceList: string;
   notes: string;
@@ -129,7 +129,7 @@ export interface SaleOrderGeneralData extends SaleOrderAdditionalData {
   customerAddress: Address;
   supplier: Party;
   salesAgent: Party;
-  paymentCondition: string;
+  paymentConditions: string;
   shippingMethod: string;
   notes?: string;
 }
@@ -232,7 +232,7 @@ export const EmptySaleOrderGeneralData: SaleOrderGeneralData = {
   customerAddress: EmptyAddress,
   supplier: Empty,
   salesAgent: Empty,
-  paymentCondition: '',
+  paymentConditions: '',
   priceList: '',
   notes: '',
 };
@@ -266,7 +266,7 @@ export const EmptySaleOrderData: SaleOrderData = {
   customerAddress: EmptyAddress,
   supplier: Empty,
   salesAgent: Empty,
-  paymentCondition: '',
+  paymentConditions: '',
   priceList: '',
   itemsCount: 0,
   itemsTotal: 0,
@@ -336,7 +336,7 @@ export function mapSaleOrderFieldsFromSaleOrder(order: SaleOrder): SaleOrderFiel
     customerAddressUID: order.orderData.customerAddress?.uid ?? '',
     salesAgentUID: order.orderData.salesAgent?.uid ?? '',
     supplierUID: order.orderData.supplier?.uid ?? '',
-    paymentCondition: order.orderData.paymentCondition,
+    paymentConditions: order.orderData.paymentConditions,
     shippingMethod: order.orderData.shippingMethod,
     priceList: order.orderData.priceList,
     items: order.items.map(x => mapSaleOrderItemFieldsFromSaleOrderItem(x)),
