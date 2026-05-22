@@ -10,11 +10,10 @@
 
       <div class="fx-row-container" [style.margin-right.px]="-8">
 
-        <emp-ng-select #presentationSelected class="fx-item"
+        <emp-ng-select #presentationSelected class="fx-item-one"
           [(ngModel)]="presentation"
-          [title]="presentation?.description"
           [name]="'selectPresentation'+ product.productUID"
-          [config]="{bindByValue: false}"
+          [config]="{bindByValue: false, showTooltip: true}"
           [items]="product.presentations"
           [disabled]="product.presentations.length === 1"
           bindValue="presentationUID"
