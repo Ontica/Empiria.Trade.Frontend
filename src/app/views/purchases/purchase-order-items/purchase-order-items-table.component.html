@@ -144,7 +144,7 @@
 
     <ng-container matColumnDef="totalsItemsCount">
       <td mat-footer-cell *matFooterCellDef>
-        {{ orderTotals.itemsCount | empDecimal: '1.0-0' }}
+        {{ orderTotals.itemsCount | empDecimal: 0 }}
       </td>
     </ng-container>
 

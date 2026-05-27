@@ -98,6 +98,7 @@ export interface ProductDescriptor extends Product {
 export interface ProductPresentation extends Presentation {
   presentationUID: string;
   description: string;
+  name: string;
   units: number;
   vendors: Vendor[];
 }
