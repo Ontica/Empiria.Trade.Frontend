@@ -11,6 +11,7 @@
       <emp-trade-products-seeker
         displayFlat="true"
         productSeekerQueryType="ProductsForPurchaseOrder"
+        [supplierUID]="orderSupplierUID"
         (productsSeekerEvent)="onProductsSeekerEvent($event)">
 
       </emp-trade-products-seeker>

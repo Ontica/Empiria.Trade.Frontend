@@ -19,6 +19,7 @@
 
       <emp-trade-purchase-order-items-edition
         [orderUID]="order.uid"
+        [orderSupplierUID]="order.supplier.uid"
         [orderItems]="order.items"
         [orderTotals]="order.totals"
         [canEdit]="order.actions.canEdit"

@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
@@ -25,6 +25,7 @@ export enum PurchaseOrderProductSelectorEventType {
 })
 export class PurchaseOrderProductSelectorComponent {
 
+  @Input() orderSupplierUID = '';
 
   @Output() purchaseOrderProductSelectorEvent = new EventEmitter<EventInfo>();
 

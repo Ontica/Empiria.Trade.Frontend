@@ -52,6 +52,7 @@ export interface Vendor {
 export interface ProductQuery {
   keywords: string;
   onStock: boolean;
+  supplierUID?: string;
   order?: SaleOrderFields;
 }
 

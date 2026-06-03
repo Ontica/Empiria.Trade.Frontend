@@ -37,6 +37,8 @@ export class ProductsSeekerComponent implements OnInit {
 
   @Input() productSeekerQueryType: ProductSeekerQueryType = 'Products';
 
+  @Input() supplierUID = null;
+
   @Input() order: SaleOrderFields = null;
 
   @Input() displayFlat = null;
@@ -178,6 +180,10 @@ export class ProductsSeekerComponent implements OnInit {
 
     if (!!this.order) {
       productQuery.order = this.order;
+    }
+
+    if (!!this.supplierUID) {
+      productQuery.supplierUID = this.supplierUID;
     }
 
     return productQuery;

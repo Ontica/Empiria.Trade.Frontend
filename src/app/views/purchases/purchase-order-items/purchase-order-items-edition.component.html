@@ -44,6 +44,7 @@
 
 
 <emp-trade-purchase-order-product-selector *ngIf="displayProductSelector"
+  [orderSupplierUID]="orderSupplierUID"
   (purchaseOrderProductSelectorEvent)="onPurchaseOrderProductSelectorEvent($event)">
 
 </emp-trade-purchase-order-product-selector>

@@ -39,6 +39,8 @@ export class PurchaseOrderItemsEditionComponent {
 
   @Input() orderUID = '';
 
+  @Input() orderSupplierUID = '';
+
   @Input() orderItems: PurchaseOrderItem[] = [];
 
   @Input() orderTotals: PurchaseOrderTotals = EmptyPurchaseOrderTotals;
