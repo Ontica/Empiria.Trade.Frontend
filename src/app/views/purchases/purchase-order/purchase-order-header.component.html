@@ -90,23 +90,29 @@
 
       <div class="fx-item fx-items-center">
 
-        <button *ngIf="editionMode && canDelete"
+        <button *ngIf="editionMode && order.actions.canDelete"
           type="button" class="btn-warning"
           (click)="onDeleteButtonClicked()">
           Eliminar
         </button>
 
-        <button *ngIf="!editionMode && canClose"
+        <button *ngIf="!editionMode && order.actions.canClose"
           type="button" class="btn"
           (click)="onCloseButtonClicked()">
           Cerrar
+        </button>
+
+        <button *ngIf="!editionMode && order.actions.canExport"
+          type="button" class="btn"
+          (click)="onExportButtonClicked()">
+          Exportar
         </button>
 
       </div>
 
       <div class="fx-item fx-end fx-items-center">
 
-        <button *ngIf="!editionMode && canEdit"
+        <button *ngIf="!editionMode && order.actions.canEdit"
           class="btn-action"
           (click)="enableEditor(true)">
           Editar

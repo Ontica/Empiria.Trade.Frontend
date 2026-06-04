@@ -13,6 +13,8 @@ import { sendEvent } from '@app/shared/utils';
 
 import { AlertService, MessageBoxService } from '@app/shared/services';
 
+import { SkipIf } from '@app/shared/decorators';
+
 import { InventoryDataService } from '@app/data-services';
 
 import { EmptyInventoryOrderItem, InventoryOrderHolder, InventoryOrderItem, InventoryOrderItemFields,
@@ -88,6 +90,7 @@ export class InventoryOrderItemsEditionComponent {
   }
 
 
+  @SkipIf('submitted')
   onInventoryOrderItemEditorEvent(event: EventInfo) {
     switch (event.type as InventoryOrderItemEditorEventType) {
       case InventoryOrderItemEditorEventType.CLOSE_BUTTON_CLICKED:
@@ -105,6 +108,7 @@ export class InventoryOrderItemsEditionComponent {
   }
 
 
+  @SkipIf('submitted')
   onInventoryOrderItemsTableEvent(event: EventInfo) {
     switch (event.type as InventoryOrderItemsTableEventType) {
       case InventoryOrderItemsTableEventType.SELECT_ITEM_CLICKED:
@@ -137,6 +141,7 @@ export class InventoryOrderItemsEditionComponent {
   }
 
 
+  @SkipIf('submitted')
   onInventoryOrderItemEntriesEditionEvent(event: EventInfo) {
     switch (event.type as InventoryOrderItemEntriesEditionEventType) {
       case InventoryOrderItemEntriesEditionEventType.CLOSE_BUTTON_CLICKED:
@@ -211,7 +216,7 @@ export class InventoryOrderItemsEditionComponent {
   private exportOrderItemReport(orderUID: string) {
     this.inventoryData.exportOrderItemReport(orderUID)
       .firstValue()
-      .then(x => { this.fileUrl = x.url; });
+      .then(x => this.fileUrl = x.url);
   }
 
 

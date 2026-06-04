@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { OrdersDataTable, PurchaseOrder, PurchaseOrderFields, PurchaseOrderItemFields,
+import { FileReport, OrdersDataTable, PurchaseOrder, PurchaseOrderFields, PurchaseOrderItemFields,
          PurchaseOrdersQuery } from '@app/models';
 
 
@@ -79,6 +79,16 @@ export class PurchasesDataService {
     const path = `v4/trade/procurement/purchase-orders/${orderUID}/close`;
 
     return this.http.post<PurchaseOrder>(path);
+  }
+
+
+
+  exportOrder(orderUID: string,): EmpObservable<FileReport> {
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v4/trade/procurement/purchase-orders/${orderUID}/export`;
+
+    return this.http.get<FileReport>(path);
   }
 
 

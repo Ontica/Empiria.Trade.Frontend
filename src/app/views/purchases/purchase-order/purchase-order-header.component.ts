@@ -26,6 +26,7 @@ export enum PurchaseOrderHeaderEventType {
   UPDATE_ORDER = 'PurchaseOrderHeaderComponent.Event.UpdateOrder',
   DELETE_ORDER = 'PurchaseOrderHeaderComponent.Event.DeleteOrder',
   CLOSE_ORDER  = 'PurchaseOrderHeaderComponent.Event.CloseOrder',
+  EXPORT_ORDER = 'PurchaseOrderHeaderComponent.Event.ExportOrder',
 }
 
 
@@ -44,12 +45,6 @@ interface PurchaseOrderFormModel extends FormGroup<{
 export class PurchaseOrderHeaderComponent implements OnChanges {
 
   @Input() isSaved = false;
-
-  @Input() canEdit = false;
-
-  @Input() canClose = false;
-
-  @Input() canDelete = false;
 
   @Input() order: PurchaseOrder = EmptyPurchaseOrder;
 
@@ -84,7 +79,8 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
 
 
   get hasActions(): boolean {
-    return this.canEdit || this.canClose;
+    return this.order.actions.canEdit || this.order.actions.canClose || this.order.actions.canExport ||
+           this.order.actions.canDelete;
   }
 
 
@@ -108,6 +104,11 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
 
   onCloseButtonClicked() {
     this.showConfirmMessage(PurchaseOrderHeaderEventType.CLOSE_ORDER);
+  }
+
+
+  onExportButtonClicked() {
+    sendEvent(this.purchaseOrderHeaderEvent, PurchaseOrderHeaderEventType.EXPORT_ORDER);
   }
 
 

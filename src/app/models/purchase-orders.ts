@@ -98,6 +98,7 @@ export interface PurchaseOrderActions {
   canDelete: boolean;
   canClose: boolean;
   canOpen: boolean;
+  canExport: boolean;
 }
 
 
@@ -138,6 +139,7 @@ export const EmptyPurchaseOrderActions: PurchaseOrderActions = {
   canDelete: false,
   canClose: false,
   canOpen: false,
+  canExport: false,
 };
 
 

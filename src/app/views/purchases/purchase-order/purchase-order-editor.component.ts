@@ -11,9 +11,15 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
+import { SkipIf } from '@app/shared/decorators';
+
 import { PurchasesDataService } from '@app/data-services';
 
 import { EmptyPurchaseOrder, PurchaseOrder, PurchaseOrderFields } from '@app/models';
+
+import {
+  ExportReportModalEventType
+} from '@app/views/_reports-controls/export-report-modal/export-report-modal.component';
 
 import { PurchaseOrderHeaderEventType } from './purchase-order-header.component';
 
@@ -35,6 +41,10 @@ export class PurchaseOrderEditorComponent {
 
   submitted = false;
 
+  displayExportModal = false;
+
+  fileUrl = '';
+
 
   constructor(private purchasesData: PurchasesDataService) { }
 
@@ -44,25 +54,37 @@ export class PurchaseOrderEditorComponent {
   }
 
 
+  @SkipIf('submitted')
   onPurchaseOrderHeaderEvent(event: EventInfo) {
-    if (this.submitted) {
-      return;
-    }
-
     switch (event.type as PurchaseOrderHeaderEventType) {
       case PurchaseOrderHeaderEventType.UPDATE_ORDER:
         Assertion.assertValue(event.payload.dataFields, 'event.payload.dataFields');
         this.updateOrder(event.payload.dataFields as PurchaseOrderFields);
         return;
-
       case PurchaseOrderHeaderEventType.DELETE_ORDER:
         this.deleteOrder();
         return;
-
       case PurchaseOrderHeaderEventType.CLOSE_ORDER:
         this.closeOrder();
         return;
+      case PurchaseOrderHeaderEventType.EXPORT_ORDER:
+        this.setDisplayExportModal(true);
+        return;
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
 
+
+  onExportReportModalEvent(event: EventInfo) {
+    switch (event.type as ExportReportModalEventType) {
+      case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
+        this.setDisplayExportModal(false);
+        return;
+      case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
+        this.exportOrder();
+        return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -102,6 +124,19 @@ export class PurchaseOrderEditorComponent {
         sendEvent(this.purchaseOrderEditorEvent, PurchaseOrderEditorEventType.ORDER_UPDATED, { order: x })
       )
       .finally(() => this.submitted = false);
+  }
+
+
+  private exportOrder() {
+    this.purchasesData.exportOrder(this.order.uid)
+      .firstValue()
+      .then(x => this.fileUrl = x.url);
+  }
+
+
+  private setDisplayExportModal(display: boolean) {
+    this.displayExportModal = display;
+    this.fileUrl = '';
   }
 
 }

@@ -8,12 +8,18 @@
 
   <emp-trade-purchase-order-header
     [isSaved]="isSaved"
-    [canEdit]="order.actions.canEdit"
-    [canClose]="order.actions.canClose"
-    [canDelete]="order.actions.canDelete"
     [order]="order"
     (purchaseOrderHeaderEvent)="onPurchaseOrderHeaderEvent($event)">
 
   </emp-trade-purchase-order-header>
 
 </div>
+
+
+<emp-ng-export-report-modal *ngIf="displayExportModal"
+  title="Exportar orden de compra"
+  message="Se generará la exportación a Excel de la orden de compra."
+  [fileUrl]="fileUrl"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-ng-export-report-modal>

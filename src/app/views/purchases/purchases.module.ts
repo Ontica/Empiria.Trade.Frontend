@@ -14,6 +14,7 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { OrdersModule } from '../orders/orders.module';
 import { ProductsModule } from '../products/products.module';
+import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
 
 import { PurchaseOrdersMainPageComponent } from './purchase-orders-main-page/purchase-orders-main-page.component';
 import { PurchaseOrdersFilterComponent } from './purchase-orders-filter/purchase-orders-filter.component';
@@ -36,6 +37,7 @@ import { PurchaseOrderProductSelectorComponent } from './purchase-order-product-
 
     OrdersModule,
     ProductsModule,
+    ReportsControlsModule,
   ],
   declarations: [
     PurchaseOrdersMainPageComponent,
