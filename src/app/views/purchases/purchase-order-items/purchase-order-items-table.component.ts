@@ -50,7 +50,8 @@ export class PurchaseOrderItemsTableComponent implements OnChanges {
 
   rowInEdition: PurchaseOrderItem = null;
 
-  displayedColumnsDefault: string[] = ['product', 'notes', 'quantity', 'price', 'weight', 'total'];
+  displayedColumnsDefault: string[] = ['product', 'packingSmallBag', 'packagingSize', 'presentationName',
+                                       'notes', 'quantity', 'price', 'weight', 'total'];
 
   displayedColumns = [...this.displayedColumnsDefault];
 

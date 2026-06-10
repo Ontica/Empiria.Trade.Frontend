@@ -77,13 +77,15 @@ export interface PurchaseOrderItem {
   productCode: string;
   productName: string;
   presentationName: string;
+  description: string;
+  packagingSize: number;
+  packingSmallBag: number;
 
+  notes: string;
   quantity: number;
   price: number;
   weight: number;
   total: number;
-
-  notes: string;
 }
 
 
