@@ -218,7 +218,7 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
               delay(2000),
               catchError(() => of([])),
               tap(x => {
-                this.setIsLoading(false)
+                this.setIsLoading(false);
                 this.enableVirtualScroll = x.length > this.config.virtualScrollThreshold;
               })
             ))
@@ -232,7 +232,7 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
       const query = Object.assign({}, this.initQuery, { keywords });
       return this.searcherData.searchDataByQuery(this.searcherAPI, query);
     } else {
-      return this.searcherData.searchData(this.searcherAPI, keywords)
+      return this.searcherData.searchData(this.searcherAPI, keywords);
     }
   }
 

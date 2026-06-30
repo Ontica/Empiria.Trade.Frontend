@@ -5,11 +5,16 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
+         SimpleChanges } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
+
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { FormHelper, sendEvent, sendEventIf } from '@app/shared/utils';
 
@@ -34,6 +39,8 @@ interface PurchaseOrderFormModel extends FormGroup<{
   supplierUID: FormControl<string>;
   paymentConditions: FormControl<string>;
   shippingMethod: FormControl<string>;
+  currencyUID: FormControl<string>;
+  exchangeRate: FormControl<number>;
   scheduledTime: FormControl<DateString>;
   notes: FormControl<string>;
 }> { }
@@ -42,13 +49,15 @@ interface PurchaseOrderFormModel extends FormGroup<{
   selector: 'emp-trade-purchase-order-header',
   templateUrl: './purchase-order-header.component.html',
 })
-export class PurchaseOrderHeaderComponent implements OnChanges {
+export class PurchaseOrderHeaderComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() isSaved = false;
 
   @Input() order: PurchaseOrder = EmptyPurchaseOrder;
 
   @Output() purchaseOrderHeaderEvent = new EventEmitter<EventInfo>();
+
+  helper: SubscriptionHelper;
 
   form: PurchaseOrderFormModel;
 
@@ -64,8 +73,12 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
 
   paymentConditionsList: Identifiable[] = PaymentConditionsList;
 
+  currenciesList: Identifiable[] = [];
 
-  constructor(private messageBox: MessageBoxService) {
+
+  constructor(private uiLayer: PresentationLayer,
+              private messageBox: MessageBoxService) {
+    this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
     this.enableEditor(true);
   }
@@ -75,6 +88,16 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
     if (changes.order && this.isSaved) {
       this.enableEditor(false);
     }
+  }
+
+
+  ngOnInit() {
+    this.loadDataLists();
+  }
+
+
+  ngOnDestroy() {
+    this.helper.destroy();
   }
 
 
@@ -119,7 +142,18 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
       this.setFormData();
     }
 
-    this.formHelper.setDisableForm(this.form, !this.editionMode);
+    this.validateFormDisabled();
+  }
+
+
+  private loadDataLists() {
+    this.isLoading = true;
+
+    this.helper.select<Identifiable[]>(CataloguesStateSelector.CURRENCIES)
+      .subscribe(x => {
+        this.currenciesList = x;
+        this.isLoading = false;
+      });
   }
 
 
@@ -130,6 +164,8 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
       supplierUID: ['', Validators.required],
       paymentConditions: [''],
       shippingMethod: [''],
+      currencyUID: [''],
+      exchangeRate: [null],
       scheduledTime: ['' as DateString],
       notes: [''],
     });
@@ -137,12 +173,24 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
 
 
   private setFormData() {
-    this.form.reset({
-      supplierUID: isEmpty(this.order.supplier) ? '' : this.order.supplier.uid,
-      paymentConditions: this.order.paymentConditions,
-      shippingMethod: this.order.shippingMethod,
-      scheduledTime: this.order.scheduledTime,
-      notes: this.order.notes,
+    setTimeout(() => {
+      this.form.reset({
+        supplierUID: isEmpty(this.order.supplier) ? '' : this.order.supplier.uid,
+        paymentConditions: this.order.paymentConditions,
+        shippingMethod: this.order.shippingMethod,
+        currencyUID: isEmpty(this.order.currency) ? '' : this.order.currency.uid,
+        exchangeRate: this.order.exchangeRate,
+        scheduledTime: this.order.scheduledTime,
+        notes: this.order.notes,
+      });
+    });
+  }
+
+
+  private validateFormDisabled() {
+    setTimeout(() => {
+      const disable = this.isSaved && (!this.editionMode || !this.order.actions.canEdit);
+      FormHelper.setDisableForm(this.form, disable);
     });
   }
 
@@ -156,6 +204,8 @@ export class PurchaseOrderHeaderComponent implements OnChanges {
       supplierUID: formModel.supplierUID ?? '',
       paymentConditions: formModel.paymentConditions ?? '',
       shippingMethod: formModel.shippingMethod ?? '',
+      currencyUID: formModel.currencyUID ?? '',
+      exchangeRate: formModel.exchangeRate ?? null,
       scheduledTime: formModel.scheduledTime ?? '',
       notes: formModel.notes ?? '',
     };

@@ -10,7 +10,7 @@
           formControlName="supplierUID"
           [config]="{ minTermLength: 5 }"
           [searcherAPI]="suppliersAPI"
-          [initialValue]="order.supplier"
+          [initialValue]="isSaved ? order.supplier : null"
           [showError]="formHelper.isControlInvalid(form.controls.supplierUID)">
 
         </emp-ng-select-typeahead>
@@ -28,7 +28,7 @@
 
     <div class="fx-row-container">
 
-      <div class="fx-item-half">
+      <div class="fx-item-quarter">
         <label>Condiciones de pago:</label>
         <emp-ng-select
           formControlName="paymentConditions"
@@ -38,7 +38,7 @@
         </emp-ng-select>
       </div>
 
-      <div class="fx-item-half">
+      <div class="fx-item-quarter">
         <label>Forma de envío:</label>
         <emp-ng-select
           formControlName="shippingMethod"
@@ -47,6 +47,35 @@
           [placeholder]="editionMode ? 'Seleccionar' : 'No definido'"
           [showError]="formHelper.isControlInvalid(form.controls.shippingMethod)">
         </emp-ng-select>
+      </div>
+
+      <div class="fx-item-quarter">
+
+        <label>Moneda:</label>
+
+        <emp-ng-select
+          formControlName="currencyUID"
+          [items]="currenciesList"
+          [loading]="isLoading"
+          [placeholder]="editionMode ? 'Seleccionar' : 'No definido'"
+          [showError]="formHelper.isControlInvalid(form.controls.currencyUID)">
+
+        </emp-ng-select>
+
+      </div>
+
+      <div class="fx-item-quarter">
+
+        <label class="nowrap">Tipo de cambio:</label>
+
+        <emp-ng-input-numeric
+          formControlName="exchangeRate"
+          [minDecimals]="6"
+          [maxDecimals]="6"
+          [showError]="formHelper.isControlInvalid(form.controls.exchangeRate)">
+
+        </emp-ng-input-numeric>
+
       </div>
 
     </div>
