@@ -9,6 +9,8 @@ export * from './_access-control.data.service';
 
 export * from './_searcher.data.service';
 
+export * from './catalogues.data.service';
+
 export * from './contacts.data.service';
 
 export * from './inventory.data.service';

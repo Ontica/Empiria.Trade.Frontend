@@ -11,31 +11,23 @@ import { EmpObservable } from '@app/core';
 
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
-import { MoneyAccountsDataService } from '@app/data-services';
+import { CataloguesDataService } from '@app/data-services';
 
 
 export enum SelectorType {
-  MONEY_ACCOUNT_TYPES                  = 'Trade.MoneyAccount.Selectors.Types.List',
-  MONEY_ACCOUNT_STATUS                 = 'Trade.MoneyAccount.Selectors.Status.List',
-  MONEY_ACCOUNT_TRANSACTION_TYPES      = 'Trade.MoneyAccount.Selectors.TransactionTypes.List',
-  MONEY_ACCOUNT_PAYMENT_TYPES          = 'Trade.MoneyAccount.Selectors.PaymentTypes.List',
-  MONEY_ACCOUNT_TRANSACTION_ITEM_TYPES = 'Trade.MoneyAccount.Selectors.TransactionItemTypes.List',
+  CURRENCIES = 'Trade.Catalogues.Selector.Currencies.List',
 }
 
 
 const initialState: StateValues = [
-  { key: SelectorType.MONEY_ACCOUNT_TYPES, value: [] },
-  { key: SelectorType.MONEY_ACCOUNT_STATUS, value: [] },
-  { key: SelectorType.MONEY_ACCOUNT_TRANSACTION_TYPES, value: [] },
-  { key: SelectorType.MONEY_ACCOUNT_PAYMENT_TYPES, value: [] },
-  { key: SelectorType.MONEY_ACCOUNT_TRANSACTION_ITEM_TYPES, value: [] },
+  { key: SelectorType.CURRENCIES, value: [] },
 ];
 
 
 @Injectable()
 export class CataloguesPresentationHandler extends AbstractPresentationHandler {
 
-  constructor(private moneyAccountsData: MoneyAccountsDataService) {
+  constructor(private data: CataloguesDataService) {
     super({
       initialState,
       selectors: SelectorType,
@@ -46,32 +38,8 @@ export class CataloguesPresentationHandler extends AbstractPresentationHandler {
   select<U>(selectorType: SelectorType, params?: any): EmpObservable<U> {
     switch (selectorType) {
 
-      case SelectorType.MONEY_ACCOUNT_TYPES: {
-        const provider = () => this.moneyAccountsData.getMoneyAccountTypes();
-
-        return super.selectFirst<U>(selectorType, provider);
-      }
-
-      case SelectorType.MONEY_ACCOUNT_STATUS: {
-        const provider = () => this.moneyAccountsData.getMoneyAccountStatus();
-
-        return super.selectFirst<U>(selectorType, provider);
-      }
-
-      case SelectorType.MONEY_ACCOUNT_TRANSACTION_TYPES: {
-        const provider = () => this.moneyAccountsData.getMoneyAccountTransactionTypes();
-
-        return super.selectFirst<U>(selectorType, provider);
-      }
-
-      case SelectorType.MONEY_ACCOUNT_PAYMENT_TYPES: {
-        const provider = () => this.moneyAccountsData.getMoneyAccountPaymentTypes();
-
-        return super.selectFirst<U>(selectorType, provider);
-      }
-
-      case SelectorType.MONEY_ACCOUNT_TRANSACTION_ITEM_TYPES: {
-        const provider = () => this.moneyAccountsData.getMoneyAccountTransactionItemTypes();
+      case SelectorType.CURRENCIES: {
+        const provider = () => this.data.getCurrencies();
 
         return super.selectFirst<U>(selectorType, provider);
       }

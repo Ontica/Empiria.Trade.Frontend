@@ -29,5 +29,9 @@ export { SelectorType as CataloguesStateSelector } from './catalogues.presentati
 import { SelectorType as InventaryStateSelector } from './inventary.presentation.handler';
 export { SelectorType as InventaryStateSelector } from './inventary.presentation.handler';
 
+import { SelectorType as MoneyAccountsStateSelector } from './money-accounts.presentation.handler';
+export { SelectorType as MoneyAccountsStateSelector } from './money-accounts.presentation.handler';
+
 export type TradeSelectors = CataloguesStateSelector |
-                             InventaryStateSelector;
+                             InventaryStateSelector |
+                             MoneyAccountsStateSelector;

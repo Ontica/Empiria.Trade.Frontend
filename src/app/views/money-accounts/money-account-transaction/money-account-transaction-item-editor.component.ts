@@ -16,7 +16,7 @@ import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/co
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
+import { MoneyAccountsStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
@@ -136,8 +136,8 @@ export class MoneyAccountTransactionItemEditorComponent implements OnChanges, On
     this.isLoading = true;
 
     combineLatest([
-      this.helper.select<Identifiable[]>(CataloguesStateSelector.MONEY_ACCOUNT_PAYMENT_TYPES),
-      this.helper.select<Identifiable[]>(CataloguesStateSelector.MONEY_ACCOUNT_TRANSACTION_ITEM_TYPES),
+      this.helper.select<Identifiable[]>(MoneyAccountsStateSelector.MONEY_ACCOUNT_PAYMENT_TYPES),
+      this.helper.select<Identifiable[]>(MoneyAccountsStateSelector.MONEY_ACCOUNT_TRANSACTION_ITEM_TYPES),
     ])
     .subscribe(([x, y]) => {
       this.paymentTypes = x;

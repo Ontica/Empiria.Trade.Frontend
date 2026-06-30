@@ -15,7 +15,7 @@ import { EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
+import { MoneyAccountsStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
@@ -97,8 +97,8 @@ export class MoneyAccountsFilterComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     combineLatest([
-      this.helper.select<Identifiable[]>(CataloguesStateSelector.MONEY_ACCOUNT_TYPES),
-      this.helper.select<Identifiable[]>(CataloguesStateSelector.MONEY_ACCOUNT_STATUS),
+      this.helper.select<Identifiable[]>(MoneyAccountsStateSelector.MONEY_ACCOUNT_TYPES),
+      this.helper.select<Identifiable[]>(MoneyAccountsStateSelector.MONEY_ACCOUNT_STATUS),
     ])
     .subscribe(([x, y]) => {
       this.moneyAccountTypesList = x;

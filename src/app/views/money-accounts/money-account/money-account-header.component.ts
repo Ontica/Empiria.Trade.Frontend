@@ -14,7 +14,7 @@ import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
+import { MoneyAccountsStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { FormHelper, FormatLibrary, sendEvent } from '@app/shared/utils';
 
@@ -155,7 +155,7 @@ export class MoneyAccountHeaderComponent implements OnChanges, OnInit, OnDestroy
   private loadDataLists() {
     this.isLoading = true;
 
-    this.helper.select<Identifiable[]>(CataloguesStateSelector.MONEY_ACCOUNT_TYPES)
+    this.helper.select<Identifiable[]>(MoneyAccountsStateSelector.MONEY_ACCOUNT_TYPES)
       .subscribe(x => {
         this.moneyAccountTypesList = x;
         this.isLoading = false;

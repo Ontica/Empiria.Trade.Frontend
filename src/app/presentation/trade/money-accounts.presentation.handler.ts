@@ -1,0 +1,84 @@
+/**
+ * @license
+ * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
+ *
+ * See LICENSE.txt in the project root for complete license information.
+ */
+
+import { Injectable } from '@angular/core';
+
+import { EmpObservable } from '@app/core';
+
+import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
+
+import { MoneyAccountsDataService } from '@app/data-services';
+
+
+export enum SelectorType {
+  MONEY_ACCOUNT_TYPES                  = 'Trade.MoneyAccount.Selectors.Types.List',
+  MONEY_ACCOUNT_STATUS                 = 'Trade.MoneyAccount.Selectors.Status.List',
+  MONEY_ACCOUNT_TRANSACTION_TYPES      = 'Trade.MoneyAccount.Selectors.TransactionTypes.List',
+  MONEY_ACCOUNT_PAYMENT_TYPES          = 'Trade.MoneyAccount.Selectors.PaymentTypes.List',
+  MONEY_ACCOUNT_TRANSACTION_ITEM_TYPES = 'Trade.MoneyAccount.Selectors.TransactionItemTypes.List',
+}
+
+
+const initialState: StateValues = [
+  { key: SelectorType.MONEY_ACCOUNT_TYPES, value: [] },
+  { key: SelectorType.MONEY_ACCOUNT_STATUS, value: [] },
+  { key: SelectorType.MONEY_ACCOUNT_TRANSACTION_TYPES, value: [] },
+  { key: SelectorType.MONEY_ACCOUNT_PAYMENT_TYPES, value: [] },
+  { key: SelectorType.MONEY_ACCOUNT_TRANSACTION_ITEM_TYPES, value: [] },
+];
+
+
+@Injectable()
+export class MoneyAccountsPresentationHandler extends AbstractPresentationHandler {
+
+  constructor(private data: MoneyAccountsDataService) {
+    super({
+      initialState,
+      selectors: SelectorType,
+    });
+  }
+
+
+  select<U>(selectorType: SelectorType, params?: any): EmpObservable<U> {
+    switch (selectorType) {
+
+      case SelectorType.MONEY_ACCOUNT_TYPES: {
+        const provider = () => this.data.getMoneyAccountTypes();
+
+        return super.selectFirst<U>(selectorType, provider);
+      }
+
+      case SelectorType.MONEY_ACCOUNT_STATUS: {
+        const provider = () => this.data.getMoneyAccountStatus();
+
+        return super.selectFirst<U>(selectorType, provider);
+      }
+
+      case SelectorType.MONEY_ACCOUNT_TRANSACTION_TYPES: {
+        const provider = () => this.data.getMoneyAccountTransactionTypes();
+
+        return super.selectFirst<U>(selectorType, provider);
+      }
+
+      case SelectorType.MONEY_ACCOUNT_PAYMENT_TYPES: {
+        const provider = () => this.data.getMoneyAccountPaymentTypes();
+
+        return super.selectFirst<U>(selectorType, provider);
+      }
+
+      case SelectorType.MONEY_ACCOUNT_TRANSACTION_ITEM_TYPES: {
+        const provider = () => this.data.getMoneyAccountTransactionItemTypes();
+
+        return super.selectFirst<U>(selectorType, provider);
+      }
+
+      default:
+        return super.select<U>(selectorType, params);
+    }
+  }
+
+}

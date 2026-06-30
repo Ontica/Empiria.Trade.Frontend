@@ -19,6 +19,8 @@ import { CataloguesPresentationHandler } from './trade/catalogues.presentation.h
 
 import { InventaryPresentationHandler } from './trade/inventary.presentation.handler';
 
+import { MoneyAccountsPresentationHandler } from './trade/money-accounts.presentation.handler';
+
 
 @NgModule({
 
@@ -28,12 +30,14 @@ import { InventaryPresentationHandler } from './trade/inventary.presentation.han
     AccessControlPresentationHandler,
     CataloguesPresentationHandler,
     InventaryPresentationHandler,
+    MoneyAccountsPresentationHandler,
 
     { provide: STATE_HANDLERS, useExisting: MainLayoutPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AppStatusPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AccessControlPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: CataloguesPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: InventaryPresentationHandler, multi: true },
+    { provide: STATE_HANDLERS, useExisting: MoneyAccountsPresentationHandler, multi: true },
   ]
 
 })

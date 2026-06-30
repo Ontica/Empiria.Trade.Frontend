@@ -14,7 +14,7 @@ import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/co
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
+import { MoneyAccountsStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { FormHelper, FormatLibrary, sendEvent } from '@app/shared/utils';
 
@@ -169,7 +169,7 @@ export class MoneyAccountTransactionEditorComponent implements OnChanges, OnInit
   private loadDataLists() {
     this.isLoading = true;
 
-    this.helper.select<Identifiable[]>(CataloguesStateSelector.MONEY_ACCOUNT_TRANSACTION_TYPES)
+    this.helper.select<Identifiable[]>(MoneyAccountsStateSelector.MONEY_ACCOUNT_TRANSACTION_TYPES)
       .subscribe(x => {
         this.transactionTypes = x;
         this.isLoading = false;

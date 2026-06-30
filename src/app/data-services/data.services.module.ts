@@ -11,6 +11,8 @@ import { AccessControlDataService } from './_access-control.data.service';
 
 import { SearcherDataService } from './_searcher.data.service';
 
+import { CataloguesDataService } from './catalogues.data.service';
+
 import { ContactsDataService } from './contacts.data.service';
 
 import { InventoryDataService } from './inventory.data.service';
@@ -35,6 +37,7 @@ import { ShippingDataService } from './shipping-data.service';
   providers: [
     AccessControlDataService,
     SearcherDataService,
+    CataloguesDataService,
     ContactsDataService,
     InventoryDataService,
     MoneyAccountsDataService,
