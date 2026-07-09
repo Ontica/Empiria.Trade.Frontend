@@ -169,7 +169,7 @@
     </ng-container>
 
     <ng-container matColumnDef="totalsOrderTotal">
-      <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length - 2" class="text-align-right">
+      <td mat-footer-cell *matFooterCellDef [attr.colspan]="totalsOrderTotalColspan" class="text-align-right">
         {{ orderTotals.orderTotal | empDecimal }}
       </td>
     </ng-container>

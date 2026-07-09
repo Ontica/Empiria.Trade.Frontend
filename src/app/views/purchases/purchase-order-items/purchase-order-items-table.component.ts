@@ -77,6 +77,11 @@ export class PurchaseOrderItemsTableComponent implements OnChanges {
   }
 
 
+  get totalsOrderTotalColspan(): number {
+    return this.canEdit ? this.displayedColumns.length - 2 : this.displayedColumns.length;
+  }
+
+
   isRowInEdition(rowInEditionUID: string): boolean {
     return this.editionMode && rowInEditionUID === this.rowInEdition?.uid;
   }
