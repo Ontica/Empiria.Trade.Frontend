@@ -17,16 +17,15 @@ const routes: Routes = [
   //
   // Temporarily disabled for first production release
   //
-  // {
-  //   data: { permission: ROUTES.ventas.permission },
-  //   path: ROUTES.ventas.path,
-  //   component: MainLayoutComponent,
-  //   canActivate: [ParentRouteGuard],
-  //   canActivateChild: [ChildRouteGuard],
-  //   loadChildren: () => import('./workspaces/sales/sales-workspace.module')
-  //     .then((m) => m.SalesWorkspaceModule)
-  // },
-
+  {
+    data: { permission: ROUTES.ventas.permission },
+    path: ROUTES.ventas.path,
+    component: MainLayoutComponent,
+    canActivate: [ParentRouteGuard],
+    canActivateChild: [ChildRouteGuard],
+    loadChildren: () => import('./workspaces/sales/sales-workspace.module')
+      .then((m) => m.SalesWorkspaceModule)
+  },
   {
     data: { permission: ROUTES.compras.permission },
     path: ROUTES.compras.path,

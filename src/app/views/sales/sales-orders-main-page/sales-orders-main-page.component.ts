@@ -50,7 +50,7 @@ export class SalesOrdersMainPageComponent implements OnInit, OnDestroy {
     type: OrdersQueryType.Sales,
     titleText: 'Pedido',
     itemText: 'pedido',
-    permissionToCreate: PERMISSIONS.BLOCKED,
+    permissionToCreate: PERMISSIONS.FEATURE_EDICION_PEDIDOS,
   };
 
   isLoading = false;
@@ -220,7 +220,7 @@ export class SalesOrdersMainPageComponent implements OnInit, OnDestroy {
   private validateCurrentView(view: string) {
     switch (view) {
       case 'VentasViews.Pedidos':
-        this.setInitConfig(OrdersQueryType.Sales, 'Pedidos', 'pedido', PERMISSIONS.NOT_REQUIRED);
+        this.setInitConfig(OrdersQueryType.Sales, 'Pedidos', 'pedido', PERMISSIONS.FEATURE_EDICION_PEDIDOS);
         return;
 
       case 'VentasViews.Autorizaciones':

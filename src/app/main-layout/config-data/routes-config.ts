@@ -13,7 +13,7 @@ export const ROUTES = {
   // #region app-routing module
 
   ventas: {
-    permission: PERMISSIONS.BLOCKED,
+    permission: PERMISSIONS.MODULE_VENTAS,
     parent: '',
     path: 'ventas',
     fullpath: '/ventas',
@@ -64,14 +64,14 @@ export const ROUTES = {
   // #region ventas-routing module
 
   ventas_pedidos: {
-    permission: PERMISSIONS.BLOCKED,
+    permission: PERMISSIONS.ROUTE_VENTAS_PEDIDOS,
     parent: 'ventas',
     path: 'pedidos',
     fullpath: '/ventas/pedidos',
   },
 
   ventas_autorizaciones: {
-    permission: PERMISSIONS.BLOCKED,
+    permission: PERMISSIONS.ROUTE_VENTAS_AUTORIZACIONES,
     parent: 'ventas',
     path: 'autorizaciones',
     fullpath: '/ventas/autorizaciones',

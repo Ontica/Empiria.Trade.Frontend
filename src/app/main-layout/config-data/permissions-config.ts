@@ -35,6 +35,17 @@ export enum PERMISSIONS {
 
   FEATURE_EDICION_ORDENES_DE_COMPRA = 'feature-edicion-ordenes-de-compra',
 
+
+  //
+  // COMPRAS
+  //
+  MODULE_VENTAS = 'module-ventas',
+
+  ROUTE_VENTAS_PEDIDOS = 'route-ventas-pedidos',
+  ROUTE_VENTAS_AUTORIZACIONES = 'route-ventas-autorizaciones',
+
+  FEATURE_EDICION_PEDIDOS = 'feature-edicion-pedidos',
+
   //
   // ADMINISTRACION
   //
