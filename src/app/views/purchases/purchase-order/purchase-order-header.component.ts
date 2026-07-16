@@ -40,7 +40,6 @@ interface PurchaseOrderFormModel extends FormGroup<{
   paymentConditions: FormControl<string>;
   shippingMethod: FormControl<string>;
   currencyUID: FormControl<string>;
-  exchangeRate: FormControl<number>;
   scheduledTime: FormControl<DateString>;
   notes: FormControl<string>;
 }> { }
@@ -165,7 +164,6 @@ export class PurchaseOrderHeaderComponent implements OnChanges, OnInit, OnDestro
       paymentConditions: [''],
       shippingMethod: [''],
       currencyUID: [''],
-      exchangeRate: [null],
       scheduledTime: ['' as DateString],
       notes: [''],
     });
@@ -179,7 +177,6 @@ export class PurchaseOrderHeaderComponent implements OnChanges, OnInit, OnDestro
         paymentConditions: this.order.paymentConditions,
         shippingMethod: this.order.shippingMethod,
         currencyUID: isEmpty(this.order.currency) ? '' : this.order.currency.uid,
-        exchangeRate: this.order.exchangeRate,
         scheduledTime: this.order.scheduledTime,
         notes: this.order.notes,
       });
@@ -205,7 +202,6 @@ export class PurchaseOrderHeaderComponent implements OnChanges, OnInit, OnDestro
       paymentConditions: formModel.paymentConditions ?? '',
       shippingMethod: formModel.shippingMethod ?? '',
       currencyUID: formModel.currencyUID ?? '',
-      exchangeRate: formModel.exchangeRate ?? null,
       scheduledTime: formModel.scheduledTime ?? '',
       notes: formModel.notes ?? '',
     };

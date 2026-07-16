@@ -4,38 +4,33 @@
 
 <div class="explorer">
 
-  <div class="primary" [class.std-hide]="displayTabbedView">
+  <emp-trade-orders-explorer
+    class="primary"
+    [class.std-hide]="displayTabbedView"
+    [config]="purchasesConfig"
+    [operationsList]="operationsList"
+    [data]="purchaseOrdersData"
+    [selectedUID]="purchaseOrderSelected?.uid ?? null"
+    [isLoading]="isLoading"
+    [queryExecuted]="queryExecuted"
+    (ordersExplorerEvent)="onOrdersExplorerEvent($event)">
 
-    <emp-trade-orders-explorer
-      [config]="purchasesConfig"
-      [operationsList]="operationsList"
-      [data]="purchaseOrdersData"
-      [selectedUID]="purchaseOrderSelected?.uid ?? null"
-      [isLoading]="isLoading"
+    <emp-trade-purchase-orders-filter class="fx-item-none"
+      [orderType]="purchasesConfig.type"
+      [query]="query"
       [queryExecuted]="queryExecuted"
-      (ordersExplorerEvent)="onOrdersExplorerEvent($event)">
+      (purchaseOrdersFilterEvent)="onPurchaseOrdersFilterEvent($event)">
 
-      <emp-trade-purchase-orders-filter class="fx-item-none"
-        [orderType]="purchasesConfig.type"
-        [query]="query"
-        [queryExecuted]="queryExecuted"
-        (purchaseOrdersFilterEvent)="onPurchaseOrdersFilterEvent($event)">
+    </emp-trade-purchase-orders-filter>
 
-      </emp-trade-purchase-orders-filter>
+  </emp-trade-orders-explorer>
 
-    </emp-trade-orders-explorer>
+  <emp-trade-purchase-order-tabbed-view *ngIf="displayTabbedView"
+    class="secondary priority std-stacked"
+    [order]="purchaseOrderSelected"
+    (purchaseOrderTabbedViewEvent)="onPurchaseOrderTabbedViewEvent($event)">
 
-  </div>
-
-  <div class="secondary priority" *ngIf="displayTabbedView">
-
-    <emp-trade-purchase-order-tabbed-view
-      [order]="purchaseOrderSelected"
-      (purchaseOrderTabbedViewEvent)="onPurchaseOrderTabbedViewEvent($event)">
-
-    </emp-trade-purchase-order-tabbed-view>
-
-  </div>
+  </emp-trade-purchase-order-tabbed-view>
 
 </div>
 

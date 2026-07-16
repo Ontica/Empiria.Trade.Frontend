@@ -60,7 +60,6 @@ export interface PurchaseOrder {
   paymentConditions: string;
   shippingMethod: string;
   currency: Identifiable;
-  exchangeRate: number;
   notes: string;
   status: Identifiable;
   orderTime: DateString;
@@ -111,7 +110,6 @@ export interface PurchaseOrderFields {
   paymentConditions: string;
   shippingMethod: string;
   currencyUID: string;
-  exchangeRate: number;
   scheduledTime: DateString;
   notes: string;
 }
@@ -162,7 +160,6 @@ export const EmptyPurchaseOrder: PurchaseOrder = {
   paymentConditions: '',
   shippingMethod: '',
   currency: Empty,
-  exchangeRate: null,
   notes: '',
   status: Empty,
   orderTime: '',

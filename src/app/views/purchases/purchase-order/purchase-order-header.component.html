@@ -28,20 +28,22 @@
 
     <div class="fx-row-container">
 
-      <div class="fx-item-quarter">
+      <div class="fx-item-third">
         <label>Condiciones de pago:</label>
         <emp-ng-select
           formControlName="paymentConditions"
+          [config]="{ clearable: true }"
           [items]="paymentConditionsList"
           [placeholder]="editionMode ? 'Seleccionar' : 'No definido'"
           [showError]="formHelper.isControlInvalid(form.controls.paymentConditions)">
         </emp-ng-select>
       </div>
 
-      <div class="fx-item-quarter">
+      <div class="fx-item-third">
         <label>Forma de envío:</label>
         <emp-ng-select
           formControlName="shippingMethod"
+          [config]="{ clearable: true }"
           [items]="receptionMethodList"
           [loading]="isLoading"
           [placeholder]="editionMode ? 'Seleccionar' : 'No definido'"
@@ -49,32 +51,19 @@
         </emp-ng-select>
       </div>
 
-      <div class="fx-item-quarter">
+      <div class="fx-item-third">
 
         <label>Moneda:</label>
 
         <emp-ng-select
           formControlName="currencyUID"
+          [config]="{ clearable: true }"
           [items]="currenciesList"
           [loading]="isLoading"
           [placeholder]="editionMode ? 'Seleccionar' : 'No definido'"
           [showError]="formHelper.isControlInvalid(form.controls.currencyUID)">
 
         </emp-ng-select>
-
-      </div>
-
-      <div class="fx-item-quarter">
-
-        <label class="nowrap">Tipo de cambio:</label>
-
-        <emp-ng-input-numeric
-          formControlName="exchangeRate"
-          [minDecimals]="6"
-          [maxDecimals]="6"
-          [showError]="formHelper.isControlInvalid(form.controls.exchangeRate)">
-
-        </emp-ng-input-numeric>
 
       </div>
 
