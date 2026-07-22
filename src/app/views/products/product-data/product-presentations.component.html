@@ -10,16 +10,37 @@
 
       <div class="fx-row-container" [style.margin-right.px]="-8">
 
-        <emp-ng-select #presentationSelected class="fx-item"
+        <emp-ng-select #presentationSelected
+          [ngClass]="presentation?.vendors.length > 1 ? 'fx-item' : 'fx-item-one'"
           [(ngModel)]="presentation"
           [title]="presentation?.description"
           [name]="'selectPresentation'+ product.productUID"
-          [config]="{bindByValue: false}"
+          [config]="{bindByValue: false, showTooltip: true}"
           [items]="product.presentations"
           [disabled]="product.presentations.length === 1"
           bindValue="presentationUID"
           bindLabel="description"
           (changes)="onPresentationChanges($event)">
+
+          <ng-template #labelTemplate let-item="item">
+            {{item.name}}: {{item.description}}
+          </ng-template>
+
+          <ng-template #optionTemplate let-item="item">
+
+            <div class="item wrap">
+
+              <span class="item-highlight">
+                {{item.name}}
+              </span>
+              <br>
+              <span class="item-text-xs">
+                {{item.description}}
+              </span>
+
+            </div>
+
+          </ng-template>
 
         </emp-ng-select>
 
