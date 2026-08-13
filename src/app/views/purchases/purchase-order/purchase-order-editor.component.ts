@@ -41,9 +41,14 @@ export class PurchaseOrderEditorComponent {
 
   submitted = false;
 
-  displayExportModal = false;
-
-  fileUrl = '';
+  selectedExportData = {
+    display: false,
+    heading: '',
+    message: '',
+    operation: '',
+    fileUrl: '',
+    hasError: false,
+  }
 
 
   constructor(private purchasesData: PurchasesDataService) { }
@@ -68,7 +73,12 @@ export class PurchaseOrderEditorComponent {
         this.closeOrder();
         return;
       case PurchaseOrderHeaderEventType.EXPORT_ORDER:
-        this.setDisplayExportModal(true);
+        this.setDisplayExportModal(true, 'export', 'Exportar orden de compra',
+          'Se generará la exportación a Excel de la orden de compra.');
+        return;
+      case PurchaseOrderHeaderEventType.EXPORT_LABELS:
+        this.setDisplayExportModal(true, 'export-labels', 'Exportar etiquetas',
+          'Se generarán la exportación a Excel de las etiquetas de la orden de compra.');
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -83,11 +93,27 @@ export class PurchaseOrderEditorComponent {
         this.setDisplayExportModal(false);
         return;
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        this.exportOrder();
+        this.validateExportToExecute();
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
+    }
+  }
+
+
+
+  private validateExportToExecute() {
+    switch (this.selectedExportData.operation) {
+      case 'export':
+        this.exportOrder();
+        break;
+      case 'export-labels':
+        this.exportOrderLabels();
+        break;
+      default:
+        console.log(`Unhandled exportation type ${this.selectedExportData.operation}`);
+        break;
     }
   }
 
@@ -130,13 +156,32 @@ export class PurchaseOrderEditorComponent {
   private exportOrder() {
     this.purchasesData.exportOrder(this.order.uid)
       .firstValue()
-      .then(x => this.fileUrl = x.url);
+      .then(x => this.resolveExport(x.url));
   }
 
 
-  private setDisplayExportModal(display: boolean) {
-    this.displayExportModal = display;
-    this.fileUrl = '';
+  private exportOrderLabels() {
+    this.purchasesData.exportOrderLabels(this.order.uid)
+      .firstValue()
+      .then(x => this.resolveExport(x.url));
+  }
+
+
+  private setDisplayExportModal(display: boolean, operation?: 'export-labels' | 'export',
+                                heading?: string, message?: string) {
+    this.selectedExportData = {
+      display,
+      heading: heading ?? '',
+      message: message ?? '',
+      operation: operation ?? '',
+      fileUrl: '',
+      hasError: false,
+    };
+  }
+
+
+  private resolveExport(url: string) {
+    this.selectedExportData.fileUrl = url;
   }
 
 }

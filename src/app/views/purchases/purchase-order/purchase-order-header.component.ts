@@ -27,11 +27,12 @@ import { EmptyPurchaseOrder, PaymentConditionsList, PurchaseOrder, PurchaseOrder
 
 
 export enum PurchaseOrderHeaderEventType {
-  CREATE_ORDER = 'PurchaseOrderHeaderComponent.Event.CreateOrder',
-  UPDATE_ORDER = 'PurchaseOrderHeaderComponent.Event.UpdateOrder',
-  DELETE_ORDER = 'PurchaseOrderHeaderComponent.Event.DeleteOrder',
-  CLOSE_ORDER  = 'PurchaseOrderHeaderComponent.Event.CloseOrder',
-  EXPORT_ORDER = 'PurchaseOrderHeaderComponent.Event.ExportOrder',
+  CREATE_ORDER  = 'PurchaseOrderHeaderComponent.Event.CreateOrder',
+  UPDATE_ORDER  = 'PurchaseOrderHeaderComponent.Event.UpdateOrder',
+  DELETE_ORDER  = 'PurchaseOrderHeaderComponent.Event.DeleteOrder',
+  CLOSE_ORDER   = 'PurchaseOrderHeaderComponent.Event.CloseOrder',
+  EXPORT_ORDER  = 'PurchaseOrderHeaderComponent.Event.ExportOrder',
+  EXPORT_LABELS = 'PurchaseOrderHeaderComponent.Event.ExportLabels',
 }
 
 
@@ -101,8 +102,8 @@ export class PurchaseOrderHeaderComponent implements OnChanges, OnInit, OnDestro
 
 
   get hasActions(): boolean {
-    return this.order.actions.canEdit || this.order.actions.canClose || this.order.actions.canExport ||
-           this.order.actions.canDelete;
+    return this.order.actions.canEdit || this.order.actions.canClose || this.order.actions.canDelete ||
+           this.order.actions.canExport || this.order.actions.canExportLabels;
   }
 
 
@@ -131,6 +132,11 @@ export class PurchaseOrderHeaderComponent implements OnChanges, OnInit, OnDestro
 
   onExportButtonClicked() {
     sendEvent(this.purchaseOrderHeaderEvent, PurchaseOrderHeaderEventType.EXPORT_ORDER);
+  }
+
+
+  onExportLabelsButtonClicked() {
+    sendEvent(this.purchaseOrderHeaderEvent, PurchaseOrderHeaderEventType.EXPORT_LABELS);
   }
 
 

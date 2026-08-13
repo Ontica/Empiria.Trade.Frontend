@@ -92,6 +92,15 @@ export class PurchasesDataService {
   }
 
 
+  exportOrderLabels(orderUID: string,): EmpObservable<FileReport> {
+    Assertion.assertValue(orderUID, 'orderUID');
+
+    const path = `v4/trade/procurement/purchase-orders/${orderUID}/export-labels`;
+
+    return this.http.get<FileReport>(path);
+  }
+
+
   createOrderItem(orderUID: string,
                   dataFields: PurchaseOrderItemFields): EmpObservable<PurchaseOrder> {
     Assertion.assertValue(orderUID, 'orderUID');

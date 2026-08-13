@@ -126,6 +126,12 @@
           Exportar
         </button>
 
+        <button *ngIf="!editionMode && order.actions.canExportLabels"
+          type="button" class="btn"
+          (click)="onExportLabelsButtonClicked()">
+          Generar etiquetas
+        </button>
+
       </div>
 
       <div class="fx-item fx-end fx-items-center">
