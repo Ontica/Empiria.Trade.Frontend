@@ -56,7 +56,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: ROUTES.almacenes_inventario.path,
+    redirectTo: ROUTES.almacenes_surtidos.path,
     pathMatch: 'full',
   },
 ];

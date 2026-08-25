@@ -78,7 +78,7 @@ export const ROUTES = {
   },
 
   ventas_envios: {
-    permission: PERMISSIONS.BLOCKED,
+    permission: PERMISSIONS.ROUTE_VENTAS_ENVIOS,
     parent: 'ventas',
     path: 'envios',
     fullpath: '/ventas/envios',
@@ -121,14 +121,14 @@ export const ROUTES = {
   // #region almacenes-routing module
 
   almacenes_surtidos: {
-    permission: PERMISSIONS.BLOCKED,
+    permission: PERMISSIONS.ROUTE_ALMACENES_SURTIDOS,
     parent: 'almacenes',
     path: 'surtidos',
     fullpath: '/almacenes/surtidos',
   },
 
   almacenes_embarques: {
-    permission: PERMISSIONS.BLOCKED,
+    permission: PERMISSIONS.ROUTE_ALMACENES_EMBARQUES,
     parent: 'almacenes',
     path: 'embarques',
     fullpath: '/almacenes/embarques',

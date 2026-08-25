@@ -22,6 +22,8 @@ export enum PERMISSIONS {
   MODULE_ALMACENES = 'module-almacenes',
 
   ROUTE_ALMACENES_INVENTARIOS = 'route-almacenes-inventario',
+  ROUTE_ALMACENES_SURTIDOS = 'route-almacenes-surtidos',
+  ROUTE_ALMACENES_EMBARQUES = 'route-almacenes-embarques',
   ROUTE_ALMACENES_REPORTES = 'route-almacenes-reportes',
 
   FEATURE_EDICION_ORDENES_DE_INVENTARIO = 'feature-edicion-ordenes-de-inventario',
@@ -43,6 +45,7 @@ export enum PERMISSIONS {
 
   ROUTE_VENTAS_PEDIDOS = 'route-ventas-pedidos',
   ROUTE_VENTAS_AUTORIZACIONES = 'route-ventas-autorizaciones',
+  ROUTE_VENTAS_ENVIOS = 'route-ventas-envios',
 
   FEATURE_EDICION_PEDIDOS = 'feature-edicion-pedidos',
 
