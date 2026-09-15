@@ -19,6 +19,7 @@ export const PaymentConditionsList: Identifiable[] = [
 export interface Customer extends Party {
   uid: string;
   name: string;
+  priceList: string;
   contacts: Contact[];
   addresses: Address[];
 }
@@ -27,6 +28,7 @@ export interface Customer extends Party {
 export const EmptyCustomer: Customer = {
   uid: '',
   name: '',
+  priceList: '',
   contacts: [],
   addresses: [],
 };

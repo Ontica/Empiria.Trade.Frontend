@@ -123,6 +123,8 @@ export class SaleOrderTabbedViewComponent implements OnChanges {
 
 
   private setTitle() {
+    const customer = `${this.order.orderData.customer.name} ` +
+      `(${!this.order.orderData.customer.priceList ? 'N/D' : this.order.orderData.customer.priceList}) `
     const orderTime = DateStringLibrary.format(this.order.orderData.orderTime);
     const orderTotal = FormatLibrary.numberWithCommas(this.order.orderData.orderTotal, '1.2-2');
 
@@ -139,7 +141,7 @@ export class SaleOrderTabbedViewComponent implements OnChanges {
         '<span class="tag tag-medium tag-base">sin adeudo</span>';
     }
 
-    this.hint = `<strong>${this.order.orderData.customer.name} </strong> &nbsp; &nbsp; | &nbsp; &nbsp; ` +
+    this.hint = `<strong>${customer} </strong> &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${orderTime} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${orderTotal} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `<span class="tag tag-small">${this.order.orderData.statusName}</span>`;

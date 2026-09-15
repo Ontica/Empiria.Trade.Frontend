@@ -13,6 +13,17 @@
       (changes)="onCustomerChanged($event)"
       placeholder="Buscar cliente">
 
+      <ng-template #tLabelTemplate let-item="item">
+        {{item.name}} ({{!item.priceList ? 'N/D' : item.priceList}})
+      </ng-template>
+
+      <ng-template #tOptionTemplate let-item="item">
+        <div class="wrap" [style.padding]="'0.25rem 0'">
+          <span class="item-highlight">{{item.name}}</span> <br>
+          <span class="item-text-xs">{{!item.priceList ? 'N/D' : item.priceList}}</span>
+        </div>
+      </ng-template>
+
     </emp-ng-select-typeahead>
   </div>
 
