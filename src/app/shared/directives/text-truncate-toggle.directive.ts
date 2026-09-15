@@ -7,6 +7,8 @@
 
 import { Directive, ElementRef, HostListener, Input, OnChanges } from '@angular/core';
 
+import { SkipIfSelection } from '../decorators';
+
 
 @Directive({
   selector: '[empNgTextTruncateToggle]'
@@ -30,6 +32,7 @@ export class EmpTextTruncateToggleDirective implements OnChanges {
 
 
   @HostListener('click')
+  @SkipIfSelection()
   toggle() {
     this.expanded = !this.expanded;
     this.applyState();
