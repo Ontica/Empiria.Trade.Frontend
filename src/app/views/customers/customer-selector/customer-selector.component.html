@@ -63,12 +63,12 @@
       (changes)="onCustomerDataChanged()">
 
       <ng-template #labelTemplate let-item="item">
-        {{item.name}} - {{item.description}}
+        {{!!item.name ? item.name : 'N/D' }} - {{item.description}}
       </ng-template>
 
       <ng-template #optionTemplate let-item="item">
         <div class="wrap" [style.padding]="'0.25rem 0'">
-          <span class="item-highlight">{{item.name}}</span> <br>
+          <span class="item-highlight">{{!!item.name ? item.name : 'N/D'}}</span> <br>
           <span class="item-text-xs">{{item.description}}</span>
         </div>
       </ng-template>

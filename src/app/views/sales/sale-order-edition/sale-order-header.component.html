@@ -24,45 +24,12 @@
         </emp-ng-datepicker>
       </div>
 
-      <div class="fx-item-third">
+      <div class="fx-item-size" style="--size: calc(33% - 126px)">
         <label>Estatus:</label>
         <emp-ng-select
           formControlName="status"
           [items]="statusList"
           [showError]="formHelper.isControlInvalid(form.controls.status)">
-        </emp-ng-select>
-      </div>
-
-    </div>
-
-    <div class="fx-row-container">
-
-      <div class="fx-item-third">
-        <label>Proveedor:</label>
-        <emp-ng-select
-          formControlName="supplier"
-          [config]="{bindByValue: false}"
-          [items]="suppliersList"
-          [showError]="formHelper.isControlInvalid(form.controls.supplier)">
-        </emp-ng-select>
-      </div>
-
-      <div class="fx-item-third">
-        <label>Vendedor:</label>
-        <emp-ng-select
-          formControlName="salesAgent"
-          [config]="{bindByValue: false}"
-          [items]="salesAgentsList"
-          [showError]="formHelper.isControlInvalid(form.controls.salesAgent)">
-        </emp-ng-select>
-      </div>
-
-      <div class="fx-item-sixth">
-        <label>Forma de envío:</label>
-        <emp-ng-select
-          formControlName="shippingMethod"
-          [items]="shippingMethodList"
-          [showError]="formHelper.isControlInvalid(form.controls.shippingMethod)">
         </emp-ng-select>
       </div>
 
@@ -75,7 +42,54 @@
         </emp-ng-select>
       </div>
 
+      <div class="fx-item-sixth">
+        <label>Forma de envío:</label>
+        <emp-ng-select
+          formControlName="shippingMethod"
+          [items]="shippingMethodList"
+          [showError]="formHelper.isControlInvalid(form.controls.shippingMethod)"
+          (changes)="onShippingMethodChanges($event)">
+        </emp-ng-select>
+      </div>
+
     </div>
+
+    <div class="fx-row-container">
+      <div class="fx-item-third">
+        <label>Proveedor:</label>
+        <emp-ng-select
+          formControlName="supplier"
+          [config]="{bindByValue: false}"
+          [items]="suppliersList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.supplier)">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item-third">
+        <label>Vendedor:</label>
+        <emp-ng-select
+          formControlName="salesAgent"
+          [config]="{bindByValue: false}"
+          [items]="salesAgentsList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.salesAgent)">
+        </emp-ng-select>
+      </div>
+
+      <div class="fx-item-third">
+        <label>Paquetería:</label>
+        <emp-ng-select
+          formControlName="parcelSupplier"
+          [config]="{clearable: true}"
+          [items]="parcelSuppliersList"
+          [loading]="isLoading"
+          [placeholder]="parcelSupplierPlaceholder"
+          [showError]="formHelper.isControlInvalid(form.controls.parcelSupplier)">
+        </emp-ng-select>
+      </div>
+    </div>
+
 
     <emp-trade-customer-selector
       formControlName="customer"

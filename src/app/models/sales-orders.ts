@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Empty } from '@app/core';
+import { DateString, Empty, Identifiable } from '@app/core';
 
 import { clone } from '@app/shared/utils';
 
@@ -98,6 +98,7 @@ export interface SaleOrderFields {
   supplierUID: string;
   paymentConditions: string;
   shippingMethod: string;
+  parcelSupplierUID: string,
   notes: string;
   items: SaleOrderItemFields[];
 }
@@ -131,6 +132,7 @@ export interface SaleOrderGeneralData extends SaleOrderAdditionalData {
   salesAgent: Party;
   paymentConditions: string;
   shippingMethod: string;
+  parcelSupplier: Identifiable;
   notes?: string;
 }
 
@@ -225,6 +227,7 @@ export const EmptySaleOrderGeneralData: SaleOrderGeneralData = {
   orderNumber: '',
   orderTime: '',
   shippingMethod: '',
+  parcelSupplier: Empty,
   status: '',
   statusName: '',
   customer: EmptyCustomer,
@@ -258,6 +261,7 @@ export const EmptySaleOrderData: SaleOrderData = {
   orderTime: '',
   notes: '',
   shippingMethod: '',
+  parcelSupplier: Empty,
   status: '',
   statusName: '',
   customer: EmptyCustomer,
@@ -336,6 +340,7 @@ export function mapSaleOrderFieldsFromSaleOrder(order: SaleOrder): SaleOrderFiel
     supplierUID: order.orderData.supplier?.uid ?? '',
     paymentConditions: order.orderData.paymentConditions,
     shippingMethod: order.orderData.shippingMethod,
+    parcelSupplierUID: order.orderData.parcelSupplier?.uid ?? '',
     items: order.items.map(x => mapSaleOrderItemFieldsFromSaleOrderItem(x)),
     notes: order.orderData.notes,
   };

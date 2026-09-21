@@ -13,7 +13,7 @@ import { combineLatest } from 'rxjs';
 
 import { DateString, DateStringLibrary, EventInfo, Identifiable, Validate, isEmpty } from '@app/core';
 
-import { ContactsDataService, SalesDataService } from '@app/data-services';
+import { ContactsDataService, SalesDataService, ShippingDataService } from '@app/data-services';
 
 import { DefaultOrdersStatus, EmptySaleOrderGeneralData, SaleOrderGeneralData, Party, PaymentConditionsList,
          ShippingMethodList, ShippingMethodTypes, CustomerSelection, EmptyCustomerSelection,
@@ -34,6 +34,7 @@ interface SaleOrderFormModel extends FormGroup<{
   salesAgent: FormControl<Party>;
   paymentConditions: FormControl<string>;
   shippingMethod: FormControl<string>;
+  parcelSupplier: FormControl<string>;
   customer: FormControl<CustomerSelection>;
 }> { }
 
@@ -55,15 +56,17 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
 
   formHelper = FormHelper;
 
-  isLoadingDataList = false;
+  isLoading = false;
 
   isChangeEmission = false;
 
   statusList: Identifiable[] = [];
 
+  paymentConditionsList: Identifiable[] = PaymentConditionsList;
+
   shippingMethodList: Identifiable[] = ShippingMethodList;
 
-  paymentConditionsList: Identifiable[] = PaymentConditionsList;
+  parcelSuppliersList: Identifiable[] = [];
 
   salesAgentsList: Party[] = [];
 
@@ -71,7 +74,8 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
 
 
   constructor(private contactsData: ContactsDataService,
-              private salesData: SalesDataService) {
+              private salesData: SalesDataService,
+              private shippingData: ShippingDataService) {
     this.initForm();
     this.validateEditionMode();
   }
@@ -93,6 +97,28 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
   }
 
 
+  get parcelSupplierPlaceholder(): string {
+    if (!this.editionMode) {
+      return 'No determinado';
+    }
+
+    if (!this.form.getRawValue().shippingMethod) {
+      return 'Seleccione forma de envío';
+    }
+
+    if (!this.isPaqueteria) {
+      return 'No aplica';
+    }
+
+    return 'Seleccionar';
+  }
+
+
+  get isPaqueteria(): boolean {
+    return this.form.getRawValue().shippingMethod === ShippingMethodTypes.Paqueteria;
+  }
+
+
   get shippingRequired(): boolean {
     return [ShippingMethodTypes.RutaForanea,
             ShippingMethodTypes.RutaLocal,
@@ -103,6 +129,12 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
 
   get isFormValid(): boolean {
     return this.form.valid;
+  }
+
+
+  onShippingMethodChanges(event: string) {
+    this.validateDisabledControls();
+    this.form.controls.parcelSupplier.reset();
   }
 
 
@@ -122,6 +154,7 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
       salesAgent: [null as Party, Validators.required],
       paymentConditions: ['', Validators.required],
       shippingMethod: ['', Validators.required],
+      parcelSupplier: [''],
       customer: [EmptyCustomerSelection, Validate.objectFieldsRequired('customer', 'address')],
     });
 
@@ -161,6 +194,7 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
         salesAgent: this.orderData.salesAgent,
         paymentConditions: this.orderData.paymentConditions,
         shippingMethod: this.orderData.shippingMethod,
+        parcelSupplier: this.orderData.parcelSupplier?.uid,
         customer: customerData,
       });
 
@@ -179,7 +213,16 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
     FormHelper.setDisableControl(this.form.controls.orderNumber);
     FormHelper.setDisableControl(this.form.controls.orderTime);
     FormHelper.setDisableControl(this.form.controls.status);
+
+    this.validateDisabledControls();
   }
+
+
+  private validateDisabledControls() {
+    const formDisabled = (this.isSaved && !this.editionMode) || !this.isPaqueteria;
+    FormHelper.setDisableControl(this.form.controls.parcelSupplier, formDisabled);
+  }
+
 
   private getFormData(): SaleOrderGeneralData {
     const formModel = this.form.getRawValue();
@@ -193,6 +236,7 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
       salesAgent: formModel.salesAgent ?? null,
       paymentConditions: formModel.paymentConditions ?? '',
       shippingMethod: formModel.shippingMethod ?? '',
+      parcelSupplier: this.parcelSupplierSelected,
       customer: formModel.customer?.customer ?? null,
       customerContact: formModel.customer?.contact ?? null,
       customerAddress: formModel.customer?.address ?? null,
@@ -202,19 +246,28 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
   }
 
 
+  get parcelSupplierSelected(): Identifiable<string> {
+    const parcel = this.parcelSuppliersList.find(x => x.uid === this.form.getRawValue().parcelSupplier) ?? null;
+
+    return (isEmpty(parcel as Identifiable) ? null : parcel) as Identifiable<string>;
+  }
+
+
   private loadDataList() {
-    this.isLoadingDataList = true;
+    this.isLoading = true;
 
     combineLatest([
       this.salesData.getOrderStatus(),
       this.contactsData.getInternalSuppliers(),
       this.contactsData.getSalesAgents(),
+      this.shippingData.getParcelSuppliers(),
     ])
-    .subscribe(([x, y, z]) => {
-      this.statusList = x;
-      this.suppliersList = y;
-      this.salesAgentsList = z;
-      this.isLoadingDataList = false;
+    .subscribe(([a, b, c, d]) => {
+      this.statusList = a;
+      this.suppliersList = b;
+      this.salesAgentsList = c;
+      this.parcelSuppliersList = d;
+      this.isLoading = false;
     });
   }
 
