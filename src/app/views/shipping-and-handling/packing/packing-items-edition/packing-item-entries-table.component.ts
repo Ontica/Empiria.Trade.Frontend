@@ -34,7 +34,7 @@ export class PackingItemEntriesTableComponent implements OnChanges {
 
   @Output() packingItemEntriesTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumnsDefault: string[] = ['quantity', 'product', 'description', 'warehouseBin'];
+  displayedColumnsDefault: string[] = ['quantity', 'product', 'presentation', 'warehouseBin'];
 
   displayedColumns = [...this.displayedColumnsDefault];
 
