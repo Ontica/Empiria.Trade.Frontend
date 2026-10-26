@@ -10,15 +10,15 @@
 
       <div class="fx-column-container fx-gap-half">
 
-        <div #warehouseBinSection class="fx-row-container">
+        <div #warehouseBinSection class="fx-row-container"
+          [style.marginRight.px]="-8">
 
-          <emp-ng-select #warehouseBinSelect class="fx-item"
-            [(ngModel)]="warehouseBin"
+          <emp-ng-select #warehouseBinSelect class="fx-item-one"
+            [config]="{bindByValue: false, showTooltip: true}"
             [name]="'selectWarehouseBin'+ warehouseBin?.uid"
-            [config]="{bindByValue: false}"
+            [(ngModel)]="warehouseBin"
             [items]="missingItem.warehouseBins"
-            [disabled]="missingItem.warehouseBins.length === 1"
-            [style.marginRight.px]="-8">
+            [disabled]="missingItem.warehouseBins.length === 1">
 
             <ng-template #labelTemplate let-item="item">
               {{item.warehouseName}} - {{item.name}} {{'(' + (item.stock | number) + ')'}}
