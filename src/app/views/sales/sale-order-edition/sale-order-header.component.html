@@ -81,7 +81,7 @@
         <label>Paquetería:</label>
         <emp-ng-select
           formControlName="parcelSupplier"
-          [config]="{clearable: true}"
+          [config]="{bindByValue: false, clearable: true}"
           [items]="parcelSuppliersList"
           [loading]="isLoading"
           [placeholder]="parcelSupplierPlaceholder"

@@ -34,7 +34,7 @@ interface SaleOrderFormModel extends FormGroup<{
   salesAgent: FormControl<Party>;
   paymentConditions: FormControl<string>;
   shippingMethod: FormControl<string>;
-  parcelSupplier: FormControl<string>;
+  parcelSupplier: FormControl<Identifiable>;
   customer: FormControl<CustomerSelection>;
 }> { }
 
@@ -154,7 +154,7 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
       salesAgent: [null as Party, Validators.required],
       paymentConditions: ['', Validators.required],
       shippingMethod: ['', Validators.required],
-      parcelSupplier: [''],
+      parcelSupplier: [null as Identifiable],
       customer: [EmptyCustomerSelection, Validate.objectFieldsRequired('customer', 'address')],
     });
 
@@ -166,7 +166,6 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
     if (this.isChangeEmission) {
       this.isChangeEmission = false;
     } else {
-
       const payload = {
         isFormValid: this.isFormValid,
         isFormDirty: this.form.dirty,
@@ -194,7 +193,7 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
         salesAgent: this.orderData.salesAgent,
         paymentConditions: this.orderData.paymentConditions,
         shippingMethod: this.orderData.shippingMethod,
-        parcelSupplier: this.orderData.parcelSupplier?.uid,
+        parcelSupplier: isEmpty(this.orderData.parcelSupplier) ? null : this.orderData.parcelSupplier,
         customer: customerData,
       });
 
@@ -236,20 +235,13 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
       salesAgent: formModel.salesAgent ?? null,
       paymentConditions: formModel.paymentConditions ?? '',
       shippingMethod: formModel.shippingMethod ?? '',
-      parcelSupplier: this.parcelSupplierSelected,
+      parcelSupplier: formModel.parcelSupplier ?? null,
       customer: formModel.customer?.customer ?? null,
       customerContact: formModel.customer?.contact ?? null,
       customerAddress: formModel.customer?.address ?? null,
     };
 
     return data;
-  }
-
-
-  get parcelSupplierSelected(): Identifiable<string> {
-    const parcel = this.parcelSuppliersList.find(x => x.uid === this.form.getRawValue().parcelSupplier) ?? null;
-
-    return (isEmpty(parcel as Identifiable) ? null : parcel) as Identifiable<string>;
   }
 
 
@@ -267,6 +259,9 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
       this.suppliersList = b;
       this.salesAgentsList = c;
       this.parcelSuppliersList = d;
+
+      this.initLists();
+
       this.isLoading = false;
     });
   }
@@ -277,6 +272,8 @@ export class SaleOrderHeaderComponent implements OnChanges, OnInit {
       ArrayLibrary.insertIfNotExist(this.suppliersList ?? [], this.orderData.supplier, 'uid');
     this.salesAgentsList = isEmpty(this.orderData.salesAgent) ? this.salesAgentsList :
       ArrayLibrary.insertIfNotExist(this.salesAgentsList ?? [], this.orderData.salesAgent, 'uid');
+    this.parcelSuppliersList = isEmpty(this.orderData.parcelSupplier) ? this.parcelSuppliersList :
+      ArrayLibrary.insertIfNotExist(this.parcelSuppliersList ?? [], this.orderData.parcelSupplier, 'uid');
   }
 
 }
